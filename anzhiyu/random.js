@@ -1,3 +1,3 @@
-var posts=["2025/08/07/测试2/","2025/08/07/这是一篇测试博文/","2025/08/07/hello-world/"];function toRandomPost(){
+var posts=["2025/08/09/ROS2机器人操作系统教程/"];function toRandomPost(){
     pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
   };
