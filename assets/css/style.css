@@ -1,0 +1,13 @@
+/* 全局基础样式 */
+body {
+  font-family: sans-serif;   /* 设置默认字体 */
+  margin: auto;              /* 居中显示 */
+  line-height: 1.6;          /* 行间距更舒服 */
+}
+
+/* 限制正文宽度 */
+main {
+  max-width: 800px;  /* 正文宽度 */
+  margin: auto;      /* 居中 */
+  padding: 20px;     /* 给点内边距 */
+}
