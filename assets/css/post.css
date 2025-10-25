@@ -1,0 +1,27 @@
+/* 保持现有文章内容样式 */
+.post-content img {
+  max-width: 90%;
+  height: auto;
+  display: block;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.post-content pre {
+  background-color: #f6f8fa;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+/* 提醒提示框样式 */
+.post-content blockquote {
+  background-color: #fff4e5; /* 浅橙色背景 */
+  border-left: 5px solid #ffa500; /* 橙色边框 */
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #333;
+  font-weight: bold;
+}
+
+

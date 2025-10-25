@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电控视觉环境搭建 | 小辉的折腾天地</title>
+
+  <!-- 引入 CSS 样式 -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/friends.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
+
+  <!-- 代码高亮样式 -->
+  <link rel="stylesheet" href="/assets/css/code-highlight.css">
+
+  <!-- 国内Font Awesome镜像 -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+
+  <!-- 网站图标 -->
+  
+  <link rel="icon" 
+        href="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/favicon.png">
+
+  <!-- Vercount 网站访问统计 -->
+  <script defer src="https://events.vercount.one/js"></script>
+
+</head>
+
+  <body>
+    <header class="site-header">
+
+  <!-- 内容层 -->
+  <div class="header-content">
+    <h1><a href="/">小辉的折腾天地</a></h1>
+    <nav>
+      <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/blog/">博客</a></li>
+        <li><a href="/cv/">简历</a></li>
+        <li><a href="/friends/">友链</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <main>
+      <article class="post-main">
+  <h2>电控视觉环境搭建</h2>
+  <p>
+    <small>
+      发布于 2023-12-10 | 作者: Tung Chia-hui | 阅读次数：<span id="vercount_value_page_pv">Loading</span> 次
+    </small>
+  </p>
+  <div class="post-content">
+    <!-- > ⚠️ **注意：本文中的图片因飞书图床时效性已失效**  
+> 若想查看完整图文内容和原版教程，请访问飞书文档：[点击查看完整博客](https://sdutvincirobot.feishu.cn/wiki/FQszwXIR5iQgCfk7pRwc9rYpnqg?from=from_copylink) -->
+
+<ul id="markdown-toc">
+  <li><a href="#cc环境搭建" id="markdown-toc-cc环境搭建">C/C++环境搭建</a>    <ul>
+      <li><a href="#windows" id="markdown-toc-windows">Windows</a>        <ul>
+          <li><a href="#visual-studio" id="markdown-toc-visual-studio">Visual Studio</a></li>
+        </ul>
+      </li>
+      <li><a href="#linux" id="markdown-toc-linux">Linux</a></li>
+    </ul>
+  </li>
+  <li><a href="#arm-keil-mdkarm单片机环境搭建" id="markdown-toc-arm-keil-mdkarm单片机环境搭建">ARM Keil MDK(ARM单片机环境搭建)</a>    <ul>
+      <li><a href="#介绍以及环境推荐" id="markdown-toc-介绍以及环境推荐">介绍以及环境推荐</a></li>
+      <li><a href="#arm-keil-mdk-5--cubemx推荐小鸟新手" id="markdown-toc-arm-keil-mdk-5--cubemx推荐小鸟新手">Arm Keil MDK 5 + CubeMX【推荐小鸟(新手）】</a>        <ul>
+          <li><a href="#简介" id="markdown-toc-简介">简介</a></li>
+          <li><a href="#windows-1" id="markdown-toc-windows-1">Windows</a></li>
+        </ul>
+      </li>
+      <li><a href="#arm-keil-mdk-5--vscodekeil-assistant不推荐" id="markdown-toc-arm-keil-mdk-5--vscodekeil-assistant不推荐">Arm Keil MDK 5 + VScode(Keil Assistant)【不推荐】</a>        <ul>
+          <li><a href="#简介-1" id="markdown-toc-简介-1">简介</a></li>
+          <li><a href="#windows-2" id="markdown-toc-windows-2">Windows</a>            <ul>
+              <li><a href="#配置教程" id="markdown-toc-配置教程">配置教程：</a></li>
+              <li><a href="#注意事项必看" id="markdown-toc-注意事项必看">注意事项（必看）：</a>                <ul>
+                  <li><a href="#须知" id="markdown-toc-须知">须知</a></li>
+                  <li><a href="#文字编码有问题" id="markdown-toc-文字编码有问题">文字🦟编码有问题</a></li>
+                  <li><a href="#误报错" id="markdown-toc-误报错">误报错</a></li>
+                  <li><a href="#无法go-to-definition" id="markdown-toc-无法go-to-definition">无法go to definition</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#arm-keil-mdk-6-基于vscode暂不推荐" id="markdown-toc-arm-keil-mdk-6-基于vscode暂不推荐">Arm Keil MDK 6 (基于VScode)【暂不推荐】</a>        <ul>
+          <li><a href="#简介-2" id="markdown-toc-简介-2">简介</a></li>
+          <li><a href="#windows--linux" id="markdown-toc-windows--linux">Windows &amp;&amp; Linux</a></li>
+        </ul>
+      </li>
+      <li><a href="#告别keil-mdk--vscodecmake环境部署非常推荐老鸟" id="markdown-toc-告别keil-mdk--vscodecmake环境部署非常推荐老鸟">告别Keil MDK : VScode+CMake环境部署【非常推荐老鸟】</a></li>
+    </ul>
+  </li>
+  <li><a href="#linux基本配置" id="markdown-toc-linux基本配置">Linux基本配置</a></li>
+  <li><a href="#cmake工程搭建" id="markdown-toc-cmake工程搭建">CMake工程搭建</a></li>
+  <li><a href="#opencv_cuda环境搭建" id="markdown-toc-opencv_cuda环境搭建">OpenCV_CUDA环境搭建</a>    <ul>
+      <li><a href="#linux-1" id="markdown-toc-linux-1">Linux</a>        <ul>
+          <li><a href="#保证显卡正常" id="markdown-toc-保证显卡正常">保证显卡正常</a></li>
+          <li><a href="#安装依赖项" id="markdown-toc-安装依赖项">安装依赖项</a></li>
+          <li><a href="#下载opencv源码" id="markdown-toc-下载opencv源码">下载OpenCV源码</a></li>
+          <li><a href="#cmake编译" id="markdown-toc-cmake编译">CMake编译</a>            <ul>
+              <li><a href="#准备工作" id="markdown-toc-准备工作">准备工作</a></li>
+              <li><a href="#cmake编译两种方式选其一" id="markdown-toc-cmake编译两种方式选其一">CMake编译<strong>(两种方式选其一)</strong></a>                <ul>
+                  <li><a href="#cmake终端命令方式不建议更建议用gui的方式这种终端的方式容易出奇奇怪怪的问题" id="markdown-toc-cmake终端命令方式不建议更建议用gui的方式这种终端的方式容易出奇奇怪怪的问题">CMake终端命令方式(不建议，更建议用GUI的方式，这种终端的方式容易出奇奇怪怪的问题)</a></li>
+                  <li><a href="#cmake-gui方式推荐不过太麻烦但是问题少且更好找问题" id="markdown-toc-cmake-gui方式推荐不过太麻烦但是问题少且更好找问题">CMake-GUI方式(推荐，不过太麻烦，但是问题少，且更好找问题)</a></li>
+                  <li><a href="#常见问题" id="markdown-toc-常见问题">常见问题</a>                    <ul>
+                      <li><a href="#无cuda选项" id="markdown-toc-无cuda选项">无CUDA选项</a></li>
+                      <li><a href="#模组的路径与命令行方式不同" id="markdown-toc-模组的路径与命令行方式不同">模组的路径与命令行方式不同</a></li>
+                      <li><a href="#opencv_python3_version参数的类型错了" id="markdown-toc-opencv_python3_version参数的类型错了">OPENCV_PYTHON3_VERSION参数的类型错了</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#makefiles编译" id="markdown-toc-makefiles编译">Makefiles编译</a></li>
+          <li><a href="#配置opencv环境变量env" id="markdown-toc-配置opencv环境变量env">配置OpenCV环境变量ENV</a></li>
+          <li><a href="#测试opencv_cudacmake程序示例" id="markdown-toc-测试opencv_cudacmake程序示例">测试OpenCV_CUDA(CMake程序示例)</a></li>
+          <li><a href="#常见问题-1" id="markdown-toc-常见问题-1">常见问题</a>            <ul>
+              <li><a href="#cmake--jx编译遇到operator或权重weight相关问题" id="markdown-toc-cmake--jx编译遇到operator或权重weight相关问题">cmake -jx编译遇到operator!=或权重weight相关问题</a></li>
+              <li><a href="#ros原装opencv与自己搭建的opencv_cuda冲突的问题" id="markdown-toc-ros原装opencv与自己搭建的opencv_cuda冲突的问题">ros原装opencv与自己搭建的opencv_cuda冲突的问题</a>                <ul>
+                  <li><a href="#ros1" id="markdown-toc-ros1">ROS1</a></li>
+                  <li><a href="#ros2" id="markdown-toc-ros2">ROS2</a></li>
+                </ul>
+              </li>
+              <li><a href="#opencv编译爆内存的问题" id="markdown-toc-opencv编译爆内存的问题">opencv编译爆内存的问题</a>                <ul>
+                  <li><a href="#windows中" id="markdown-toc-windows中">windows中：</a></li>
+                  <li><a href="#linux中" id="markdown-toc-linux中">linux中：</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#windows-3" id="markdown-toc-windows-3">Windows</a></li>
+    </ul>
+  </li>
+  <li><a href="#yolo环境搭建" id="markdown-toc-yolo环境搭建">YOLO环境搭建</a>    <ul>
+      <li><a href="#windows-4" id="markdown-toc-windows-4">Windows</a></li>
+      <li><a href="#linuxwsl2也能用" id="markdown-toc-linuxwsl2也能用">Linux(WSL2也能用)</a></li>
+    </ul>
+  </li>
+  <li><a href="#ros环境搭建" id="markdown-toc-ros环境搭建">ROS环境搭建</a>    <ul>
+      <li><a href="#推荐的搭建环境" id="markdown-toc-推荐的搭建环境">推荐的搭建环境</a>        <ul>
+          <li><a href="#方案一推荐" id="markdown-toc-方案一推荐">方案一(推荐)</a></li>
+          <li><a href="#方案二也是比较推荐但是要多学个docker" id="markdown-toc-方案二也是比较推荐但是要多学个docker">方案二(也是比较推荐，但是要多学个Docker)</a></li>
+          <li><a href="#方案三可以用" id="markdown-toc-方案三可以用">方案三(可以用)</a></li>
+          <li><a href="#方案四可以用" id="markdown-toc-方案四可以用">方案四(可以用)</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#qt环境搭建" id="markdown-toc-qt环境搭建">QT环境搭建</a>    <ul>
+      <li><a href="#安装qt" id="markdown-toc-安装qt">安装QT</a>        <ul>
+          <li><a href="#qt5" id="markdown-toc-qt5">QT5</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#debian系" id="markdown-toc-debian系">debian系</a></li>
+  <li><a href="#红帽系" id="markdown-toc-红帽系">红帽系</a></li>
+  <li><a href="#安装-qt5-核心开发包" id="markdown-toc-安装-qt5-核心开发包">安装 Qt5 核心开发包</a></li>
+  <li><a href="#安装常用模块按需选择" id="markdown-toc-安装常用模块按需选择">安装常用模块（按需选择）</a>    <ul>
+      <li><a href="#vscode环境配置" id="markdown-toc-vscode环境配置">VScode环境配置</a></li>
+      <li><a href="#qt-designer生成ui" id="markdown-toc-qt-designer生成ui">QT Designer生成.ui</a></li>
+      <li><a href="#调用ui类并编译运行" id="markdown-toc-调用ui类并编译运行">调用.ui类并编译运行</a></li>
+    </ul>
+  </li>
+  <li><a href="#docker环境搭建" id="markdown-toc-docker环境搭建">Docker环境搭建</a></li>
+</ul>
+
+<p>暂时无法在飞书文档外展示此内容</p>
+
+<ol>
+  <li>
+    <h1 id="cc环境搭建">C/C++环境搭建</h1>
+  </li>
+  <li>
+    <h2 id="windows">Windows</h2>
+  </li>
+  <li>
+    <h3 id="visual-studio">Visual Studio</h3>
+  </li>
+</ol>
+
+<p>https://www.bilibili.com/video/BV11R4y1s7jz</p>
+
+<ol>
+  <li>
+    <h2 id="linux">Linux</h2>
+  </li>
+</ol>
+
+<p>详见下方的CMake工程搭建。</p>
+
+<ol>
+  <li>
+    <h1 id="arm-keil-mdkarm单片机环境搭建">ARM Keil MDK(ARM单片机环境搭建)</h1>
+  </li>
+  <li>
+    <h2 id="介绍以及环境推荐">介绍以及环境推荐</h2>
+  </li>
+  <li>
+    <p>Keil MDK是ARM公司旗下官方软件。最主流的单片机开发环境IDE，没有之一。</p>
+  </li>
+  <li>
+    <p><strong>推荐版本：</strong></p>
+
+    <ol>
+      <li>
+        <p><strong>新手：无脑</strong> <strong>ARM</strong> <strong>Keil</strong> <strong>MDK</strong> <strong>5 + CubeMX(新手前期只准先安装ARM Keil MDK 5，不准用CubeMX)</strong></p>
+      </li>
+      <li>
+        <p><strong>老鸟：无脑 VScode + CMake + CubeMX</strong></p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <h2 id="arm-keil-mdk-5--cubemx推荐小鸟新手">Arm Keil MDK 5 + CubeMX【推荐小鸟(新手）】</h2>
+  </li>
+  <li>
+    <h3 id="简介">简介</h3>
+  </li>
+  <li>
+    <p>最主流的开发环境(即便有很多致命缺点)，没有之一。新手无脑用，新手必须用这个方案开发STM32。</p>
+  </li>
+  <li>
+    <p>缺点很明显：上古的界面，上古的代码补齐，仅支持Windows，且只有X86的32位版本。</p>
+  </li>
+  <li>
+    <h3 id="windows-1">Windows</h3>
+  </li>
+</ol>
+
+<p>https://www.bilibili.com/video/BV18T411r7Yu</p>
+
+<p>所需文件获取方式：</p>
+
+<ol>
+  <li>
+    <p>社团的U盘(直接拷贝)</p>
+  </li>
+  <li>
+    <p>官网：</p>
+
+    <ol>
+      <li>
+        <p>MDK5官网：https://www.keil.com/demo/eval/arm.htm</p>
+      </li>
+      <li>
+        <p>MDK5的FW固件下载链接：https://www.keil.arm.com/devices/</p>
+      </li>
+      <li>
+        <p>ARM编译器下载链接：</p>
+
+        <ol>
+          <li>
+            <p>ARMCC(AC5)必下：https://developer.arm.com/downloads/view/ACOMP5?revision=r5p6-07rel1</p>
+          </li>
+          <li>
+            <p>ARMCLANG(AC6)一般MDK5最新版都自带，<em>不用下</em>：https://developer.arm.com/downloads/view/ACOMPE</p>
+          </li>
+          <li>
+            <p>AC5与AC6对比(一般不用看)：<a href="https://developer.arm.com/Tools%20and%20Software/Arm%20Compiler%20for%20Embedded%20FuSa#Editions">https://developer.arm.com/Tools and Software/Arm Compiler for Embedded FuSa#Editions</a></p>
+          </li>
+        </ol>
+
+        <p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image1.png" alt="" /></p>
+      </li>
+      <li>
+        <p>Keil MDK 5 破解注册机(请关闭杀毒软件再下载)： <a href="https://sdutvincirobot.feishu.cn/file/SBbTbvSQ5o3dvExZ49UcGvYen8d">keygen.iso</a> or https://www.duote.com/soft/907739.html</p>
+      </li>
+      <li>
+        <p>Java_JRE下载(一般下载<a href="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=250129_d8aa705069af427f9b83e66b34f5e380">Windows Offline (64-bit)</a>,需要安装JRE才可以打开CubeMX)：https://www.java.com/en/download/manual.jsp</p>
+      </li>
+      <li>
+        <p>CubeMX官网：https://www.st.com.cn/zh/development-tools/stm32cubemx.html</p>
+      </li>
+      <li>
+        <p>正点原子配套资料1(A盘资料F1):http://www.openedv.com/docs/boards/stm32/zdyz_stm32f103_warshipV4.html</p>
+      </li>
+      <li>
+        <p>正点原子配套资料2(A盘资料F4):http://www.openedv.com/docs/boards/stm32/zdyz_stm32f407_explorerV3.html</p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image2.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image3.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image4.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h2 id="arm-keil-mdk-5--vscodekeil-assistant不推荐">Arm Keil MDK 5 + VScode(Keil Assistant)【不推荐】</h2>
+  </li>
+  <li>
+    <h3 id="简介-1">简介</h3>
+  </li>
+  <li>
+    <p>该方式是折中方案，介于MDK5和MDK6之间的方案，可以规避掉一部分MDK5的缺点。(但是由于C/C++插件过于垃圾，所以<strong>不太推荐使用</strong>)</p>
+  </li>
+  <li>
+    <h3 id="windows-2">Windows</h3>
+  </li>
+  <li>
+    <h4 id="配置教程">配置教程：</h4>
+  </li>
+</ol>
+
+<p>快速配置的视频：</p>
+
+<p>https://www.bilibili.com/video/BV18e4y1H7xX</p>
+
+<p>如果遇到一些问题，请看下方这个视频：</p>
+
+<p>https://www.bilibili.com/video/BV19V411g7gD/</p>
+
+<ol>
+  <li>
+    <p>请安装好MDK5，CubeMX，VScode等软件</p>
+  </li>
+  <li>
+    <p>安装VScode插件</p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image5.png" alt="" /></p>
+
+<ol>
+  <li>
+    <p>配置Keil Assistant</p>
+
+    <ol>
+      <li>点击扩展设置</li>
+    </ol>
+
+    <p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image6.png" alt="" /></p>
+
+    <ol>
+      <li>找到MDK5的路径</li>
+    </ol>
+
+    <p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image7.png" alt="" /></p>
+
+    <ol>
+      <li>复制一下路径</li>
+    </ol>
+
+    <p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image8.png" alt="" /></p>
+
+    <ol>
+      <li>填入刚才复制的路径</li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image9.png" alt="" /></p>
+
+<ol>
+  <li>
+    <p>用VScode打开MDK5工程</p>
+
+    <ol>
+      <li>打开工程</li>
+    </ol>
+
+    <p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image10.png" alt="" /></p>
+
+    <p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image11.png" alt="" /></p>
+
+    <p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image12.png" alt="" /></p>
+  </li>
+  <li>
+    <p>然后就可以用VScode编辑源码了</p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image13.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h4 id="注意事项必看">注意事项（必看）：</h4>
+  </li>
+  <li>
+    <h5 id="须知">须知</h5>
+  </li>
+  <li>
+    <p>该方式仅仅为<strong>折中方案</strong>，比单用MDK5好用一点，但远没有MDK6好用。</p>
+  </li>
+  <li>
+    <p>VScode只负责代码编辑(建议别用Keil Assistant的编译等功能)。</p>
+  </li>
+  <li>
+    <p>MDK5负责编译，下载，debug，添加源文件，头文件等其他一切操作。</p>
+  </li>
+  <li>
+    <p>优点：解决了AC6编译器的go to definition失效的问题(AC6全是优点，这是唯一缺点)；解决了MDK5上古界面的不护眼；解决了MDK5代码提示拉跨；可以使用各种VScode的插件提高编辑效率。</p>
+  </li>
+  <li>
+    <p>缺点：需要同时开着VScode和MDK5，各司其职，不统一。C/C++插件的代码提示虽比mdk5好，但也是过于拉胯。(远不如MDK6+Clangd)</p>
+  </li>
+  <li>
+    <h5 id="文字编码有问题">文字🦟编码有问题</h5>
+  </li>
+  <li>问题如下：</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image14.png" alt="" /></p>
+
+<ol>
+  <li>手动改编码(点右下角的UTF-8，推荐用下方的插件解决，比手改便捷)：</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image15.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image16.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image17.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image18.png" alt="" /></p>
+
+<ol>
+  <li>插件(VScode的特点就是插件多，不用插件的vscode失去了灵魂)</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image19.png" alt="" /></p>
+
+<p>该插件会自动提示你当前的编码有问题，自动猜测正确编码，点击yes就可以自动修改。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image20.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h5 id="误报错">误报错</h5>
+  </li>
+</ol>
+
+<p>不用管，只要MDK5编译不报错就行。</p>
+
+<ol>
+  <li>
+    <h5 id="无法go-to-definition">无法go to definition</h5>
+  </li>
+</ol>
+
+<p>(如果有问题才需要做，没问题就不要管)</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image21.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image22.png" alt="" /></p>
+
+<p>在下面框中加上：(加完后可能还会误报错，但是已经可以正常go to definition了)</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="err">..\**</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>或者 将Include Path这一栏里的绝对路径全改为相对路径(下方只列举一部分)：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="err">..\applications\Inc</span><span class="w">
+</span><span class="err">..\bsp\boards\Inc</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>
+    <h2 id="arm-keil-mdk-6-基于vscode暂不推荐">Arm Keil MDK 6 (基于VScode)【暂不推荐】</h2>
+  </li>
+  <li>
+    <h3 id="简介-2">简介</h3>
+  </li>
+  <li>
+    <p>优点：改善了MDK5的基本所有已知缺点，简直是开发者福音。</p>
+  </li>
+  <li>
+    <p>缺点：学习成本较高，没有一定的电脑常识驾驭不了。</p>
+  </li>
+  <li>
+    <p>目前暂时还<strong>不是很推荐单独使用</strong>，因为即便你会用，队友也不一定会用，这样工程无法互通。但如果你有能力，就是想用MDK6，那用也无妨，自己用着顺手为主。</p>
+  </li>
+  <li>
+    <p>但是<strong>非常推荐配合使用</strong>，MDK6配合MDK5一起使用。使用MDK5添加源文件，添加头文件等操作(不要忘记添加完源文件和头文件后，用mdk5编译一下)；使用MDK6转化刚才的mdk5工程，进行源码编辑，编译，debug等等操作。(这样无论是用mdk5还是mdk6的队友，都可以打开你的工程直接食用啦)（看不懂这段话问学长）</p>
+  </li>
+  <li>
+    <h3 id="windows--linux">Windows &amp;&amp; Linux</h3>
+  </li>
+</ol>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/NfUlwxPTbiHTurktlEXc8TGYnmc">ARM Keil MDK6使用教程</a></p>
+
+<ol>
+  <li>
+    <h2 id="告别keil-mdk--vscodecmake环境部署非常推荐老鸟">告别Keil MDK : VScode+CMake环境部署【非常推荐老鸟】</h2>
+  </li>
+</ol>
+
+<p><strong>(开发起来目前感觉还是挺舒服的，日后电控组组长如果觉得好用，可以统一一下IDE)</strong></p>
+
+<p>主要现在有三个使用比较广的编译器.</p>
+
+<p>armclang(AC6):编译巨快,开销巨小.(不论是编译,还是开销都非常优秀)</p>
+
+<p>armcc(AC5):编译巨慢,开销很小.(仅仅只是开销小)</p>
+
+<p>armgcc:编译较快,开销略大.(仅仅只是编译快)</p>
+
+<p>所以说armgcc并没有那么大的优势，但是也可以接受。</p>
+
+<p>主要是ARMCC和ARMCLANG是商用编译器，而ARMGCC是开源编译器，所以可以搭配CMake，Makefile等使用，可以更好管理项目，也可以支持全平台(Windows，Linux，MacOS等）</p>
+
+<p>详细教程<a href="https://sdutvincirobot.feishu.cn/wiki/F3Htw5Id9ih63okH9npcszeWn4g">STM32+CMake工程部署</a></p>
+
+<ol>
+  <li>
+    <h1 id="linux基本配置">Linux基本配置</h1>
+  </li>
+</ol>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/GIKnwJo39iREkHkFGvqcy5Osntc">Vinci机器人队Linux入门教程</a></p>
+
+<ol>
+  <li>
+    <h1 id="cmake工程搭建">CMake工程搭建</h1>
+  </li>
+</ol>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/Dosvw46BtiBBLEkTdO4cPOt8nVb">CMake C/C++编译环境配置</a></p>
+
+<ol>
+  <li>
+    <h1 id="opencv_cuda环境搭建">OpenCV_CUDA环境搭建</h1>
+  </li>
+  <li>
+    <h2 id="linux-1">Linux</h2>
+  </li>
+</ol>
+
+<p>更推荐在Linux上部署，一些深度学习的东西，在Linux上的运行速度要明显<strong>远远高于</strong>Windows。</p>
+
+<p>如果你没有空闲硬盘装Linux了，可以考虑WSL2(在Windows上运行的Linux子系统2)，虽有一点点性能损失，但速度也远远高于Windows。</p>
+
+<p>WSL2安装教程<a href="https://sdutvincirobot.feishu.cn/wiki/GIKnwJo39iREkHkFGvqcy5Osntc">Vinci机器人队Linux入门教程</a></p>
+
+<p><strong>实体机Linux</strong><strong>＞</strong><strong>WSL2</strong><strong>＞＞</strong><strong>Windows</strong></p>
+
+<p>关于cv_bridge:最好在安装ros之前编译opencv，这样安装ros时,cv_bridge就会自己指向已经安装过的opencv，并且ros不会另外安装opencv，如此就可以通过find_package指令找到电脑上仅有的cv_bridge和opencv，保证系统环境不被污染。关于补救办法，请看常见问题</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image23.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="保证显卡正常">保证显卡正常</h3>
+  </li>
+</ol>
+
+<p><strong>请确保 英伟达驱动、CUDA、cuDNN 全部安装成功并且版本正确。</strong></p>
+
+<p><strong>(安装驱动、CUDA、cuDNN教程:</strong><a href="https://sdutvincirobot.feishu.cn/wiki/GIKnwJo39iREkHkFGvqcy5Osntc">Vinci机器人队Linux入门教程</a><strong>)</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="c"># 检查显卡驱动</span>
+nvidia-smi
+<span class="c"># 验证CUDA是否安装成功</span>
+nvcc <span class="nt">-V</span>
+<span class="c"># 检查cuDNN版本命令(仅仅只是查了头文件)</span>
+<span class="nb">cat</span> /usr/local/cuda/include/cudnn_version.h | <span class="nb">grep </span>CUDNN_MAJOR <span class="nt">-A</span> 2
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>出现下图这样的，则你是有英伟达驱动，CUDA以及cuDNN的</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image24.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image25.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="安装依赖项">安装依赖项</h3>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="c"># Debian系系统</span>
+<span class="nb">sudo </span>apt <span class="nb">install</span> <span class="nt">-y</span> libcurl4 build-essential pkg-config cmake-gui <span class="se">\</span>
+    libopenblas-dev libeigen3-dev libtbb-dev <span class="se">\</span>
+    libavcodec-dev libavformat-dev <span class="se">\</span>
+    libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev <span class="se">\</span>
+    libswscale-dev libgtk-3-dev libpng-dev libjpeg-dev <span class="se">\</span>
+    libcanberra-gtk-module libcanberra-gtk3-module libv4l-dev python3-dev python3-numpy
+    
+    
+<span class="c"># RHEL红帽系系统</span>
+bash <span class="nt">-c</span> <span class="s1">'sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm'</span>
+<span class="nb">sudo </span>dnf <span class="nb">install</span> <span class="nt">-y</span> curl gcc gcc-c++ make cmake cmake-gui <span class="se">\</span>
+    openblas-devel eigen3-devel tbb-devel <span class="se">\</span>
+    ffmpeg-libs ffmpeg-devel <span class="se">\</span>
+    gstreamer1-plugins-base-devel gstreamer1-devel <span class="se">\</span>
+    gtk3-devel libpng-devel libjpeg-devel <span class="se">\</span>
+    <span class="nv">libc</span><span class="o">=</span>aanberra-gtk3 libcanberra-devel v4l-utils v4l2loopback openexr-devel python3-dev python3-numpy
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>下方表格是这些依赖的说明</p>
+
+<!--br {mso-data-placement:same-cell;}-->
+<p>td {white-space:nowrap;border:0.5pt solid #dee0e3;font-size:10pt;font-style:normal;font-weight:normal;vertical-align:middle;word-break:normal;word-wrap:normal;}
+| 生成 OpenCV 的主要依赖项 |
+|:—|
+| 名称 | apt package 名称 | 功能 |
+| 编译系统 | build-essential cmake cmake-gui pkg-config | 生成 OpenCV |
+| 图像库 | libpng-dev libjpeg-dev | 提供各类图像格式的编解码 |
+| OpenBLAS | libopenblas-dev | 利用 CPU 向量运算指令为大量算法提供加速。 |
+| Eigen3 | libeigen3-dev | 提供线性代数相关算法支持 |
+| Intel TBB | libtbb-dev | 在 Intel CPU 上提供高性能并发计算支持 |
+| FFMPEG | libavcodec-dev libavformat-dev libswscale-dev | 提供视频编解码能力 |
+| GStreamer | libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev | 提供流媒体处理能力 |
+| GTK | libgtk-3-dev libcanberra-gtk-module libcanberra-gtk3-module | 图形化用户界面 |
+| Video4Linux | libv4l-dev | Linux摄像头库 |</p>
+
+<ol>
+  <li>
+    <h3 id="下载opencv源码">下载OpenCV源码</h3>
+  </li>
+</ol>
+
+<p>https://github.com/opencv/opencv</p>
+
+<p>https://github.com/opencv/opencv_contrib</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image26.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image27.png" alt="" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="c"># 创建文件夹存放源码</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> ooppccvv
+<span class="nb">cd </span>ooppccvv
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image28.png" alt="" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="c"># 解压源码</span>
+unzip ./opencv-4.11.0.zip
+unzip ./opencv_contrib-4.11.0.zip
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image29.png" alt="" /></p>
+
+<p>确认一下 opencv 目录和 opencv-contrib 目录位于相同的父目录内，并确认这两个目录下都存在 modules 子目录：<strong>(一般不用确认，只要你照着敲我上方的命令，一定没问题)</strong></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image30.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image31.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="cmake编译">CMake编译</h3>
+  </li>
+  <li>
+    <h4 id="准备工作">准备工作</h4>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="c"># 创建build文件夹用于装CMake生成的内容:</span>
+<span class="nb">cd </span>opencv-4.11.0
+<span class="nb">mkdir</span> <span class="nt">-p</span> build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image32.png" alt="" /></p>
+
+<p>OpenCV使用CMake与Makefile进行编译，编译选项较多，详见（也可以不看，不过不同版本有些CMake编译选项是不同的）：</p>
+
+<p>https://docs.opencv.org/4.10.0/db/d05/tutorial_config_reference.html</p>
+
+<p>下方被划掉的是在OpenCV4.11.0中已经不复存在的参数，但是可能在其他版本的OpenCV中仍有效，请自行用<code class="language-plaintext highlighter-rouge">CMake-LAH</code>(不推荐)命令或者<code class="language-plaintext highlighter-rouge">CMake-gui</code>(推荐)查看。</p>
+
+<!--br {mso-data-placement:same-cell;}-->
+<p>td {white-space:nowrap;border:0.5pt solid #dee0e3;font-size:10pt;font-style:normal;font-weight:normal;vertical-align:middle;word-break:normal;word-wrap:normal;}
+| OpenCV4.11.0 CMake常用编译选项表一览 |
+|:—|
+| 序号 | CMake参数名 | 参数值 | 作用 |
+| 1 | CMAKE_BUILD_TYPE | Release | 不在行成的库文件中包含调试信息，并进行速度优化。如果指定为 Debug ，就可以在 Debug 过程中进入 OpenCV 内部的代码，但运行速度会略微下降。 |
+| 2 | CMAKE_INSTALL_PREFIX | /usr/local | 指定 OpenCV 生成的库文件在系统中的安装路径。 |
+| 3 | CMAKE_VERBOSE_MAKEFILE | ON | 务必开启，以便于发现编译中出现的问题。 |
+| 4 | BUILD_SHARED_LIBS | ON | 成共享库（.so），如果置为 OFF 则只会生成静态库（.a） |
+| 5 | OPENCV_EXTRA_MODULES_PATH | <Modules路径> | 按之前的描述，应为 「../../opencv_contrib-4.10.0/modules」。如果使用CMake-GUI则应为「../opencv_contrib-4.10.0/modules」。可以用 ls 命令确认相对路径是否存在。 |
+| 6 | OPENCV_ENABLE_NONFREE | ON | 如果置为OFF，一些包含专利保护算法的函数将不会生成。 |
+| 7 | ENABLE_CXX11 | ON | 支持 C++11 以上的语法和 STL 库。 |
+| 8 | BUILD_TESTS | OFF | 可以关闭生成后的自我 TEST ，大多数情况没有必要开启，可大辐缩短生成时间。但如果怀疑生成的 OpenCV 库有问题，则尽量开启一下，可以进行自测。 |
+| 9 | BUILD_PERF_TESTS | OFF |
+| 10 | OPENCV_GENERATE_PKGCONFIG | ON | 建议开启，便于 C++ 程序通过 pkg-config 来引用 OpenCV 库。 |
+| 11 | WITH_GTK | ON | 编译图形界面，cv2.show会用到 |
+| 12 | CUDA_ARCH_BIN | 7.2;8.6;8.7 | 这俩空需要填显卡算力，下面会有教程教你怎么查你的显卡算力。BIN指定为哪些 真实 GPU 架构 生成二进制代码（SASS），通常你要编译几张不同显卡，就要用分号分隔开这些显卡对应的算力（如 "7.2;8.6;8.7" ）。PTX指定为哪些 虚拟架构 生成 PTX 中间代码（用于未来 GPU 的 JIT 编译） 。通常只需设置BIN的最高算力（如 "8.7" ）。 |
+| 13 | CUDA_ARCH_PTX | 8.7 |
+| 14 | WITH_CUDA | ON | 如果系统正确安装了 CUDA 并希望 OpenCV 启用 CUDA 支持，这四个选项都要打开。 |
+| 15 | ENABLE_FAST_MATH | ON | 支持math快速计算 |
+| 16 | CUDA_FAST_MATH | ON | cuda的math快速计算 |
+| 17 | WITH_CUBLAS | ON | 开启CUBLAS |
+| 18 | WITH_CUDNN | ON | 希望OpenCV启用cuDNN支持，这三项要打开 |
+| 19 | WITH_DNN | ON | 开启DNN |
+| 20 | OPENCV_DNN_CUDA | ON | 启用CUDA，必须安装CUDA、CUBLAS和CUDNN。 |
+| 21 | CUDA_HOST_COMPILER | /usr/bin/gcc-13 | (可选)如果你是gcc14及以上，请安装一个gcc13及以下，改用gcc13及以下编译CUDA |
+| 22 | WITH_IPP | ON | 这四个选项控制 OpenCV 如何进行并发运算，默认都是 ON，但如果有需要生成一个绝对单线程运行的 OpenCV ，请将这几个选项均置为 OFF 。 |
+| 23 | WITH_TBB | ON |  |
+| 24 | WITH_OPENMP | ON |  |
+| 25 | WITH_PTHREADS_PF | ON |  |
+| 26 | BUILD_opencv_python3 | ON | OpenCV 提供 Python3 支持。在OpenCV4的某个版本已经默认打开。 |
+| 27 | OPENCV_PYTHON3_VERSION | Python3版本，如3.12 | 填你的python3版本，比如Fedora42是Python3.13，就填3.13 |
+| 28 | PYTHON3_EXECUTABLE | Python3路径 | Python3 C++接口库的路径/usr/bin/python3 |
+| 29 | PYTHON3_LIBRARY | Lib路径 | Python3 C++接口库的路径 |
+| 30 | PYTHON3_NUMPY_INCLUDE_DIRS | 矩阵库Head路径 | Python3 矩阵库头文件的路径 |
+| 31 | PYTHON3_INCLUDE_DIR | Head路径 | Python3 C++头文件的路径 |
+| 32 | PYTHON3_PACKAGES_PATH | Path路径 | OpenCV 的 Python3 包安装的路径 |
+| 33 | WITH_OPENGL | ON | 启用OPENGL |
+|  |  |  |  |</Modules路径></p>
+
+<ol>
+  <li>查询GPU Compute Capability(CUDA_ARCH_BIN参数):</li>
+</ol>
+
+<p>https://developer.nvidia.com/cuda-gpus#collapseOne</p>
+
+<p>进入网站后，</p>
+
+<p>GeForce代表英伟达游戏系列显卡，常见的有GTX1080，RTX3080，RTX 4080等。</p>
+
+<p>Jetson代表工控机序列显卡。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image33.png" alt="" /></p>
+
+<p>我是3060Laptop(笔记本移动端显卡，所以找右列的Notebook下方的3060)</p>
+
+<p>如果你是3060(台式桌面端，则要找左列的3060)</p>
+
+<p>通过图得知，我的显卡算力(GPU Compute Capability)为8.6，所以我的CMake的CUDA_ARCH_BIN参数为8.6。</p>
+
+<p>CUDA_ARCH_PTX为BIN的最高值，我只设置了一个BIN，所以最高值就是这个8.6。(只有你要给电脑更换显卡的情况下，才要给BIN设置多个值，就需要把你要用的显卡的值全包含在BIN中，而PTX只需要BIN的最高值即可)</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image34.png" alt="" /></p>
+
+<ol>
+  <li>Python3的路径查询，请在终端中使用，检查是否都有结果生成，确保打印出的结果符合预期后再进行下面的CMake生成操作。(不需要记住路径)</li>
+</ol>
+
+<p>当然你也可以用命令反馈出来的路径复制出来，这个路径就是参数的值。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="c"># Python3 C++接口库的路径</span>
+python3 <span class="nt">-c</span> <span class="s2">"import sysconfig; from os.path import join; print(join(sysconfig.get_config_var('LIBDIR'), sysconfig.get_config_var('LDLIBRARY')))"</span>
+<span class="c"># Python3 矩阵库头文件的路径</span>
+python3 <span class="nt">-c</span> <span class="s2">"import numpy; print(numpy.get_include())"</span>
+<span class="c"># OpenCV 的 Python3 包安装的路径。</span>
+python3 <span class="nt">-c</span> <span class="s2">"import sysconfig; print(sysconfig.get_path('purelib'))"</span>
+<span class="c"># Python3 头文件的路径</span>
+python3 <span class="nt">-c</span> <span class="s2">"import sysconfig; print(sysconfig.get_path('include'))"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>
+    <h4 id="cmake编译两种方式选其一">CMake编译<strong>(两种方式选其一)</strong></h4>
+  </li>
+</ol>
+
+<p>因为电脑配置的不同，每个电脑的硬件，软件(依赖包)等都不同，所以我能跑起来的你不一定一下就能跑成功。</p>
+
+<p>一般很难风调雨顺，如果有问题及时去百度，谷歌，OpenCV论坛上找答案。</p>
+
+<p>论坛:https://forum.opencv.org/</p>
+
+<ol>
+  <li>
+    <h5 id="cmake终端命令方式不建议更建议用gui的方式这种终端的方式容易出奇奇怪怪的问题">CMake终端命令方式(不建议，更建议用GUI的方式，这种终端的方式容易出奇奇怪怪的问题)</h5>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="rouge-code"><pre>cmake .. <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="se">\</span>
+        <span class="nt">-DCMAKE_INSTALL_PREFIX</span><span class="o">=</span>/usr/local <span class="se">\</span>
+        <span class="nt">-DBUILD_SHARED_LIBS</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DOPENCV_EXTRA_MODULES_PATH</span><span class="o">=</span>../../opencv_contrib-4.11.0/modules <span class="se">\</span>
+        <span class="nt">-DOPENCV_ENABLE_NONFREE</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DBUILD_TESTS</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DBUILD_PERF_TESTS</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DOPENCV_GENERATE_PKGCONFIG</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DWITH_GTK</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DWITH_CUDA</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DENABLE_FAST_MATH</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DCUDA_FAST_MATH</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DWITH_CUBLAS</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DCUDA_ARCH_BIN</span><span class="o">=</span><span class="s2">"8.6"</span> <span class="se">\</span>
+        <span class="nt">-DCUDA_ARCH_PTX</span><span class="o">=</span><span class="s2">"8.6"</span> <span class="se">\</span>
+        <span class="nt">-DCUDA_HOST_COMPILER</span><span class="o">=</span>/usr/bin/gcc-13 <span class="se">\</span>
+        <span class="nt">-DWITH_CUDNN</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DOPENCV_DNN_CUDA</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DWITH_IPP</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DWITH_TBB</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DWITH_OPENMP</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DWITH_PTHREADS_PF</span><span class="o">=</span>ON <span class="se">\</span>
+        <span class="nt">-DOPENCV_PYTHON3_VERSION</span><span class="o">=</span>3.12 <span class="se">\</span>
+        <span class="nt">-DPYTHON3_EXECUTABLE</span><span class="o">=</span>/usr/bin/python3 <span class="se">\</span>
+        <span class="nt">-DPYTHON3_LIBRARY</span><span class="o">=</span><span class="si">$(</span>python3 <span class="nt">-c</span> <span class="s2">"import sysconfig; from os.path import join; print(join(sysconfig.get_config_var('LIBDIR'), sysconfig.get_config_var('LDLIBRARY')))"</span><span class="si">)</span> <span class="se">\</span>
+        <span class="nt">-DPYTHON3_NUMPY_INCLUDE_DIRS</span><span class="o">=</span><span class="si">$(</span>python3 <span class="nt">-c</span> <span class="s2">"import numpy; print(numpy.get_include())"</span><span class="si">)</span> <span class="se">\</span>
+        <span class="nt">-DPYTHON3_PACKAGES_PATH</span><span class="o">=</span><span class="si">$(</span>python3 <span class="nt">-c</span> <span class="s2">"import sysconfig; print(sysconfig.get_path('purelib'))"</span><span class="si">)</span> <span class="se">\</span>
+        <span class="nt">-DPYTHON3_INCLUDE_DIR</span><span class="o">=</span><span class="si">$(</span>python3 <span class="nt">-c</span> <span class="s2">"import sysconfig; print(sysconfig.get_path('include'))"</span><span class="si">)</span> <span class="se">\</span>
+        <span class="nt">-DWITH_OPENGL</span><span class="o">=</span>ON
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image35.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image36.png" alt="" /></p>
+
+<p>你可以根据你的需要，按照之前的说明来自行增减或修改这些选项。如果 cmake 命令出错，往往是缺少依赖项或配置的生成选项不正确所致，可根据提示信息来检查。如果执行成功，就可以进行编译（请看Makefiles编译部分）了：</p>
+
+<ol>
+  <li>
+    <h5 id="cmake-gui方式推荐不过太麻烦但是问题少且更好找问题">CMake-GUI方式(推荐，不过太麻烦，但是问题少，且更好找问题)</h5>
+  </li>
+  <li>打开CMake-GUI：</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image37.png" alt="" /></p>
+
+<p>配置一下这俩路径</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image38.png" alt="" /></p>
+
+<p>点击左下角配置，选择Makefiles</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image39.png" alt="" /></p>
+
+<ol>
+  <li>配置参数</li>
+</ol>
+
+<p>根据上方表格去挨个参数进行配置。填完所有选项后，配置完毕点Configure.</p>
+
+<p>在配置参数遇到问题，请看下面的常见问题章节。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image40.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image41.png" alt="" /></p>
+
+<p>你可以根据你的需要，按照之前的说明来自行增减或修改这些选项。如果 cmake 命令出错，往往是缺少依赖项或配置的生成选项不正确所致，可根据提示信息来检查。如果执行成功，就可以进行编译(进行Makefiles编译)了：</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image42.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image43.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h5 id="常见问题">常见问题</h5>
+  </li>
+  <li>
+    <h6 id="无cuda选项">无CUDA选项</h6>
+  </li>
+</ol>
+
+<p>有时候CMake-GUI只会在编译后才显示某些参数(比如只有编译过WITH_CUDA才会显示CUDA相关的选项)。</p>
+
+<p>所以你需要先把WITH_CUDA打上勾，再点左下角的config,这样才会出现和CUDA相关的选项，再把那些选项配置一下。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image44.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h6 id="模组的路径与命令行方式不同">模组的路径与命令行方式不同</h6>
+  </li>
+</ol>
+
+<p>需要注意的是，这个相对路径与直接敲CMake命令配置的参数不同，这里是<code class="language-plaintext highlighter-rouge">../opencv_contrib-4.11.0/modules</code>。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image45.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h6 id="opencv_python3_version参数的类型错了">OPENCV_PYTHON3_VERSION参数的类型错了</h6>
+  </li>
+</ol>
+
+<p>在cmake-gui中不知道为何OPENCV_PYTHON3_VERSION参数的类型成了布尔型。</p>
+
+<p>需要手动改为字符串型数据。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image46.png" alt="" /></p>
+
+<p>上图就是问题所在，这里竟然是个布尔值。</p>
+
+<p>先删掉该选项。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image47.png" alt="" /></p>
+
+<p>再重新添加一个该选项。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image48.png" alt="" /></p>
+
+<div class="language-Dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c"># 查看python3版本</span>
+python3 --version
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image49.png" alt="" /></p>
+
+<p>在下面填上3.12，后面的小版本号不用填。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image50.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="makefiles编译">Makefiles编译</h3>
+  </li>
+</ol>
+
+<p>后面 -j 参数的意义是使用所有 CPU 参与编译。如果启用了 CUDA ，生成过程会比较慢，请耐心等待。编译期间如果出错往往是编译器、系统库、三方库的版本兼容性问题，找问题的难度偏大。</p>
+
+<p><strong>请在build目录下进行下方命令。</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="c"># 内存小于16GB</span>
+make all
+<span class="c"># 内存等于16GB</span>
+make all <span class="nt">-j</span><span class="k">$((</span> <span class="si">$(</span><span class="nb">grep</span> <span class="nt">-c</span> ^processor /proc/cpuinfo<span class="si">)</span> <span class="o">/</span> <span class="m">2</span> <span class="k">))</span>
+<span class="c"># 内存大于32GB</span>
+make all <span class="nt">-j</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-c</span> ^processor /proc/cpuinfo<span class="si">)</span>
+<span class="c"># 或者自行规定线程数量（比如16线程）</span>
+make all <span class="nt">-j16</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image51.png" alt="" /></p>
+
+<p>全核跑编译</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image52.png" alt="" /></p>
+
+<p>如图才是真编译成功，没有错误。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image53.png" alt="" /></p>
+
+<p>生成结束后，执行以下命令进行安装：</p>
+
+<p><code class="language-plaintext highlighter-rouge">$(grep -c ^processor /proc/cpuinfo)</code>变量为CPU线程的数量。(这样可以使CPU全力多线程进行编译)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="c"># 内存小于16GB</span>
+<span class="nb">sudo </span>make <span class="nb">install</span>
+<span class="c"># 内存等于16GB</span>
+<span class="nb">sudo </span>make <span class="nb">install</span> <span class="nt">-j</span><span class="k">$((</span> <span class="si">$(</span><span class="nb">grep</span> <span class="nt">-c</span> ^processor /proc/cpuinfo<span class="si">)</span> <span class="o">/</span> <span class="m">2</span> <span class="k">))</span>
+<span class="c"># 内存大于32GB</span>
+<span class="nb">sudo </span>make <span class="nb">install</span> <span class="nt">-j</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-c</span> ^processor /proc/cpuinfo<span class="si">)</span>
+<span class="c"># 或者自行规定线程数量（比如16线程）</span>
+<span class="nb">sudo </span>make <span class="nb">install</span> <span class="nt">-j16</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image54.png" alt="" /></p>
+
+<p>无报错则安装成功</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image55.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="配置opencv环境变量env">配置OpenCV环境变量ENV</h3>
+  </li>
+  <li>可能需要配置一下lib的路径：</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>vim ~/.bashrc
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>在最底下加上下方的内容</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c"># 设置 LD_LIBRARY_PATH</span>
+<span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">"/usr/local/lib:</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>其他的不用配置，开箱即用(可以配置一下pkg-config)，</li>
+</ol>
+
+<p>检查是否安装成功：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>opencv_version
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image56.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="测试opencv_cudacmake程序示例">测试OpenCV_CUDA(CMake程序示例)</h3>
+  </li>
+  <li>
+    <p>CMake是一定要掌握的，请看下方文档学习:<a href="https://sdutvincirobot.feishu.cn/wiki/Dosvw46BtiBBLEkTdO4cPOt8nVb">CMake C/C++编译环境配置</a></p>
+  </li>
+  <li>如图测试完毕：</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image57.png" alt="" /></p>
+
+<ol>
+  <li>下方是实例工程我已上传至GitHub供大家下载：(下方示例工程里的CMake模板不是最新的，可能不如新版功能齐全，不如新版各方面设计的更周到，如果想找最新版模板请看<a href="https://sdutvincirobot.feishu.cn/wiki/Dosvw46BtiBBLEkTdO4cPOt8nVb">CMake C/C++编译环境配置</a>)</li>
+</ol>
+
+<p>https://github.com/tungchiahui/opencv_cuda_test</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="c"># 克隆源码</span>
+git clone https://github.com/tungchiahui/opencv_cuda_test.git
+<span class="c"># cd进工程</span>
+<span class="nb">cd </span>opencv_cuda_test
+<span class="c"># cd进build目录</span>
+<span class="nb">cd </span>build
+<span class="c"># 进行cmake编译</span>
+cmake ..
+<span class="c"># 进行make编译+进行make install安装(最大线程)</span>
+make <span class="nb">install</span> <span class="nt">-j</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-c</span> ^processor /proc/cpuinfo<span class="si">)</span>
+<span class="c"># 给予脚本执行权限</span>
+<span class="nb">sudo chmod </span>a+x ../script/setup_vinci_emis.bash
+<span class="nb">sudo chmod </span>a+x ../script/vinci_emis
+<span class="nb">sudo chmod </span>a+x ../install/.setup.bash
+<span class="c"># 执行环境脚本</span>
+<span class="nb">source</span> ../script/setup_vinci_emis.bash
+<span class="c"># 执行demo1二进制程序</span>
+../script/vinci_emis run demo1
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>或者</strong>直接点击<code class="language-plaintext highlighter-rouge">Run</code>，<code class="language-plaintext highlighter-rouge">Start Debugging</code>或者<code class="language-plaintext highlighter-rouge">Run Without Debugging</code>都可以。(已经将launch.json及task.json全部配置好了)(发现bug及时call我，call我之前，请看最新CMake模板是否已经修复了该bug，若未修复，再call我)</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image58.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image59.png" alt="" /></p>
+
+<p>测试完毕</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image60.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="常见问题-1">常见问题</h3>
+  </li>
+  <li>
+    <h4 id="cmake--jx编译遇到operator或权重weight相关问题">cmake -jx编译遇到operator!=或权重weight相关问题</h4>
+
+    <p>  这个问题大多发生在ubuntu20.04或者cuda12.2上，编译时添加contrib库，对应ros版本为noetic，opencv版本为4.8.0。</p>
+
+    <p>  github上的讨论：</p>
+  </li>
+</ol>
+
+<p>https://github.com/ros-perception/vision_opencv/tree/kinetic</p>
+
+<p>根据GitHub中的解决方案，将对应报错.hpp文件中的相应代码修改（若只是有一些WARNING那大可不必修改）：</p>
+
+<p><code class="language-plaintext highlighter-rouge">114 opencv/modules/dnn/src/cuda4dnn/primitives/normalize_bbox.hpp 中 if (weight != 1.0)</code>改为 <code class="language-plaintext highlighter-rouge">if (weight != static_cast&lt;T&gt;(1.0))</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">124 opencv/modules/dnn/src/cuda4dnn/primitives/region.hpp 中if (nms_iou_threshold &gt; 0)</code></p>
+
+<p>改为 <code class="language-plaintext highlighter-rouge">if (nms_iou_threshold &gt; static_cast&lt;T&gt;(0))</code></p>
+
+<p>再次编译</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>make <span class="nt">-j16</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>
+    <h4 id="ros原装opencv与自己搭建的opencv_cuda冲突的问题">ros原装opencv与自己搭建的opencv_cuda冲突的问题</h4>
+  </li>
+</ol>
+
+<p>原因：ros自带的cv_bridge自动链接ros的opencv，而ros自带的opencv没有cuda加速，故报错。</p>
+
+<p>Ubuntu允许多版本 opencv共存，不建议直接卸载opencv，可能导致相关环境异常。</p>
+
+<p>解决方案：额外配置一个版本的cv_bridge进行opencv的链接</p>
+
+<ol>
+  <li>
+    <h5 id="ros1">ROS1</h5>
+  </li>
+</ol>
+
+<p>解决方案：</p>
+
+<p>在https://github.com/ros-perception/vision_opencv/tree/kinetic中下载对应版本的cv_bridge</p>
+
+<p>先对cv_bridge中的CmakeList.txt进行修改，OpencvDIR对应自己的opencv安装路径，并将修改包名：</p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="nb">project</span><span class="p">(</span>cv_bridge_480<span class="p">)</span><span class="c1">#修改为你的包名，加个版本号就可以</span>
+<span class="nb">set</span><span class="p">(</span>OpenCV_DIR <span class="s2">"/home/liu/opencv/opencv-4.8.0"</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span>OpenCV 4.8.0 REQUIRED
+  COMPONENTS
+    opencv_core
+    opencv_imgproc
+    opencv_imgcodecs
+  CONFIG
+<span class="p">)</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>修改package.xml中的包名</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>  <span class="nt">&lt;name&gt;</span>cv_bridge_480<span class="nt">&lt;/name&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>此时将cv_bridge作为一个ros功能包进行编译，把包整体复制进你工作空间的src中进行编译</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>cp -rf ./cv_bridge ~/Yolo_Tensorrt_Demo/demo01_test/src
+catkin_make
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>然后就可以将cv_bridge作为功能包使用了，在你原本的包CmakeLists中添加</p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">find_package</span><span class="p">(</span>cv_bridge_480<span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>package.xml:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;build_depend&gt;</span>cv_bridge_480<span class="nt">&lt;/build_depend&gt;</span>
+<span class="nt">&lt;build_export_depend&gt;</span>cv_bridge_480<span class="nt">&lt;/build_export_depend&gt;</span>
+<span class="nt">&lt;exec_depend&gt;</span>cv_bridge_480<span class="nt">&lt;/exec_depend&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>到这里自定义的cv_bridge包就配好了</p>
+
+<p>如果你还想在vscode中使用代码补全，添加路径一直到cv_bridge包的include就可以,我这里是另一个工作空间，都一样。</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nl">"includePath"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"/home/liu/cv_bridge_ws/src/cv_bridge/include"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"/home/liu/cv_bridge_ws/src/cv_bridge"</span><span class="w">
+
+</span><span class="p">]</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>
+    <h5 id="ros2">ROS2</h5>
+  </li>
+</ol>
+
+<p>详见<a href="https://sdutvincirobot.feishu.cn/wiki/FKEVwIsvKi1yBHkHWqTcn2ZKnNe">ROS2机器人操作系统教程</a>中CV_Bridge章节.</p>
+
+<ol>
+  <li>
+    <h4 id="opencv编译爆内存的问题">opencv编译爆内存的问题</h4>
+  </li>
+</ol>
+
+<p>解决方案：采用多核编译，一般采用make -j16 （这里16是CPU线程数，可以根据实际情况进行调整）即可解决，cpu线程越多，编译速度就越快</p>
+
+<ol>
+  <li>
+    <h5 id="windows中">windows中：</h5>
+  </li>
+</ol>
+
+<p>Mingw：</p>
+
+<pre><code class="language-PowerShell">mingw64-make -j16
+</code></pre>
+
+<p>值得注意的是，mingw并不支持windows上的opencv_contrib编译，这在configure一开始就会提示</p>
+
+<p>Vs：</p>
+
+<p>https://blog.csdn.net/hollyholly5/article/details/68062513</p>
+
+<ol>
+  <li>
+    <h5 id="linux中">linux中：</h5>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>make <span class="nt">-j</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-c</span> ^processor /proc/cpuinfo<span class="si">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>
+    <h2 id="windows-3">Windows</h2>
+  </li>
+</ol>
+
+<p>详见<a href="https://sdutvincirobot.feishu.cn/wiki/Lm6XwbEJyi099ykqyV4cvirPn2f">使用OpenCV推理Yolov8模型（C++）</a></p>
+
+<ol>
+  <li>
+    <h1 id="yolo环境搭建">YOLO环境搭建</h1>
+  </li>
+  <li>
+    <h2 id="windows-4">Windows</h2>
+  </li>
+</ol>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/BD51wAe3riSF74kIJEUcywINnhv">深度学习算法-Yolo系列</a></p>
+
+<ol>
+  <li>
+    <h2 id="linuxwsl2也能用">Linux(WSL2也能用)</h2>
+  </li>
+  <li>
+    <h1 id="ros环境搭建">ROS环境搭建</h1>
+  </li>
+</ol>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/W976wTlonibALVkmfIhcdUKYnUV">ROS机器人操作系统教程</a></p>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/FKEVwIsvKi1yBHkHWqTcn2ZKnNe">ROS2机器人操作系统教程</a></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image61.png" alt="" /></p>
+
+<p>ROS1已经EOF了，官方鼓励使用ROS2.</p>
+
+<ol>
+  <li>
+    <h2 id="推荐的搭建环境">推荐的搭建环境</h2>
+  </li>
+  <li>
+    <h3 id="方案一推荐">方案一(推荐)</h3>
+  </li>
+</ol>
+
+<p><strong><em>ROS1=Kubuntu20.04</em></strong><strong>（Noetic与20.04双双寿终正寝）</strong></p>
+
+<p><strong><em>ROS2=Kubuntu22.04+</em></strong></p>
+
+<p><strong>仍然建议使用22.04+Humble</strong> Noetic，Humble，Jazzy这几个LTS之间主要有以下区别:</p>
+
+<ol>
+  <li>
+    <p>Noetic是ROS1的LTS（长支持版），将于2025年5月31日EOF寿终正寝，自带算法比较老，依赖于其他非自带算法，但是教程最多，第三方算法支持也比较多。</p>
+  </li>
+  <li>
+    <p>Humble是ROS2的第一个LTS，支持到2027年5月31日或海龟节，自带老版Gazebo Classic和新版Igntion Gazebo（独一份支持新旧两个Gazebo版本比较好的ROS版本），选择性比较广，自带算法比较新，教程正在逐渐增多中，第三方算法也在逐渐增多中，很多用ROS1的人都在往ROS2Humble上转。</p>
+  </li>
+  <li>
+    <p>Jazzy是ROS2第二个LTS，支持到2029年5月31日或海龟节，在Humble的基础上，多了一些功能，但只有新版Gazebo Sim，针对Jazzy做ROS2教程的资料很少很少，而且很多第三方算法也并未针对Jazzy做相应版本，但是Jazzy目前来看兼容很多Humble的算法与教程，目前除了新版Gazebo改名需要改一些标记语言的标签外，没发现其他代码不兼容的地方。</p>
+  </li>
+  <li>
+    <h3 id="方案二也是比较推荐但是要多学个docker">方案二(也是比较推荐，但是要多学个Docker)</h3>
+  </li>
+  <li>
+    <p>系统发行版:Fedora KDE（学长比较推荐，选一个自己喜欢的其他Linux发行版也行）</p>
+  </li>
+  <li>
+    <p>ROS1Noetic安装方式:Docker</p>
+  </li>
+  <li>
+    <p>ROS2Humble/Jazzy安装方式:Docker 详看<a href="https://sdutvincirobot.feishu.cn/wiki/KRSMwKmTvivWRskSRszc2vfNnoc">Docker教程</a></p>
+  </li>
+  <li>
+    <h3 id="方案三可以用">方案三(可以用)</h3>
+  </li>
+  <li>
+    <p>系统发行版:Kubuntu 22.04 Jammy LTS / Kubuntu 24.04 Jammy LTS</p>
+  </li>
+  <li>
+    <p>ROS1Noetic安装方式:西南交通大佬的ppa(详见上面ROS文档中，仅amd64(x86_64))</p>
+  </li>
+  <li>
+    <p>ROS2Humble / ROS2Jazzy安装方式:官方二进制安装方式(详见上面的ROS2文档中)</p>
+  </li>
+  <li>
+    <h3 id="方案四可以用">方案四(可以用)</h3>
+  </li>
+  <li>
+    <p>系统发行版:Windows10及以上</p>
+  </li>
+  <li>
+    <p>WSL2发行版:Ubuntu24.04 Noble LTS</p>
+  </li>
+  <li>
+    <p>ROS1Noetic安装方式:西南交通大佬的ppa(详见上面ROS文档中，仅amd64(x86_64))</p>
+  </li>
+  <li>
+    <p>ROS2Jazzy安装方式:官方二进制安装方式(详见上面的ROS2文档中)</p>
+  </li>
+  <li>
+    <h1 id="qt环境搭建">QT环境搭建</h1>
+  </li>
+  <li>
+    <h2 id="安装qt">安装QT</h2>
+  </li>
+  <li>
+    <h3 id="qt5">QT5</h3>
+  </li>
+</ol>
+
+<p>```Plain Text</p>
+<h1 id="debian系">debian系</h1>
+<p>sudo apt install qt5-default          # 基础开发工具（qmake、moc 等）
+sudo apt install qtbase5-dev          # Qt5 核心库开发文件
+sudo apt install qttools5-dev         # Qt5 工具（Qt Designer、Linguist 等）</p>
+
+<h1 id="红帽系">红帽系</h1>
+<h1 id="安装-qt5-核心开发包">安装 Qt5 核心开发包</h1>
+<p>sudo dnf install qt5-qtbase-devel      # Qt5 核心库开发文件
+sudo dnf install qt5-qttools-devel     # Qt5 工具（Qt Designer、Linguist 等）</p>
+<h1 id="安装常用模块按需选择">安装常用模块（按需选择）</h1>
+<p>sudo dnf install <br />
+  qt5-qtdeclarative-devel \           # Qt Quick
+  qt5-qtsvg-devel \                   # SVG 支持
+  qt5-qtwayland-devel \               # Wayland 支持
+  qt5-qtwebengine-devel               # WebEngine 支持</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre>
+2.  ### QT6
+    
+
+https://www.qt.io/product/qt6
+
+```bash
+# debian系
+sudo apt install qt6-base-dev qt6-tools-dev
+
+# 红帽系
+sudo dnf install qt6-qtbase-devel qt6-qttools-devel
+
+sudo dnf install qt6-qtdeclarative-devel qt6-qtsvg-devel qt6-qtwayland-devel qt6-qt5compat-devel qt6-qtwebsockets-devel
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>
+    <h2 id="vscode环境配置">VScode环境配置</h2>
+  </li>
+</ol>
+
+<p>主要是CMake搭建QT5/QT6开发环境，详看<a href="https://sdutvincirobot.feishu.cn/wiki/Dosvw46BtiBBLEkTdO4cPOt8nVb">CMake C/C++编译环境配置</a></p>
+
+<ol>
+  <li>
+    <h2 id="qt-designer生成ui">QT Designer生成.ui</h2>
+  </li>
+</ol>
+
+<p>主要是用下面这个软件进行图形化设计，然后生成<code class="language-plaintext highlighter-rouge">.ui</code>文件再转化为<code class="language-plaintext highlighter-rouge">.h</code>文件用于C/C++工程。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image62.png" alt="" /></p>
+
+<p>比如我们创建一个Helloworld窗口，打开QT Designer之后，选择创建Widget。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image63.png" alt="" /></p>
+
+<p>拖进来，输入Hello World！</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image64.png" alt="" /></p>
+
+<p>可以调字体大小。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image65.png" alt="" /></p>
+
+<p>可以修改objectName，即是C++代码里调用的类名称。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image66.png" alt="" /></p>
+
+<p>最后保存.ui文件，一般是保存在功能包下的form文件夹下。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image67.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image68.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h2 id="调用ui类并编译运行">调用.ui类并编译运行</h2>
+  </li>
+</ol>
+
+<p>首先先确保你的VScode+CMake配置正确。</p>
+
+<p>然后再<code class="language-plaintext highlighter-rouge">cmake ..</code>，接着<code class="language-plaintext highlighter-rouge">make install</code>，此时QT_Projects/QT6/QT6_Template/build/src/QT6TEST/目录下会出现<code class="language-plaintext highlighter-rouge">.h</code>文件。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image69.png" alt="" /></p>
+
+<p>然后可以在代码中引用这个.h。</p>
+
+<p>接着实现自己的代码功能就可以了。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"QT6TEST/inc/qt6_test.hpp"</span><span class="cp">
+#include</span> <span class="cpf">&lt;QApplication&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;QWidget&gt;</span><span class="cp">
+#include</span> <span class="cpf">"ui_mywidget.h"</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">qt6_test</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span><span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">QApplication</span> <span class="n">app</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+
+    <span class="c1">// 创建主窗口和 UI 对象</span>
+    <span class="n">QWidget</span> <span class="n">mainWindow</span><span class="p">;</span>
+    <span class="n">Ui</span><span class="o">::</span><span class="n">MyWidget</span> <span class="n">ui</span><span class="p">;</span>        <span class="c1">// Ui 命名空间中的类名与 .ui 文件中的 class 属性一致</span>
+    <span class="n">ui</span><span class="p">.</span><span class="n">setupUi</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mainWindow</span><span class="p">);</span>
+
+    <span class="c1">// 设置窗口标题</span>
+    <span class="n">mainWindow</span><span class="p">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">"Hello Qt6!"</span><span class="p">);</span>
+
+    <span class="c1">// 显示窗口</span>
+    <span class="n">mainWindow</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2023-12-10/image70.png" alt="" /></p>
+
+<p>我这里有个配置好的QT6环境，你可以clone下来使用。</p>
+
+<p>https://github.com/tungchiahui/QT_Projects/tree/main/QT6/QT6_Template</p>
+
+<ol>
+  <li>
+    <h1 id="docker环境搭建">Docker环境搭建</h1>
+  </li>
+</ol>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/KRSMwKmTvivWRskSRszc2vfNnoc">Docker教程</a></p>
+
+  </div>
+</article>
+
+<script>
+// 页面内容加载完成后执行
+document.addEventListener("DOMContentLoaded", function() {
+
+  // 选择文章内容中的所有图片
+  const imgs = document.querySelectorAll('.post-content img');
+
+  imgs.forEach(img => {
+    // 如果图片还没有 data-src，就把 src 移过去
+    if (!img.dataset.src) {
+      img.dataset.src = img.src; // 原来的图片 URL 放到 data-src
+      img.removeAttribute('src'); // 清空 src，等待懒加载
+    }
+  });
+
+  // 创建 IntersectionObserver
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+
+        // 懒加载图片
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        }
+
+        // 加载后取消观察
+        obs.unobserve(img);
+      }
+    });
+  }, {
+    root: null,           
+    rootMargin: '666px 0px', // 提前加载
+    threshold: 0          
+  });
+
+  // 遍历所有图片，开始观察
+  imgs.forEach(img => observer.observe(img));
+});
+</script>
+
+
+    </main>
+
+    <footer>
+  <p>© 2025 小辉的折腾天地. All rights reserved.</p>
+
+  <!-- 社交图标 -->
+  <div class="footer-social">
+    
+      <a href="https://me.tungchiahui.cn" target="_blank" rel="noopener" title="Website">
+        <i class="fas fa-link"></i>
+      </a>
+    
+    
+      <a href="mailto:tungchiahui@gmail.com" target="_blank" rel="noopener" title="E-Mail">
+        <i class="fas fa-envelope"></i>
+      </a>
+    
+    
+      <a href="https://github.com/tungchiahui" target="_blank" rel="noopener" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    
+    
+      <a href="https://qm.qq.com/q/JRhksaNK82?from=qq" target="_blank" rel="noopener" title="QQ">
+        <i class="fab fa-qq"></i>
+      </a>
+    
+    
+      <a href="https://t.me/tungchiahui" target="_blank" rel="noopener" title="Telegram">
+        <i class="fab fa-telegram"></i>
+      </a>
+    
+    
+      <a href="http://www.coolapk.com/u/3224578" target="_blank" rel="noopener" title="CoolAPK">
+        <i class="fab fa-android"></i>
+      </a>
+    
+    
+      <a href="https://space.bilibili.com/141482453" target="_blank" rel="noopener" title="Bilibili">
+        <i class="fa-brands fa-bilibili"></i>
+      </a>
+    
+    
+      <a href="https://www.youtube.com/@Chia-huiTung" target="_blank" rel="noopener" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    
+    
+      <a href="https://twitter.com/tungchiahui" target="_blank" rel="noopener" title="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+    
+    
+      <a href="https://www.facebook.com/tungchiahui" target="_blank" rel="noopener" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+    
+    
+      <a href="https://www.instagram.com/tungchiahui" target="_blank" rel="noopener" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+    
+  </div>
+
+  <!-- ICP 备案号 -->
+  
+  <p>
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">
+      鲁ICP备2025185601号-2
+    </a>
+  </p>
+  
+
+  <!-- 公安备案号 -->
+  
+  <p>
+    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=xxxxxxxxxxxxxx"
+       target="_blank" rel="noopener">
+      <img src="https://www.beian.gov.cn/img/new/gongan.png"
+           alt="公安备案图标">
+      鲁公网安备xxxxxxxxxxxxxx号
+    </a>
+  </p>
+  
+
+</footer>
+
+
+    <!-- 这才是liquild的注释，不能用html的注释 -->
+    <!-- 因为liquid会把html的注释也渲染出来 -->
+    
+
+  </body>
+</html>

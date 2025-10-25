@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jekyll静态网站框架 | 小辉的折腾天地</title>
+
+  <!-- 引入 CSS 样式 -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/friends.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
+
+  <!-- 代码高亮样式 -->
+  <link rel="stylesheet" href="/assets/css/code-highlight.css">
+
+  <!-- 国内Font Awesome镜像 -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+
+  <!-- 网站图标 -->
+  
+  <link rel="icon" 
+        href="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/favicon.png">
+
+  <!-- Vercount 网站访问统计 -->
+  <script defer src="https://events.vercount.one/js"></script>
+
+</head>
+
+  <body>
+    <header class="site-header">
+
+  <!-- 内容层 -->
+  <div class="header-content">
+    <h1><a href="/">小辉的折腾天地</a></h1>
+    <nav>
+      <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/blog/">博客</a></li>
+        <li><a href="/cv/">简历</a></li>
+        <li><a href="/friends/">友链</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <main>
+      <article class="post-main">
+  <h2>Jekyll静态网站框架</h2>
+  <p>
+    <small>
+      发布于 2025-07-01 | 作者: Tung Chia-hui | 阅读次数：<span id="vercount_value_page_pv">Loading</span> 次
+    </small>
+  </p>
+  <div class="post-content">
+    <!-- > ⚠️ **注意：本文中的图片因飞书图床时效性已失效**  
+> 若想查看完整图文内容和原版教程，请访问飞书文档：[点击查看完整博客](https://sdutvincirobot.feishu.cn/wiki/BePowCaGki6Yy3kUeQlcHfERnog) -->
+
+<ol>
+  <li>
+    <h1 id="简介">简介</h1>
+  </li>
+  <li>
+    <h1 id="部署方案">部署方案</h1>
+  </li>
+  <li>
+    <h2 id="静态网站托管服务pages介绍">静态网站托管服务Pages介绍</h2>
+  </li>
+</ol>
+
+<p>Pages一般常用的有Github Pages，Cloudflare Pages和腾讯云Edge One Pages.</p>
+
+<p>一般来说，Github pages是带宽又低，在国内访问又很波动，所以一般不用Github pages.</p>
+
+<p>Cloudflare Pages在全球（除中国大陆🇨🇳）都有高速服务器，所以在全球（除中国大陆🇨🇳）访问都是非常快的，基本延迟都在1～5ms内，缺点就是在中国大陆🇨🇳比较波动。</p>
+
+<p>腾讯云Edge One Pages的服务器主要是在中国（大陆🇨🇳、港澳台🇭🇰🇲🇴🇨🇳）和国外一些主要的国家，但是缺点是可能需要你在国内进行域名备案，但是国内域名备案需要购买服务器等东西，所以成本很高。<strong>（腾讯云Pages自带CDN，所以不用再套一层CDN了）</strong></p>
+
+<p>据说，阿里云(阿里云ESA Pages）也在加班加点的去抄袭Cloudflare和腾讯云EO，从而去阻击腾讯云EdgeOne Pages。不知道何时才会出，希望能够也有免费额度吧。</p>
+
+<!--br {mso-data-placement:same-cell;}-->
+<p>td {white-space:nowrap;border:0.5pt solid #dee0e3;font-size:10pt;font-style:normal;font-weight:normal;vertical-align:middle;word-break:normal;word-wrap:normal;}
+| 平台 | 主要特点 | 费用 | 优势 | 缺点 |
+|:—|:—|:—|:—|:—|
+| GitHub Pages | 托管静态网站 | 免费 | 与 GitHub 仓库集成紧密，自动构建方便 | 带宽较低，在中国大陆访问极不稳定 |
+| Cloudflare Pages | 全球高性能服务器（不含中国大陆） | 免费 | 全球访问速度极快，延迟通常仅 1～5 ms；支持自定义域名与CI/CD集成 | 中国大陆访问速度不稳定 |
+| 腾讯云 EdgeOne Pages | 服务器覆盖中国大陆、港澳台及海外主要节点 | 有免费额度 | 对国内访问速度优秀；支持 EO CDN 一体化加速；免费额度较大 | 若面向大陆用户需备案，备案流程复杂且可能需购买国内服务器 |
+| 阿里云ESA Pages | 服务器覆盖中国大陆、港澳台及海外主要节点 |  |  |  |</p>
+
+<ol>
+  <li>
+    <h2 id="内容分发网络cdn介绍">内容分发网络CDN介绍</h2>
+  </li>
+</ol>
+
+<p>CDN（Content Delivery Network）通过在全球布置缓存节点，让用户从距离最近的服务器加载内容，从而大幅提升访问速度并降低源站压力。</p>
+
+<p>常用的CDN有Cloudflare CDN，腾讯云EO CDN，阿里云CDN等等。</p>
+
+<p>Cloudflare CDN在全球（除中国大陆🇨🇳）都有高速服务器，所以在全球（除中国大陆🇨🇳）访问都是比较快的，缺点就是在中国大陆比较波动。</p>
+
+<p>腾讯云Edge One CDN的服务器主要是在中国（大陆🇨🇳、港澳台🇭🇰🇲🇴🇨🇳）和国外一些主要的国家，如果要面向中国大陆🇨🇳用户加速，则需要备案，成本很高。但是可以选择不向中国大陆🇨🇳用户加速，这样，由于腾讯云在中国香港🇭🇰的CDN很优质，所以在国内访问其实速度也不差的。而且最重要的是，目前有免费的配额，对于普通用户来讲完全够用了。</p>
+
+<p>阿里云ESA CDN，和腾讯云EO定位差不多，但是这是一个为了阻击腾讯云EO而加班加点模仿出来的产品，只能说《暂时》远远不如Cloudflare和腾讯云EO好用。</p>
+
+<!--br {mso-data-placement:same-cell;}-->
+<p>td {white-space:nowrap;border:0.5pt solid #dee0e3;font-size:10pt;font-style:normal;font-weight:normal;vertical-align:middle;word-break:normal;word-wrap:normal;}
+| 平台 | 节点分布 | 费用 | 优势 | 缺点 |
+|:—|:—|:—|:—|:—|
+| Cloudflare CDN | 免费的全球高速节点（除中国大陆） | 免费 | 性能优秀、配置简便、全球覆盖广 | 中国大陆访问速度波动较大 |
+| 腾讯云 EdgeOne CDN | 中国大陆、港澳台及海外主要节点 | 有免费额度 | 国内外访问速度平衡；香港节点质量高；提供免费配额 | 若启用大陆加速需备案，成本较高 |
+| 阿里云 ESA | 中国大陆、港澳台及海外主要节点 | 有免费额度 | 国内外访问速度平衡；香港节点质量高；提供免费配额 | 若启用大陆加速需备案，成本较高。且暂时产品并不像腾讯云EO那样完善。 |</p>
+
+<ol>
+  <li>
+    <h2 id="搭配方案">搭配方案</h2>
+  </li>
+  <li>
+    <h3 id="免费方案">免费方案</h3>
+  </li>
+  <li><strong>纯免费方案一【Cloudflare Pages + 腾讯云EO CDN（加速全球，但不加速中国大陆）】：</strong><strong>（普通人用这个方案完全够用了，强烈推荐）</strong></li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在150ms，在中国香港🇭🇰平均2ms。</p>
+
+<p>这是因为Cloudflare在全球（除中国大陆🇨🇳）都有高速服务器，腾讯云CDN在中国香港🇭🇰也有高速CDN，所以中国大陆访问比较快，完全够用，主要是纯免费。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image1.png" alt="" /></p>
+
+<ol>
+  <li>纯免费方案二【Cloudflare Pages + 阿里云 ESA CDN（加速全球，但不加速中国大陆）】：</li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在240ms，在中国香港🇭🇰平均2ms。</p>
+
+<p>这是因为Cloudflare在全球（除中国大陆🇨🇳）都有高速服务器，阿里云CDN在中国香港🇭🇰也有高速CDN，但是目前貌似没有腾讯的优质,所以比腾讯的要差很多.</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image2.png" alt="" /></p>
+
+<ol>
+  <li>纯免费方案三【腾讯云EO Pages + 腾讯云EO CDN（加速全球，但不加速中国大陆）】：</li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在230ms，在中国香港🇭🇰平均2ms。</p>
+
+<p>不如方案一的原因是，腾讯云只在主要国家有服务器，而Cloudflare在全球（除中国大陆🇨🇳）都有高速服务器，所以不如Cloudflare的速度快。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image3.png" alt="" /></p>
+
+<ol>
+  <li>纯免费方案四【Cloudflare Pages + Cloudflare CDN（加速全球）】：</li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在180ms，但有些省（比如江苏省）访问异常，在中国香港🇭🇰、中国台湾🇨🇳平均0～2ms。</p>
+
+<p>这是因为Cloudflare的CDN在中国大陆🇨🇳会抽风，所以才不太行。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image4.png" alt="" /></p>
+
+<ol>
+  <li>纯免费方案五【Github Pages】：</li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在100ms，在中国香港🇭🇰平均51ms。</p>
+
+<p>看似延迟不低，而且没有像Cloudflare那样被半封禁，实际上带宽低的要命，加载一个图片卡的要死。最不推荐的方案。（连中国香港🇭🇰这种什么方案都2ms的都变成50+ms了，可想而知多么垃圾）</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image5.png" alt="" /></p>
+
+<ol>
+  <li>
+    <h3 id="付费方案">付费方案</h3>
+  </li>
+  <li><strong>付费方案一【腾讯云EO Pages + 腾讯云EO CDN（加速全球，含中国大陆）】：</strong></li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在16ms，在中国香港🇭🇰平均2ms。</p>
+
+<p>付费就付费在域名和备案上，成本也没那么高，Pages和CDN都是免费的。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image6.png" alt="" /></p>
+
+<ol>
+  <li><strong>付费方案二【阿里云ESA Pages + 阿里云ESA CDN（加速全球，含中国大陆）】：</strong></li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在12ms，在中国香港🇭🇰平均2ms,中国台湾🇨🇳平均4ms.</p>
+
+<p>付费就付费在域名和备案上，成本也没那么高，Pages和CDN暂时都是免费的。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image7.png" alt="" /></p>
+
+<ol>
+  <li>付费方案三【Cloudflare Pages + 腾讯云EO CDN（加速全球，含中国大陆）】：</li>
+</ol>
+
+<p>在中国大陆🇨🇳平均在10ms，在中国香港🇭🇰平均2ms，中国台湾🇨🇳平均20ms。</p>
+
+<p>因为Cloudflare服务器在中国香港🇭🇰，中国台湾🇨🇳，日本🇯🇵等地区，但是腾讯云CDN使用的是中国大陆🇨🇳CDN，这样腾讯高速CDN先从Cloudflare的高速服务器获取内容，再把内容分发给中国大陆用户，还是非常快的。</p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image8.png" alt="" /></p>
+
+<ol>
+  <li>付费方案四【Cloudflare Pages + 阿里云ESA CDN（加速全球，含中国大陆）】：</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image9.png" alt="" /></p>
+
+<p>在中国大陆🇨🇳平均在10ms，在中国香港🇭🇰平均2ms，中国台湾🇨🇳平均4ms。</p>
+
+<p>因为Cloudflare服务器在中国香港🇭🇰，中国台湾🇨🇳，日本🇯🇵等地区，但是腾讯云CDN使用的是中国大陆🇨🇳CDN，这样腾讯高速CDN先从Cloudflare的高速服务器获取内容，再把内容分发给中国大陆用户，还是非常快的。</p>
+
+<ol>
+  <li>
+    <h3 id="方案展示">方案展示</h3>
+  </li>
+  <li>腾讯EO Pages + 腾讯EO CDN</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image10.png" alt="" /></p>
+
+<ol>
+  <li>阿里云ESA Pages + 阿里云ESA CDN</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image11.png" alt="" /></p>
+
+<ol>
+  <li>Cloudflare Pages + 腾讯EO CDN</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image12.png" alt="" /></p>
+
+<ol>
+  <li>Cloudflare Pages + 阿里云ESA CDN</li>
+</ol>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image13.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image14.png" alt="" /></p>
+
+<p><img src="https://cdn.eo.r2.tungchiahui.cn/tungwebsite/assets/images/2025-07-01/image15.png" alt="" /></p>
+
+<p>强制浏览器刷新缓存</p>
+
+<pre><code class="language-Bash"># Chrome/Edge 强制刷新组合键
+Ctrl + Shift + R (Windows/Linux)
+Cmd + Shift + R (Mac)
+
+# Firefox 额外步骤
+about:config → 搜索 "browser.cache.disk.enable" → 设为 false → 刷新
+</code></pre>
+
+<pre><code class="language-Bash">bundle exec jekyll serve --livereload
+
+# 上面那个出错后，用下面这个把错误全排除就好了
+bundle exec jekyll serve --livereload --trace
+</code></pre>
+
+  </div>
+</article>
+
+<script>
+// 页面内容加载完成后执行
+document.addEventListener("DOMContentLoaded", function() {
+
+  // 选择文章内容中的所有图片
+  const imgs = document.querySelectorAll('.post-content img');
+
+  imgs.forEach(img => {
+    // 如果图片还没有 data-src，就把 src 移过去
+    if (!img.dataset.src) {
+      img.dataset.src = img.src; // 原来的图片 URL 放到 data-src
+      img.removeAttribute('src'); // 清空 src，等待懒加载
+    }
+  });
+
+  // 创建 IntersectionObserver
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+
+        // 懒加载图片
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        }
+
+        // 加载后取消观察
+        obs.unobserve(img);
+      }
+    });
+  }, {
+    root: null,           
+    rootMargin: '666px 0px', // 提前加载
+    threshold: 0          
+  });
+
+  // 遍历所有图片，开始观察
+  imgs.forEach(img => observer.observe(img));
+});
+</script>
+
+
+    </main>
+
+    <footer>
+  <p>© 2025 小辉的折腾天地. All rights reserved.</p>
+
+  <!-- 社交图标 -->
+  <div class="footer-social">
+    
+      <a href="https://me.tungchiahui.cn" target="_blank" rel="noopener" title="Website">
+        <i class="fas fa-link"></i>
+      </a>
+    
+    
+      <a href="mailto:tungchiahui@gmail.com" target="_blank" rel="noopener" title="E-Mail">
+        <i class="fas fa-envelope"></i>
+      </a>
+    
+    
+      <a href="https://github.com/tungchiahui" target="_blank" rel="noopener" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    
+    
+      <a href="https://qm.qq.com/q/JRhksaNK82?from=qq" target="_blank" rel="noopener" title="QQ">
+        <i class="fab fa-qq"></i>
+      </a>
+    
+    
+      <a href="https://t.me/tungchiahui" target="_blank" rel="noopener" title="Telegram">
+        <i class="fab fa-telegram"></i>
+      </a>
+    
+    
+      <a href="http://www.coolapk.com/u/3224578" target="_blank" rel="noopener" title="CoolAPK">
+        <i class="fab fa-android"></i>
+      </a>
+    
+    
+      <a href="https://space.bilibili.com/141482453" target="_blank" rel="noopener" title="Bilibili">
+        <i class="fa-brands fa-bilibili"></i>
+      </a>
+    
+    
+      <a href="https://www.youtube.com/@Chia-huiTung" target="_blank" rel="noopener" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    
+    
+      <a href="https://twitter.com/tungchiahui" target="_blank" rel="noopener" title="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+    
+    
+      <a href="https://www.facebook.com/tungchiahui" target="_blank" rel="noopener" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+    
+    
+      <a href="https://www.instagram.com/tungchiahui" target="_blank" rel="noopener" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+    
+  </div>
+
+  <!-- ICP 备案号 -->
+  
+  <p>
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">
+      鲁ICP备2025185601号-2
+    </a>
+  </p>
+  
+
+  <!-- 公安备案号 -->
+  
+  <p>
+    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=xxxxxxxxxxxxxx"
+       target="_blank" rel="noopener">
+      <img src="https://www.beian.gov.cn/img/new/gongan.png"
+           alt="公安备案图标">
+      鲁公网安备xxxxxxxxxxxxxx号
+    </a>
+  </p>
+  
+
+</footer>
+
+
+    <!-- 这才是liquild的注释，不能用html的注释 -->
+    <!-- 因为liquid会把html的注释也渲染出来 -->
+    
+
+  </body>
+</html>
