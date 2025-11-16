@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROS1机器人操作系统教程 | 东澈的折腾天地</title>
+
+
+  <!-- 插件 / 功能资源 -->
+   <!-- 插件 / 功能资源 -->
+
+  <!-- 引入 CSS 样式 -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/friends.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
+  <link rel="stylesheet" href="/assets/css/music-player.css">
+
+  <!-- Aplayer播放器 -->
+  <link rel="stylesheet" href="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.css">
+  <script defer src="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js"></script>
+  <!-- Meting音乐资源加载器 -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/meting/1.2.0/Meting.min.js"></script>
+
+  <!-- 代码高亮样式 -->
+  <link rel="stylesheet" href="/assets/css/code-highlight.css">
+  <script defer src="/assets/js/code-copy.js"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/fontawesome.min.css" rel="stylesheet">
+  <script defer src="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/all.min.js"></script>
+
+  <!-- === 图片点击放大功能(延迟加载) === -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/medium-zoom/1.1.0/medium-zoom.min.js"></script>
+  <script defer src="/assets/js/image-zoom.js"></script>
+
+  <!-- 懒加载 -->
+  <script defer src="/assets/js/lazyload.js"></script>
+
+
+  <!-- Vercount 网站访问统计 -->
+  <script async src="https://events.vercount.one/js"></script>
+
+  <!-- 放在模板底部，lazyload.js 或其他主脚本之后 -->
+  <script defer src="/assets/js/pjax-vercount.js"></script>
+
+  <!-- 网站图标 -->
+  
+  <link rel="icon" 
+        href="https://cdn.tungchiahui.cn/tungwebsite/assets/images/favicon.webp">
+
+
+</head>
+
+  <body>
+    <header class="site-header">
+
+  <!-- 内容层 -->
+  <div class="header-content">
+    <h1><a href="/">东澈的折腾天地</a></h1>
+    <nav>
+      <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/blog/">博客</a></li>
+        <li><a href="/cv/">简历</a></li>
+        <li><a href="/friends/">友链</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+    
+    <!-- 🎵 音乐播放器 -->
+<div id="music-player" class="aplayer player"
+     data-id="17401109156"
+     data-server="netease"
+     data-type="playlist"
+     data-autoplay="false">
+</div>
+
+<!-- 🎧 按钮 -->
+<button id="toggle-player-fixed" aria-pressed="false">🎧 收起</button>
+
+
+<script>
+(() => {
+  const container = document.getElementById('music-player');
+  const btnFixed = document.getElementById('toggle-player-fixed');
+  let hidden = false;
+
+  try {
+    const saved = localStorage.getItem('music_player_hidden');
+    if (saved === 'true') {
+      hidden = true;
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+  } catch(e){}
+
+  btnFixed.addEventListener('click', () => {
+    hidden = !hidden;
+    if (hidden) {
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      container.classList.remove('hidden');
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+    try { 
+      localStorage.setItem('music_player_hidden', hidden ? 'true' : 'false'); 
+    } catch(e){}
+  });
+})();
+</script>
+
+
+    <!-- PJAX -->
+    <main id="pjax-container">
+      <article class="post-main">
+  <h2>ROS1机器人操作系统教程</h2>
+  <p>
+    <small>
+      发布于 2024-07-13 | 作者: Tung Chia-hui | 阅读次数：<span id="vercount_value_page_pv">Loading</span> 次
+    </small>
+  </p>
+  <div class="post-content">
+    <ul id="markdown-toc">
+  <li><a href="#ros介绍" id="markdown-toc-ros介绍">ROS介绍</a>    <ul>
+      <li><a href="#ros介绍-1" id="markdown-toc-ros介绍-1">ROS介绍</a></li>
+      <li><a href="#ros与ros2的关系" id="markdown-toc-ros与ros2的关系">ROS与ROS2的关系</a></li>
+      <li><a href="#ros的教学资料" id="markdown-toc-ros的教学资料">ROS的教学资料</a></li>
+      <li><a href="#安装ros1-noetic" id="markdown-toc-安装ros1-noetic">安装ROS1 Noetic</a>        <ul>
+          <li><a href="#官方途径" id="markdown-toc-官方途径">官方途径</a>            <ul>
+              <li><a href="#二进制包安装仅支持ubuntu2004-focal和debian10-buster更推荐该方式" id="markdown-toc-二进制包安装仅支持ubuntu2004-focal和debian10-buster更推荐该方式">二进制包安装(仅支持Ubuntu20.04 Focal和Debian10 Buster，<strong>更推荐该方式</strong>)</a></li>
+              <li><a href="#根据官方源码手动编译不推荐该方式" id="markdown-toc-根据官方源码手动编译不推荐该方式">根据官方源码，手动编译(不推荐该方式)</a></li>
+            </ul>
+          </li>
+          <li><a href="#第三方途径" id="markdown-toc-第三方途径">第三方途径</a>            <ul>
+              <li><a href="#二进制包安装较为推荐" id="markdown-toc-二进制包安装较为推荐">二进制包安装(<strong>较为推荐</strong>）</a></li>
+              <li><a href="#docker容器不推荐可供有需要的使用" id="markdown-toc-docker容器不推荐可供有需要的使用">Docker容器(不推荐，可供有需要的使用)</a></li>
+              <li><a href="#根据源码手动编译不推荐" id="markdown-toc-根据源码手动编译不推荐">根据源码，手动编译（不推荐）</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#测试ros1" id="markdown-toc-测试ros1">测试ROS1</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>如果你想看ROS2教程，请看<a href="/blog/ros2-tutorial/">ROS2机器人操作系统教程</a></p>
+
+<h1 id="ros介绍">ROS介绍</h1>
+
+<h2 id="ros介绍-1">ROS介绍</h2>
+
+<h2 id="ros与ros2的关系">ROS与ROS2的关系</h2>
+
+<p><strong>ROS1最后一个</strong><strong>LTS</strong><strong>版本</strong><strong>ROS</strong> <strong>Noetic官方仅在Ubuntu20.04 Focal和Debian10 Buster提供二进制安装文件.且在2025年彻底停更。(有第三方的方式可以将ROS Neotic部署在Ubuntu 22.04 Jammy、Ubuntu 24.04 Noble以及Debian12 Bookworm等发行版上)</strong></p>
+
+<p><strong>ROS2改进了ROS1初期设计的一些遗留毛病，以后会成为主流，但ROS2纯纯战未来，目前可以学，但是几乎没法应用，没啥教程。</strong></p>
+
+<p><strong>ROS2目前主流的</strong><strong>LTS</strong><strong>版本如下:</strong><strong>ROS</strong> <strong>Humble官方仅在Ubuntu22.04 Jammy提供二进制安装文件，ROS Jazzy官方仅在Ubuntu24.04 Noble提供二进制安装文件。</strong></p>
+
+<h2 id="ros的教学资料">ROS的教学资料</h2>
+
+<ol>
+  <li>教学视频</li>
+</ol>
+
+<p>https://www.bilibili.com/video/BV1Ci4y1L7ZZ/</p>
+
+<p>https://www.bilibili.com/video/BV1Ub4y1a7PH</p>
+
+<ol>
+  <li>教学文档</li>
+</ol>
+
+<p>http://www.autolabor.com.cn/book/ROSTutorials/</p>
+
+<h2 id="安装ros1-noetic">安装ROS1 Noetic</h2>
+
+<p>安装ROS2详见:<a href="/blog/ros2-tutorial/">ROS2机器人操作系统教程</a></p>
+
+<p>ROS1已经EOF了，来ROS2吧。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/07/13/image1.webp" alt="" /></p>
+
+<h3 id="官方途径">官方途径</h3>
+
+<ol>
+  <li>Wiki安装首页：</li>
+</ol>
+
+<p>https://wiki.ros.org/cn/noetic/Installation</p>
+
+<h4 id="二进制包安装仅支持ubuntu2004-focal和debian10-buster更推荐该方式">二进制包安装(仅支持Ubuntu20.04 Focal和Debian10 Buster，<strong>更推荐该方式</strong>)</h4>
+
+<ol>
+  <li>Ubuntu 20.04 Focal</li>
+</ol>
+
+<p>https://wiki.ros.org/noetic/Installation/Ubuntu</p>
+
+<ol>
+  <li>Debian10 Buster</li>
+</ol>
+
+<p>https://wiki.ros.org/noetic/Installation/Debian</p>
+
+<h4 id="根据官方源码手动编译不推荐该方式">根据官方源码，手动编译(不推荐该方式)</h4>
+
+<ol>
+  <li>支持的发行版：</li>
+</ol>
+
+<p>https://www.ros.org/reps/rep-2000.html</p>
+
+<ol>
+  <li>
+    <p>教程</p>
+
+    <ol>
+      <li>Ubuntu 20.04 Focal和Debian10 Buster（多此一举：有二进制包安装，就不要从源码编译了）</li>
+    </ol>
+
+    <p>https://wiki.ros.org/noetic/Installation/Source</p>
+
+    <ol>
+      <li>Arch Linux</li>
+    </ol>
+
+    <p>https://wiki.ros.org/noetic/Installation/ArchLinux</p>
+  </li>
+</ol>
+
+<h3 id="第三方途径">第三方途径</h3>
+
+<h4 id="二进制包安装较为推荐">二进制包安装(<strong>较为推荐</strong>）</h4>
+
+<ol>
+  <li>支持Ubuntu 22.04 Jammy的方式：</li>
+</ol>
+
+<p>https://rcbbs.top/t/topic/559</p>
+
+<p>https://github.com/ganyuanzhen/ROS-on-Jammy</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>sudo add-apt-repository ppa:ros-for-jammy/noetic
+sudo apt update
+sudo apt install ros-noetic-desktop-full
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>支持Ubuntu 24.04 Noble的方式：</li>
+</ol>
+
+<p>https://rcbbs.top/t/topic/559</p>
+
+<p>https://github.com/ganyuanzhen/ROS-on-Jammy</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>add-apt-repository ppa:ros-for-jammy/noble
+<span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>ros-noetic-desktop-full
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>支持Debian 12 Bookworm的方式：</li>
+</ol>
+
+<p>https://gist.github.com/vrbadev/ec168a0940d45f523bf050011d7dff75</p>
+
+<p><strong>从密钥服务器重新获取密钥</strong> ： 你可以直接从密钥服务器上获取并保存这个密钥文件到正确的位置。首先，使用以下命令从密钥服务器获取密钥，并将其保存为 <code class="language-plaintext highlighter-rouge">.asc</code> 文件：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>wget <span class="nt">-O</span> /etc/apt/trusted.gpg.d/ros.asc https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>这个Mavros相关的不用管，用不着飞控</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/07/13/image2.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/07/13/image3.webp" alt="" /></p>
+
+<h4 id="docker容器不推荐可供有需要的使用">Docker容器(不推荐，可供有需要的使用)</h4>
+
+<p><a href="/blog/docker-tutorial/">Docker教程</a></p>
+
+<p>https://gitee.com/qinyinan/amber-ce-bookworm</p>
+
+<h4 id="根据源码手动编译不推荐">根据源码，手动编译（不推荐）</h4>
+
+<ol>
+  <li>Ubuntu</li>
+</ol>
+
+<p>https://zhuanlan.zhihu.com/p/688413327?utm_psn=1805362924497268736</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/07/13/image4.webp" alt="" /></p>
+
+<ol>
+  <li>Fedora</li>
+</ol>
+
+<p>https://zhuanlan.zhihu.com/p/687755518?utm_psn=1823704798471520256</p>
+
+<h2 id="测试ros1">测试ROS1</h2>
+
+<ol>
+  <li>配置环境（只需配置一次即可）</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>
+<span class="c"># 打开文件并编辑</span>
+<span class="nb">sudo </span>vim ~/.bashrc
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>在末尾加上下方命令（只需配置一次即可）</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">source</span> /opt/ros/noetic/setup.bash
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>在当前终端加载修改的文件（只需配置一次即可）</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>
+<span class="c"># 加载文件</span>
+<span class="nb">source</span> ~/.bashrc
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>测试</li>
+</ol>
+
+<p>打开一个终端，并敲下列命令打开Master</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>roscore
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>再打开一个终端，打开乌龟图形界面节点</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>rosrun turtlesim turtlesim_node
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>再打开一个终端，打开控制节点，鼠标选中放在该终端中，按键盘即可让🐢龟男🐢移动。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>rosrun turtlesim turtle_teleop_key
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/07/13/image5.webp" alt="" /></p>
+
+  </div>
+</article>
+
+
+
+
+
+    </main>
+
+    <footer>
+  <p>© 2025 东澈的折腾天地. All rights reserved.</p>
+
+  <!-- 社交图标 -->
+  <div class="footer-social">
+    
+      <a href="https://me.tungchiahui.cn" target="_blank" rel="noopener" title="Website">
+        <i class="fas fa-link"></i>
+      </a>
+    
+    
+      <a href="mailto:tungchiahui@gmail.com" target="_blank" rel="noopener" title="E-Mail">
+        <i class="fas fa-envelope"></i>
+      </a>
+    
+    
+      <a href="https://github.com/tungchiahui" target="_blank" rel="noopener" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    
+    
+      <a href="https://qm.qq.com/q/JRhksaNK82?from=qq" target="_blank" rel="noopener" title="QQ">
+        <i class="fab fa-qq"></i>
+      </a>
+    
+    
+      <a href="https://t.me/tungchiahui" target="_blank" rel="noopener" title="Telegram">
+        <i class="fab fa-telegram"></i>
+      </a>
+    
+    
+      <a href="http://www.coolapk.com/u/3224578" target="_blank" rel="noopener" title="CoolAPK">
+        <i class="fab fa-android"></i>
+      </a>
+    
+    
+      <a href="https://space.bilibili.com/141482453" target="_blank" rel="noopener" title="Bilibili">
+        <i class="fa-brands fa-bilibili"></i>
+      </a>
+    
+    
+      <a href="https://www.youtube.com/@Chia-huiTung" target="_blank" rel="noopener" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    
+    
+      <a href="https://twitter.com/tungchiahui" target="_blank" rel="noopener" title="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+    
+    
+      <a href="https://www.facebook.com/tungchiahui" target="_blank" rel="noopener" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+    
+    
+      <a href="https://www.instagram.com/tungchiahui" target="_blank" rel="noopener" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+    
+  </div>
+
+  <div class="footer-records">
+    <!-- ICP 备案号 -->
+    
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-record icp">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-miit.webp" alt="工信部图标">
+      鲁ICP备2025185601号-2
+    </a>
+    
+
+     <!-- 公安备案号 -->
+    
+    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=鲁公网安备37030302001121号" target="_blank" rel="noopener" class="footer-record beian">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-mps.webp" alt="公安备案图标">
+      鲁公网安备37030302001121号
+    </a>
+    
+  </div>
+
+
+</footer>
+
+
+    <!-- 这才是liquild的注释，不能用html的注释 -->
+    <!-- 因为liquid会把html的注释也渲染出来 -->
+    
+
+
+    <!-- PJAX -->
+    <script src="https://cdn.tungchiahui.cn/libs/pjax/0.2.8/pjax.min.js" defer></script>
+    <script src="/assets/js/pjax-init.js" defer></script>
+    
+  </body>
+</html>

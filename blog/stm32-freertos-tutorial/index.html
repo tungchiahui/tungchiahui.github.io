@@ -1,0 +1,4128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STM32-FreeRTOS教程 | 东澈的折腾天地</title>
+
+
+  <!-- 插件 / 功能资源 -->
+   <!-- 插件 / 功能资源 -->
+
+  <!-- 引入 CSS 样式 -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/friends.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
+  <link rel="stylesheet" href="/assets/css/music-player.css">
+
+  <!-- Aplayer播放器 -->
+  <link rel="stylesheet" href="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.css">
+  <script defer src="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js"></script>
+  <!-- Meting音乐资源加载器 -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/meting/1.2.0/Meting.min.js"></script>
+
+  <!-- 代码高亮样式 -->
+  <link rel="stylesheet" href="/assets/css/code-highlight.css">
+  <script defer src="/assets/js/code-copy.js"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/fontawesome.min.css" rel="stylesheet">
+  <script defer src="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/all.min.js"></script>
+
+  <!-- === 图片点击放大功能(延迟加载) === -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/medium-zoom/1.1.0/medium-zoom.min.js"></script>
+  <script defer src="/assets/js/image-zoom.js"></script>
+
+  <!-- 懒加载 -->
+  <script defer src="/assets/js/lazyload.js"></script>
+
+
+  <!-- Vercount 网站访问统计 -->
+  <script async src="https://events.vercount.one/js"></script>
+
+  <!-- 放在模板底部，lazyload.js 或其他主脚本之后 -->
+  <script defer src="/assets/js/pjax-vercount.js"></script>
+
+  <!-- 网站图标 -->
+  
+  <link rel="icon" 
+        href="https://cdn.tungchiahui.cn/tungwebsite/assets/images/favicon.webp">
+
+
+</head>
+
+  <body>
+    <header class="site-header">
+
+  <!-- 内容层 -->
+  <div class="header-content">
+    <h1><a href="/">东澈的折腾天地</a></h1>
+    <nav>
+      <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/blog/">博客</a></li>
+        <li><a href="/cv/">简历</a></li>
+        <li><a href="/friends/">友链</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+    
+    <!-- 🎵 音乐播放器 -->
+<div id="music-player" class="aplayer player"
+     data-id="17401109156"
+     data-server="netease"
+     data-type="playlist"
+     data-autoplay="false">
+</div>
+
+<!-- 🎧 按钮 -->
+<button id="toggle-player-fixed" aria-pressed="false">🎧 收起</button>
+
+
+<script>
+(() => {
+  const container = document.getElementById('music-player');
+  const btnFixed = document.getElementById('toggle-player-fixed');
+  let hidden = false;
+
+  try {
+    const saved = localStorage.getItem('music_player_hidden');
+    if (saved === 'true') {
+      hidden = true;
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+  } catch(e){}
+
+  btnFixed.addEventListener('click', () => {
+    hidden = !hidden;
+    if (hidden) {
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      container.classList.remove('hidden');
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+    try { 
+      localStorage.setItem('music_player_hidden', hidden ? 'true' : 'false'); 
+    } catch(e){}
+  });
+})();
+</script>
+
+
+    <!-- PJAX -->
+    <main id="pjax-container">
+      <article class="post-main">
+  <h2>STM32-FreeRTOS教程</h2>
+  <p>
+    <small>
+      发布于 2023-10-09 | 作者: Tung Chia-hui | 阅读次数：<span id="vercount_value_page_pv">Loading</span> 次
+    </small>
+  </p>
+  <div class="post-content">
+    <ul id="markdown-toc">
+  <li><a href="#前言" id="markdown-toc-前言">前言</a></li>
+  <li><a href="#arduino库了解即可" id="markdown-toc-arduino库了解即可">arduino库(了解即可)</a>    <ul>
+      <li><a href="#arduino库qualcomm-arduinoesp32" id="markdown-toc-arduino库qualcomm-arduinoesp32">arduino库（Qualcomm Arduino、esp32）</a></li>
+      <li><a href="#最简单的电机驱动板使用讲解" id="markdown-toc-最简单的电机驱动板使用讲解">最简单的电机驱动板使用讲解</a></li>
+    </ul>
+  </li>
+  <li><a href="#51单片机了解即可" id="markdown-toc-51单片机了解即可">51单片机(了解即可)</a></li>
+  <li><a href="#stm32单片机重点" id="markdown-toc-stm32单片机重点">stm32单片机(重点)</a>    <ul>
+      <li><a href="#单片机介绍" id="markdown-toc-单片机介绍">单片机介绍</a>        <ul>
+          <li><a href="#什么是单片机" id="markdown-toc-什么是单片机">①什么是单片机?</a></li>
+          <li><a href="#单片机的应用" id="markdown-toc-单片机的应用">②单片机的应用?</a></li>
+          <li><a href="#stm32单片机组成部分" id="markdown-toc-stm32单片机组成部分">③stm32单片机组成部分</a></li>
+          <li><a href="#原理图" id="markdown-toc-原理图">      ④原理图</a></li>
+          <li><a href="#芯片手册" id="markdown-toc-芯片手册">⑤芯片手册</a></li>
+        </ul>
+      </li>
+      <li><a href="#软件介绍" id="markdown-toc-软件介绍">软件介绍</a></li>
+      <li><a href="#时钟树" id="markdown-toc-时钟树">时钟树</a>        <ul>
+          <li><a href="#使用cubemx配置时钟的步骤" id="markdown-toc-使用cubemx配置时钟的步骤">①使用CubeMX配置时钟的步骤</a></li>
+          <li><a href="#查询某个外设时钟频率的方法拿定时器来举例子" id="markdown-toc-查询某个外设时钟频率的方法拿定时器来举例子">②查询某个外设时钟频率的方法（拿定时器来举例子）</a></li>
+        </ul>
+      </li>
+      <li><a href="#stm32程序组成" id="markdown-toc-stm32程序组成">stm32程序组成</a>        <ul>
+          <li><a href="#基本介绍主函数等" id="markdown-toc-基本介绍主函数等">基本介绍(主函数等)</a></li>
+          <li><a href="#中断服务函数的介绍" id="markdown-toc-中断服务函数的介绍">中断服务函数的介绍</a></li>
+          <li><a href="#rtos与rosros2简单了解" id="markdown-toc-rtos与rosros2简单了解">RTOS与ROS/ROS2简单了解</a></li>
+        </ul>
+      </li>
+      <li><a href="#寄存器" id="markdown-toc-寄存器">寄存器</a></li>
+      <li><a href="#vinci机器人队标准工程格式" id="markdown-toc-vinci机器人队标准工程格式">Vinci机器人队标准工程格式</a>        <ul>
+          <li><a href="#英语" id="markdown-toc-英语">英语</a></li>
+          <li><a href="#正点原子hal库工程标准" id="markdown-toc-正点原子hal库工程标准">正点原子HAL库工程标准：</a></li>
+          <li><a href="#vinci机器人队stm32工程标准cubec语言" id="markdown-toc-vinci机器人队stm32工程标准cubec语言">Vinci机器人队STM32工程标准(Cube+C语言)：</a></li>
+          <li><a href="#vinci机器人队stm32cc工程标准类正点原子试运行不建议建议用下一节的类cube_cpp" id="markdown-toc-vinci机器人队stm32cc工程标准类正点原子试运行不建议建议用下一节的类cube_cpp">  Vinci机器人队STM32C/C++工程标准(类正点原子，试运行，<strong><em>不建议</em></strong>，<code class="language-plaintext highlighter-rouge">建议用下一节的类Cube_Cpp</code>):</a></li>
+          <li><a href="#建议vinci机器人队stm32cube-cc工程标准类cube试运行建议" id="markdown-toc-建议vinci机器人队stm32cube-cc工程标准类cube试运行建议"><strong>(建议)Vinci机器人队STM32Cube C/C++工程标准(类Cube，试运行，建议):</strong></a>            <ul>
+              <li><a href="#首先打开cubemx进行工程配置比如我们这里用裸机开发使一个led灯闪烁" id="markdown-toc-首先打开cubemx进行工程配置比如我们这里用裸机开发使一个led灯闪烁">首先打开CubeMX进行工程配置，比如我们这里用裸机开发使一个LED灯闪烁</a></li>
+              <li><a href="#打开github将一些必备文件进行克隆" id="markdown-toc-打开github将一些必备文件进行克隆">打开Github将一些必备文件进行克隆</a></li>
+              <li><a href="#打开克隆的模板与刚才cubemx生成的工程" id="markdown-toc-打开克隆的模板与刚才cubemx生成的工程">打开克隆的模板与刚才CubeMX生成的工程</a></li>
+              <li><a href="#打开工程设置工程" id="markdown-toc-打开工程设置工程">打开工程设置工程</a></li>
+              <li><a href="#编译并配置一些必要代码" id="markdown-toc-编译并配置一些必要代码">编译并配置一些必要代码</a></li>
+              <li><a href="#c库的头文件格式" id="markdown-toc-c库的头文件格式">C++库的头文件格式</a></li>
+              <li><a href="#c库的源文件格式" id="markdown-toc-c库的源文件格式">C++库的源文件格式</a></li>
+              <li><a href="#注意事项" id="markdown-toc-注意事项">注意事项</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#驱动" id="markdown-toc-驱动">驱动</a></li>
+      <li><a href="#大疆电机控制can" id="markdown-toc-大疆电机控制can">  大疆电机控制(CAN)</a>        <ul>
+          <li><a href="#电机库代码解析该库内容要求尽量全部看懂尽量一行不差" id="markdown-toc-电机库代码解析该库内容要求尽量全部看懂尽量一行不差">②电机库代码解析（该库内容要求尽量全部看懂，尽量一行不差）</a></li>
+          <li><a href="#pid控制器" id="markdown-toc-pid控制器">③PID控制器</a></li>
+          <li><a href="#c库建议" id="markdown-toc-c库建议">④C++库（建议）</a>            <ul>
+              <li><a href="#简介" id="markdown-toc-简介">简介</a></li>
+              <li><a href="#c大疆电机库" id="markdown-toc-c大疆电机库">C++大疆电机库</a>                <ul>
+                  <li><a href="#class的结构与简单介绍" id="markdown-toc-class的结构与简单介绍">  CLASS的结构与简单介绍</a></li>
+                  <li><a href="#can_busbsp类的方法函数-在bsp_cancpp中" id="markdown-toc-can_busbsp类的方法函数-在bsp_cancpp中">CAN_BUS::BSP类的方法(函数) (在bsp_can.cpp中)</a>                    <ul>
+                      <li><a href="#can_start-开启can通信的函数" id="markdown-toc-can_start-开启can通信的函数">  CAN_Start 开启CAN通信的函数</a></li>
+                      <li><a href="#filter_init-can通信滤波的函数" id="markdown-toc-filter_init-can通信滤波的函数">Filter_Init CAN通信滤波的函数</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#can_busdji_encoder类的方法函数-在can_receivecpp中" id="markdown-toc-can_busdji_encoder类的方法函数-在can_receivecpp中">CAN_BUS::DJI_ENCODER类的方法(函数) (在can_receive.cpp中)</a>                    <ul>
+                      <li><a href="#get_motor_measure-处理can通信接收到的大疆电机编码器数据并处理得到-电机各个信息-函数" id="markdown-toc-get_motor_measure-处理can通信接收到的大疆电机编码器数据并处理得到-电机各个信息-函数">get_motor_measure 处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机各个信息</strong> 函数</a></li>
+                      <li><a href="#get_moto_offset-处理can通信接收到的大疆电机编码器数据并处理得到-电机刚开始上电的角度初始值-函数" id="markdown-toc-get_moto_offset-处理can通信接收到的大疆电机编码器数据并处理得到-电机刚开始上电的角度初始值-函数">get_moto_offset 处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机刚开始上电的角度初始值</strong> 函数</a></li>
+                      <li><a href="#get_total_angle-处理can通信接收到的大疆电机编码器数据并处理得到-电机角度值-函数暂时没被调用" id="markdown-toc-get_total_angle-处理can通信接收到的大疆电机编码器数据并处理得到-电机角度值-函数暂时没被调用">get_total_angle 处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机角度值</strong> 函数。（<em>暂时没被调用</em>）</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#can_buscmd类的方法函数-在can_receivecpp中" id="markdown-toc-can_buscmd类的方法函数-在can_receivecpp中">CAN_BUS::CMD类的方法(函数) (在can_receive.cpp中)</a>                    <ul>
+                      <li><a href="#can1_front-can1-前-4个电机发送电流的函数" id="markdown-toc-can1_front-can1-前-4个电机发送电流的函数">CAN1_Front CAN1 <strong>前</strong> 4个电机发送电流的函数</a></li>
+                      <li><a href="#can1_behindcan1-后-4个电机发送电流的函数" id="markdown-toc-can1_behindcan1-后-4个电机发送电流的函数">CAN1_BehindCAN1 <strong>后</strong> 4个电机发送电流的函数</a></li>
+                      <li><a href="#can2_frontcan2-前-4个电机发送电流的函数" id="markdown-toc-can2_frontcan2-前-4个电机发送电流的函数">CAN2_FrontCAN2 <strong>前</strong> 4个电机发送电流的函数</a></li>
+                      <li><a href="#can2_behind-can2-后-4个电机发送电流的函数" id="markdown-toc-can2_behind-can2-后-4个电机发送电流的函数">CAN2_Behind CAN2 <strong>后</strong> 4个电机发送电流的函数</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#can_rx0接收中断回调函数-在can_receivecpp中" id="markdown-toc-can_rx0接收中断回调函数-在can_receivecpp中">CAN_RX0接收中断回调函数 (在can_receive.cpp中)</a></li>
+                </ul>
+              </li>
+              <li><a href="#cpid库" id="markdown-toc-cpid库">C++PID库</a>                <ul>
+                  <li><a href="#class的结构与简单介绍-1" id="markdown-toc-class的结构与简单介绍-1">CLASS的结构与简单介绍</a></li>
+                  <li><a href="#pid_controller类的方法函数-在pid_usercpp中" id="markdown-toc-pid_controller类的方法函数-在pid_usercpp中">PID_Controller类的方法(函数) (在pid_user.cpp中)</a>                    <ul>
+                      <li><a href="#all_device_init-将所有设备的pid控制器进行初始化" id="markdown-toc-all_device_init-将所有设备的pid控制器进行初始化">  All_Device_Init 将所有设备的PID控制器进行初始化</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#pid_controllercore类的方法函数-在pidcpp中" id="markdown-toc-pid_controllercore类的方法函数-在pidcpp中">PID_Controller::CORE类的方法(函数) (在pid.cpp中)</a>                    <ul>
+                      <li><a href="#pid_init-pid核心初始化函数" id="markdown-toc-pid_init-pid核心初始化函数">  PID_Init PID核心初始化函数</a></li>
+                      <li><a href="#pid_calc-pid核心计算函数" id="markdown-toc-pid_calc-pid核心计算函数">  PID_Calc PID核心计算函数</a></li>
+                      <li><a href="#pid_clear-pid清0函数" id="markdown-toc-pid_clear-pid清0函数">  PID_Clear PID清0函数</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#pid_controllercan_motor类的方法-在pid_usercpp中这里只讲can1的3个闭环函数" id="markdown-toc-pid_controllercan_motor类的方法-在pid_usercpp中这里只讲can1的3个闭环函数">PID_Controller::CAN_MOTOR类的方法 (在pid_user.cpp中)（这里只讲CAN1的3个闭环函数）</a>                    <ul>
+                      <li><a href="#can1_velocity_realize-can1速度环实现函数" id="markdown-toc-can1_velocity_realize-can1速度环实现函数">CAN1_Velocity_Realize CAN1速度环实现函数</a></li>
+                      <li><a href="#can1_position_realize-can1位置环实现函数" id="markdown-toc-can1_position_realize-can1位置环实现函数">CAN1_Position_Realize CAN1位置环实现函数</a></li>
+                      <li><a href="#can1_vp_dual_loop_realize-can1速度位置双环实现函数" id="markdown-toc-can1_vp_dual_loop_realize-can1速度位置双环实现函数">CAN1_VP_Dual_Loop_Realize CAN1速度位置双环实现函数</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#pid_controllersensors传感器类的方法函数-在pid_usercpp中" id="markdown-toc-pid_controllersensors传感器类的方法函数-在pid_usercpp中">PID_Controller::SENSORS传感器类的方法(函数) (在pid_user.cpp中)</a>                    <ul>
+                      <li><a href="#yaw_realize-陀螺仪imu的航向角pid实现函数等你们完善好-陀螺仪imu的c库你们再补充" id="markdown-toc-yaw_realize-陀螺仪imu的航向角pid实现函数等你们完善好-陀螺仪imu的c库你们再补充">Yaw_Realize 陀螺仪IMU的航向角PID实现函数（等你们完善好 陀螺仪IMU的C++库你们再补充）</a></li>
+                      <li><a href="#pos_x_realize-码盘定位x坐标实现函数等你们完善好-码盘ops-9的c库你们再补充" id="markdown-toc-pos_x_realize-码盘定位x坐标实现函数等你们完善好-码盘ops-9的c库你们再补充">Pos_X_Realize 码盘定位X坐标实现函数（等你们完善好 码盘OPS-9的C++库你们再补充）</a></li>
+                      <li><a href="#pos_y_realize-码盘定位y坐标实现函数等你们完善好-码盘ops-9的c库你们再补充" id="markdown-toc-pos_y_realize-码盘定位y坐标实现函数等你们完善好-码盘ops-9的c库你们再补充">Pos_Y_Realize 码盘定位Y坐标实现函数（等你们完善好 码盘OPS-9的C++库你们再补充）</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li><a href="#如何调用" id="markdown-toc-如何调用">如何调用？</a></li>
+            </ul>
+          </li>
+          <li><a href="#实物连接详细的请看说明书" id="markdown-toc-实物连接详细的请看说明书">⑤实物连接，详细的请看说明书</a></li>
+        </ul>
+      </li>
+      <li><a href="#dmadirect-memory-access--直接存储器访问" id="markdown-toc-dmadirect-memory-access--直接存储器访问">DMA(Direct Memory Access / 直接存储器访问)</a></li>
+      <li><a href="#freertos" id="markdown-toc-freertos">FreeRTOS</a>        <ul>
+          <li><a href="#理论知识" id="markdown-toc-理论知识">理论知识</a></li>
+          <li><a href="#常用的内容下方教程着重讲cubemx如何配置理论知识请看正点原子" id="markdown-toc-常用的内容下方教程着重讲cubemx如何配置理论知识请看正点原子">常用的内容(下方教程着重讲CubeMX如何配置，理论知识请看正点原子)</a>            <ul>
+              <li><a href="#系统配置" id="markdown-toc-系统配置">系统配置</a></li>
+              <li><a href="#创建任务" id="markdown-toc-创建任务">创建任务</a></li>
+              <li><a href="#延时" id="markdown-toc-延时">延时</a></li>
+              <li><a href="#任务状态转换" id="markdown-toc-任务状态转换">任务状态转换</a></li>
+              <li><a href="#队列" id="markdown-toc-队列">队列</a></li>
+              <li><a href="#信号量队列的特殊形式" id="markdown-toc-信号量队列的特殊形式">信号量(队列的特殊形式)</a></li>
+              <li><a href="#内存管理" id="markdown-toc-内存管理">内存管理</a>                <ul>
+                  <li><a href="#简介-1" id="markdown-toc-简介-1">简介</a></li>
+                  <li><a href="#修改stm32的栈区和堆区大小" id="markdown-toc-修改stm32的栈区和堆区大小">修改stm32的栈区和堆区大小</a>                    <ul>
+                      <li><a href="#stm32本身的堆区和栈区大小修改" id="markdown-toc-stm32本身的堆区和栈区大小修改">  stm32本身的堆区和栈区大小修改</a></li>
+                      <li><a href="#freertos的堆区大小修改此堆区非彼堆区请看下方介绍" id="markdown-toc-freertos的堆区大小修改此堆区非彼堆区请看下方介绍">FreeRTOS的堆区大小修改(此堆区非彼堆区，请看下方介绍)</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#内存管理api介绍" id="markdown-toc-内存管理api介绍">内存管理API介绍</a>                    <ul>
+                      <li><a href="#c语言库的内存管理api不建议" id="markdown-toc-c语言库的内存管理api不建议">C语言库的内存管理API(不建议)</a></li>
+                      <li><a href="#正点原子分块式内存管理api" id="markdown-toc-正点原子分块式内存管理api">正点原子分块式内存管理API</a></li>
+                      <li><a href="#freertos内存管理api建议" id="markdown-toc-freertos内存管理api建议">FreeRTOS内存管理API(建议)</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#fpu浮点数计算加速" id="markdown-toc-fpu浮点数计算加速">FPU浮点数计算加速</a>        <ul>
+          <li><a href="#检查是否支持" id="markdown-toc-检查是否支持">检查是否支持</a></li>
+          <li><a href="#开启fpu" id="markdown-toc-开启fpu">开启FPU</a></li>
+          <li><a href="#dsp加速" id="markdown-toc-dsp加速">DSP加速</a>            <ul>
+              <li><a href="#安装并使能dsp库" id="markdown-toc-安装并使能dsp库">安装并使能DSP库：</a></li>
+              <li><a href="#函数介绍" id="markdown-toc-函数介绍">函数介绍</a></li>
+              <li><a href="#性能对比" id="markdown-toc-性能对比">性能对比</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#dma多通道adc遥控器遥杆" id="markdown-toc-dma多通道adc遥控器遥杆">DMA+多通道adc(遥控器遥杆)</a></li>
+      <li><a href="#stm32常见问题" id="markdown-toc-stm32常见问题">STM32常见问题</a>        <ul>
+          <li><a href="#stm32-使用st-link下载问题" id="markdown-toc-stm32-使用st-link下载问题">STM32 使用ST-link下载问题</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="前言">前言</h1>
+
+<p><strong>本文只负责指导一些问题，学</strong><strong>单片机</strong><strong>MCU</strong><strong>还是以下列视频为主:</strong></p>
+
+<p>单片机MCU环境配置:<a href="https://sdutvincirobot.feishu.cn/wiki/FQszwXIR5iQgCfk7pRwc9rYpnqg">电控组环境搭建大全</a></p>
+
+<ol>
+  <li>正点原子HAL库视频：</li>
+</ol>
+
+<p>https://www.bilibili.com/video/BV1bv4y1R7dp</p>
+
+<ol>
+  <li>正点原子电机专项视频：</li>
+</ol>
+
+<p>https://www.bilibili.com/video/BV1hv4y1g7s3</p>
+
+<ol>
+  <li>正点原子FreeRTOS：</li>
+</ol>
+
+<p>https://www.bilibili.com/video/BV19g411p7UT</p>
+
+<ol>
+  <li>
+    <p>大疆开发板C板开发教程：<a href="https://sdutvincirobot.feishu.cn/file/VTXjbEQQTohL3lxITmUcZokbnke">大疆开发板C型嵌入式软件教程文档.pdf</a></p>
+  </li>
+  <li>
+    <p>正点原子开发板资料(请下载A盘资料)：</p>
+  </li>
+</ol>
+
+<p>http://www.openedv.com/docs/boards/stm32/zdyz_stm32f103_warshipV4.html</p>
+
+<p>http://www.openedv.com/docs/boards/stm32/zdyz_stm32f407_explorerV3.html</p>
+
+<ol>
+  <li>
+    <p>【【中科大RM电控合集】手把手Keil+STM32CubeMX+VsCode环境配置-哔哩哔哩】 https://b23.tv/5mwveRt</p>
+  </li>
+  <li>
+    <p>【ARM与STM32啥关系？不来了解一下嘛？-哔哩哔哩】 https://b23.tv/VvcYgUD</p>
+  </li>
+</ol>
+
+<h1 id="arduino库了解即可">arduino库(了解即可)</h1>
+
+<h2 id="arduino库qualcomm-arduinoesp32">arduino库（Qualcomm Arduino、esp32）</h2>
+
+<p>Qualcomm Arduino 的语言系统在设计时参考了C、C++、Java，是一种综合性的简洁语言，语法更类似于C++，但是不支持C++的异常处理，没有STL库，你可以把它当作是精简后的C++。</p>
+
+<p>资料:<a href="https://sdutvincirobot.feishu.cn/docx/HxRYd0Ixpoq1s6xyeQYcNBwun1s">Arduino常用库函数和速学参考</a></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre>
+<span class="kt">int</span> <span class="n">led0</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+
+<span class="c1">// 初始化函数</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span>    <span class="c1">//运行一遍</span>
+<span class="p">{</span>
+  <span class="c1">//将LED灯引脚(引脚值为13，被封装为了LED_BUTLIN)设置为输出模式</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">led0</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+<span class="c1">//OUTPUT输出信号，输出让led灯亮的信号 给引脚写数据</span>
+<span class="p">}</span>
+
+<span class="c1">// 循环执行函数</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>         <span class="c1">//while(true)</span>
+<span class="p">{</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led0</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>   <span class="c1">// 打开LED灯   HIGH高电平</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                       <span class="c1">// 休眠1000毫秒ms</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led0</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>    <span class="c1">// 关闭LED灯</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                       <span class="c1">// 休眠1000毫秒ms</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">setup</span><span class="p">();</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">loop</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image1.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image2.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image3.webp" alt="" /></p>
+
+<p>I/O口初始化函数pinMode()</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image4.webp" alt="" /></p>
+
+<p>I/O输出函数</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image5.webp" alt="" /></p>
+
+<p>I/O输入函数</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image6.webp" alt="" /></p>
+
+<h2 id="最简单的电机驱动板使用讲解">最简单的电机驱动板使用讲解</h2>
+
+<p><strong>L298N电机驱动板介绍</strong></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image7.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image8.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image9.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image10.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image11.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image12.webp" alt="" /></p>
+
+<p><strong><em>如何给</em></strong><strong><em>单片机</em></strong><strong><em>和电机驱动板L298N供电呢？</em></strong></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image13.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image14.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image15.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image16.webp" alt="" /></p>
+
+<h1 id="51单片机了解即可">51单片机(了解即可)</h1>
+
+<p>以STC89C52为例子</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image17.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image18.webp" alt="" /></p>
+
+<p>点一个亮灯</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"reg51.h"</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">main</span> <span class="p">()</span>
+<span class="p">{</span>
+        <span class="n">P2</span> <span class="o">=</span> <span class="mh">0xFE</span><span class="p">;</span><span class="c1">// 等同于  P2 = 0b   1111 1110;</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>延时函数定义</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="c1">//固定延时函数</span>
+<span class="kt">void</span> <span class="nf">Delay500ms</span><span class="p">()</span>                <span class="c1">//@12.000MHz</span>
+<span class="p">{</span>
+        <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+
+        <span class="n">_nop_</span><span class="p">();</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">205</span><span class="p">;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">187</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+                <span class="k">do</span>
+                <span class="p">{</span>
+                        <span class="k">while</span> <span class="p">(</span><span class="o">--</span><span class="n">k</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">--</span><span class="n">j</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">--</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>让灯闪烁</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="rouge-code"><pre>
+<span class="cp">#include</span> <span class="cpf">"reg51.h"</span><span class="cp">
+</span><span class="kt">void</span> <span class="nf">Delay500ms</span><span class="p">()</span>                <span class="c1">//@12.000MHz</span>
+<span class="p">{</span>
+        <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+
+        <span class="n">_nop_</span><span class="p">();</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">205</span><span class="p">;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">187</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+                <span class="k">do</span>
+                <span class="p">{</span>
+                        <span class="k">while</span> <span class="p">(</span><span class="o">--</span><span class="n">k</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">--</span><span class="n">j</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">--</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span> <span class="p">()</span>
+<span class="p">{</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="n">P2</span> <span class="o">=</span> <span class="mh">0xFE</span><span class="p">;</span>
+                <span class="n">Delay500ms</span><span class="p">();</span>
+                <span class="n">P2</span> <span class="o">=</span> <span class="mh">0xFF</span><span class="p">;</span>
+                <span class="n">Delay500ms</span><span class="p">();</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="stm32单片机重点">stm32单片机(重点)</h1>
+
+<h2 id="单片机介绍">单片机介绍</h2>
+
+<h3 id="什么是单片机">①什么是单片机?</h3>
+
+<p>单片机又称<a href="https://baike.baidu.com/item/%E5%8D%95%E7%89%87%E5%BE%AE%E6%8E%A7%E5%88%B6%E5%99%A8/2790468?fromModule=lemma_inlink">单片微控制器</a>，它不是完成某一个逻辑功能的<a href="https://baike.baidu.com/item/%E8%8A%AF%E7%89%87/32249?fromModule=lemma_inlink">芯片</a>，而是把一个计算机系统集成到一个芯片上。相当于一个微型的计算机，和计算机相比，单片机只缺少了I/O设备。概括的讲：一块芯片就成了一台计算机。它的体积小、质量轻、价格便宜、为学习、应用和开发提供了便利条件。同时，学习使用单片机也是了解<a href="https://baike.baidu.com/item/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86/1221312?fromModule=lemma_inlink">计算机原理</a>与结构的最佳选择。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image19.webp" alt="" /></p>
+
+<h3 id="单片机的应用">②单片机的应用?</h3>
+
+<ol>
+  <li>
+    <p>物联网(※)</p>
+  </li>
+  <li>
+    <p>医用设备</p>
+  </li>
+  <li>
+    <p>工业控制</p>
+  </li>
+  <li>
+    <p>计算机网络通信(※)</p>
+  </li>
+  <li>
+    <p>… …</p>
+  </li>
+</ol>
+
+<h3 id="stm32单片机组成部分">③stm32单片机组成部分</h3>
+
+<ol>
+  <li>
+    <p>CPU（中央处理器）</p>
+
+    <ol>
+      <li>芯片框图</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image20.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>处理器内核（内核这个东西了解一下，以后要根据内核的架构和操作系统来判断下什么版本的软件)</p>
+
+        <ol>
+          <li>
+            <p>介绍与作用 : CPU所有的计算、接收/存储命令、处理数据全部由内核执行。</p>
+          </li>
+          <li>
+            <p>指令集分类 : ARM架构、X86架构、LoongArch架构，RISC-V架构</p>
+
+            <ol>
+              <li>
+                <p>ARM架构指令集</p>
+
+                <ol>
+                  <li>
+                    <p>应用:广泛应用于移动行业（手机、平板、工控机等）等需要很强的能耗比的场景中</p>
+                  </li>
+                  <li>
+                    <p>架构分类: ARM32、AArch64（ARM64）等</p>
+                  </li>
+                  <li>
+                    <p>内核分类：ARM Cortex-X(手机) 、ARM Cortex-A（手机） 、 ARM Cortex-R（嵌入式） 、 ARM Cortex-M（嵌入式）</p>
+                  </li>
+                  <li>
+                    <p>了解CPU Soc和CPU内核的区别</p>
+                  </li>
+                </ol>
+
+                <p>        小米玄戒o1，华为麒麟9000，意法半导体STM32F407VET6这三个芯片都是基于ARM架构。他们的CPU的核心的前端设计都是由英国ARM公司设计好的，ARM的内核决定了这个CPU的性能，总线，浮点运算器等等。</p>
+
+                <p>        而小米，华为，意法半导体只对CPU核心进行后端设计，对CPU性能等影响不会太大，<strong>CPU绝大部分特征都是由ARM的前端设计决定的</strong>。</p>
+
+                <p>        <strong>所以，我们在使用F407IG，F407VE的时候，因为他们的CPU内核都是Cortex-M4,所以CPU特征都一样，所以代码也几乎都一样的。</strong></p>
+
+                <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image21.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image22.webp" alt="" /></p>
+              </li>
+            </ol>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image23.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image24.webp" alt="" /></p>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image25.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image26.webp" alt="" /></p>
+
+            <ol>
+              <li>X86架构指令集</li>
+            </ol>
+
+            <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>1.  应用：广泛应用于电脑、软路由、工控机等需要高性能计算的场景中
+
+2.  分类：X86、AMD64(X86\_64)
+</pre></td></tr></tbody></table></code></pre></div>            </div>
+
+            <ol>
+              <li>LoongArch架构</li>
+            </ol>
+
+            <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>1.  应用：政府单位采购、军工采购、个人电脑等
+
+2.  分类：龙架构32位、龙架构64位
+</pre></td></tr></tbody></table></code></pre></div>            </div>
+
+            <ol>
+              <li>RISC-V架构</li>
+            </ol>
+          </li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image27.webp" alt="" /></p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image28.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>GPIO(通用输入/输出端口General-Purpose IO ports)</p>
+
+        <ol>
+          <li>
+            <p>定义：CPU与外部进行信息交换的端口（Input输入、Output输出）</p>
+          </li>
+          <li>
+            <p>理解：CPU上的“金手指”（注意和电路板PCB上的引脚区分）</p>
+          </li>
+          <li>
+            <p>所在位置：通常把CPU焊在电路板PCB上，一般地，GPIO端口在电路板上经过某些电路最终被引出来成为电路板引脚</p>
+          </li>
+          <li>
+            <p>数量：STM32F407系列具有上百GPIO端口，由于数量过多，将其分为7个组(A,B,C… …)，每组共16个IO口(0,1,2,3…15)</p>
+          </li>
+          <li>
+            <p>命名：P+GPIO组+IO口号（比如PA2,PB6等）</p>
+          </li>
+          <li>
+            <p>应用</p>
+
+            <ol>
+              <li>
+                <p>普通输出IO口：输出高电平，或低电平</p>
+              </li>
+              <li>
+                <p>普通输入IO口：读取外部高低电平</p>
+              </li>
+              <li>
+                <p>复用IO口：可变为通信IO口与电脑、电机、蓝牙模块等通信（定时器PWM、串口UART、CAN通信、SWD调试通信、晶振IO口）</p>
+              </li>
+            </ol>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image29.webp" alt="" /></p>
+
+            <h3 id="原理图">      ④原理图</h3>
+
+            <ol>
+              <li>介绍：<a href="https://baike.baidu.com/item/%E9%A1%BE%E5%90%8D%E6%80%9D%E4%B9%89/1481950?fromModule=lemma_inlink">顾名思义</a>就是表示<a href="https://baike.baidu.com/item/%E7%94%B5%E8%B7%AF%E6%9D%BF/10106124?fromModule=lemma_inlink">电路板</a>上各<a href="https://baike.baidu.com/item/%E5%99%A8%E4%BB%B6/8755458?fromModule=lemma_inlink">器件</a>之间<a href="https://baike.baidu.com/item/%E8%BF%9E%E6%8E%A5/70199?fromModule=lemma_inlink">连接</a>原理的<a href="https://baike.baidu.com/item/%E5%9B%BE%E8%A1%A8/1252386?fromModule=lemma_inlink">图表</a>。（各元件在原理图中是用整体形式来表示，进行二次接线的图）</li>
+            </ol>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image30.webp" alt="" /></p>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image31.webp" alt="" /></p>
+
+            <ol>
+              <li>
+                <p>组成部分：</p>
+
+                <ol>
+                  <li>
+                    <p>元器件（包括元器件端口）</p>
+                  </li>
+                  <li>
+                    <p>导线</p>
+                  </li>
+                  <li>
+                    <p>网络标号</p>
+                  </li>
+                  <li>
+                    <p>电源符号</p>
+                  </li>
+                  <li>
+                    <p>等… …</p>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image32.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image33.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image34.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image35.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image36.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image37.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image38.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image39.webp" alt="" /></p>
+
+<h3 id="芯片手册">⑤芯片手册</h3>
+
+<ol>
+  <li>作用：查询各种芯片信息（比如CPU频率，IO定义，时钟树等等）</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image40.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image41.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image42.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image43.webp" alt="" /></p>
+
+<h2 id="软件介绍">软件介绍</h2>
+
+<ol>
+  <li>
+    <p>STM32库</p>
+
+    <ol>
+      <li>
+        <p>各种开发方式：寄存器，标准库，HAL库，LL库</p>
+
+        <ol>
+          <li>
+            <p>寄存器功能简单了解：寄存器就是一个离CPU内核更近的存储结构，所以与CPU内核交换数据比内存（RAM）更快，每个寄存器都有不同的功能，在寄存器里存不同的值，CPU读取后都会实现对应的不同功能。</p>
+          </li>
+          <li>
+            <p>库：库是源文件+头文件。stm32的库是由汇编语言、C语言混合编译而成（HAL库、LL库兼容C++）。现有标准库、HAL库、LL库（标准库已淘汰，咱们实验室使用HAL库和LL库）</p>
+          </li>
+          <li>
+            <p>各种开发方式的优缺点：</p>
+
+            <ol>
+              <li>
+                <p>寄存器：这种开发方式硬件执行效率高，但由于STM32寄存器过于多，用寄存器写可读性差，且麻烦繁琐，故不建议全用寄存器写，在某些场合下可以偶尔使用。（比如在流水灯可直接对寄存器进行移位操作、在调PWM占空比时可直接对CCR寄存器进行赋值等）</p>
+              </li>
+              <li>
+                <p>标准库：太老了，现在已经淘汰，该库使用汇编+C语言进行开发，代码可读性很高，但是由于初期对标准库设计有些问题以及一些专利上的问题，导致会出一些问题（比如IIC通信），且时钟配置过于麻烦繁琐，所以咱们于2021级开始就不再使用标准库。</p>
+              </li>
+              <li>
+                <p>HAL库、LL库（力推）：ARM公司与ST意法半导体力推的库，符合ARM CMSIS标准，该标准是当今嵌入式开发者都需要遵循的一个标准。该库由汇编语言+C语言进行开发，且兼容C++（头文件中有extern “C”条件编译），使用C++的OOP（面向对象）进行开发要方便一万倍。HAL库和LL库仍然被ST公司维护中，其解决掉了标准库的各种确定，比如硬件IIC无法正常使用，时钟配置及其容易。ARM CMSIS标准介绍:https://www.arm.com/technologies/cmsis</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image44.webp" alt="" /></p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image45.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image46.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image47.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image48.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image49.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>开发软件介绍：</p>
+
+    <ol>
+      <li>
+        <p>搭建环境教程:<a href="https://sdutvincirobot.feishu.cn/wiki/FQszwXIR5iQgCfk7pRwc9rYpnqg">STM32 Windows开发环境软件安装教程</a></p>
+      </li>
+      <li>
+        <p>ARM Keil MDK</p>
+
+        <ol>
+          <li>
+            <p>介绍：可进行开发各种基于ARM Cortex系列内核开发的CPU的单片机（比如stm32），也可以开发其他类型单片机（例如51单片机）</p>
+          </li>
+          <li>
+            <p>作用：进行单片机的代码编辑(edit)、编译(compile)、构建(build)以及下载(download)与调试(debug)。</p>
+          </li>
+          <li>
+            <p>版本选择：</p>
+
+            <ol>
+              <li>
+                <p>MDK 5.3及以上：建议使用，但需要自己装ARMCC编译器。其只能在Windows平台进行开发，且图形界面过于丑陋，且没有黑暗模式，夜晚开发及其辣眼，但由于其使用ARMCC和ARMCLANG编译器，比ARM-GCC编译器生成的量要小很多，且因为其对ARM Cortex内核兼容性极好，所以仍选择用MDK 5.3版本。</p>
+              </li>
+              <li>
+                <p>MDK 6及以上：详见下方的VScode</p>
+              </li>
+              <li>
+                <p>折中方案(Keil MDK5 + VScode +Keil Assistant): 详见下方的VScode</p>
+              </li>
+            </ol>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image50.webp" alt="" /></p>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image51.webp" alt="" /></p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>STM32 CubeMX</p>
+
+        <ol>
+          <li>
+            <p>介绍：用图形界面生成STM32 HAL库部分驱动层代码的软件，由ST公司开发，仅支持STM32系列单片机。</p>
+          </li>
+          <li>
+            <p>作用：后期开发使用，进行STM32单片机的驱动层的基本配置（比如时钟树、GPIO、各种外设通信、中断、嵌入式实时操作系统等的配置），<strong>前期新手禁止使用STM32 CubeMX这款软件</strong><strong>，不然就和没学一样。</strong><strong>前期新手只可以用该软件生成时钟函数</strong><strong>，其他的一切操作概不允许，可以了解一下，但不准作为主力开发工具。</strong> （大概熟练掌握CAN通信，DMA等就可以使用该软件了）</p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>STM32 CubeIDE（选用，没有需求就不要去使用）</p>
+
+        <ol>
+          <li>介绍：跨平台的STM32单片机开发平台，仅支持STM32系列单片机，且只能用ARM-GCC编译器(该编译器远远比不上MDK5和MDK6上的ARM-Clang编译器，甚至部分性能也比不上ARM-CC编译器)</li>
+        </ol>
+      </li>
+      <li>
+        <p>VScode</p>
+
+        <ol>
+          <li>
+            <p>介绍：由微软开发的，开源的，世界第一的万能编辑器</p>
+          </li>
+          <li>
+            <p>作用：只是个编辑器（类似记事本），不自带编译器（比如GCC、MSVC，ARMCC(AC5)，ARMCLANG(AC6)，ARM-GCC），需要自己配置环境才能够正常开发C/C++，CMake，Python，ROS2，单片机等。</p>
+          </li>
+          <li>
+            <p>优点：①图形界面非常优美，②可跨平台，在Windows，Linux，MacOS上均能使用，③有非常多好用的插件。</p>
+          </li>
+          <li>
+            <p>缺点：①VSCode是使用Electron开发的，约等于塞了一个Google Chromium浏览器内核，非常占内存。②且环境难配置，但是这是必须要学的。</p>
+          </li>
+          <li>
+            <p>插件：</p>
+
+            <ol>
+              <li>Keil Studio Pack(Keil MDK 6，截止2024年1月2日，推荐熟练使用keil5后再使用) MDK6已经基本完善了，可以使用，但是不建议使用。MDK6学习成本比较高，对新手不友好，且MDK5还在更新维护，所以建议使用MDK5.3及以上。但MDK 6基于MS VScode编辑器开发，实现了跨平台，可在Windows，Linux，MacOS上进行开发，且界面非常优美，所以未来可期。<a href="https://sdutvincirobot.feishu.cn/docx/SJ9FdnLXwoR3cTx93eOc4lZfnzh">ARM Keil MDK6使用教程</a></li>
+            </ol>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image52.webp" alt="" /></p>
+
+            <ol>
+              <li>Keil Assistant（后期开发建议使用，可以代替Keil MDK 5.3 完成代码编译(edit)，但是编译，构建，下载，调试仍然建议在Keil MDK 5.3 上使用）在Windows上用MDK5软件配合Vscode的keil assistant插件进行开发。【VS Code开发stm32和51单片机的教程，vscode代替Keil-哔哩哔哩】 https://www.bilibili.com/video/BV18e4y1H7xX</li>
+            </ol>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image53.webp" alt="" /></p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="时钟树">时钟树</h2>
+
+<h3 id="使用cubemx配置时钟的步骤">①使用CubeMX配置时钟的步骤</h3>
+
+<ol>
+  <li>
+    <p>时钟配置介绍：这是每一个工程都需要做的事情，给予CPU正常的心跳。</p>
+  </li>
+  <li>
+    <p>作用：给予CPU正常的心跳，并且给予各个外设的心跳，让CPU和其各个外设正常工作。（比如延时函数的准确度，定时器PWM波形的准确度）</p>
+  </li>
+  <li>
+    <p>STM32F1系列CPU时钟框图：</p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image54.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>配置需要注意的事项：</p>
+
+    <ol>
+      <li>
+        <p>注意电路板上HSE的真实晶振频率，填高了会导致超频，会出现比较严重的问题</p>
+      </li>
+      <li>
+        <p>配置时建议用CubeMX配置时钟函数，然后复制到正点原子模板工程中（因为手撸时钟函数太难了）</p>
+      </li>
+      <li>
+        <p>CubeMX参考文档：<a href="https://sdutvincirobot.feishu.cn/file/VTXjbEQQTohL3lxITmUcZokbnke">大疆开发板C型嵌入式软件教程文档.pdf</a></p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>配置步骤（这里只点出几个要注意的点，详细步骤请看大疆C板开发文档）：</p>
+
+    <ol>
+      <li>
+        <p>打开大疆C板开发文档</p>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image55.webp" alt="" /></p>
+      </li>
+      <li>
+        <p>找到目录，点击0.4.2</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image56.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>按照0.4.2的步骤开始操作（每一步必须都得做，特别是Debug选Serial Wire，不选的话该工程代码会让板子假变砖）</p>
+
+        <ol>
+          <li>需要注意板子型号，大疆板子是stm32f407igh6，咱们需要根据咱们实际的板子型号进行选择</li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image57.webp" alt="" /></p>
+
+        <ol>
+          <li>配置时钟树时，需要注意HSE的时钟频率，按照实际原理图上的HSE频率来配置</li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image58.webp" alt="" /></p>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image59.webp" alt="" /></p>
+
+        <ol>
+          <li>代码路径必须全是英文，并且不能有连续两个空格，建议直接不要空格，单词之间用下划线（不可以放在桌面上）</li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image60.webp" alt="" /></p>
+
+        <ol>
+          <li>解释</li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image61.webp" alt="" /></p>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image62.webp" alt="" /></p>
+      </li>
+      <li>
+        <p>打开CubeMX生成的MDK 5工程</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image63.webp" alt="" /></p>
+
+    <ol>
+      <li>再复制一个并打开正点原子的模板工程</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image64.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image65.webp" alt="" /></p>
+
+    <ol>
+      <li>在CubeMX HAL库工程中的main.c中找到时钟函数void SystemClock_Config(void)的定义</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image66.webp" alt="" /></p>
+
+    <ol>
+      <li>复制整个void SystemClock_Config(void)函数的定义</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image67.webp" alt="" /></p>
+
+    <ol>
+      <li>然后打开正点原子的工程，在main函数中找到sys_stm32_clock_init(RCC_PLL_MUL9)函数，右键该函数，并go to definition of “sys_stm32_clock_init”找到这个函数的定义。</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image68.webp" alt="" /></p>
+
+    <ol>
+      <li>如果弹出下方的问题，请按照这个框框中的提示来解决，说的很明白。（如果看不懂英语，就去百度搜，锻炼下搜索能力）</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image69.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>go to definition of “sys_stm32_clock_init”完后找到这个函数的定义，删掉整个函数，并把刚才复制的CubeMX HAL库里的时钟函数复制到这里。并将Error_Handler();直接删掉，或者替换成while(1)；</p>
+      </li>
+      <li>
+        <p>找到sys_stm32_clock_init函数定义</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image70.webp" alt="" /></p>
+
+    <ol>
+      <li>框选后删掉</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image71.webp" alt="" /></p>
+
+    <ol>
+      <li>把复制的CubeMX HAL库里的时钟函数复制到这里。</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image72.webp" alt="" /></p>
+
+    <ol>
+      <li>用while(1)；替换掉Error_Handler();或直接删掉。</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image73.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image74.webp" alt="" /></p>
+
+    <ol>
+      <li>找到void SystemClock_Config(void)函数所在的源文件sys.c对应的头文件sys.h</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image75.webp" alt="" /></p>
+
+    <ol>
+      <li>找到sys_stm32_clock_init(uint32_t plln)函数，删掉，替换成void SystemClock_Config(void)的声明。</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image76.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image77.webp" alt="" /></p>
+
+    <ol>
+      <li>回到主函数，找到sys_stm32_clock_init(RCC_PLL_MUL9);函数，删掉，并调用咱们新的时钟函数</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image78.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image79.webp" alt="" /></p>
+
+    <ol>
+      <li>修改HSE_VALUE</li>
+      <li>随便找个地方输入HSE_VALUE并go to definition（go to definition完毕后，就可以删掉这个自己写的HSE_VALUE）</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image80.webp" alt="" /></p>
+
+    <ol>
+      <li>修改HSE_VALUE的值(如果是8MHz就写8000000U，如果是12MHz就写12000000U)</li>
+    </ol>
+
+    <p>通过看原理图可知，该板子为8MHz。（具体填多少，看你板子HSE的原理图，对应OSCIN和OSCOUT这俩IO口）</p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image81.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image82.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>删掉原来用来go to definition才写的HSE_VALUE</p>
+      </li>
+      <li>
+        <p>删掉多余的代码</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image83.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>第9行的delay_init的入口参数具体填什么值，先查看一下他的定义</p>
+      </li>
+      <li>
+        <p>查看delay_init的定义，得知其入口参数为sysclk（系统时钟）</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image84.webp" alt="" /></p>
+
+    <ol>
+      <li>查看CubeMX的时钟树框图，得知SYSCLK的值为72MHz</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image85.webp" alt="" /></p>
+
+    <ol>
+      <li>把delay_init的值改为时钟树中的SYSCLK的值</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image86.webp" alt="" /></p>
+
+    <ol>
+      <li>然后编译所有文件</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image87.webp" alt="" /></p>
+
+    <ol>
+      <li>零错误零警告即配置成功，有错误有警告请自行百度、谷歌</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image88.webp" alt="" /></p>
+  </li>
+</ol>
+
+<h3 id="查询某个外设时钟频率的方法拿定时器来举例子">②查询某个外设时钟频率的方法（拿定时器来举例子）</h3>
+
+<ol>
+  <li>打开tim.c</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image89.webp" alt="" /></p>
+
+<ol>
+  <li>找到Msp初始化弱函数（看TIM的基句柄得知是哪个TIMx）</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image90.webp" alt="" /></p>
+
+<ol>
+  <li>查找__HAL_RCC_XXX_CLK_ENABLE()的定义</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image91.webp" alt="" /></p>
+
+<ol>
+  <li>根据函数定义，可以看出TIM1挂载在APB2上</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image92.webp" alt="" /></p>
+
+<ol>
+  <li>查询时钟树，找APB2 Timer Clock可得TIM1的TCLK是168MHz</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image93.webp" alt="" /></p>
+
+<ol>
+  <li>所以得知，TIM1的TCLK频率为168MHz</li>
+</ol>
+
+<h2 id="stm32程序组成">stm32程序组成</h2>
+
+<h3 id="基本介绍主函数等">基本介绍(主函数等)</h3>
+
+<ol>
+  <li>
+    <p>工程构成：stm32工程是由C语言和汇编语言的库组成的工程，所以有主函数，符合C/C++语言的结构。</p>
+  </li>
+  <li>
+    <p>程序运行顺序：除了预编译等，程序从主函数开始运行，而且非常符合C/C++运行顺序，从主函数开始会逐行运行代码，然后会进入死循环。</p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image94.webp" alt="" /></p>
+  </li>
+  <li>
+    <p>主函数内必须的组成部分：死循环[while(true)或者for(;;)]，因为单片机要一直运行下去，所以有个死循环。</p>
+  </li>
+  <li>
+    <p>HAL库 与 用户自定义库</p>
+
+    <ol>
+      <li>
+        <p>库：</p>
+
+        <ol>
+          <li>
+            <p>.h文件声明函数</p>
+          </li>
+          <li>
+            <p>.c/.cpp文件定义函数</p>
+          </li>
+          <li>
+            <p>.c/.cpp文件调用函数</p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image95.webp" alt="" /></p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image96.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image97.webp" alt="" /></p>
+
+<h3 id="中断服务函数的介绍">中断服务函数的介绍</h3>
+
+<ol>
+  <li>
+    <p>特殊函数(中断服务函数)：中断服务函数是由汇编定义的，与芯片硬件更紧密，是由芯片中断事件所触发，并不满足常规C/C++调用顺序。</p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image98.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>中断服务函数的调用方式：由中断事件所触发。一旦满足某个中断事件，就立马从正在运行的地方切换到中断服务函数里开始运行，然后运行完中断服务函数后，再返回刚才运行的地方接着运行。</p>
+      </li>
+      <li>
+        <p>中断事件：比如说第X条线的外部中断事件、systick滴答定时器中断(普通延时函数的实现方式)、UART接收中断事件、UART发送中断事件、TIM定时器溢出更新中断、TIM定时器输入捕获中断、CAN通信发送中断事件、CAN通信接收中断事件、RTOS的PendSV中断等等。（每个事件对应的中断服务函数一般都不相同，但是也有一些中断事件会共用同一个中断服务函数）</p>
+      </li>
+      <li>
+        <p>中断服务函数处理过程：</p>
+
+        <ol>
+          <li>
+            <p>CPU检测到有中断事件的发生</p>
+          </li>
+          <li>
+            <p>保护现场，将当前位置的PC地址压栈(程序计数器(Program Counter))；</p>
+          </li>
+          <li>
+            <p>跳转到中断服务函数，执行中断服务程序；</p>
+          </li>
+          <li>
+            <p>恢复现场，将栈顶的值回送给PC;</p>
+          </li>
+          <li>
+            <p>跳转到被中断的位置开始执行下一个指令。</p>
+          </li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image99.webp" alt="" /></p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image100.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image101.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>中断优先级与分组</p>
+
+        <ol>
+          <li>
+            <p>优先级：抢占优先级和子优先级</p>
+          </li>
+          <li>
+            <p>分组0-5</p>
+          </li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image102.webp" alt="" /></p>
+
+        <ol>
+          <li>更改分组(在HAL_Init中更改)</li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image103.webp" alt="" /></p>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image104.webp" alt="" /></p>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image105.webp" alt="" /></p>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image106.webp" alt="" /></p>
+
+        <ol>
+          <li>
+            <p>中断服务函数内容：</p>
+
+            <ol>
+              <li>
+                <p>先查询中断标志位，确定被触发的中断事件</p>
+              </li>
+              <li>
+                <p>清除对应标志位，防止中断一直被触发，好让下次中断正常运行</p>
+              </li>
+              <li>
+                <p>接收数据等（可选）</p>
+              </li>
+              <li>
+                <p>逻辑业务代码实现（可选，比如数据处理等）</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>中断服务函数的特点：</p>
+          </li>
+        </ol>
+
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre>1.  中断服务函数不能传入参数；
+
+2.  中断服务函数不能有返回值；
+
+3.  中断服务函数应该做到短小精悍；
+
+4.  迫不得已的情况下，不准在中断服务函数中使用延时函数，如果要使用延时，请设置好延时和中断的优先级，否则程序出卡死（除了外部中断为了软件消抖而设立的延时）
+
+5.  不要在中断服务函数中使用printf函数，会带来重入和性能问题。
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+
+        <ol>
+          <li>举例：</li>
+        </ol>
+
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+</pre></td><td class="rouge-code"><pre>![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image107.webp)
+
+2.  USART1\_IRQHnadler函数
+
+    1.  中文名：串口1\_中断服务函数
+
+    2.  声明定义：由汇编声明，需要用户自己去定义(如果使能了，用户还不定义，程序将会卡在汇编代码中）
+
+    3.  调用条件：由CPU中断事件调用
+
+    4.  作用：被CPU调用，并调用紧急的中断程序(中断程序也就是中断服务函数里的内容)
+
+3.  HAL\_UART\_IRQHnadler(句柄)
+
+    1.  中文名：串口\_中断**公共**服务函数(公共的意思指串口1,2,3,4,5......等所有的串口都共用这一个函数实现功能，由后面的句柄决定究竟是哪个函数被触发)
+
+    2.  声明定义：ST公司编写的HAL库声明和定义
+
+    3.  调用条件：由中断服务函数调用
+
+    4.  作用：
+
+        1.  先查询中断标志位，确定被触发的中断事件
+
+        2.  清除对应标志位，防止中断一直被触发，好让下次中断正常运行
+
+        3.  接收数据等（可选）
+
+        4.  调用中断事件对应的中断回调函数
+
+        5.  其他操作（比如特殊的，在串口接收中断里会disable失能中断，也就是关掉中断）
+
+4.  HAL\_UART\_RxCpltCallback(句柄)
+
+    1.  中文名：串口\_中断回调函数(因为他被中断公共服务函数调用，所以句柄是由调用它的中断公共服务函数所决定)
+
+    2.  声明定义：ST公司编写的HAL库声明为弱函数，需要用户自己去定义
+
+    3.  调用条件：被中断公共服务函数调用
+
+    4.  作用：先确定是哪个句柄调用的，再进行相应的业务逻辑实现（可选，比如数据处理等）
+
+![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image108.webp)
+
+![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image109.webp)
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image110.webp" alt="" /></p>
+
+<h3 id="rtos与rosros2简单了解">RTOS与ROS/ROS2简单了解</h3>
+
+<ol>
+  <li>
+    <p>进阶（非裸机开发，基于RTOS系统开发）</p>
+
+    <ol>
+      <li>
+        <p>常见的RTOS(嵌入式实时操作系统)：FreeRTOS、Nuttx、RT-Thread、μC/OS-II、Xiaomi VelaOS</p>
+      </li>
+      <li>
+        <p>FreeRTOS官网：https://www.freertos.org/zh-cn-cmn-s/</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image111.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>FreeRTOS简单理解：拥有多线程库特性并兼容POSIX标准的操作系统</p>
+      </li>
+      <li>
+        <p>多线程：系统拥有多个任务(线程)，每个任务(线程)独立并同时运行(可以理解成每个任务都是一个主函数，这些任务都是同时在执行的。具体实现方式以后再学，原理就是PendSV中断等)</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>进阶(非裸机开发，基于RTOS和ROS2_MicroROS)</p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image112.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>使用方式：ESP32使用arduino库+FreeRTOS+MicroROS并通过串口与STM32进行通信。</p>
+      </li>
+      <li>
+        <p>主要作用之一：可通过WIFI远程与上位机（电脑、工控机）的ROS2进行更加安全、稳定的通信，对比直接用串口通信（rosserial），要好很多(DDS分布式)。</p>
+      </li>
+      <li>
+        <p>MicroROS Vs ROSserial的详解链接: https://mp.weixin.qq.com/s/1lQXAA3sV-4GpXAzHiGChQ</p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="寄存器">寄存器</h2>
+
+<ol>
+  <li>理解：是CPU内部用来存放数据的一些小型存储区域，用来暂时存放参与运算的数据和运算结果。</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image113.webp" alt="" /></p>
+
+<ol>
+  <li>实现的功能：</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image114.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image115.webp" alt="" /></p>
+
+<ol>
+  <li>寄存器如何在基于C语言的HAL库中发挥作用的呢？（应该说是 C语言HAL库实现stm32单片机控制的原理是什么？）</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image116.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image117.webp" alt="" /></p>
+
+<h2 id="vinci机器人队标准工程格式">Vinci机器人队标准工程格式</h2>
+
+<h3 id="英语">英语</h3>
+
+<p>必须用 <strong>英语</strong> ，工程文件名、函数名、变量名必须用英语！(走出中文舒适圈，最起码一些专业英语你要认识)</p>
+
+<h3 id="正点原子hal库工程标准">正点原子HAL库工程标准：</h3>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image118.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image119.webp" alt="" /></p>
+
+<h3 id="vinci机器人队stm32工程标准cubec语言">Vinci机器人队STM32工程标准(Cube+C语言)：</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre>![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image120.webp)
+
+1.  applications应用层
+
+    ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image121.webp)
+
+2.  bsp驱动层
+
+![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image122.webp)
+
+3.  Middlewares中间层
+
+![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image123.webp)
+
+4.  Core(主函数所在地，条件编译配置HAL库的头文件所在地)
+
+![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image124.webp)
+
+![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image125.webp)
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="vinci机器人队stm32cc工程标准类正点原子试运行不建议建议用下一节的类cube_cpp">  Vinci机器人队STM32C/C++工程标准(类正点原子，试运行，<strong><em>不建议</em></strong>，<code class="language-plaintext highlighter-rouge">建议用下一节的类Cube_Cpp</code>):</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="rouge-code"><pre>    ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image126.webp)
+
+    1.  应用层、驱动层等采用模块集成式，不再采用Src和Inc分离式
+
+    ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image127.webp)
+
+    ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image128.webp)
+
+    2.  公共兼容层：
+
+    3.  C++子main兼容库
+
+        ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image129.webp)
+
+        2.  作用：在.cpp文件中创建一个普通的函数，该函数调用C++的代码，然后被C语言main.c文件中的main函数所调用。
+
+        ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image130.webp)
+
+        ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image131.webp)
+
+        5.  弱函数\_回调函数库（该文件的源文件全局要有extern "C",因为弱函数是C语言的东西，C++无法正常识别）
+
+        ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image132.webp)
+
+        ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image133.webp)
+
+        ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image134.webp)
+
+        ![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image135.webp)
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="建议vinci机器人队stm32cube-cc工程标准类cube试运行建议"><strong>(建议)Vinci机器人队STM32Cube C/C++工程标准(类Cube，试运行，建议):</strong></h3>
+
+<h4 id="首先打开cubemx进行工程配置比如我们这里用裸机开发使一个led灯闪烁">首先打开CubeMX进行工程配置，比如我们这里用裸机开发使一个LED灯闪烁</h4>
+
+<p>然后选择OpenFolder打开文件夹</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image136.webp" alt="" /></p>
+
+<h4 id="打开github将一些必备文件进行克隆">打开Github将一些必备文件进行克隆</h4>
+
+<p>仓库链接：</p>
+
+<p>https://github.com/tungchiahui/CubeMX_MDK5to6_Template</p>
+
+<p>或者直接打开terminal输入</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>git clone https://github.com/tungchiahui/CubeMX_MDK5to6_Template.git
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="打开克隆的模板与刚才cubemx生成的工程">打开克隆的模板与刚才CubeMX生成的工程</h4>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image137.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image138.webp" alt="" /></p>
+
+<p>打开模板中的<strong><em><code class="language-plaintext highlighter-rouge">工程文件移植(创建新模板请看这里)</code></em></strong> 文件夹，然后将里面的文件全部复制到CubeMX工程文件中。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image139.webp" alt="" /></p>
+
+<p>移动后：</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image140.webp" alt="" /></p>
+
+<h4 id="打开工程设置工程">打开工程设置工程</h4>
+
+<ol>
+  <li>打开MDK5工程</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image141.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image142.webp" alt="" /></p>
+
+<ol>
+  <li>点击Options for Target</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image143.webp" alt="" /></p>
+
+<ol>
+  <li>修改编译器为<code class="language-plaintext highlighter-rouge">ARMClang[ARM Compiler6 (AC6)]</code> <strong>替换掉</strong> <code class="language-plaintext highlighter-rouge">ARMCC[ARM Compiler5 (AC5)]</code></li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image144.webp" alt="" /></p>
+
+<ol>
+  <li>添加头文件的路径(Include Path)</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image145.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image146.webp" alt="" /></p>
+
+<p>添加applications中的Inc文件夹</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image147.webp" alt="" /></p>
+
+<p>添加bsp/boards中的Inc文件夹</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image148.webp" alt="" /></p>
+
+<p>点击OK即可</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image149.webp" alt="" /></p>
+
+<ol>
+  <li>添加源文件.c/.cpp等</li>
+</ol>
+
+<p>打开Manage Project Items</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image150.webp" alt="" /></p>
+
+<p>创建两个分组</p>
+
+<p>分组的名字分别叫</p>
+
+<p>applications</p>
+
+<p>bsp/boards</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image151.webp" alt="" /></p>
+
+<p>将Core/Src目录下的startup_main.cpp加入到Application/User/Core组中。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image152.webp" alt="" /></p>
+
+<p>将bsp/boards/Src目录下的bsp_delay.cpp加入到bsp/boards组中。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image153.webp" alt="" /></p>
+
+<p>可以看到工程里的文件都就绪了。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image154.webp" alt="" /></p>
+
+<h4 id="编译并配置一些必要代码">编译并配置一些必要代码</h4>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image155.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image156.webp" alt="" /></p>
+
+<p>可以右键头文件，然后点Open Document “xxx.h”来打开头文件，用来检查头文件是否导入成功。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image157.webp" alt="" /></p>
+
+<p>找到main.c文件，准备在主函数main()中调用C++的类主函数startup_main();</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image158.webp" alt="" /></p>
+
+<p>在USER CODE BEGIN Includes和USER CODE END Includes这两行注释中间 <code class="language-plaintext highlighter-rouge">引用startup_main.h</code> <strong><em>(因为不放在BEGIN和END之间的代码在CubeMX重新配置后，代码都会消失)</em></strong></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image159.webp" alt="" /></p>
+
+<p>在USER CODE BEGIN和USER CODE END这两行注释中间 <code class="language-plaintext highlighter-rouge">调用startup_main();</code><strong><em>(因为不放在BEGIN和END之间的代码在CubeMX重新配置后，代码都会消失)</em></strong></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image160.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image161.webp" alt="" /></p>
+
+<p>打开startup_main.h</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image162.webp" alt="" /></p>
+
+<p>更改isRTOS宏的值，如果是裸机开发则为0，如果使用了FreeRTOS则改为1。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image163.webp" alt="" /></p>
+
+<p>至此，你可以在startup_main()函数中随意调用C/C++库中的代码啦。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image164.webp" alt="" /></p>
+
+<h4 id="c库的头文件格式">C++库的头文件格式</h4>
+
+<p>拿bsp_delay.h举例</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+</pre></td><td class="rouge-code"><pre><span class="cp">#ifndef __BSP_DELAY_H_
+#define __BSP_DELAY_H_
+</span>
+<span class="cp">#ifdef __cplusplus
+</span><span class="k">extern</span> <span class="s">"C"</span> 
+<span class="p">{</span>
+<span class="cp">#endif
+</span>
+<span class="cp">#include</span> <span class="cpf">"startup_main.h"</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">BSP_Delay</span>
+<span class="p">{</span>
+        <span class="nl">public:</span>
+                <span class="k">class</span> <span class="nc">F1</span>
+                <span class="p">{</span>
+                        <span class="nl">public:</span>
+                                <span class="kt">void</span> <span class="n">Init</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">sysclk</span><span class="p">);</span>
+                                <span class="kt">void</span> <span class="n">us</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">nus</span><span class="p">);</span>
+                                <span class="kt">void</span> <span class="n">ms</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nms</span><span class="p">);</span>
+                <span class="p">}</span><span class="n">f1</span><span class="p">;</span>
+                <span class="k">class</span> <span class="nc">F4</span>
+                <span class="p">{</span>
+                        <span class="nl">public:</span>
+                                <span class="kt">void</span> <span class="n">Init</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">sysclk</span><span class="p">);</span>
+                                <span class="kt">void</span> <span class="n">us</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">nus</span><span class="p">);</span>
+                                <span class="kt">void</span> <span class="n">ms</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nms</span><span class="p">);</span>
+                <span class="p">}</span><span class="n">f4</span><span class="p">;</span>
+                <span class="k">class</span> <span class="nc">FreeRTOS</span>
+                <span class="p">{</span>
+                        <span class="nl">public:</span>
+                                <span class="kt">void</span> <span class="n">Init</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+                <span class="p">}</span><span class="n">freertos</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">extern</span> <span class="n">BSP_Delay</span> <span class="n">bsp_delay</span><span class="p">;</span>
+
+<span class="cp">#ifdef __cplusplus
+</span><span class="p">}</span>
+<span class="cp">#endif
+</span>
+<span class="cp">#endif
+</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>条件编译肯定不能少，一个是防止头文件重复引用的条件编译，一个是把C++链接为C语言的条件编译。（如果忘了，请看<a href="https://sdutvincirobot.feishu.cn/docx/N0GAdx6IDoqnRnx1q0TcX1Wfnvc">Vinci机器人队C/C++资料</a>）</p>
+
+<p>然后引用startup_main.h头文件</p>
+
+<p>再创建该模块的类，比如说class BSP_LED等，我这里为延时的类，所以是class BSP_Delay。</p>
+
+<p>然后写类里的声明。</p>
+
+<p>注意：不要在.h文件里写任何代码实现，也就是不能写任何函数的定义。</p>
+
+<p>然后第35行的extern BSP_Delay bsp_delay;是在主函数中进行了创建对象bsp_delay，我们要在这里声明(extern)一下对象(变量)。方便其他的源文件调用。</p>
+
+<p>理论上你是可以看懂上面所说的的，如果你实在看不懂，就照葫芦画瓢，画着画着也就理解了。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image165.webp" alt="" /></p>
+
+<h4 id="c库的源文件格式">C++库的源文件格式</h4>
+
+<p>拿bsp_delay.cpp举例</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+</pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">"bsp_delay.h"</span><span class="cp">
+</span>
+<span class="cp">#if isRTOS == 1
+</span>    <span class="cp">#include</span> <span class="cpf">"cmsis_os.h"</span><span class="cp">
+#endif
+</span>
+<span class="k">static</span> <span class="kt">uint32_t</span> <span class="n">g_fac_us</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>       <span class="cm">/* us延时倍乘数 */</span>
+
+<span class="n">BSP_Delay</span> <span class="n">bsp_delay</span><span class="p">;</span>
+
+<span class="cm">/**
+ * @brief       初始化延迟函数
+ * @param       sysclk: 系统时钟频率, 即CPU频率(HCLK)
+ * @retval      无
+ */</span>
+ <span class="kt">void</span> <span class="n">BSP_Delay</span><span class="o">::</span><span class="n">F1</span><span class="o">::</span><span class="n">Init</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">sysclk</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">CTRL</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                                          <span class="cm">/* 清Systick状态，以便下一步重设，如果这里开了中断会关闭其中断 */</span>
+    <span class="n">HAL_SYSTICK_CLKSourceConfig</span><span class="p">(</span><span class="n">SYSTICK_CLKSOURCE_HCLK_DIV8</span><span class="p">);</span>   <span class="cm">/* SYSTICK使用内核时钟源8分频,因systick的计数器最大值只有2^24 */</span>
+
+    <span class="n">g_fac_us</span> <span class="o">=</span> <span class="n">sysclk</span> <span class="o">/</span> <span class="mi">8</span><span class="p">;</span>                                      <span class="cm">/* 不论是否使用OS,g_fac_us都需要使用,作为1us的基础时基 */</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * @brief       延时nus
+ * @param       nus: 要延时的us数.
+ * @note        注意: nus的值,不要大于1864135us(最大值即2^24 / g_fac_us  @g_fac_us = 9)
+ * @retval      无
+ */</span>
+<span class="kt">void</span> <span class="n">BSP_Delay</span><span class="o">::</span><span class="n">F1</span><span class="o">::</span><span class="n">us</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">nus</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">LOAD</span> <span class="o">=</span> <span class="n">nus</span> <span class="o">*</span> <span class="n">g_fac_us</span><span class="p">;</span> <span class="cm">/* 时间加载 */</span>
+    <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">VAL</span> <span class="o">=</span> <span class="mh">0x00</span><span class="p">;</span>            <span class="cm">/* 清空计数器 */</span>
+    <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">CTRL</span> <span class="o">|=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span> <span class="p">;</span>       <span class="cm">/* 开始倒数 */</span>
+
+    <span class="k">do</span>
+    <span class="p">{</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">CTRL</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">((</span><span class="n">temp</span> <span class="o">&amp;</span> <span class="mh">0x01</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">temp</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">)));</span> <span class="cm">/* CTRL.ENABLE位必须为1, 并等待时间到达 */</span>
+
+    <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">CTRL</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">;</span>    <span class="cm">/* 关闭SYSTICK */</span>
+    <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">VAL</span> <span class="o">=</span> <span class="mh">0X00</span><span class="p">;</span>            <span class="cm">/* 清空计数器 */</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * @brief       延时nms
+ * @param       nms: 要延时的ms数 (0&lt; nms &lt;= 65535)
+ * @retval      无
+ */</span>
+<span class="kt">void</span> <span class="n">BSP_Delay</span><span class="o">::</span><span class="n">F1</span><span class="o">::</span><span class="n">ms</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nms</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">repeat</span> <span class="o">=</span> <span class="n">nms</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">;</span>   <span class="cm">/*  这里用1000,是考虑到可能有超频应用,
+                                     *  比如128Mhz的时候, delay_us最大只能延时1048576us左右了
+                                     */</span>
+    <span class="kt">uint32_t</span> <span class="n">remain</span> <span class="o">=</span> <span class="n">nms</span> <span class="o">%</span> <span class="mi">1000</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">repeat</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">us</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>      <span class="cm">/* 利用delay_us 实现 1000ms 延时 */</span>
+        <span class="n">repeat</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">remain</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">us</span><span class="p">(</span><span class="n">remain</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>    <span class="cm">/* 利用delay_us, 把尾数延时(remain ms)给做了 */</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * @brief     初始化延迟函数
+ * @param     sysclk: 系统时钟频率, 即CPU频率(rcc_c_ck), 168MHz
+ * @retval    无
+ */</span>  
+<span class="kt">void</span> <span class="n">BSP_Delay</span><span class="o">::</span><span class="n">F4</span><span class="o">::</span><span class="n">Init</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">sysclk</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">HAL_SYSTICK_CLKSourceConfig</span><span class="p">(</span><span class="n">SYSTICK_CLKSOURCE_HCLK</span><span class="p">);</span><span class="cm">/* SYSTICK使用外部时钟源,频率为HCLK */</span>
+    <span class="n">g_fac_us</span> <span class="o">=</span> <span class="n">sysclk</span><span class="p">;</span>                                  <span class="cm">/* 不论是否使用OS,g_fac_us都需要使用 */</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * @brief       延时nus
+ * @param       nus: 要延时的us数.
+ * @note        nus取值范围 : 0~190887435(最大值即 2^32 / fac_us @fac_us = 21)
+ * @retval      无
+ */</span>
+<span class="kt">void</span> <span class="n">BSP_Delay</span><span class="o">::</span><span class="n">F4</span><span class="o">::</span><span class="n">us</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">nus</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">ticks</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">told</span><span class="p">,</span> <span class="n">tnow</span><span class="p">,</span> <span class="n">tcnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">reload</span> <span class="o">=</span> <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">LOAD</span><span class="p">;</span>        <span class="cm">/* LOAD的值 */</span>
+    <span class="n">ticks</span> <span class="o">=</span> <span class="n">nus</span> <span class="o">*</span> <span class="n">g_fac_us</span><span class="p">;</span>                 <span class="cm">/* 需要的节拍数 */</span>
+    <span class="n">told</span> <span class="o">=</span> <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">VAL</span><span class="p">;</span>                    <span class="cm">/* 刚进入时的计数器值 */</span>
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">tnow</span> <span class="o">=</span> <span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">VAL</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tnow</span> <span class="o">!=</span> <span class="n">told</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tnow</span> <span class="o">&lt;</span> <span class="n">told</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">tcnt</span> <span class="o">+=</span> <span class="n">told</span> <span class="o">-</span> <span class="n">tnow</span><span class="p">;</span>        <span class="cm">/* 这里注意一下SYSTICK是一个递减的计数器就可以了 */</span>
+            <span class="p">}</span>
+            <span class="k">else</span> 
+            <span class="p">{</span>
+                <span class="n">tcnt</span> <span class="o">+=</span> <span class="n">reload</span> <span class="o">-</span> <span class="n">tnow</span> <span class="o">+</span> <span class="n">told</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">told</span> <span class="o">=</span> <span class="n">tnow</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tcnt</span> <span class="o">&gt;=</span> <span class="n">ticks</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>                      <span class="cm">/* 时间超过/等于要延迟的时间,则退出 */</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * @brief       延时nms
+ * @param       nms: 要延时的ms数 (0&lt; nms &lt;= 65535)
+ * @retval      无
+ */</span>
+<span class="kt">void</span> <span class="n">BSP_Delay</span><span class="o">::</span><span class="n">F4</span><span class="o">::</span><span class="n">ms</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nms</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">repeat</span> <span class="o">=</span> <span class="n">nms</span> <span class="o">/</span> <span class="mi">540</span><span class="p">;</span>    <span class="cm">/*  这里用540,是考虑到可能有超频应用, 比如248M的时候,delay_us最大只能延时541ms左右了 */</span>
+    <span class="kt">uint32_t</span> <span class="n">remain</span> <span class="o">=</span> <span class="n">nms</span> <span class="o">%</span> <span class="mi">540</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">repeat</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">us</span><span class="p">(</span><span class="mi">540</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>        <span class="cm">/* 利用delay_us 实现 540ms 延时 */</span>
+        <span class="n">repeat</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">remain</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">us</span><span class="p">(</span><span class="n">remain</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>    <span class="cm">/* 利用delay_us, 把尾数延时(remain ms)给做了 */</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">BSP_Delay</span><span class="o">::</span><span class="n">FreeRTOS</span><span class="o">::</span><span class="n">Init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="c1">//调用FreeRTOS自带的延时即可。</span>
+        <span class="c1">//osDelay</span>
+        <span class="c1">//vTaskDelay</span>
+        <span class="c1">//vTaskDelayUntil</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+  * @brief HAL库内部函数用到的延时
+           HAL库的延时默认用Systick，如果我们没有开Systick的中断会导致调用这个延时后无法退出
+  * @param Delay 要延时的毫秒数
+  * @retval None
+  */</span>
+<span class="kt">void</span> <span class="nf">HAL_Delay</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Delay</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="cp">#if isRTOS==0   //如果是裸机开发
+</span>
+        <span class="cp">#ifdef STM32F1  //如果是裸机开发且为F1
+</span>                        <span class="n">bsp_delay</span><span class="p">.</span><span class="n">f1</span><span class="p">.</span><span class="n">ms</span><span class="p">(</span><span class="n">Delay</span><span class="p">);</span>
+        <span class="cp">#endif
+</span>
+        <span class="cp">#ifdef STM32F4  //如果是裸机开发且为F4
+</span>                        <span class="n">bsp_delay</span><span class="p">.</span><span class="n">f4</span><span class="p">.</span><span class="n">ms</span><span class="p">(</span><span class="n">Delay</span><span class="p">);</span>
+        <span class="cp">#endif
+</span>
+<span class="cp">#elif isRTOS==1          //如果是FreeRTOS开发
+</span>                 <span class="n">osDelay</span><span class="p">(</span><span class="n">Delay</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="p">}</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>刚上来肯定要引用自己的头文件。</p>
+
+<p>这个条件编译不用管，因为延时在裸机开发和RTOS开发时有区别，所以我加了一行条件编译。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image166.webp" alt="" /></p>
+
+<p>上来要先创建一下类对象bsp_delay;</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image167.webp" alt="" /></p>
+
+<p>然后把类里的函数都进行定义。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image168.webp" alt="" /></p>
+
+<p><strong>函数注释格式：</strong></p>
+
+<p>这一块是该函数的注释，以后尽量都这样写注释。（在以后MDK6中进行调用函数时，会提示该注释，一目了然）</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image169.webp" alt="" /></p>
+
+<p>这样写注释的好处，在调用时，会显示入口参数需要填什么，会显示返回值是什么。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image170.webp" alt="" /></p>
+
+<p>brief 函数摘要</p>
+
+<p>param 入口参数</p>
+
+<p>retval 返回值</p>
+
+<p>note或attention 注意事项</p>
+
+<p>注意这里，有几个param入口参数，就写几个param</p>
+
+<p>比如</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="cm">/**
+ * @brief       CAN1通信发送函数
+ * @param       motor1: 第1个电机的相对电流值
+ * @param       motor2: 第2个电机的相对电流值
+ * @param       motor3: 第3个电机的相对电流值
+ * @param       motor4: 第4个电机的相对电流值
+ * @retval      bool是否发送成功
+ * @note        无特殊注意事项
+ */</span>
+ <span class="kt">bool</span> <span class="n">CAN_BUS</span><span class="o">::</span><span class="n">CAN1</span><span class="o">::</span><span class="n">CMD1</span><span class="p">(</span><span class="kt">int16_t</span> <span class="n">motor1</span><span class="p">,</span><span class="kt">int16_t</span> <span class="n">motor2</span><span class="p">,</span><span class="kt">int16_t</span> <span class="n">motor3</span><span class="p">,</span><span class="kt">int16_t</span> <span class="n">motor4</span><span class="p">)</span>
+ <span class="p">{</span>
+ <span class="c1">// ... ...</span>
+ <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="注意事项">注意事项</h4>
+
+<ol>
+  <li>
+    <p>在.cpp源文件中，弱函数的定义前面要加个extern “C” 因为__weak是C语言(汇编向量)特有的，所以必须把代码以C语言的形式链接。</p>
+  </li>
+  <li>
+    <p>代码要写在Begin和End之间，否则再次用CubeMX配置代码后，代码会消失。</p>
+  </li>
+</ol>
+
+<h2 id="驱动">驱动</h2>
+
+<ol>
+  <li>
+    <p>驱动，驱动程序全称设备驱动程序，能够使计算机与相应的设备进行通信。驱动程序是硬件厂商根据操作系统编写的配置文件，可以说没有驱动程序，计算机中的硬件就无法工作。</p>
+  </li>
+  <li>
+    <p>普通模块的驱动：GPIO初始化程序+通信协议程序 数据协议处理程序</p>
+
+    <ol>
+      <li>例子：LED灯，只需要GPIO初始化程序；蓝牙模块，需要写GPIO初始化程序和通信协议程序+数据处理程序</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image171.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image172.webp" alt="" /></p>
+
+    <ol>
+      <li>GPIO程序：</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image173.webp" alt="" /></p>
+
+    <ol>
+      <li>通信协议程序：如图是串口的通信协议程序以及GPIO程序</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image174.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>数据解析程序：如图是PS2手柄的数据处理函数（见C++题库数据解析的题型，主要用二进制，十六进制，位操作符等）</p>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image175.webp" alt="" /></p>
+
+        <ol>
+          <li>
+            <p>数据单位变换：</p>
+
+            <ol>
+              <li>
+                <p>1Mbps（比特率） = 1000 000 bit/s（比特/秒） 1 byte（字节） = 8 bit（比特）= 8位二进制 （非常重要） 1 kbyte（千字节） = 1024 byte（字节） 1Mbyte（兆字节） = 1024 kbyte（千字节） 1Gbyte （千兆字节） = 1024Mbyte（兆字节）</p>
+              </li>
+              <li>
+                <p>1个字符 = 1 byte（字节）</p>
+              </li>
+            </ol>
+
+            <p>      1个阿拉伯数字 = 1个字符</p>
+
+            <p>      在GBK编码下，1个汉字 = 2个字符</p>
+
+            <p>      在Utf-8编码下，1个汉字 = 3个字符</p>
+          </li>
+          <li>
+            <p>数据命名格式（详细请见C++文档）：</p>
+
+            <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image176.webp" alt="" /></p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image177.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image178.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image179.webp" alt="" /></p>
+
+    <ol>
+      <li>针对HAL库外设API的填参方法：</li>
+    </ol>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image180.webp)
+
+2.  查看对应的数据类型
+
+3.  查数据手册查函数的内容的注释
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="大疆电机控制can">  大疆电机控制(CAN)</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>###   ①CAN通信简介
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>什么是CAN通信？</li>
+</ol>
+
+<p><a href="https://so.csdn.net/so/search?q=CAN%E6%80%BB%E7%BA%BF&amp;spm=1001.2101.3001.7020">CAN总线</a>通信系统是<strong>串行通信</strong>的一种，要优于串口<a href="https://so.csdn.net/so/search?q=RS485&amp;spm=1001.2101.3001.7020">RS485</a>总线。与I2C、SPI等具有时钟信号的同步通讯方式不同，CAN通讯并不是以时钟信号来进行同步的，它是一种<strong>异步</strong><strong>半双工</strong>通讯。（差分信号，半双工）</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image181.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>串口通信逻辑电平表示方法的分类</p>
+
+    <ol>
+      <li>
+        <p>TTL（单片机上引脚常用电平，串口全双工，芯片IO口为TTL电平的RX,TX;信号线为TTL电平的RX,TX）</p>
+      </li>
+      <li>
+        <p>RS232（电压范围比TTL高的一种电平，抗干扰较好，串口全双工，芯片IO口为TTL电平的RX,TX;信号线为RS232电平的RX,TX）</p>
+      </li>
+      <li>
+        <p>RS485（差分信号，抗干扰极好，Modbus协议，串口半双工，芯片IO口为TTL电平的RX,TX;信号线为A和B）</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>CAN通信信号线</p>
+
+    <ol>
+      <li>差分信号，抗干扰极好，半双工，芯片IO口为TTL电平的CAN_RX,CAN_TX;信号线为CAN_H和CAN_L;（类似RS485)</li>
+    </ol>
+  </li>
+</ol>
+
+<h3 id="电机库代码解析该库内容要求尽量全部看懂尽量一行不差">②电机库代码解析（该库内容要求尽量全部看懂，尽量一行不差）</h3>
+
+<ol>
+  <li>
+    <p>代码及其初始化</p>
+
+    <ol>
+      <li>这部分正点原子都有讲，只需要把参数改为大疆电机的</li>
+    </ol>
+
+    <p>代码仓库链接:https://github.com/SDUTEMIS/SDUT_VinciRobot/tree/main/1.Embedded_STM32_Driver%2FC%2F4.Motor_Drivers%2F1.DJI_CAN_PID</p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image182.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image183.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image184.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image185.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image186.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>大疆电机库开环代码解析：库由往届学长学姐对大疆官方库代码修改后的。</p>
+
+    <ol>
+      <li>CAN报文发送函数解析</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image187.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image188.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image189.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image190.webp" alt="" /></p>
+
+    <p>   <strong>此函数是将电流值发送给大疆CAN1通信电机，CAN1通信每次只能发送8比特的数据，电流值是16比特的数据，所以把电流值向右移8位，然后再发送给电机。电机接收到电流值就开始转动（入口参数是电调ID为1-4的电机电流值）</strong></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image191.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image192.webp" alt="" /></p>
+
+    <p>   <strong>此函数是将电流值发送给大疆CAN1通信电机，CAN1通信每次只能发送8比特的数据，电流值是16比特的数据，所以把电流值向右移8位，然后再发送给电机。电机接收到电流值就开始转动（入口参数是电调ID为5-8的电机电流值）</strong></p>
+
+    <ol>
+      <li>CAN报文发送函数调用</li>
+    </ol>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="kt">int16_t</span> <span class="n">Current_Motor_Target</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="kt">void</span> <span class="nf">chassis_task</span><span class="p">(</span><span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">argument</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1">//wait a time</span>
+  <span class="c1">//空闲一段时间</span>
+  <span class="n">vTaskDelay</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>  <span class="c1">//等待所有设备准备就绪</span>
+
+  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">//可以在定时器中断里实现</span>
+  <span class="p">{</span>
+    <span class="n">Current_Motor_Target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>    <span class="c1">//测试电机闭环是否可用的代码，正式使用时请注释该行代码</span>
+    <span class="n">CAN1_CMD_1</span><span class="p">(</span><span class="n">Current_Motor_Target</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>  <span class="c1">//对电调ID为1的电机发送1000电流使其开环转动。</span>
+    <span class="c1">//系统延时</span>
+    <span class="n">vTaskDelay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>  <span class="c1">//等同于osDelay(2);      </span>
+  <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>大疆电机库闭环代码解析：库由往届学长学姐对大疆官方库代码修改后的。（在开环基础上又加了CAN报文接收，以及一系列数据解析程序）</p>
+
+    <ol>
+      <li>CAN通信接收中断回调函数(CAN_RX0接收中断回调函数用来处理CAN通信电机发来的数据，也就是 <strong>电机的速度，角度，温度</strong> 等数据。)</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image193.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image194.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image195.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image196.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>数据解析函数</p>
+
+        <ol>
+          <li>
+            <p>电机编码器分为增量式编码器和绝对值编码器</p>
+
+            <ol>
+              <li>
+                <p>增量式编码器：上电时数据会丢失，角度从0开始</p>
+              </li>
+              <li>
+                <p>绝对值编码器：掉电后数据不会丢失。</p>
+              </li>
+              <li>
+                <p>M3508和M2006编码器都为绝对值编码器，掉电后数据不会丢失，但是因为记录的是转子的角度，转子连接了一个减速器，所以导致数据是错误的，所以我们要用代码将绝对值编码器的数据转化为增量式编码器的数据来使用。(结构体里的total是绝对编码器的角度，而total_angle是我们处理后改为增量式编码器的总角度)</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>记录上电角度</p>
+          </li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image197.webp" alt="" /></p>
+
+        <ol>
+          <li>计算总角度（经代码处理后，上电时总角度 = 圈数(0) *8192 + 当前绝对值编码器的角度(假设为A) - 上电时捕获到的上电角度(因为此时为上电时，所以也为A) = 0）</li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image198.webp" alt="" /></p>
+
+        <ol>
+          <li>暂时用不着的函数(此函数没有被调用)</li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image199.webp" alt="" /></p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h3 id="pid控制器">③PID控制器</h3>
+
+<ol>
+  <li>
+    <p>PID算法简介：</p>
+
+    <ol>
+      <li>MATLAB_PID控制器介绍：https://www.mathworks.com/help/control/pid-controller-design.html?s_tid=CRUX_lftnav</li>
+    </ol>
+  </li>
+  <li>
+    <p>PID算法原理</p>
+  </li>
+</ol>
+
+<p>关于理解PID控制算法最典型的一个例子就是一个漏水的水缸的问题。</p>
+
+<p>有个漏水的水缸，而且漏水的速度还不是恒定的。然后我们还有个水桶，我们可以控制往水缸里面加水或者从水缸里面舀水出来。另外我们可以检测水平面。现在我们的目的就是要控制水平面稳定在我们想要的任何一个平面上。</p>
+
+<p>注意我们使用PID需要在一个闭环系统里面。什么叫闭环系统，就是有输入有反馈，输入就是能输入一个量去影响和控制我们的系统，反馈就是我们要能知道我们最终控制的东西的状态。在这个漏水的水缸系统中，输入就是这个水桶，我们能通过水桶往水缸里面加水或者从水缸里面舀水出来来影响我们水缸的水平面，反馈的话也就是说我们要能测量水平面，知道水平面是多少。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image200.webp" alt="" /></p>
+
+<p>a, <strong>比例控制理解</strong></p>
+
+<p><em>首先是比例控制。比例控制就好比是通过水桶往水缸加水或者从水缸舀水。假设我们需要把水平面稳定在A平面，而实际水平面在B平面，那么水平面差值Err=A-B，那这个时候我们需要往里面加水的量就是Kp*Err，Kp就是我们的比例控制系数。</em></p>
+
+<p><em>如果A&gt;B，Err为正，就往水缸里面加水；如果A&lt;B，Err为负，就从水缸里面舀水出来。那么只要预期水平面和实际水平面有差值，我们都会通过水桶去加减水来调整系统。同时Kp的大小也有对系统的性能有影响。如果Kp的值比较大，优点是从B平面达到A平面的速度快，缺点是在B平面已经接近A平面的时候系统会产生比较大的震荡。如果Kp的值比较小，优点是B平面在接近A平面的时候系统震荡小，缺点是从B平面达到A平面的速度慢。</em></p>
+
+<p><em>这里也许有人会有疑问，如果这里把比例控制系数Kp直接设置成1，然后加水的量直接为Err=A-B不就可以了。然而实际上很多系统是做不到这点的。比如温度控制系统，实际温度为10度，我要通过加热把温度提升到40度，这里难道我们能一次性准确的给系统加30度？显然这是做不到的。那么比例控制的最终结果是Err的值趋向于0。</em></p>
+
+<p>b, <strong>微分控制理解</strong></p>
+
+<p><em>然后我们先看看微分控制。在我们的比例控制的作用下，Err是开始减小的（假设一开始预期水平面A大于实际水平面B，也就是说Err是一个正值），那么也就是说Err随时间是一条斜率小于0的曲线，那么在周期时间内，Err越大，微分的绝对值越大，那么也就对Err的减小速度是起到抑制的作用的，直到最后斜率为0微分才会停止作用。</em></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image201.webp" alt="" /></p>
+
+<p>微分控制能反映输入信号的变化趋势，因此在输入信号的量值在变化太大之前可为系统引入一个有效的早期修正信号以增加系统的阻尼程度，从而提高系统的稳定性，但一阶微分的高通特性使得该控制器易于放大高频噪声</p>
+
+<p>c, <strong>积分控制理解</strong></p>
+
+<p><em>积分控制部分的作用主要是用来消除静差。那么积分是怎样来消除静差的呢？</em></p>
+
+<p><em>比例控制只能尽量将Err调节到0，而微分的作用是将曲线的斜率控制到0则停止对其作用，但斜率为0的时候Err并不一定为0。</em></p>
+
+<p><em>这个时候我们就需要积分来起作用了。我们知道曲线的积分相当于曲线与x轴围出来的面积。如下图，积分作用的目的是使红色部分的面积和蓝色部分的面积的和为0，那么即使系统在比例控制和微分控制部分已经趋于稳定，只要Err不为0就会存在静差，只要存在静差那么积分就会对系统产生影响，直到系统的Err值为0。那么这样我们的PID控制在理论上就可以达到一个非常精确的控制效果。</em></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image202.webp" alt="" /></p>
+
+<p>d, <strong>PID算法离散化</strong></p>
+
+<p>假设采样时间间隔为T，则在k时刻：</p>
+
+<p>偏差为e(k);</p>
+
+<p>积分为e(k)+e(k-1)+e(k-2)+…+e(0);</p>
+
+<p>微分为(e(k)-e(k-1))/T;</p>
+
+<p>从而公式离散化后如下：</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image203.webp" alt="" /></p>
+
+<p>比例系数：Kp，</p>
+
+<p>积分系数：Kp<em>T/Ti，可以用Ki表示；</em></p>
+
+<p>* 微分系数：Kp*Td/T，可以用Kd表示；</p>
+
+<p>则公式可以写成如下形式：</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image204.webp" alt="" /></p>
+
+<p>PID算法的离散形式就是这样了，这就是我们平时说的位置式PID。</p>
+
+<p>但是为什么还要增推算量式？</p>
+
+<p>一个累加符号使得微机的内存可能不够用，一个字节八位最多存到255，第二点就是掉电之后产生的产生的影响非常大，之前存储的状态会全部丢失，所以要推算对状态记录要求不高的增量式。</p>
+
+<p>接下来我们继续推算增量式PID，根据上面公式我们可以求得：</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image205.webp" alt="" /></p>
+
+<p>e,pid双环</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image206.webp" alt="" /></p>
+
+<p>f,pid前馈</p>
+
+<ol>
+  <li>
+    <p>PID算法库</p>
+
+    <ol>
+      <li>核心计算函数（非常成熟的控制器，数学算法）</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image207.webp" alt="" /></p>
+
+    <ol>
+      <li>初始化代码(将Kp，Ki，Kd三个参数与输出最大值，积分限赋值赋值给PID句柄pid_v_1或者其他的句柄)</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image208.webp" alt="" /></p>
+
+    <ol>
+      <li>反馈环代码</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image209.webp" alt="" /></p>
+
+    <ol>
+      <li>闭环代码调用</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image210.webp" alt="" /></p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image211.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image212.webp" alt="" /></p>
+
+<h3 id="c库建议">④C++库（建议）</h3>
+
+<h4 id="简介">简介</h4>
+
+<p>代码仓库链接:https://github.com/TungChiahuiMCURepos/CAN_PID_CPP</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image213.webp" alt="" /></p>
+
+<p>类比着C语言的库，</p>
+
+<p>can.c是CubeMX自动生成的CAN通信初始化驱动文件，</p>
+
+<p>bsp_can.cpp是需要自己写的开启CAN通信的代码文件（CubeMX没自动生成的部分，需要手动调用）</p>
+
+<p>can_receive.cpp里是CANRX0接收中断回调函数的实现，该回调函数里用了一些电机信息数据处理函数，然后还有CAN的4个发送函数。</p>
+
+<p>pid.cpp是pid控制系统核心的数学算法代码</p>
+
+<p>pid_user.cpp里是调用pid核心代码并进行封装为PID控制器的初始化代码和一些闭环实现代码。</p>
+
+<h4 id="c大疆电机库">C++大疆电机库</h4>
+
+<h5 id="class的结构与简单介绍">  CLASS的结构与简单介绍</h5>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image214.webp" alt="" /></p>
+
+<p>下方图片中是CAN_BUS类，其中嵌套了3个类。</p>
+
+<ol>
+  <li>
+    <p>CAN_BUS::BSP类，该类中包含两个方法：</p>
+
+    <ol>
+      <li>
+        <p>CAN_Start是开启CAN通信的函数；</p>
+      </li>
+      <li>
+        <p>Filter_Init是CAN通信滤波的函数。</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>CAN_BUS::DJI_ENCODER类，该类里包含三个方法（该类里的所有函数都由CAN_RX0接收中断回调函数调用）：</p>
+
+    <ol>
+      <li>
+        <p>get_motor_measure是处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机各个信息</strong> 函数；</p>
+      </li>
+      <li>
+        <p>get_moto_offset是处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机刚开始上电的角度初始值</strong> 函数；</p>
+      </li>
+      <li>
+        <p>get_total_angle是处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机角度值</strong> 函数。（暂时没被调用）</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>CAN_BUS::CMD类，该类里包含四个方法：</p>
+
+    <ol>
+      <li>
+        <p>CAN1_Front是给CAN1 <strong>前</strong> 4个电机发送电流的函数；（对应电调ID：1-4）</p>
+      </li>
+      <li>
+        <p>CAN1_Behind是给CAN1 <strong>后</strong> 4个电机发送电流的函数;（对应电调ID：5-8）</p>
+      </li>
+      <li>
+        <p>CAN2_Front是是给CAN2 <strong>前</strong> 4个电机发送电流的函数;（对应电调ID：1-4）</p>
+      </li>
+      <li>
+        <p>CAN2_Behind是是给CAN2 <strong>后</strong> 4个电机发送电流的函数。（对应电调ID：5-8）</p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image215.webp" alt="" /></p>
+
+<h5 id="can_busbsp类的方法函数-在bsp_cancpp中">CAN_BUS::BSP类的方法(函数) (在bsp_can.cpp中)</h5>
+
+<h6 id="can_start-开启can通信的函数">  CAN_Start 开启CAN通信的函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image216.webp" alt="" /></p>
+
+<h6 id="filter_init-can通信滤波的函数">Filter_Init CAN通信滤波的函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image217.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image218.webp" alt="" /></p>
+
+<h5 id="can_busdji_encoder类的方法函数-在can_receivecpp中">CAN_BUS::DJI_ENCODER类的方法(函数) (在can_receive.cpp中)</h5>
+
+<h6 id="get_motor_measure-处理can通信接收到的大疆电机编码器数据并处理得到-电机各个信息-函数">get_motor_measure 处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机各个信息</strong> 函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image219.webp" alt="" /></p>
+
+<h6 id="get_moto_offset-处理can通信接收到的大疆电机编码器数据并处理得到-电机刚开始上电的角度初始值-函数">get_moto_offset 处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机刚开始上电的角度初始值</strong> 函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image220.webp" alt="" /></p>
+
+<h6 id="get_total_angle-处理can通信接收到的大疆电机编码器数据并处理得到-电机角度值-函数暂时没被调用">get_total_angle 处理CAN通信接收到的大疆电机编码器数据，并处理得到 <strong>电机角度值</strong> 函数。（<em>暂时没被调用</em>）</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image221.webp" alt="" /></p>
+
+<h5 id="can_buscmd类的方法函数-在can_receivecpp中">CAN_BUS::CMD类的方法(函数) (在can_receive.cpp中)</h5>
+
+<h6 id="can1_front-can1-前-4个电机发送电流的函数">CAN1_Front CAN1 <strong>前</strong> 4个电机发送电流的函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image222.webp" alt="" /></p>
+
+<h6 id="can1_behindcan1-后-4个电机发送电流的函数">CAN1_BehindCAN1 <strong>后</strong> 4个电机发送电流的函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image223.webp" alt="" /></p>
+
+<h6 id="can2_frontcan2-前-4个电机发送电流的函数">CAN2_FrontCAN2 <strong>前</strong> 4个电机发送电流的函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image224.webp" alt="" /></p>
+
+<h6 id="can2_behind-can2-后-4个电机发送电流的函数">CAN2_Behind CAN2 <strong>后</strong> 4个电机发送电流的函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image225.webp" alt="" /></p>
+
+<h5 id="can_rx0接收中断回调函数-在can_receivecpp中">CAN_RX0接收中断回调函数 (在can_receive.cpp中)</h5>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image226.webp" alt="" /></p>
+
+<h4 id="cpid库">C++PID库</h4>
+
+<h5 id="class的结构与简单介绍-1">CLASS的结构与简单介绍</h5>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image227.webp" alt="" /></p>
+
+<p>下方图片中是PID_Controller类，其中嵌套了3个类和一个方法：</p>
+
+<ol>
+  <li>
+    <p>PID_Controller类：</p>
+
+    <ol>
+      <li>All_Device_Init 将所有设备的PID控制器进行初始化</li>
+    </ol>
+  </li>
+  <li>
+    <p>PID_Controller::CORE核心类，该类中包含三个方法：</p>
+
+    <ol>
+      <li>
+        <p>PID_Init PID核心初始化函数；</p>
+      </li>
+      <li>
+        <p>PID_Calc PID核心计算函数；</p>
+      </li>
+      <li>
+        <p>PID_Clear PID清0函数。</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>PID_Controller::CAN_MOTORcan电机类，该类中包含6个方法(因为上面3个方法和下面3个方法只是CAN通信不一样，所以只讲CAN1)：</p>
+
+    <ol>
+      <li>
+        <p>CAN1_Velocity_Realize CAN1速度环实现函数；</p>
+      </li>
+      <li>
+        <p>CAN1_Position_Realize CAN1位置环实现函数；</p>
+      </li>
+      <li>
+        <p>CAN1_VP_Dual_Loop_Realize CAN1速度位置双环实现函数；</p>
+      </li>
+      <li>
+        <p>CAN2_Velocity_Realize CAN2速度环实现函数；</p>
+      </li>
+      <li>
+        <p>CAN2_Position_Realize CAN2位置环实现函数；</p>
+      </li>
+      <li>
+        <p>CAN2_VP_Dual_Loop_Realize CAN2速度位置双环实现函数；</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>PID_Controller::SENSORS传感器类，该类中包含三个方法：</p>
+
+    <ol>
+      <li>
+        <p>Yaw_Realize 陀螺仪IMU的航向角PID实现函数；</p>
+      </li>
+      <li>
+        <p>Pos_X_Realize 码盘定位X坐标实现函数；</p>
+      </li>
+      <li>
+        <p>Pos_Y_Realize 码盘定位Y坐标实现函数；</p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image228.webp" alt="" /></p>
+
+<h5 id="pid_controller类的方法函数-在pid_usercpp中">PID_Controller类的方法(函数) (在pid_user.cpp中)</h5>
+
+<h6 id="all_device_init-将所有设备的pid控制器进行初始化">  All_Device_Init 将所有设备的PID控制器进行初始化</h6>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image229.webp)
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h5 id="pid_controllercore类的方法函数-在pidcpp中">PID_Controller::CORE类的方法(函数) (在pid.cpp中)</h5>
+
+<h6 id="pid_init-pid核心初始化函数">  PID_Init PID核心初始化函数</h6>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image230.webp)
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h6 id="pid_calc-pid核心计算函数">  PID_Calc PID核心计算函数</h6>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image231.webp)
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h6 id="pid_clear-pid清0函数">  PID_Clear PID清0函数</h6>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>![](https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image232.webp)
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h5 id="pid_controllercan_motor类的方法-在pid_usercpp中这里只讲can1的3个闭环函数">PID_Controller::CAN_MOTOR类的方法 (在pid_user.cpp中)（这里只讲CAN1的3个闭环函数）</h5>
+
+<ol>
+  <li>
+    <p><strong>注意：</strong></p>
+
+    <ol>
+      <li><em>一般电流值变量定义为一个数组形式，比如fp32 motor_current_target[8];这样就成功定义了8个电机要发送的电流值。</em></li>
+    </ol>
+
+    <p>  <em>速度和角度位置同理，fp32 motor_speed_target[8];和fp32 motor_position_target[8];。</em></p>
+
+    <ol>
+      <li>
+        <p><em>C++电机PID库与C语言的电机PID 库有些区别</em></p>
+
+        <ol>
+          <li>
+            <p><em>因为电调ID的范围是1-8，而数组范围是0-7，</em></p>
+          </li>
+          <li>
+            <p><em>所以为了和数组序号一样，这个地方注意一下区别：</em></p>
+          </li>
+          <li>
+            <p><em>C语言库中，i的值为电调ID的值。</em></p>
+          </li>
+          <li>
+            <p><em>C++库中，</em><strong><em>i值为电调ID值-1。</em></strong></p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h6 id="can1_velocity_realize-can1速度环实现函数">CAN1_Velocity_Realize CAN1速度环实现函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image233.webp" alt="" /></p>
+
+<h6 id="can1_position_realize-can1位置环实现函数">CAN1_Position_Realize CAN1位置环实现函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image234.webp" alt="" /></p>
+
+<h6 id="can1_vp_dual_loop_realize-can1速度位置双环实现函数">CAN1_VP_Dual_Loop_Realize CAN1速度位置双环实现函数</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image235.webp" alt="" /></p>
+
+<h5 id="pid_controllersensors传感器类的方法函数-在pid_usercpp中">PID_Controller::SENSORS传感器类的方法(函数) (在pid_user.cpp中)</h5>
+
+<h6 id="yaw_realize-陀螺仪imu的航向角pid实现函数等你们完善好-陀螺仪imu的c库你们再补充">Yaw_Realize 陀螺仪IMU的航向角PID实现函数（等你们完善好 陀螺仪IMU的C++库你们再补充）</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image236.webp" alt="" /></p>
+
+<h6 id="pos_x_realize-码盘定位x坐标实现函数等你们完善好-码盘ops-9的c库你们再补充">Pos_X_Realize 码盘定位X坐标实现函数（等你们完善好 码盘OPS-9的C++库你们再补充）</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image237.webp" alt="" /></p>
+
+<h6 id="pos_y_realize-码盘定位y坐标实现函数等你们完善好-码盘ops-9的c库你们再补充">Pos_Y_Realize 码盘定位Y坐标实现函数（等你们完善好 码盘OPS-9的C++库你们再补充）</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image238.webp" alt="" /></p>
+
+<h4 id="如何调用">如何调用？</h4>
+
+<p>我这里选择每隔1ms使用PID控制器进行一次负反馈回路的控制，并发送一次电流值。</p>
+
+<p>可以选择在while(1)死循环中加个delay(1)进行发送；</p>
+
+<p>也可以使用周期为1ms的定时器中断进行实现，更建议使用定时器中断。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image239.webp" alt="" /></p>
+
+<h3 id="实物连接详细的请看说明书">⑤实物连接，详细的请看说明书</h3>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image240.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image241.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image242.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image243.webp" alt="" /></p>
+
+<h2 id="dmadirect-memory-access--直接存储器访问">DMA(Direct Memory Access / 直接存储器访问)</h2>
+
+<h2 id="freertos">FreeRTOS</h2>
+
+<h3 id="理论知识">理论知识</h3>
+
+<p>https://www.bilibili.com/video/BV19g411p7UT</p>
+
+<p><strong>下方只会讲一些常用的操作和注意事项，更详细的FreeRTOS配置请看：(配合着学习)</strong></p>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/PVS8wQzRgiTRqpko9l4cEK33nhw">大疆开发板C型嵌入式软件教程文档.pdf</a></p>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/L40WwB369itdj4kGIsTcOc9cnQf">STM32F1 FreeRTOS开发手册_V1.1.pdf</a></p>
+
+<p><a href="https://sdutvincirobot.feishu.cn/wiki/VLg4w0oIQi8HHNkVE4CcGs65nue">STM32F4 FreeRTOS开发手册_V1.1.pdf</a></p>
+
+<h3 id="常用的内容下方教程着重讲cubemx如何配置理论知识请看正点原子">常用的内容(下方教程着重讲CubeMX如何配置，理论知识请看正点原子)</h3>
+
+<h4 id="系统配置">系统配置</h4>
+
+<ol>
+  <li>
+    <p>选择系统时基源(Timebase Source)</p>
+
+    <ol>
+      <li>
+        <p>原因：因为FreeRTOS会占用systick，所以需要改时基源。</p>
+      </li>
+      <li>
+        <p>选择规则：优先选择功能少的定时器。(比如说F407ZGT6的tim6和tim7的功能比较少)</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image244.webp" alt="" /></p>
+
+    <ol>
+      <li>如何选择？（如图）</li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image245.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>选择接口(Interface)</p>
+
+    <ol>
+      <li>
+        <p>原因：FreeRTOS遵循ARM的CMSIS标准。</p>
+      </li>
+      <li>
+        <p>选择原则：优先选CMSIS v1，因为CMSIS v2还有些小问题没解决。</p>
+      </li>
+      <li>
+        <p>如何选择？</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image246.webp" alt="" /></p>
+  </li>
+  <li>
+    <p>配置Include Parameters</p>
+
+    <ol>
+      <li>
+        <p>功能：与hal_conf.h(用来开启HAL库的一些功能)一样，用来开启FreeRTOS的一些功能。</p>
+      </li>
+      <li>
+        <p>Include Parameters的配置</p>
+
+        <ol>
+          <li>
+            <p>CubeMX配置(推荐)</p>
+          </li>
+          <li>
+            <p>需要什么功能就Enabled对应的功能即可。（常用的就是vTaskDelayUntil）</p>
+          </li>
+        </ol>
+
+        <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image247.webp" alt="" /></p>
+
+        <ol>
+          <li>手动编辑头文件配置(不推荐)</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h4 id="创建任务">创建任务</h4>
+
+<ol>
+  <li>
+    <p>CubeMX创建任务：</p>
+
+    <ol>
+      <li>各参数介绍(详看大疆手册)：</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image248.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>一般选择什么参数？</p>
+
+        <ol>
+          <li>
+            <p>Task Name(任务名)：英文大写(与Entry Function对应)</p>
+          </li>
+          <li>
+            <p>Priority(优先级)：一般选择普通优先级即可(除非有特殊的逻辑)</p>
+          </li>
+          <li>
+            <p>Stack Size(栈空间）:128 Words即可</p>
+          </li>
+          <li>
+            <p>Entry Function(入口函数名)：英文小写(与Task Name对应)</p>
+          </li>
+          <li>
+            <p>Code Generation Option(代码生成选项)：无脑选择As weak(使FreeRTOS线程任务的入口函数以弱函数的形式生成)</p>
+          </li>
+          <li>
+            <p>Parameter(参数)：一般NULL即可，如果要用一些特殊功能(比如信号量)，要填一些句柄(比如信号量的句柄)</p>
+          </li>
+          <li>
+            <p>Allocation(份额)：无脑选Dynamic，让FreeRTOS动态分配管理即可</p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image249.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>注意事项：</p>
+
+    <ol>
+      <li>任务创建太多会内存爆掉</li>
+    </ol>
+  </li>
+</ol>
+
+<h4 id="延时">延时</h4>
+
+<ol>
+  <li>
+    <p>相对延时</p>
+
+    <ol>
+      <li>
+        <p>函数：以下这俩函数作用相同，osDelay()和vTaskDelay()</p>
+      </li>
+      <li>
+        <p>时间：是从调用该函数才开始算，直到延时指定时间结束</p>
+      </li>
+      <li>
+        <p>调用方法：与HAL_Delay()方法一样</p>
+      </li>
+    </ol>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="k">extern</span> <span class="s">"C"</span> <span class="c1">//若在C++中运行需要加上该行</span>
+<span class="kt">void</span> <span class="nf">green_led_task</span><span class="p">(</span><span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">argument</span><span class="p">)</span>
+<span class="p">{</span> 
+    <span class="k">for</span><span class="p">(;;)</span> <span class="c1">//等同于while(true) </span>
+    <span class="p">{</span> 
+    <span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">LED_GPIO_Port</span><span class="p">,</span> <span class="n">LED_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_RESET</span><span class="p">);</span> 
+    <span class="n">osDelay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span> 
+    <span class="n">HAL_GPIO_WritePin</span><span class="p">(</span><span class="n">LED_GPIO_Port</span><span class="p">,</span> <span class="n">LED_Pin</span><span class="p">,</span> <span class="n">GPIO_PIN_SET</span><span class="p">);</span> 
+    <span class="n">osDelay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span> 
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>绝对延时</p>
+
+    <ol>
+      <li>
+        <p>函数：</p>
+
+        <ol>
+          <li>
+            <p>获取当前时间：osKernelSysTick()</p>
+          </li>
+          <li>
+            <p>绝对延时函数：osDelayUntil()</p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>时间：从任务开始就开始算时间了，将整个任务运行周期看成一个整体，适用于按照一定频率运行的任务</p>
+      </li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image250.webp" alt="" /></p>
+
+    <ol>
+      <li>调用方法：</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image251.webp" alt="" /></p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image252.webp" alt="" /></p>
+  </li>
+</ol>
+
+<h4 id="任务状态转换">任务状态转换</h4>
+
+<ol>
+  <li>FreeRTOS状态(详看大疆手册)：</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image253.webp" alt="" /></p>
+
+<ol>
+  <li>函数介绍：</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image254.webp" alt="" /></p>
+
+<ol>
+  <li>如何调用：</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image255.webp" alt="" /></p>
+
+<h4 id="队列">队列</h4>
+
+<ol>
+  <li>
+    <p>原因：全局变量在多线程里是不安全的，多个任务对该变量进行操作时，数据容易受损。</p>
+  </li>
+  <li>
+    <p>队列：队列是任务到任务、任务到中断、中断到任务数据交流的一种机制(消息传递)</p>
+  </li>
+  <li>
+    <p>具体内容：详看正点原子视频学习理论知识</p>
+  </li>
+  <li>
+    <p>调用</p>
+
+    <ol>
+      <li>CubeMX配置：(Queue Size选择你要传的数据的比特数(即二进制位数)，Item Size选择数据的类型)</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image256.webp" alt="" /></p>
+
+    <ol>
+      <li>调用(详解请看正点原子)：</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image257.webp" alt="" /></p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image258.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image259.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image260.webp" alt="" /></p>
+
+<h4 id="信号量队列的特殊形式">信号量(队列的特殊形式)</h4>
+
+<ol>
+  <li>
+    <p>原因：同队列</p>
+  </li>
+  <li>
+    <p>信号量：一种特殊的队列，是一种解决同步问题的机制，可以实现对共享资源的有序访问。</p>
+  </li>
+  <li>
+    <p>分类：二值信号量、计数型信号量(详见正点原子)</p>
+  </li>
+  <li>
+    <p>同步问题：A做完一个事情，通知B，B才可以做，这叫同步问题。</p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image261.webp" alt="" /></p>
+
+<ol>
+  <li>信号量简介(详见正点原子)</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image262.webp" alt="" /></p>
+
+<ol>
+  <li>队列与信号量的对比</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image263.webp" alt="" /></p>
+
+<ol>
+  <li>二值信号量介绍：</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image264.webp" alt="" /></p>
+
+<ol>
+  <li>CubeMX配置</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image265.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image266.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image267.webp" alt="" /></p>
+
+<p>要把创建的二值信号量的句柄传入任务的parameter参数里。</p>
+
+<p>其实设置为NULL也可以。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image268.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>调用(详细API函数作用请看正点原子)</p>
+
+    <ol>
+      <li>
+        <p>释放信号量函数：xSemaphoreGive();</p>
+      </li>
+      <li>
+        <p>获取信号量函数：</p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image269.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image270.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image271.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image272.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image273.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image274.webp" alt="" /></p>
+
+<h4 id="内存管理">内存管理</h4>
+
+<h5 id="简介-1">简介</h5>
+
+<p><strong>栈区（stack）</strong>：由编译器自动分配和释放，存放函数的参数值、局部变量的值等，其操作方式类似于数据结构中的栈。</p>
+
+<p><strong>堆区（heap）</strong>：一般由程序员分配和释放，若程序员不释放，程序结束时可能由操作系统回收。分配方式类似于数据结构中的链表。</p>
+
+<p>(详细请看<a href="https://sdutvincirobot.feishu.cn/docx/N0GAdx6IDoqnRnx1q0TcX1Wfnvc">Vinci机器人队C/C++资料</a>)</p>
+
+<h5 id="修改stm32的栈区和堆区大小">修改stm32的栈区和堆区大小</h5>
+
+<h6 id="stm32本身的堆区和栈区大小修改">  stm32本身的堆区和栈区大小修改</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image275.webp" alt="" /></p>
+
+<p>如上图，</p>
+
+<p>stm32一般内存总大小为20Kb。</p>
+
+<p>Heap Size就是堆大小，为512byte = 0.5Kb。</p>
+
+<p>Stack Size就是栈大小，为1024byte = 1Kb。</p>
+
+<p>剩余的其他部分的内存，分配给剩余的区，其中大部分内存都分给了Static静态区。</p>
+
+<p>使用CubeMX生成工程后，可以在启动文件中看到咱们设置的堆区和栈区大小地址。（当然也可以在这里进行修改，不过建议直接在CubeMX上进行修改，一般没啥需求也不用改。)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image276.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image277.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image278.webp" alt="" /></p>
+
+<h6 id="freertos的堆区大小修改此堆区非彼堆区请看下方介绍">FreeRTOS的堆区大小修改(此堆区非彼堆区，请看下方介绍)</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image279.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>TOTAL_HEAP_SIZE：如果使用了FreeRTOS，可以在这里修改FreeRTOS的堆区的大小。</p>
+  </li>
+  <li>
+    <p>memory management scheme：可以修改动态分配内存的算法，一般都使用heap_4算法。</p>
+  </li>
+  <li>
+    <p>FreeRTOS_HEAP这里的堆区，非彼堆区，而是FreeRTOS从stm32的ZI区中开辟的内存(可以这么理解，其实是FreeRTOS的内核在data,bss,heap,stack等中抢的内存)，而并非从stm32的Heap堆区开辟的内存(在当你选择heap_1,2,4,5算法时)。如果你选择的是heap_3算法，那么将会使用C库的malloc()和free()函数进行开辟堆区内存，这个时候，FreeRTOS就是使用的为stm32的堆区(32的堆区比较小，所以不如heap_4算法)。但是咱们一般都使用heap_4算法进行内存管理，所以这里的<strong><em>FreeRTOS_HEAP是从stm32_ZI区分配的。(也就是FreeRTOS_HEAP并非直接从heap区申请，而是非常灵活的在RAM中进行申请，可以超过STM32_HEAP的大小)</em></strong></p>
+  </li>
+  <li>
+    <p>因为我们使用的是heap_4算法，所以我们不用对stm32的heap和stack进行修改，只需要对FreeRTOS_HEAP进行修改即可。(也就是对FreeRTOS可操控的stm32的ZI区内存进行分配)</p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image280.webp" alt="" /></p>
+
+<h5 id="内存管理api介绍">内存管理API介绍</h5>
+
+<h6 id="c语言库的内存管理api不建议">C语言库的内存管理API(不建议)</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image281.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image282.webp" alt="" /></p>
+
+<h6 id="正点原子分块式内存管理api">正点原子分块式内存管理API</h6>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image283.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image284.webp" alt="" /></p>
+
+<p>memx就是指内存块，内部的SRAM和外部的SRAM(外部的不一定有外部的SRAM)。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image285.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image286.webp" alt="" /></p>
+
+<h6 id="freertos内存管理api建议">FreeRTOS内存管理API(建议)</h6>
+
+<ol>
+  <li>介绍</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image287.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image288.webp" alt="" /></p>
+
+<ol>
+  <li>FreeRTOS内存管理算法(我们一般选择heap_4)</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image289.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image290.webp" alt="" /></p>
+
+<p>heap_4的first-fit算法是从堆区内存起始地址块开始找出第一个适合的内存大小。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image291.webp" alt="" /></p>
+
+<ol>
+  <li>FreeRTOS内存管理API函数</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image292.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image293.webp" alt="" /></p>
+
+<p>可以通过看上面代码，就可以得知，申请完内存再释放掉内存后，空闲内存数会还原。</p>
+
+<p>但是，可以看到，此时我们分配的是一个4字节的内存，但是他扣掉了16字节的内存，这是因为字节对齐的原因，FreeRTOS选择使用用空间换速度的方式进行字节对齐。</p>
+
+<h2 id="fpu浮点数计算加速">FPU浮点数计算加速</h2>
+
+<p>STM32由于主频比较低，所以运算浮点数运算会非常慢，目前有下列几种办法可以优化sin，cos这种大型浮点数运算。</p>
+
+<h3 id="检查是否支持">检查是否支持</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">STM32 系列</th>
+      <th style="text-align: left">CPU 内核</th>
+      <th style="text-align: left">DSP 指令</th>
+      <th style="text-align: left">FPU 类型</th>
+      <th style="text-align: left">arm_cos_f32() 性能</th>
+      <th style="text-align: left">适合的计算</th>
+      <th style="text-align: left">建议使用的函数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">STM32H7</td>
+      <td style="text-align: left">Cortex-M7</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">✅ 双精度 FPU (DP-FPU)</td>
+      <td style="text-align: left">🚀 最快（硬件加速）</td>
+      <td style="text-align: left">高精度计算、机器人、滤波、导航</td>
+      <td style="text-align: left">arm_cos_f32()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32H5</td>
+      <td style="text-align: left">Cortex-M33</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">✅ 双精度 FPU (DP-FPU)</td>
+      <td style="text-align: left">🚀 最快（硬件加速）</td>
+      <td style="text-align: left">高精度计算、滤波、AI 计算</td>
+      <td style="text-align: left">arm_cos_f32()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32F7</td>
+      <td style="text-align: left">Cortex-M7</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">✅ 单精度 FPU (SP-FPU)</td>
+      <td style="text-align: left">🔥 很快（硬件加速）</td>
+      <td style="text-align: left">机器人控制、导航、滤波</td>
+      <td style="text-align: left">arm_cos_f32()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32F4</td>
+      <td style="text-align: left">Cortex-M4</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">✅ 单精度 FPU (SP-FPU)</td>
+      <td style="text-align: left">🔥 很快（硬件加速）</td>
+      <td style="text-align: left">机器人控制、数学运算</td>
+      <td style="text-align: left">arm_cos_f32()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32G4</td>
+      <td style="text-align: left">Cortex-M4</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">✅ 单精度 FPU (SP-FPU)</td>
+      <td style="text-align: left">🔥 很快（硬件加速）</td>
+      <td style="text-align: left">电机控制、滤波</td>
+      <td style="text-align: left">arm_cos_f32()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32L4</td>
+      <td style="text-align: left">Cortex-M4</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">✅ 单精度 FPU (SP-FPU)</td>
+      <td style="text-align: left">🔥 很快（硬件加速）</td>
+      <td style="text-align: left">低功耗计算</td>
+      <td style="text-align: left">arm_cos_f32()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32U5</td>
+      <td style="text-align: left">Cortex-M33</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">✅ 单精度 FPU (SP-FPU)</td>
+      <td style="text-align: left">🔥 很快（硬件加速）</td>
+      <td style="text-align: left">低功耗 AI 计算</td>
+      <td style="text-align: left">arm_cos_f32()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32F3</td>
+      <td style="text-align: left">Cortex-M4</td>
+      <td style="text-align: left">✅ 支持</td>
+      <td style="text-align: left">❌ 无 FPU</td>
+      <td style="text-align: left">⚠️ 较慢（无 FPU，仅 DSP 加速）</td>
+      <td style="text-align: left">电机控制、信号处理</td>
+      <td style="text-align: left">arm_cos_q31()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32G0</td>
+      <td style="text-align: left">Cortex-M0+/M4</td>
+      <td style="text-align: left">❌ 部分支持</td>
+      <td style="text-align: left">❌ 无 FPU（部分 M4 版有 SP-FPU）</td>
+      <td style="text-align: left">⚠️ 较慢（软件计算）</td>
+      <td style="text-align: left">基础控制</td>
+      <td style="text-align: left">arm_cos_q31()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32F1</td>
+      <td style="text-align: left">Cortex-M3</td>
+      <td style="text-align: left">❌ 不支持</td>
+      <td style="text-align: left">❌ 无 FPU</td>
+      <td style="text-align: left">🚫 最慢（纯软件计算）</td>
+      <td style="text-align: left">不推荐做浮点计算</td>
+      <td style="text-align: left">arm_cos_q31()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32F0</td>
+      <td style="text-align: left">Cortex-M0</td>
+      <td style="text-align: left">❌ 不支持</td>
+      <td style="text-align: left">❌ 无 FPU</td>
+      <td style="text-align: left">🚫 最慢（纯软件计算）</td>
+      <td style="text-align: left">不推荐做浮点计算</td>
+      <td style="text-align: left">arm_cos_q31()</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">STM32L0</td>
+      <td style="text-align: left">Cortex-M0+</td>
+      <td style="text-align: left">❌ 不支持</td>
+      <td style="text-align: left">❌ 无 FPU</td>
+      <td style="text-align: left">🚫 最慢（纯软件计算）</td>
+      <td style="text-align: left">超低功耗应用</td>
+      <td style="text-align: left">arm_cos_q31()</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="开启fpu">开启FPU</h3>
+
+<p>浮点运算单元（FPU）是一种用于执行浮点运算的结构，通常由电路实现，应用于计算机芯片中。ARM设计的M4内核及更高级的内核都支持FPU，也就是STM32F4系列及往上。<strong>（也就是STM32F1是不支持的）</strong></p>
+
+<p>STM32F4/F7一般有单精度FPU，而STM32H5/H7，一般有双精度FPU。</p>
+
+<p><strong>STM32F4开启FPU和不开启FPU往往会有</strong><strong>数十倍甚至上百倍</strong><strong>的差距。</strong></p>
+
+<p>使用STM32CubeMX生成工程，会默认开启FPU，如下图。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image294.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image295.webp" alt="" /></p>
+
+<p>如果你使用F1的话，会压根都没有这个选项，代表M3内核不支持FPU。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image296.webp" alt="" /></p>
+
+<p>下面这张图可以从源码看到开启了FPU。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image297.webp" alt="" /></p>
+
+<h3 id="dsp加速">DSP加速</h3>
+
+<p>DSP加速是指CMSIS-DSP库进行三角函数算法优化，使计算速度加快，但是误差会变大一些，不过对于99%的应用场景误差够用了，大概是1e-6单位的误差。</p>
+
+<p>DSP库只适用于ARM的Cortex-A和Cortex-M的内核，也就是适应手机，ARM单片机，树莓派等等的设备。</p>
+
+<p><strong>对于STM32单片机来说，基本覆盖了所有STM32系列，所以都可以用。</strong></p>
+
+<p>假设你没有FPU，比如STM32F1系列的单片机，也可以通过DSP库来加速三角函数运算，这个DSP库的是通过查表+插值的数学运算方式进行优化的，计算也是比较快。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">平台/库函数</th>
+      <th style="text-align: left">CMSIS-DSP</th>
+      <th style="text-align: left">C++ std::cos</th>
+      <th style="text-align: left">C math.h</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">arm_cos_f32</td>
+      <td style="text-align: left">std::__math::cos</td>
+      <td style="text-align: left">cosf() / cos()</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Cortex-M4/M7（带FPU）</td>
+      <td style="text-align: left">✅最快（查表+插值）</td>
+      <td style="text-align: left">✅比较快（完整计算）</td>
+      <td style="text-align: left">✅比较快（和 std::cos 相近）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Cortex-M0/M3（无FPU）</td>
+      <td style="text-align: left">⚠️比较慢（查表+插值）</td>
+      <td style="text-align: left">🚫最慢（软件浮点）</td>
+      <td style="text-align: left">🚫最慢（和 std::cos 相近）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Cortex-A（如 Raspberry Pi）</td>
+      <td style="text-align: left">✅可能更快（查表方法）</td>
+      <td style="text-align: left">✅更快（用 SIMD/FPU）</td>
+      <td style="text-align: left">✅更快（glibc/libm，SIMD 优化）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">x86/x86-64（PC 端）</td>
+      <td style="text-align: left">❌不可用</td>
+      <td style="text-align: left">✅最快（硬件加速）</td>
+      <td style="text-align: left">✅最快（使用 FPU 或 SIMD）</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>所以说在STM32上跑还是建议用dsp库的函数。</p>
+
+<h4 id="安装并使能dsp库">安装并使能DSP库：</h4>
+
+<ol>
+  <li>方法一（推荐）：使用CubeMX打开</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image298.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image299.webp" alt="" /></p>
+
+<p>然后使能DSP库</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image300.webp" alt="" /></p>
+
+<p>生成工程后，可以通过MDK5或者MDK6看到我们生成的lib。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image301.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image302.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image303.webp" alt="" /></p>
+
+<ol>
+  <li>方法二（不推荐）：使用MDK5打开</li>
+</ol>
+
+<p>这种方式会使编译时间增加至少200%.</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image304.webp" alt="" /></p>
+
+<h4 id="函数介绍">函数介绍</h4>
+
+<p>ARM内核的CPU支持 CMSIS-DSP 库的三角函数，这比标准 <code class="language-plaintext highlighter-rouge">math.h</code>、<code class="language-plaintext highlighter-rouge">cmath</code> 的函数更快。</p>
+
+<ol>
+  <li>普通的C/C++三角函数库：</li>
+</ol>
+
+<p>下面是普通的重载三角函数，当我们开启了FPU后，只要传入的是fp32的类型，其实速度也是相当快的，可以不使用DSP库也可以。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image305.webp" alt="" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp">
+</span><span class="c1">// 更新机器人的位置（假设机器人沿着x轴移动）</span>
+<span class="k">this</span><span class="o">-&gt;</span><span class="n">x_position</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">vx</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">__math</span><span class="o">::</span><span class="n">cos</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">yaw</span><span class="p">)</span> <span class="o">*</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">dt</span><span class="p">;</span>  
+<span class="k">this</span><span class="o">-&gt;</span><span class="n">y_position</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">vy</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">__math</span><span class="o">::</span><span class="n">sin</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">yaw</span><span class="p">)</span> <span class="o">*</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">dt</span><span class="p">;</span>
+<span class="k">this</span><span class="o">-&gt;</span><span class="n">y_position</span> <span class="o">=</span> <span class="o">-</span> <span class="n">y_position</span><span class="p">;</span>
+<span class="k">this</span><span class="o">-&gt;</span><span class="n">yaw</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">vw</span> <span class="o">*</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">dt</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>DSP库函数：</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image306.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image307.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image308.webp" alt="" /></p>
+
+<p>传入fp32的值。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>    <span class="c1">// 更新机器人的位置（假设机器人沿着x轴移动）</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">x_position</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">vx</span> <span class="o">*</span> <span class="n">arm_cos_f32</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">yaw</span><span class="p">)</span> <span class="o">*</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">dt</span><span class="p">;</span>  
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">y_position</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">vy</span> <span class="o">*</span> <span class="n">arm_sin_f32</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">yaw</span><span class="p">)</span> <span class="o">*</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">dt</span><span class="p">;</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">y_position</span> <span class="o">=</span> <span class="o">-</span> <span class="n">y_position</span><span class="p">;</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">yaw</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">vw</span> <span class="o">*</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">dt</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="性能对比">性能对比</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">✅ 对于有FPU的单片机</th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">函数</td>
+      <td>数据类型</td>
+      <td>计算方式</td>
+      <td>FPU 需求</td>
+      <td>计算周期（STM32F4 @168MHz）</td>
+      <td>相对速度</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">重载函数std::__math::cos(x)</td>
+      <td>double</td>
+      <td>C++ 标准库 (泰勒级数)</td>
+      <td>✅ 需要 FPU</td>
+      <td>⚠️ 80~100 cycles</td>
+      <td>❌ 最慢</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">float</td>
+      <td>C++ 标准库 (泰勒级数)</td>
+      <td>✅ 需要 FPU</td>
+      <td>✅ 20~30 cycles</td>
+      <td>✅ 较快</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">cosf(x)</td>
+      <td>float</td>
+      <td>C 标准库 (泰勒级数)</td>
+      <td>✅ 需要 FPU</td>
+      <td>✅ 20~30 cycles</td>
+      <td>✅ 较快</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">arm_cos_f32(x)</td>
+      <td>float</td>
+      <td>CMSIS-DSP 逼近计算</td>
+      <td>✅ 需要 FPU</td>
+      <td>✅ 10~15 cycles</td>
+      <td>🚀 最快</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">arm_cos_q31(x)</td>
+      <td>Q31</td>
+      <td>CMSIS-DSP（定点）</td>
+      <td>❌ 无需 FPU</td>
+      <td>✅ 约 50 cycles</td>
+      <td>⚡ 比无FPU快 100 倍</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">查表法（LUT）</td>
+      <td>预存数据查表</td>
+      <td>❌ 无需 FPU</td>
+      <td>🚀 &lt;10 cycles</td>
+      <td>🔥 最快（1000 倍加速）</td>
+      <td>🔥 比最快还快</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>除了<code class="language-plaintext highlighter-rouge">arm_cos_f32</code>，还有其他的一些<code class="language-plaintext highlighter-rouge">arm_cos_q31</code>函数，可能更加适配于F103这种低端芯片，可以进行自由选择。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">❌ 对于无FPU的单片机</th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">函数</td>
+      <td>类型</td>
+      <td>计算方式</td>
+      <td>FPU 需求</td>
+      <td>计算周期（F103@72MHz）</td>
+      <td>相对速度</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">arm_cos_f32(x)</td>
+      <td>float</td>
+      <td>CMSIS-DSP 逼近计算</td>
+      <td>❌ 无 FPU 需软件仿真</td>
+      <td>⚠️ 4500+ cycles</td>
+      <td>⚠️ 很慢</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">arm_cos_q31(x)</td>
+      <td>Q31</td>
+      <td>CMSIS-DSP 定点查表 + 插值</td>
+      <td>✅ 无需 FPU</td>
+      <td>✅ 约 50 cycles</td>
+      <td>🚀 100 倍加速</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">重载函数std::__math::cos(x)</td>
+      <td>double</td>
+      <td>标准库软件计算</td>
+      <td>❌ 无 FPU 需软件仿真</td>
+      <td>🚫 6000+ cycles</td>
+      <td>❌ 最慢</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">float</td>
+      <td>标准库软件计算</td>
+      <td>❌ 无 FPU 需软件仿真</td>
+      <td>🚫 5000+ cycles</td>
+      <td>❌ 非常慢</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">cosf(x)</td>
+      <td>float</td>
+      <td>标准 C 库软件计算</td>
+      <td>❌ 无 FPU 需软件仿真</td>
+      <td>🚫 5000+ cycles</td>
+      <td>❌ 非常慢</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">查表法（LUT）</td>
+      <td>float / Q31</td>
+      <td>预计算余弦表</td>
+      <td>✅ 无需 FPU</td>
+      <td>🚀 约 5 cycles</td>
+      <td>🔥 1000 倍加速</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="dma多通道adc遥控器遥杆">DMA+多通道adc(遥控器遥杆)</h2>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image309.webp" alt="" /></p>
+
+<p>cubemx配置：</p>
+
+<p>多通道adc大部分要开启扫描模式；</p>
+
+<p>adc连续模式开启或者关闭，影响mian函数的相关代码，不开continuous则需在while中不断对adc进行开启</p>
+
+<p>开连续模式（延时500可以去掉）</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image310.webp" alt="" /></p>
+
+<p>不开：</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image311.webp" alt="" /></p>
+
+<p>相比之下开连续更快，更建议连续</p>
+
+<h2 id="stm32常见问题">STM32常见问题</h2>
+
+<h3 id="stm32-使用st-link下载问题">STM32 使用ST-link下载问题</h3>
+
+<ol>
+  <li>原因：在使用CubeMX 配置文件时，忘记设置SYS选项里面的Debug选项</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image312.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>现象：下载完一次程序之后程序无法运行，且无法重新下载。</p>
+  </li>
+  <li>
+    <p>stm32共有三种启动模式：</p>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image313.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>用户闪存：正常的工作模式。stm32内置的Flash，一般我们使用JTAG或者SWD模式下载程序时就是下载到这个里面，重启之后也是从这里启动程序。</p>
+      </li>
+      <li>
+        <p>SRAM：芯片内置的RAM区，就是内存，没有程序储存的能力，这个模式一般用于调试。</p>
+      </li>
+      <li>
+        <p>系统储存器：系统储存器是芯片内部的一块特定的区域</p>
+      </li>
+      <li>
+        <p>stm32厂商在这个区域内部设置了一段Bootloader。选用这种启动模式，是为了能够从串口下载程序，因为在商家提供的Bootloader中，提供了串口下载的固件，可以通过这个Bootloader将程序下载到系统的Flash中。</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>解决方法：</p>
+
+    <ol>
+      <li>将BOOT0设置为1；BOOT1设置为0</li>
+    </ol>
+
+    <p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2023/10/09/image314.webp" alt="" /></p>
+
+    <ol>
+      <li>
+        <p>连接电脑后按下复位键，使用keil5下载没有问题的正常程序，发现程序正常下载。</p>
+      </li>
+      <li>
+        <p>将BOOT引脚改为原来的状态，再次尝试下载程序发现一切正常。</p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+  </div>
+</article>
+
+
+
+
+
+    </main>
+
+    <footer>
+  <p>© 2025 东澈的折腾天地. All rights reserved.</p>
+
+  <!-- 社交图标 -->
+  <div class="footer-social">
+    
+      <a href="https://me.tungchiahui.cn" target="_blank" rel="noopener" title="Website">
+        <i class="fas fa-link"></i>
+      </a>
+    
+    
+      <a href="mailto:tungchiahui@gmail.com" target="_blank" rel="noopener" title="E-Mail">
+        <i class="fas fa-envelope"></i>
+      </a>
+    
+    
+      <a href="https://github.com/tungchiahui" target="_blank" rel="noopener" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    
+    
+      <a href="https://qm.qq.com/q/JRhksaNK82?from=qq" target="_blank" rel="noopener" title="QQ">
+        <i class="fab fa-qq"></i>
+      </a>
+    
+    
+      <a href="https://t.me/tungchiahui" target="_blank" rel="noopener" title="Telegram">
+        <i class="fab fa-telegram"></i>
+      </a>
+    
+    
+      <a href="http://www.coolapk.com/u/3224578" target="_blank" rel="noopener" title="CoolAPK">
+        <i class="fab fa-android"></i>
+      </a>
+    
+    
+      <a href="https://space.bilibili.com/141482453" target="_blank" rel="noopener" title="Bilibili">
+        <i class="fa-brands fa-bilibili"></i>
+      </a>
+    
+    
+      <a href="https://www.youtube.com/@Chia-huiTung" target="_blank" rel="noopener" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    
+    
+      <a href="https://twitter.com/tungchiahui" target="_blank" rel="noopener" title="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+    
+    
+      <a href="https://www.facebook.com/tungchiahui" target="_blank" rel="noopener" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+    
+    
+      <a href="https://www.instagram.com/tungchiahui" target="_blank" rel="noopener" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+    
+  </div>
+
+  <div class="footer-records">
+    <!-- ICP 备案号 -->
+    
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-record icp">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-miit.webp" alt="工信部图标">
+      鲁ICP备2025185601号-2
+    </a>
+    
+
+     <!-- 公安备案号 -->
+    
+    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=鲁公网安备37030302001121号" target="_blank" rel="noopener" class="footer-record beian">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-mps.webp" alt="公安备案图标">
+      鲁公网安备37030302001121号
+    </a>
+    
+  </div>
+
+
+</footer>
+
+
+    <!-- 这才是liquild的注释，不能用html的注释 -->
+    <!-- 因为liquid会把html的注释也渲染出来 -->
+    
+
+
+    <!-- PJAX -->
+    <script src="https://cdn.tungchiahui.cn/libs/pjax/0.2.8/pjax.min.js" defer></script>
+    <script src="/assets/js/pjax-init.js" defer></script>
+    
+  </body>
+</html>

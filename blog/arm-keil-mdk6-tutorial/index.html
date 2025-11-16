@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arm-Keil-MDK6教程 | 东澈的折腾天地</title>
+
+
+  <!-- 插件 / 功能资源 -->
+   <!-- 插件 / 功能资源 -->
+
+  <!-- 引入 CSS 样式 -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/friends.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
+  <link rel="stylesheet" href="/assets/css/music-player.css">
+
+  <!-- Aplayer播放器 -->
+  <link rel="stylesheet" href="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.css">
+  <script defer src="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js"></script>
+  <!-- Meting音乐资源加载器 -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/meting/1.2.0/Meting.min.js"></script>
+
+  <!-- 代码高亮样式 -->
+  <link rel="stylesheet" href="/assets/css/code-highlight.css">
+  <script defer src="/assets/js/code-copy.js"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/fontawesome.min.css" rel="stylesheet">
+  <script defer src="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/all.min.js"></script>
+
+  <!-- === 图片点击放大功能(延迟加载) === -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/medium-zoom/1.1.0/medium-zoom.min.js"></script>
+  <script defer src="/assets/js/image-zoom.js"></script>
+
+  <!-- 懒加载 -->
+  <script defer src="/assets/js/lazyload.js"></script>
+
+
+  <!-- Vercount 网站访问统计 -->
+  <script async src="https://events.vercount.one/js"></script>
+
+  <!-- 放在模板底部，lazyload.js 或其他主脚本之后 -->
+  <script defer src="/assets/js/pjax-vercount.js"></script>
+
+  <!-- 网站图标 -->
+  
+  <link rel="icon" 
+        href="https://cdn.tungchiahui.cn/tungwebsite/assets/images/favicon.webp">
+
+
+</head>
+
+  <body>
+    <header class="site-header">
+
+  <!-- 内容层 -->
+  <div class="header-content">
+    <h1><a href="/">东澈的折腾天地</a></h1>
+    <nav>
+      <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/blog/">博客</a></li>
+        <li><a href="/cv/">简历</a></li>
+        <li><a href="/friends/">友链</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+    
+    <!-- 🎵 音乐播放器 -->
+<div id="music-player" class="aplayer player"
+     data-id="17401109156"
+     data-server="netease"
+     data-type="playlist"
+     data-autoplay="false">
+</div>
+
+<!-- 🎧 按钮 -->
+<button id="toggle-player-fixed" aria-pressed="false">🎧 收起</button>
+
+
+<script>
+(() => {
+  const container = document.getElementById('music-player');
+  const btnFixed = document.getElementById('toggle-player-fixed');
+  let hidden = false;
+
+  try {
+    const saved = localStorage.getItem('music_player_hidden');
+    if (saved === 'true') {
+      hidden = true;
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+  } catch(e){}
+
+  btnFixed.addEventListener('click', () => {
+    hidden = !hidden;
+    if (hidden) {
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      container.classList.remove('hidden');
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+    try { 
+      localStorage.setItem('music_player_hidden', hidden ? 'true' : 'false'); 
+    } catch(e){}
+  });
+})();
+</script>
+
+
+    <!-- PJAX -->
+    <main id="pjax-container">
+      <article class="post-main">
+  <h2>Arm-Keil-MDK6教程</h2>
+  <p>
+    <small>
+      发布于 2024-01-21 | 作者: Tung Chia-hui | 阅读次数：<span id="vercount_value_page_pv">Loading</span> 次
+    </small>
+  </p>
+  <div class="post-content">
+    <ul id="markdown-toc">
+  <li><a href="#一简介" id="markdown-toc-一简介">一、简介</a></li>
+  <li><a href="#二官方教程" id="markdown-toc-二官方教程">二、官方教程</a></li>
+  <li><a href="#三linux配置mdk6环境教程" id="markdown-toc-三linux配置mdk6环境教程">三、Linux配置MDK6环境教程</a>    <ul>
+      <li><a href="#需要准备的软件" id="markdown-toc-需要准备的软件">需要准备的软件</a></li>
+      <li><a href="#vcpkg安装与环境配置" id="markdown-toc-vcpkg安装与环境配置">vcpkg安装与环境配置</a></li>
+      <li><a href="#mdk5工程生成与armclangac6编译器配置" id="markdown-toc-mdk5工程生成与armclangac6编译器配置">MDK5工程生成与ARMCLANG(AC6)编译器配置</a>        <ul>
+          <li><a href="#工程生成与编译器配置" id="markdown-toc-工程生成与编译器配置">工程生成与编译器配置</a></li>
+          <li><a href="#工程配置比如初始化一个gpio口并创建任务使其电平翻转" id="markdown-toc-工程配置比如初始化一个gpio口并创建任务使其电平翻转">工程配置(比如初始化一个GPIO口并创建任务使其电平翻转)</a></li>
+        </ul>
+      </li>
+      <li><a href="#安装并激活mdk6插件" id="markdown-toc-安装并激活mdk6插件">安装并激活MDK6插件</a></li>
+      <li><a href="#初次转化mdk5工程并下载依赖包" id="markdown-toc-初次转化mdk5工程并下载依赖包">初次转化MDK5工程并下载依赖包</a></li>
+      <li><a href="#编译" id="markdown-toc-编译">编译</a></li>
+      <li><a href="#linux如何配置st-link等调试器" id="markdown-toc-linux如何配置st-link等调试器">Linux如何配置ST-Link等调试器？</a>        <ul>
+          <li><a href="#安装pyocdlinux" id="markdown-toc-安装pyocdlinux">安装pyOCD(Linux)</a></li>
+          <li><a href="#更新st-link最新驱动linux" id="markdown-toc-更新st-link最新驱动linux">更新ST-Link最新驱动(Linux)</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#四windows配置mdk6环境教程" id="markdown-toc-四windows配置mdk6环境教程"><strong>四、Windows配置MDK6环境教程</strong></a>    <ul>
+      <li><a href="#需要准备的软件-1" id="markdown-toc-需要准备的软件-1">需要准备的软件</a></li>
+      <li><a href="#vcpkg安装与环境配置-1" id="markdown-toc-vcpkg安装与环境配置-1">vcpkg安装与环境配置</a></li>
+      <li><a href="#生成工程文件" id="markdown-toc-生成工程文件">生成工程文件</a></li>
+      <li><a href="#打开工程并配置默认编译器" id="markdown-toc-打开工程并配置默认编译器">打开工程并配置默认编译器</a></li>
+      <li><a href="#下载并激活keil-mdk6插件" id="markdown-toc-下载并激活keil-mdk6插件">下载并激活Keil MDK6插件</a></li>
+      <li><a href="#mdk5工程转化为mdk6工程" id="markdown-toc-mdk5工程转化为mdk6工程">MDK5工程转化为MDK6工程</a></li>
+      <li><a href="#编译-1" id="markdown-toc-编译-1">编译</a></li>
+      <li><a href="#windows如何配置st-link等调试器" id="markdown-toc-windows如何配置st-link等调试器">Windows如何配置ST-Link等调试器？</a>        <ul>
+          <li><a href="#添加设备选择st-link" id="markdown-toc-添加设备选择st-link">添加设备选择ST-Link</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#五进阶使用教程全平台通用" id="markdown-toc-五进阶使用教程全平台通用"><strong>五、进阶使用教程(全平台通用)</strong></a>    <ul>
+      <li><a href="#run运行程序和debug调试程序" id="markdown-toc-run运行程序和debug调试程序">Run（运行程序）和Debug（调试程序）？</a>        <ul>
+          <li><a href="#选择packs" id="markdown-toc-选择packs">选择packs</a></li>
+          <li><a href="#run将程序下载到st-link中" id="markdown-toc-run将程序下载到st-link中">(RUN)将程序下载到ST-Link中</a></li>
+          <li><a href="#debug调试程序" id="markdown-toc-debug调试程序">(DEBUG)调试程序</a></li>
+        </ul>
+      </li>
+      <li><a href="#vscode头文件配置" id="markdown-toc-vscode头文件配置">VScode头文件配置</a>        <ul>
+          <li><a href="#cc插件不推荐" id="markdown-toc-cc插件不推荐">C/C++插件（不推荐）</a></li>
+          <li><a href="#clangd插件-非常推荐" id="markdown-toc-clangd插件-非常推荐">Clangd插件 (非常推荐)</a></li>
+        </ul>
+      </li>
+      <li><a href="#添加源文件对应project-items和头文件对应include-path到编译环境中" id="markdown-toc-添加源文件对应project-items和头文件对应include-path到编译环境中"><strong>添加源文件(对应Project Items)和头文件(对应Include Path)到编译环境中</strong></a>        <ul>
+          <li><a href="#常规方法修改yaml文件" id="markdown-toc-常规方法修改yaml文件">常规方法(修改yaml文件)</a>            <ul>
+              <li><a href="#相关资料" id="markdown-toc-相关资料">相关资料</a></li>
+              <li><a href="#创建文件c和h" id="markdown-toc-创建文件c和h">创建文件(.c和.h)</a></li>
+              <li><a href="#添加头文件路径" id="markdown-toc-添加头文件路径">添加头文件路径</a></li>
+              <li><a href="#添加源文件与分组" id="markdown-toc-添加源文件与分组">添加源文件与分组</a></li>
+              <li><a href="#编写文件并编译" id="markdown-toc-编写文件并编译">编写文件并编译</a></li>
+            </ul>
+          </li>
+          <li><a href="#图形化" id="markdown-toc-图形化">图形化</a>            <ul>
+              <li><a href="#简介" id="markdown-toc-简介">简介</a></li>
+              <li><a href="#添加源文件" id="markdown-toc-添加源文件">添加源文件</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#六--常见问题" id="markdown-toc-六--常见问题">六 <strong>、</strong> 常见问题</a>    <ul>
+      <li><a href="#freertos使用armclangac6编译报错的问题" id="markdown-toc-freertos使用armclangac6编译报错的问题">FreeRTOS使用ARMCLANG(AC6)编译报错的问题</a></li>
+      <li><a href="#错误执行cmake配置" id="markdown-toc-错误执行cmake配置">错误执行cmake配置</a></li>
+      <li><a href="#修改汇编语言的编译器为armclang集成的汇编编译器" id="markdown-toc-修改汇编语言的编译器为armclang集成的汇编编译器">修改汇编语言的编译器为ARMClang集成的汇编编译器</a></li>
+      <li><a href="#出现某些工具没被下载的情况" id="markdown-toc-出现某些工具没被下载的情况">出现某些工具没被下载的情况</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong><code class="language-plaintext highlighter-rouge">截止2024年1月21日，MDK6已经完善到完全可以当主力IDE的状态，各项功能都比较完备。</code></strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">但是由于ARM仍在更新完善MDK6，所以教程会有所出入，但是大体上的步骤不会有太大的变化，有太大的变化的地方本文可能会更新。</code></p>
+
+<h1 id="一简介">一、简介</h1>
+
+<p>https://www.keil.arm.com/</p>
+
+<p>As flexible as you are: from cloud to desktop, from CLI to GUI, running on macOS, Linux, and Windows.</p>
+
+<p>暂时无法在飞书文档外展示此内容</p>
+
+<h1 id="二官方教程">二、官方教程</h1>
+
+<p>https://developer.arm.com/documentation/108029/0000/Get-started-with-an-example-project</p>
+
+<h1 id="三linux配置mdk6环境教程">三、Linux配置MDK6环境教程</h1>
+
+<p><strong><em><code class="language-plaintext highlighter-rouge">（本教程为2024年1月创建的，可能与以后的版本有些出入）</code></em></strong></p>
+
+<h2 id="需要准备的软件">需要准备的软件</h2>
+
+<ol>
+  <li>
+    <p>CubeMX最新版</p>
+  </li>
+  <li>
+    <p>VScode最新版</p>
+  </li>
+  <li>
+    <p>vcpkg包管理工具</p>
+  </li>
+  <li>
+    <p>pyOcd（如何安装下方有教程）</p>
+  </li>
+  <li>
+    <p>ST-Link驱动（如何安装下方有教程）</p>
+  </li>
+</ol>
+
+<h2 id="vcpkg安装与环境配置">vcpkg安装与环境配置</h2>
+
+<ol>
+  <li>下载依赖包</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get upgrade
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>build-essential <span class="nb">tar </span>curl zip unzip
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>default-jre
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>克隆vcpkg仓库</li>
+</ol>
+
+<p>https://github.com/microsoft/vcpkg/tree/master</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>git clone https://github.com/microsoft/vcpkg.git
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>生成vcpkg程序</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nb">cd </span>vcpkg
+<span class="nb">sudo chmod </span>a+x ./bootstrap-vcpkg.sh
+<span class="nb">sudo</span> ./bootstrap-vcpkg.sh
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>配置环境</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>vim ~/.bashrc
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image1.webp" alt="" /></p>
+
+<p>这个 <strong>VCPKG_HOME是vcpkg的目录</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="c">#配置vcpkg环境 </span>
+<span class="nb">export </span><span class="nv">VCPKG_HOME</span><span class="o">=</span>/home/tungchiahui/user/applications/vcpkg  <span class="c">#目录需要改为你的vcpkg的目录</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$VCPKG_HOME</span>:<span class="nv">$PATH</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image2.webp" alt="" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nb">source</span> ~/.bashrc
+vcpkg <span class="nt">--version</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>出现如图提示则安装成功！</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image3.webp" alt="" /></p>
+
+<h2 id="mdk5工程生成与armclangac6编译器配置">MDK5工程生成与ARMCLANG(AC6)编译器配置</h2>
+
+<h3 id="工程生成与编译器配置">工程生成与编译器配置</h3>
+
+<ol>
+  <li>
+    <p><strong>方式一</strong> ：配置编译器教程需要在Windows进行，在Linux上目前很难修改编译器选项，可以参考下方Windows教程里的生成工程并配置默认编译器。(实质就是把编译器从默认的AC5改成AC6)</p>
+  </li>
+  <li>
+    <p><strong>方式二</strong> ：克隆已经生成好的模板（模板目前只有几个常用型号的)</p>
+  </li>
+</ol>
+
+<p>仓库链接：</p>
+
+<p>https://github.com/TungChiahuiMCURepos/CubeMX_CMake_Template</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>git clone https://github.com/TungChiahuiMCURepos/CubeMX_CMake_Template.git
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image4.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image5.webp" alt="" /></p>
+
+<h3 id="工程配置比如初始化一个gpio口并创建任务使其电平翻转">工程配置(比如初始化一个GPIO口并创建任务使其电平翻转)</h3>
+
+<p>先复制一份工程模板</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image6.webp" alt="" /></p>
+
+<p>重命名工程</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image7.webp" alt="" /></p>
+
+<p>打开CubeMX(并点击最上方File-&gt;Load Project 或者 直接点击下方图中的图标)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image8.webp" alt="" /></p>
+
+<p>找到工程并Load，并配置好工程</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image9.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image10.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image11.webp" alt="" /></p>
+
+<p>在文件夹MDK-ARM下打开终端</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nb">cd </span>MDK-ARM
+code <span class="nb">.</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="安装并激活mdk6插件">安装并激活MDK6插件</h2>
+
+<p>下载好ARM Keil Studio Pack</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image12.webp" alt="" /></p>
+
+<p>激活MDK6插件</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image13.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image14.webp" alt="" /></p>
+
+<h2 id="初次转化mdk5工程并下载依赖包">初次转化MDK5工程并下载依赖包</h2>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image15.webp" alt="" /></p>
+
+<p>右下角把这些要安装的pack都安装一下，有什么提示要允许的都允许一下</p>
+
+<p>在安装Packs的时候，需要保证一个良好的网络环境(需要一个有魔法的网络环境)，</p>
+
+<p>这个阶段会持续5-20分钟，请慢慢等待。(看你的机场速度而决定)</p>
+
+<p>(只有第一次运行需要这些操作)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image16.webp" alt="" /></p>
+
+<p>这个调查可以不查</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image17.webp" alt="" /></p>
+
+<p>如图即是安装成功</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image18.webp" alt="" /></p>
+
+<p>如果下方环境已经配置好了，请右键点击uvprojx选择Convert</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image19.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image20.webp" alt="" /></p>
+
+<p>如果环境没配置好，右键这个文件，选择active environment(图中因为我的环境配置好了，所以是deactive失能)</p>
+
+<p>然后再执行上一步的Convert</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image21.webp" alt="" /></p>
+
+<p>如图已经初始化成功了</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image22.webp" alt="" /></p>
+
+<h2 id="编译">编译</h2>
+
+<p>点击build按钮发现文件大小一样就是编译成功了。</p>
+
+<p>若编译失败，则看一下是否是工程文件列表被多配置了一个点。（看下方进阶教程里的添加源文件解决）</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image23.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image24.webp" alt="" /></p>
+
+<h2 id="linux如何配置st-link等调试器">Linux如何配置ST-Link等调试器？</h2>
+
+<h3 id="安装pyocdlinux">安装pyOCD(Linux)</h3>
+
+<p>https://github.com/pyocd/pyOCD</p>
+
+<p>先打开终端输入（如果你是debian系的系统，如Ubuntu，请看下方的教程）</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>apt <span class="nb">install </span>python3-pip
+python3 <span class="nt">-mpip</span> <span class="nb">install</span> <span class="nt">-U</span> pyocd
+
+<span class="c"># 如果上面的不行，则输入下方的</span>
+pip3 <span class="nb">install</span> <span class="nt">-U</span> pyocd
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>如果还不行，且提示</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>error: externally-managed-environment
+
+× This environment is externally managed
+╰─&gt; To <span class="nb">install </span>Python packages system-wide, try apt <span class="nb">install
+    </span>python3-xyz, where xyz is the package you are trying to
+    install.
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>则使用（debian系的系统）</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>apt <span class="nb">install </span>python3-pyocd
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>或者</strong> 说直接克隆仓库</p>
+
+<pre><code class="language-Python">git clone https://github.com/pyocd/pyOCD.git
+cd pyOCD
+pip3 install .
+</code></pre>
+
+<p>这样也可以安装pyOCD</p>
+
+<p>接下来，我们需要安装ST-Link等调试器的驱动。</p>
+
+<p>pyOCD安装调试器驱动官方教程：</p>
+
+<p>https://github.com/pyocd/pyOCD/tree/main/udev</p>
+
+<p>还是需要用到pyOCD仓库里的文件。</p>
+
+<p>如果你没clone仓库请尽快克隆。</p>
+
+<p>在仓库目录下，输入以下命令</p>
+
+<pre><code class="language-Python">cd udev
+sudo cp *.rules /etc/udev/rules.d
+#重启udev
+sudo udevadm control --reload
+sudo udevadm trigger
+</code></pre>
+
+<p>这样ST-Link就可以正常被检测出来了</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image25.webp" alt="" /></p>
+
+<p>如果没被检测出来，请插拔一下ST-Link，然后点击Add Device添加一下设备。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image26.webp" alt="" /></p>
+
+<h3 id="更新st-link最新驱动linux">更新ST-Link最新驱动(Linux)</h3>
+
+<p>https://www.st.com/en/development-tools/stsw-link007.html#get-software</p>
+
+<p>暂时无法在飞书文档外展示此内容</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image27.webp" alt="" /></p>
+
+<p>下载后的文件解压出来。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image28.webp" alt="" /></p>
+
+<pre><code class="language-Python">sudo apt install ./st-stlink-udev-rules-1.0.3-2-linux-all.deb
+</code></pre>
+
+<p>重启VScode即可</p>
+
+<p>(下方还有其他有关的教程操作，请往下滑)</p>
+
+<h1 id="四windows配置mdk6环境教程"><strong>四、Windows配置MDK6环境教程</strong></h1>
+
+<h2 id="需要准备的软件-1">需要准备的软件</h2>
+
+<ol>
+  <li>
+    <p>Keil MDK5.3x及以上</p>
+  </li>
+  <li>
+    <p>VScode最新版</p>
+  </li>
+  <li>
+    <p>CubeMX最新版</p>
+  </li>
+</ol>
+
+<h2 id="vcpkg安装与环境配置-1">vcpkg安装与环境配置</h2>
+
+<ol>
+  <li>克隆vcpkg仓库</li>
+</ol>
+
+<p>https://github.com/microsoft/vcpkg/tree/master</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>git clone https://github.com/microsoft/vcpkg.git
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image29.webp" alt="" /></p>
+
+<ol>
+  <li>生成vcpkg程序</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image30.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image31.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image32.webp" alt="" /></p>
+
+<ol>
+  <li>配置环境</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image33.webp" alt="" /></p>
+
+<p>点击高级系统设置</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image34.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image35.webp" alt="" /></p>
+
+<p>将用户环境变量和系统环境变量都配置一下</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image36.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image37.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image38.webp" alt="" /></p>
+
+<ol>
+  <li>测试</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>vcpkg <span class="nt">--version</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>显示如下图所示，则安装成功</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image39.webp" alt="" /></p>
+
+<h2 id="生成工程文件">生成工程文件</h2>
+
+<ol>
+  <li>打开CubeMX并登录ST账号</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image40.webp" alt="" /></p>
+
+<ol>
+  <li>安装好Pack</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image41.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image42.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image43.webp" alt="" /></p>
+
+<ol>
+  <li>配置工程</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image44.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image45.webp" alt="" /></p>
+
+<h2 id="打开工程并配置默认编译器">打开工程并配置默认编译器</h2>
+
+<ol>
+  <li>配置默认编译器为ARMCLANG(AC6)</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image46.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image47.webp" alt="" /></p>
+
+<ol>
+  <li>编译验证</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image48.webp" alt="" /></p>
+
+<h2 id="下载并激活keil-mdk6插件">下载并激活Keil MDK6插件</h2>
+
+<ol>
+  <li>打开VScode</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image49.webp" alt="" /></p>
+
+<ol>
+  <li>安装Keil Studio Pack插件</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image50.webp" alt="" /></p>
+
+<ol>
+  <li>
+    <p>安装完毕后，重启VScode</p>
+  </li>
+  <li>
+    <p>然后右下角会跳出来两个窗口，点击激活MDK6Community.</p>
+  </li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image51.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image52.webp" alt="" /></p>
+
+<p>显示这个通知即激活成功。</p>
+
+<h2 id="mdk5工程转化为mdk6工程">MDK5工程转化为MDK6工程</h2>
+
+<p>点击Convert进行转化</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image53.webp" alt="" /></p>
+
+<p>右下角把这些要安装的pack都安装一下，有什么提示要允许的都允许一下</p>
+
+<p>在安装Packs的时候，需要保证一个良好的网络环境(需要一个有魔法的网络环境)，</p>
+
+<p>这个阶段会持续5-20分钟，请慢慢等待。(看你的机场速度而决定)</p>
+
+<p>(只有第一次运行需要这些操作)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image54.webp" alt="" /></p>
+
+<p>可以打开任务管理器看cmsis.exe是否在正常下载，如果后面有网速，则说明在正常下载，等待即可。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image55.webp" alt="" /></p>
+
+<p>这个调查可以不查</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image56.webp" alt="" /></p>
+
+<p>如图即是安装成功</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image57.webp" alt="" /></p>
+
+<p>这里如果是没激活环境，则需要active environment。(图中是取消激活环境)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image58.webp" alt="" /></p>
+
+<p>点击转化MDK5工程</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image59.webp" alt="" /></p>
+
+<p>这样则显示为转化MDK6工程成功。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image60.webp" alt="" /></p>
+
+<h2 id="编译-1">编译</h2>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image61.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image62.webp" alt="" /></p>
+
+<p>可以看到，通过KEIL MDK6编译后的大小和KEIL MDK5编译后的大小完全相同。</p>
+
+<h2 id="windows如何配置st-link等调试器">Windows如何配置ST-Link等调试器？</h2>
+
+<p>Windows就更简单了，根本不用多下其他东西，只要你在MDK5上能用，基本在MDK6上也能用。</p>
+
+<h3 id="添加设备选择st-link">添加设备选择ST-Link</h3>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image63.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image64.webp" alt="" /></p>
+
+<h1 id="五进阶使用教程全平台通用"><strong>五、进阶使用教程(全平台通用)</strong></h1>
+
+<h2 id="run运行程序和debug调试程序">Run（运行程序）和Debug（调试程序）？</h2>
+
+<h3 id="选择packs">选择packs</h3>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image65.webp" alt="" /></p>
+
+<p>出现STM32 STLink后，接着点回车Enter</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image66.webp" alt="" /></p>
+
+<p>搜索对应的芯片的Packs并选中</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image67.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image68.webp" alt="" /></p>
+
+<h3 id="run将程序下载到st-link中">(RUN)将程序下载到ST-Link中</h3>
+
+<p>点击RUN，然后在新弹出的窗口选择对应的型号，比如我选择STM32F103C8</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image69.webp" alt="" /></p>
+
+<p>可以看到下方的命令已经把程序烧写进STM32了，然后STM32也正常工作了。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image70.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image71.webp" alt="" /></p>
+
+<h3 id="debug调试程序">(DEBUG)调试程序</h3>
+
+<p>打上三个断点</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image72.webp" alt="" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="k">extern</span> <span class="s">"C"</span>
+<span class="kt">void</span> <span class="nf">led_task</span><span class="p">(</span><span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">argument</span><span class="p">)</span>
+<span class="p">{</span>
+
+    <span class="k">for</span><span class="p">(;;)</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+        <span class="n">bsp_led</span><span class="p">.</span><span class="n">LED_Toggle</span><span class="p">();</span>  <span class="c1">//实例化后调用对象翻转电平函数</span>
+        <span class="n">osDelay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+        <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>点击Debug并选中型号</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image73.webp" alt="" /></p>
+
+<p>然后就可以进入Debug界面</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image74.webp" alt="" /></p>
+
+<p>点击开始按钮</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image75.webp" alt="" /></p>
+
+<p>可以看到断点被成功命中，且可以通过左边窗口查看a的值。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image76.webp" alt="" /></p>
+
+<p>接着点击继续。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image77.webp" alt="" /></p>
+
+<p>下一个断点也被命中了</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image78.webp" alt="" /></p>
+
+<p>接着点继续，发现a的值变为了6，符合我们程序的运行。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image79.webp" alt="" /></p>
+
+<p>这样就可以正常debug了。</p>
+
+<h2 id="vscode头文件配置">VScode头文件配置</h2>
+
+<p><strong>(这只是可以更好的编辑代码，这些头文件并没有被加入到编译环境中)</strong></p>
+
+<h3 id="cc插件不推荐">C/C++插件（不推荐）</h3>
+
+<p>如果有这种找不到头文件的情况，配置一下VScode的C/C++插件的Include Path即可。</p>
+
+<p>但是由于该插件需要同时配置编译器，所以可能会出一些各种各样的小问题。</p>
+
+<p>而且该插件对于大型项目会很卡，可以选择直接看下方的clangd插件教程。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image80.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image81.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image82.webp" alt="" /></p>
+
+<p>在这里多加一行../**</p>
+
+<p>除了以上这种方式，也可以通过修改c_cpp_properties.json文件进行。</p>
+
+<p>输入 <code class="language-plaintext highlighter-rouge">"../**"</code> (意思是将上一个目录(工程根目录)里的所有文件全部加载到Include Path中)</p>
+
+<p>同时建议也把ARMCLANG的include文件加入到这里面 “<code class="language-plaintext highlighter-rouge">/home/tungchiahui/.vcpkg/artifacts/2139c4c6/compilers.arm.armclang/6.21.0/include/</code>”</p>
+
+<p>每个人的目录不同，但都是在用户文件夹的.vcpkg隐藏文件夹下，可以自己找找。（下方的图不完整，请根据上访内容进行添加）</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image83.webp" alt="" /></p>
+
+<p>配置好之后，我们发现代码提示也正常了，虽然头文件还是有可能会被VScode误报错说找不到，但是其实已经可以正常编译了，也可以正常提示这些头文件了。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image84.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image85.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image86.webp" alt="" /></p>
+
+<h3 id="clangd插件-非常推荐">Clangd插件 (非常推荐)</h3>
+
+<ol>
+  <li>优势：由于clangd适合大型的cmake项目，在大型项目里表现比C/C++插件优秀太多，所以笔者与MDK6都建议用clangd的语言服务器。</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image87.webp" alt="" /></p>
+
+<p>现在最新版MDK6自带clangd插件。</p>
+
+<ol>
+  <li>Windows需要下载安装一下LLVM (Linux一般不用管或者<code class="language-plaintext highlighter-rouge">sudo apt install llvm</code>)</li>
+</ol>
+
+<p>https://github.com/llvm/llvm-project/releases</p>
+
+<p>我下载的是LLVM 18.1.8，中选择<code class="language-plaintext highlighter-rouge">Assets</code>中选择<code class="language-plaintext highlighter-rouge">LLVM-18.1.8-win64.exe</code></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image88.webp" alt="" /></p>
+
+<p>这里选择这个选项<code class="language-plaintext highlighter-rouge">Add LLVM to the system PATH for all users</code>，其他无脑下一步即可。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image89.webp" alt="" /></p>
+
+<p>可以打开terminal测试一下是否安装成功并配置好环境。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">clang</span><span class="w"> </span><span class="nt">-v</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image90.webp" alt="" /></p>
+
+<ol>
+  <li>现在来安装clangd：</li>
+</ol>
+
+<p>按住Ctrl shift P打开搜索框</p>
+
+<p>输入clangd 找到下载语言服务器这一项目，点击安装clangd（请保持良好的网络状况）</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image91.webp" alt="" /></p>
+
+<ol>
+  <li>接着配置clangd：</li>
+</ol>
+
+<p>禁用C/C++的代码提示功能</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image92.webp" alt="" /></p>
+
+<p>如果没有上图的弹窗，可以进行手动关闭，依然是ctrl shift P,输入settings然后找到如下图的选项</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image93.webp" alt="" /></p>
+
+<p>找到下图这个选项，改成disabled即可。</p>
+
+<p><code class="language-plaintext highlighter-rouge">"C_Cpp.intelliSenseEngine": "disabled"</code></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image94.webp" alt="" /></p>
+
+<p>新建一个settings.json文件</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image95.webp" alt="" /></p>
+
+<p>修改里面的内容，该内容是 cmake产生的compile_commands.json 文件所在的路径(路径会随MDK6版本更新而改变，请自己找文件所在路径)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image96.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image97.webp" alt="" /></p>
+
+<p>接着找到armclang编译器的include目录，也添加进来，一般在用户文件夹下的.vcpkg隐藏文件夹下。</p>
+
+<p>(现在已经无需找了)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image98.webp" alt="" /></p>
+
+<p>以下是Linux版本的settings.json示例</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>{
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/tmp/Template_Linux/TemplateLinux"
+    ]
+}
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>以下是Windows版本的settings.json示例</p>
+
+<p>需要注意的是，Windows需要把盘符号变为小写，比如<code class="language-plaintext highlighter-rouge">C:/</code>要改为<code class="language-plaintext highlighter-rouge">c:/</code>然后<code class="language-plaintext highlighter-rouge">反斜杠\</code>要改为<code class="language-plaintext highlighter-rouge">斜杠/</code>。</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+    </span><span class="nl">"clangd.arguments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"--compile-commands-dir=${workspaceFolder}/tmp/Template_Linux/TemplateLinux"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>然后ctrl shift P搜索clangd找到如下图的选项</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image99.webp" alt="" /></p>
+
+<p>代码提示就正常啦</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image100.webp" alt="" /></p>
+
+<h2 id="添加源文件对应project-items和头文件对应include-path到编译环境中"><strong>添加源文件(对应Project Items)和头文件(对应Include Path)到编译环境中</strong></h2>
+
+<h3 id="常规方法修改yaml文件">常规方法(修改yaml文件)</h3>
+
+<h4 id="相关资料">相关资料</h4>
+
+<p>添加源文件需要使用yaml标记语言修改cproject.yml文件。</p>
+
+<p>官方为此提供了相关的更为详细的资料文档：https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/YML-Input-Format.md#source-file-management</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image101.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image102.webp" alt="" /></p>
+
+<h4 id="创建文件c和h">创建文件(.c和.h)</h4>
+
+<p>我们这里先在bsp中创建4个文件分别放入到Src和Inc中。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image103.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image104.webp" alt="" /></p>
+
+<h4 id="添加头文件路径">添加头文件路径</h4>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image105.webp" alt="" /></p>
+
+<p>将头文件所在的目录写入</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image106.webp" alt="" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>      add-path:
+        - ../Core/Inc
+        - ../Drivers/STM32F1xx_HAL_Driver/Inc
+        - ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
+        - ../Drivers/CMSIS/Device/ST/STM32F1xx/Include
+        - ../Drivers/CMSIS/Include
+        - ../bsp/boards/Inc
+        - ../applications/Inc
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="添加源文件与分组">添加源文件与分组</h4>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image107.webp" alt="" /></p>
+
+<p>在这里输入group的名字和所需要添加的源文件路径（这里因为applications里无源文件，所以我们注释掉）</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image108.webp" alt="" /></p>
+
+<pre><code class="language-ymal">    - group: bsp/boards
+      files:
+        - file: ../bsp/boards/Src/gpio_demo.cpp
+        - file: ../bsp/boards/Src/gpio_test.c
+
+    # - group: applications
+
+    #   files:
+</code></pre>
+
+<p>源文件和头文件都已经成功导入了，我们可以对文件内容进行编写，看其是否能通过编译。</p>
+
+<h4 id="编写文件并编译">编写文件并编译</h4>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image109.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image110.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image111.webp" alt="" /><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image112.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image113.webp" alt="" /></p>
+
+<p>可以看到日志这几行，显示gpio_demo和gpio_test都成功被编译了</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="o">[</span>14/22] Building C object CMakeFiles/Template_Linux.dir/home/tungchiahui/user/Source/STM32_Projects/N1_F407ZGT6_GPIO_Test/bsp/boards/Src/gpio_test.o
+<span class="o">[</span>15/22] Building C object CMakeFiles/Template_Linux.dir/home/tungchiahui/user/Source/STM32_Projects/N1_F407ZGT6_GPIO_Test/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.o
+<span class="o">[</span>16/22] Building CXX object CMakeFiles/Template_Linux.dir/home/tungchiahui/user/Source/STM32_Projects/N1_F407ZGT6_GPIO_Test/bsp/boards/Src/gpio_demo.o
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="图形化">图形化</h3>
+
+<h4 id="简介">简介</h4>
+
+<p>由于ARM团队比较给力，短短2个月就搞出来了图形化操作，截止3月初已经更新。</p>
+
+<p>ARM团队更新了什么图形化功能，下方教程就会推迟几天更新一下对应的内容。</p>
+
+<h4 id="添加源文件">添加源文件</h4>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image114.webp" alt="" /></p>
+
+<p>等待ARM公司更新功能中… …</p>
+
+<h1 id="六--常见问题">六 <strong>、</strong> 常见问题</h1>
+
+<h2 id="freertos使用armclangac6编译报错的问题">FreeRTOS使用ARMCLANG(AC6)编译报错的问题</h2>
+
+<ol>
+  <li>如果你是使用的模板，那么将模板中的“其他注意事项”文件夹中的Middlewares文件夹复制到根目录即可。</li>
+</ol>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image115.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image116.webp" alt="" /></p>
+
+<ol>
+  <li>如果你是自己从Windows上从0开始创立的工程(没有使用模板)，那么需要你去寻找CubeMX下载的固件源码</li>
+</ol>
+
+<p>比如Linux中固件源码在<code class="language-plaintext highlighter-rouge">/home/tungchiahui(你自己的用户名)/STM32Cube/Repository/</code>中。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image117.webp" alt="" /></p>
+
+<p>假如你是F103，那么打开<code class="language-plaintext highlighter-rouge">STM32Cube_FW_F1_V1.8.5</code>文件夹。</p>
+
+<p>如果你是F407，那么打开<code class="language-plaintext highlighter-rouge">STM32Cube_FW_F4_V1.28.0</code>文件夹。</p>
+
+<p>找到路径<code class="language-plaintext highlighter-rouge">/home/tungchiahui/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.5/Middlewares/Third_Party/FreeRTOS/Source/portable/</code>。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image118.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image119.webp" alt="" /></p>
+
+<p>将这个GCC文件夹里的ARM_CM3文件夹复制到 <strong>工程文件夹</strong> 对应的RVDS文件夹下。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image120.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image121.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image122.webp" alt="" /></p>
+
+<h2 id="错误执行cmake配置">错误执行cmake配置</h2>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image123.webp" alt="" /></p>
+
+<p>如果遇到<code class="language-plaintext highlighter-rouge">error cbuild: error executing 'cmake' configuration</code>这种错误。则删掉MDK-ARM文件夹下的tmp文件夹。再重新编译即可。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image124.webp" alt="" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c">#删除tmp文件夹</span>
+<span class="nb">rm</span> <span class="nt">-rf</span> ./tmp
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image125.webp" alt="" /></p>
+
+<h2 id="修改汇编语言的编译器为armclang集成的汇编编译器">修改汇编语言的编译器为ARMClang集成的汇编编译器</h2>
+
+<p>这是个警告，不影响正常使用，但是咱们尽量可以修改一下。</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image126.webp" alt="" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">Plain Text
+Warning: A1950W: The legacy armasm assembler is deprecated. 
+Consider using the armclang integrated assembler instead.
+0 Errors, 1 Warning
+</code></p>
+
+<p>暂时没找到解决方案</p>
+
+<h2 id="出现某些工具没被下载的情况">出现某些工具没被下载的情况</h2>
+
+<p>按下面的arm tools然后进入下面的界面选择对应版本,再点击update tool registry即可.(最常见的就是编译器和调试器的库没自动下载.)</p>
+
+<p>如果不知道需要哪些工具,建议可以全部都选上最新版本.(亲测全选最新版本是可以正常使用的)</p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image127.webp" alt="" /></p>
+
+<p><img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/2024/01/21/image128.webp" alt="" /></p>
+
+  </div>
+</article>
+
+
+
+
+
+    </main>
+
+    <footer>
+  <p>© 2025 东澈的折腾天地. All rights reserved.</p>
+
+  <!-- 社交图标 -->
+  <div class="footer-social">
+    
+      <a href="https://me.tungchiahui.cn" target="_blank" rel="noopener" title="Website">
+        <i class="fas fa-link"></i>
+      </a>
+    
+    
+      <a href="mailto:tungchiahui@gmail.com" target="_blank" rel="noopener" title="E-Mail">
+        <i class="fas fa-envelope"></i>
+      </a>
+    
+    
+      <a href="https://github.com/tungchiahui" target="_blank" rel="noopener" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    
+    
+      <a href="https://qm.qq.com/q/JRhksaNK82?from=qq" target="_blank" rel="noopener" title="QQ">
+        <i class="fab fa-qq"></i>
+      </a>
+    
+    
+      <a href="https://t.me/tungchiahui" target="_blank" rel="noopener" title="Telegram">
+        <i class="fab fa-telegram"></i>
+      </a>
+    
+    
+      <a href="http://www.coolapk.com/u/3224578" target="_blank" rel="noopener" title="CoolAPK">
+        <i class="fab fa-android"></i>
+      </a>
+    
+    
+      <a href="https://space.bilibili.com/141482453" target="_blank" rel="noopener" title="Bilibili">
+        <i class="fa-brands fa-bilibili"></i>
+      </a>
+    
+    
+      <a href="https://www.youtube.com/@Chia-huiTung" target="_blank" rel="noopener" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    
+    
+      <a href="https://twitter.com/tungchiahui" target="_blank" rel="noopener" title="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+    
+    
+      <a href="https://www.facebook.com/tungchiahui" target="_blank" rel="noopener" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+    
+    
+      <a href="https://www.instagram.com/tungchiahui" target="_blank" rel="noopener" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+    
+  </div>
+
+  <div class="footer-records">
+    <!-- ICP 备案号 -->
+    
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-record icp">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-miit.webp" alt="工信部图标">
+      鲁ICP备2025185601号-2
+    </a>
+    
+
+     <!-- 公安备案号 -->
+    
+    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=鲁公网安备37030302001121号" target="_blank" rel="noopener" class="footer-record beian">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-mps.webp" alt="公安备案图标">
+      鲁公网安备37030302001121号
+    </a>
+    
+  </div>
+
+
+</footer>
+
+
+    <!-- 这才是liquild的注释，不能用html的注释 -->
+    <!-- 因为liquid会把html的注释也渲染出来 -->
+    
+
+
+    <!-- PJAX -->
+    <script src="https://cdn.tungchiahui.cn/libs/pjax/0.2.8/pjax.min.js" defer></script>
+    <script src="/assets/js/pjax-init.js" defer></script>
+    
+  </body>
+</html>

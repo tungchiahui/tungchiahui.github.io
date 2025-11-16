@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首页 | 东澈的折腾天地</title>
+
+
+  <!-- 插件 / 功能资源 -->
+   <!-- 插件 / 功能资源 -->
+
+  <!-- 引入 CSS 样式 -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/friends.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
+  <link rel="stylesheet" href="/assets/css/music-player.css">
+
+  <!-- Aplayer播放器 -->
+  <link rel="stylesheet" href="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.css">
+  <script defer src="https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js"></script>
+  <!-- Meting音乐资源加载器 -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/meting/1.2.0/Meting.min.js"></script>
+
+  <!-- 代码高亮样式 -->
+  <link rel="stylesheet" href="/assets/css/code-highlight.css">
+  <script defer src="/assets/js/code-copy.js"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/fontawesome.min.css" rel="stylesheet">
+  <script defer src="https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/all.min.js"></script>
+
+  <!-- === 图片点击放大功能(延迟加载) === -->
+  <script defer src="https://cdn.tungchiahui.cn/libs/medium-zoom/1.1.0/medium-zoom.min.js"></script>
+  <script defer src="/assets/js/image-zoom.js"></script>
+
+  <!-- 懒加载 -->
+  <script defer src="/assets/js/lazyload.js"></script>
+
+
+  <!-- Vercount 网站访问统计 -->
+  <script async src="https://events.vercount.one/js"></script>
+
+  <!-- 放在模板底部，lazyload.js 或其他主脚本之后 -->
+  <script defer src="/assets/js/pjax-vercount.js"></script>
+
+  <!-- 网站图标 -->
+  
+  <link rel="icon" 
+        href="https://cdn.tungchiahui.cn/tungwebsite/assets/images/favicon.webp">
+
+
+</head>
+
+  <body>
+    <header class="site-header">
+
+  <!-- 内容层 -->
+  <div class="header-content">
+    <h1><a href="/">东澈的折腾天地</a></h1>
+    <nav>
+      <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/blog/">博客</a></li>
+        <li><a href="/cv/">简历</a></li>
+        <li><a href="/friends/">友链</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+    
+    <!-- 🎵 音乐播放器 -->
+<div id="music-player" class="aplayer player"
+     data-id="17401109156"
+     data-server="netease"
+     data-type="playlist"
+     data-autoplay="false">
+</div>
+
+<!-- 🎧 按钮 -->
+<button id="toggle-player-fixed" aria-pressed="false">🎧 收起</button>
+
+
+<script>
+(() => {
+  const container = document.getElementById('music-player');
+  const btnFixed = document.getElementById('toggle-player-fixed');
+  let hidden = false;
+
+  try {
+    const saved = localStorage.getItem('music_player_hidden');
+    if (saved === 'true') {
+      hidden = true;
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+  } catch(e){}
+
+  btnFixed.addEventListener('click', () => {
+    hidden = !hidden;
+    if (hidden) {
+      container.classList.add('hidden');
+      btnFixed.textContent = '🎧 展开';
+      btnFixed.classList.remove('open');
+    } else {
+      container.classList.remove('hidden');
+      btnFixed.textContent = '🎧 收起';
+      btnFixed.classList.add('open');
+    }
+    try { 
+      localStorage.setItem('music_player_hidden', hidden ? 'true' : 'false'); 
+    } catch(e){}
+  });
+})();
+</script>
+
+
+    <!-- PJAX -->
+    <main id="pjax-container">
+      <div class="home-header">
+
+  <h1>🌟 欢迎来到 <b>Tung Chia-hui 的个人网站</b> 👋</h1>
+  <p class="subtitle">探索、学习与创造的记录</p>
+
+  <div class="btn-group">
+    <a href="/blog/" class="btn-primary">
+      🚀 进入博客文章
+    </a>
+  </div>
+
+</div>
+
+<hr />
+
+<h2 id="-关于本站">🧠 关于本站</h2>
+
+<p class="intro">
+这里是我记录学习与创作的地方，主要内容包括：
+</p>
+
+<div class="cards">
+
+  <div class="card">
+    <h3>💻 编程与嵌入式开发</h3>
+    <p>专注于 C/C++、Python 编程，以及基于 Linux 系统环境的开发。涉及嵌入式系统（STM32、ESP32）、FreeRTOS 与底层驱动实现。</p>
+  </div>
+
+  <div class="card">
+    <h3>🤖 机器人与自动化</h3>
+    <p>学习与实践 ROS1 / ROS2 平台下的运动控制、导航建图与传感器融合，同时探索 OpenCV4 在计算机视觉与环境感知中的应用。</p>
+  </div>
+
+  <div class="card">
+    <h3>🖥️ 图形界面与工具开发</h3>
+    <p>使用 Qt6 构建上位机与可视化调试工具。</p>
+  </div>
+
+  <div class="card">
+    <h3>🌐 Web 与博客技术</h3>
+    <p>本站基于 Jekyll 搭建，偶尔分享 HTML / CSS / 前端优化的经验。</p>
+  </div>
+
+  <div class="card">
+    <h3>📱 移动应用与工具开发</h3>
+    <p>在 Android 平台上开发机器人上位机与辅助工具，实现控制、监控与数据可视化，提升机器人项目的效率与体验。</p>
+  </div>
+
+  <div class="card">
+    <h3>✏️ 随笔与思考</h3>
+    <p>记录我在学习、开发与生活中的一些想法与感悟。</p>
+  </div>
+
+</div>
+
+<hr />
+
+<h2 id="-robocon">🎬 ROBOCON</h2>
+
+<!-- 封面 + 播放按钮 + 真正的视频 -->
+<div class="video-container" style="position: relative; max-width: 100%;">
+
+  <!-- 封面图 -->
+  <img id="videoCover" src="https://cdn.tungchiahui.cn/tungwebsite/assets/videos/header-bg-cover.webp" alt="video cover" style="width:100%; display:block; cursor:pointer; border-radius:10px;" />
+
+  <!-- 播放按钮 -->
+  <div id="videoPlayButton" style="
+         position:absolute;
+         top:50%;
+         left:50%;
+         transform:translate(-50%, -50%);
+         width:80px;
+         height:80px;
+         background:rgba(0,0,0,0.6);
+         border-radius:50%;
+         display:flex;
+         justify-content:center;
+         align-items:center;
+         cursor:pointer;
+       ">
+    <div style="
+      width:0;
+      height:0;
+      border-left:28px solid white;
+      border-top:18px solid transparent;
+      border-bottom:18px solid transparent;
+      margin-left:6px;
+    "></div>
+  </div>
+
+  <!-- 视频 -->
+  <video id="myVideo" controls="" preload="none" style="display:none; width:100%; border-radius:10px;">
+    <source id="videoSource" type="video/mp4" />
+    您的浏览器不支持视频播放。
+  </video>
+
+</div>
+
+<script>
+document.getElementById("videoCover").onclick = loadVideo;
+document.getElementById("videoPlayButton").onclick = loadVideo;
+
+function loadVideo() {
+  const video = document.getElementById("myVideo");
+  const source = document.getElementById("videoSource");
+
+  // 隐藏封面图和播放按钮
+  document.getElementById("videoCover").style.display = "none";
+  document.getElementById("videoPlayButton").style.display = "none";
+
+  // 显示 video
+  video.style.display = "block";
+
+  // 加载真正的视频
+  source.src = "https://cdn.tungchiahui.cn/tungwebsite/assets/videos/header-bg.mp4";
+  video.load();
+  video.play();
+}
+</script>
+
+<hr />
+
+<h2 id="-最新博客">📰 最新博客</h2>
+
+<link rel="stylesheet" href="/assets/css/blog.css" />
+
+<section class="blog-container">
+  <h1 class="blog-title">📝 博客文章</h1>
+
+  <!-- 搜索框 -->
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="搜索文章标题或简介..." />
+  </div>
+
+  <div class="blog-grid" id="blogList">
+    
+      <article class="blog-card" data-title="欢迎来到 tung 的个人网站！" data-excerpt="你会在 _posts 目录中找到这篇文章。尽管编辑它并重新构建网站，查看修改后的效果吧。你可以用多种方式重建网站，但最常用的是运行 jekyll serve，它会启动一个 web 服务器并在文件更新时自动重新生成网站。
+">
+        <h2 class="blog-post-title">
+          <a href="/blog/welcome-to-tung-site/">欢迎来到 Tung 的个人网站！</a>
+        </h2>
+        <p class="blog-meta">
+          2025-09-23 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt">你会在 _posts 目录中找到这篇文章。尽管编辑它并重新构建网站，查看修改后的效果吧。你可以用多种方式重建网站，但最常用的是运行 jekyll serv...</p>
+        
+
+        <a class="read-more" href="/blog/welcome-to-tung-site/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="linux-stm32-cmake-vscode环境搭建" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/linux-stm32-cmake-vscode/">Linux-STM32-CMake-VScode环境搭建</a>
+        </h2>
+        <p class="blog-meta">
+          2025-07-18 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/linux-stm32-cmake-vscode/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="jekyll静态网站框架" data-excerpt="简介
+">
+        <h2 class="blog-post-title">
+          <a href="/blog/jekyll-framework/">Jekyll静态网站框架</a>
+        </h2>
+        <p class="blog-meta">
+          2025-07-01 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt">简介
+</p>
+        
+
+        <a class="read-more" href="/blog/jekyll-framework/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="docker教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/docker-tutorial/">Docker教程</a>
+        </h2>
+        <p class="blog-meta">
+          2024-10-03 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/docker-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="ros1机器人操作系统教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/ros1-tutorial/">ROS1机器人操作系统教程</a>
+        </h2>
+        <p class="blog-meta">
+          2024-07-13 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/ros1-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="linux教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/linux-tutorial/">Linux教程</a>
+        </h2>
+        <p class="blog-meta">
+          2024-03-30 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/linux-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="arm-keil-mdk6教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/arm-keil-mdk6-tutorial/">Arm-Keil-MDK6教程</a>
+        </h2>
+        <p class="blog-meta">
+          2024-01-21 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/arm-keil-mdk6-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="ros2机器人操作系统教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/ros2-tutorial/">ROS2机器人操作系统教程</a>
+        </h2>
+        <p class="blog-meta">
+          2023-12-30 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/ros2-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="git教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/git-tutorial/">Git教程</a>
+        </h2>
+        <p class="blog-meta">
+          2023-12-29 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/git-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="电控视觉环境搭建" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/ide-setup/">电控视觉环境搭建</a>
+        </h2>
+        <p class="blog-meta">
+          2023-12-10 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/ide-setup/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="stm32-freertos教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/stm32-freertos-tutorial/">STM32-FreeRTOS教程</a>
+        </h2>
+        <p class="blog-meta">
+          2023-10-09 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/stm32-freertos-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="c/c++教程" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/cplusplus-tutorial/">C/C++教程</a>
+        </h2>
+        <p class="blog-meta">
+          2023-10-05 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/cplusplus-tutorial/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="机器人工程师成长计划" data-excerpt="本教程主要是机器人工程师成长计划，一些学习机器人相关知识的路线。
+">
+        <h2 class="blog-post-title">
+          <a href="/blog/roboengineer_plan/">机器人工程师成长计划</a>
+        </h2>
+        <p class="blog-meta">
+          2023-09-29 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt">本教程主要是机器人工程师成长计划，一些学习机器人相关知识的路线。
+</p>
+        
+
+        <a class="read-more" href="/blog/roboengineer_plan/">阅读全文 →</a>
+      </article>
+    
+      <article class="blog-card" data-title="openwrt编译教学" data-excerpt="">
+        <h2 class="blog-post-title">
+          <a href="/blog/openwrt-compile-tutorial/">OpenWrt编译教学</a>
+        </h2>
+        <p class="blog-meta">
+          2021-09-16 · 作者：Tung Chia-hui
+        </p>
+
+        
+          <p class="blog-excerpt"></p>
+        
+
+        <a class="read-more" href="/blog/openwrt-compile-tutorial/">阅读全文 →</a>
+      </article>
+    
+  </div>
+</section>
+
+<script>
+  // 简单前端搜索功能
+  const searchInput = document.getElementById('searchInput');
+  const blogList = document.getElementById('blogList');
+  const cards = blogList.getElementsByClassName('blog-card');
+
+  searchInput.addEventListener('input', function () {
+    const query = this.value.toLowerCase().trim();
+    Array.from(cards).forEach(card => {
+      const title = card.getAttribute('data-title');
+      const excerpt = card.getAttribute('data-excerpt');
+      if (title.includes(query) || excerpt.includes(query)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+
+    </main>
+
+    <footer>
+  <p>© 2025 东澈的折腾天地. All rights reserved.</p>
+
+  <!-- 社交图标 -->
+  <div class="footer-social">
+    
+      <a href="https://me.tungchiahui.cn" target="_blank" rel="noopener" title="Website">
+        <i class="fas fa-link"></i>
+      </a>
+    
+    
+      <a href="mailto:tungchiahui@gmail.com" target="_blank" rel="noopener" title="E-Mail">
+        <i class="fas fa-envelope"></i>
+      </a>
+    
+    
+      <a href="https://github.com/tungchiahui" target="_blank" rel="noopener" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    
+    
+      <a href="https://qm.qq.com/q/JRhksaNK82?from=qq" target="_blank" rel="noopener" title="QQ">
+        <i class="fab fa-qq"></i>
+      </a>
+    
+    
+      <a href="https://t.me/tungchiahui" target="_blank" rel="noopener" title="Telegram">
+        <i class="fab fa-telegram"></i>
+      </a>
+    
+    
+      <a href="http://www.coolapk.com/u/3224578" target="_blank" rel="noopener" title="CoolAPK">
+        <i class="fab fa-android"></i>
+      </a>
+    
+    
+      <a href="https://space.bilibili.com/141482453" target="_blank" rel="noopener" title="Bilibili">
+        <i class="fa-brands fa-bilibili"></i>
+      </a>
+    
+    
+      <a href="https://www.youtube.com/@Chia-huiTung" target="_blank" rel="noopener" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    
+    
+      <a href="https://twitter.com/tungchiahui" target="_blank" rel="noopener" title="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+    
+    
+      <a href="https://www.facebook.com/tungchiahui" target="_blank" rel="noopener" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+    
+    
+      <a href="https://www.instagram.com/tungchiahui" target="_blank" rel="noopener" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+    
+  </div>
+
+  <div class="footer-records">
+    <!-- ICP 备案号 -->
+    
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="footer-record icp">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-miit.webp" alt="工信部图标">
+      鲁ICP备2025185601号-2
+    </a>
+    
+
+     <!-- 公安备案号 -->
+    
+    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=鲁公网安备37030302001121号" target="_blank" rel="noopener" class="footer-record beian">
+      <img src="https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-mps.webp" alt="公安备案图标">
+      鲁公网安备37030302001121号
+    </a>
+    
+  </div>
+
+
+</footer>
+
+
+    <!-- 这才是liquild的注释，不能用html的注释 -->
+    <!-- 因为liquid会把html的注释也渲染出来 -->
+    
+
+
+    <!-- PJAX -->
+    <script src="https://cdn.tungchiahui.cn/libs/pjax/0.2.8/pjax.min.js" defer></script>
+    <script src="/assets/js/pjax-init.js" defer></script>
+    
+  </body>
+</html>
