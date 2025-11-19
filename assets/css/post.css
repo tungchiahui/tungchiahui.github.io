@@ -1,0 +1,189 @@
+/* 保持现有文章内容样式 */
+.post-content img {
+  max-width: 90%;
+  height: auto;
+  display: block;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.post-content pre {
+  background-color: #f6f8fa;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+/* 提醒提示框样式 */
+.post-content blockquote {
+  background-color: #fff4e5; /* 浅橙色背景 */
+  border-left: 5px solid #ffa500; /* 橙色边框 */
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* ===== 自动标题编号，仅限文章正文 ===== */
+.post-content {
+  counter-reset: h1counter;
+}
+
+/* 一级标题 */
+.post-content h1 {
+  counter-reset: h2counter;
+}
+.post-content h1::before {
+  counter-increment: h1counter;
+  content: counter(h1counter) ". ";
+  font-weight: bold;
+}
+
+/* 二级标题 */
+.post-content h2 {
+  counter-reset: h3counter;
+}
+.post-content h2::before {
+  counter-increment: h2counter;
+  content: counter(h1counter) "." counter(h2counter) " ";
+  font-weight: bold;
+}
+
+/* 三级标题 */
+.post-content h3::before {
+  counter-increment: h3counter;
+  content: counter(h1counter) "." counter(h2counter) "." counter(h3counter) " ";
+  font-weight: bold;
+}
+
+/* ===== TOC 自动编号样式（与正文同步） ===== */
+#markdown-toc {
+  counter-reset: item;
+  list-style: none;
+  padding-left: 0;
+  background: #fafafa;              /* 淡灰背景，和正文区分但不突兀 */
+  border: 1px solid #e0e0e0;        /* 轻微边框 */
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin: 25px 0;
+  position: relative;               /* 为伪元素标题定位准备 */
+}
+
+/* 自动在目录上方添加一个标题 “📖 目录” */
+#markdown-toc::before {
+  content: "📖 目录";
+  display: block;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #333;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #ddd;    /* 底部细线区分 */
+  padding-bottom: 4px;
+}
+
+/* 每一层目录项 */
+#markdown-toc li {
+  display: block;
+  margin: 6px 0;
+}
+
+/* 目录项编号（自动生成 1.1.1 等） */
+#markdown-toc li::before {
+  counter-increment: item;
+  content: counters(item, ".") ". ";
+  color: #666;                      /* 与正文标题编号颜色统一 */
+  font-weight: bold;
+  margin-right: 4px;                /* 编号与文字之间空隙 */
+}
+
+/* 子目录缩进 */
+#markdown-toc ul {
+  counter-reset: item;
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 2px solid #eee;      /* 左侧引导线 */
+}
+
+/* 目录中的链接样式 */
+#markdown-toc a {
+  color: #333;                      /* 去掉刺眼的蓝色 */
+  text-decoration: none;            /* 去掉下划线 */
+  transition: color 0.2s ease;
+}
+
+/* 鼠标悬停时的高亮 */
+#markdown-toc a:hover {
+  color: #007acc;                   /* 柔和主题蓝 */
+  text-decoration: underline;
+}
+
+/* 可选：让顶层目录文字稍微加粗 */
+#markdown-toc > li > a {
+  font-weight: 500;
+}
+
+
+/* ====== 博客文章表格美化 ====== */
+
+/* 表格整体样式 */
+.post-content table {
+  width: 100%;                 /* 表格宽度铺满内容区 */
+  border-collapse: collapse;   /* 合并边框，去掉双线效果 */
+  margin: 1em 0;               /* 上下间距，让表格与正文区分开 */
+  font-size: 14px;             /* 字体大小适中，便于阅读 */
+  text-align: left;            /* 默认文字左对齐 */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* 可选：轻微阴影，让表格更立体 */
+  border-radius: 6px;          /* 可选：表格圆角 */
+}
+
+/* 表头和单元格通用样式 */
+.post-content th,
+.post-content td {
+  border: 1px solid #ccc;      /* 边框颜色，浅灰色，突出表格结构 */
+  padding: 8px 12px;           /* 内边距，文字不会贴边 */
+  vertical-align: middle;      /* 内容垂直居中 */
+  transition: background 0.3s; /* 鼠标悬停行时过渡效果 */
+}
+
+/* 表头样式 */
+.post-content th {
+  background-color: #f5f5f5;   /* 浅灰背景，让表头突出 */
+  font-weight: 600;             /* 加粗文字 */
+  color: #333;                  /* 深灰文字颜色 */
+  text-align: center;           /* 表头文字居中，更规范 */
+}
+
+/* 偶数行背景色 */
+.post-content tr:nth-child(even) td {
+  background-color: #fafafa;    /* 偶数行浅灰背景，提高可读性 */
+}
+
+/* 鼠标悬停高亮整行 */
+.post-content tr:hover td {
+  background-color: #e6f7ff;    /* 悬停行高亮为淡蓝色 */
+}
+
+/* 表格内的代码块样式 */
+.post-content td code {
+  background-color: #f0f0f0;    /* 灰色背景，区分普通文字 */
+  padding: 2px 4px;             /* 内边距，让代码不贴边 */
+  border-radius: 3px;            /* 圆角，使代码块更美观 */
+  font-size: 13px;               /* 字体略小于表格文本 */
+  font-family: "Fira Code", monospace; /* 保持等宽字体，便于显示命令/代码 */
+  color: #c7254e;                /* 可选：红色或深色，突出代码 */
+  white-space: nowrap;            /* 保持命令或代码不换行 */
+}
+
+/* ====== 代码复制按钮 ====== */
+/* 复制按钮样式 */
+.copy-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+.copy-button:hover {
+  opacity: 1;
+}

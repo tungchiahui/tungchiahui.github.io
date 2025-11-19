@@ -1,0 +1,44 @@
+#music-player {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+  width: 330px;
+  height: auto; /* 改成自适应高度 */
+  box-sizing: content-box;
+  transition: transform .32s ease, opacity .32s ease;
+}
+
+.aplayer {
+  height: auto !important; /* 让APlayer自动调节自身高度 */
+}
+
+#music-player.hidden {
+  transform: translateY(460px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#toggle-player-fixed {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10000;
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  font-size: 14px;
+  transition: transform .3s ease, background .2s ease;
+}
+
+#toggle-player-fixed:hover {
+  background: #e04345;
+}
+
+#toggle-player-fixed.open {
+  transform: translateY(-48px);
+}
