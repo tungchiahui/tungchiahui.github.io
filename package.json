@@ -1,0 +1,17 @@
+{
+  "name": "my-blog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@nuxt/content": "^3.9.0",
+    "better-sqlite3": "^12.5.0",
+    "medium-zoom": "^1.1.0",
+    "nuxt": "^4.2.2"
+  }
+}
