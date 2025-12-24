@@ -38,8 +38,8 @@ onMounted(() => {
     <header class="main-header">
       <nav class="nav-container">
         <div class="nav-links">
-          <NuxtLink to="/" class="nav-item">🏠 首页</NuxtLink>
-          <NuxtLink to="/about" class="nav-item">ℹ️ 关于我</NuxtLink>
+          <NuxtLink to="/" class="nav-item">首页</NuxtLink>
+          <NuxtLink to="/about" class="nav-item">关于</NuxtLink>
         </div>
         <button
           @click="toggleDarkMode"

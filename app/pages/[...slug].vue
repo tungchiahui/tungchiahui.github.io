@@ -80,7 +80,7 @@ onUpdated(enhanceContent)
       <article class="main-content">
         <header>
           <h1 class="page-main-title">{{ page.title }}</h1>
-          <div class="date">📅 {{ page.date }}</div>
+          <div class="date">{{ page.date }}</div>
         </header>
         
         <div class="content-body">
