@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { onMounted, onUpdated, nextTick } from 'vue'
+import { onMounted, nextTick } from 'vue'
 import mediumZoom from 'medium-zoom'
 
 const route = useRoute()
 const { data: page, pending } = await useAsyncData('page-' + route.path, () => {
   const cleanPath = route.path.replace(/\/$/, '') || '/'
-  // 修复点 1：显式声明 TOC 深度为 4 (因为你整体降了一级，h3 变成了 h4)
   return queryCollection('content').path(cleanPath).first()
 })
 
@@ -13,7 +12,9 @@ if (!pending.value && !page.value) {
   throw createError({ statusCode: 404, statusMessage: '页面不存在', fatal: true })
 }
 
-// --- 核心功能：页面元素增强 (代码块美化 + 图片放大) ---
+// 缓存 zoom 实例，防止重复创建
+let zoom: any = null
+
 const enhanceContent = async () => {
   await nextTick()
 
@@ -56,16 +57,20 @@ const enhanceContent = async () => {
     block.appendChild(wrapper)
   })
 
-  // 2. 图片放大处理
-  mediumZoom('.content-body img', {
+  // 2. 图片放大处理 - 修复重复绑定问题
+  if (zoom) zoom.detach() // 如果已有实例先卸载
+  zoom = mediumZoom('.content-body img', {
     margin: 24,
-    background: 'rgba(0, 0, 0, 0.8)',
+    background: 'rgba(0, 0, 0, 0.7)', // 稍微降低一点暗度
     scrollOffset: 0,
   })
 }
 
 onMounted(enhanceContent)
-onUpdated(enhanceContent)
+// 移除 onUpdated，改用 watch 监听数据变化
+watch(() => page.value, () => {
+  enhanceContent()
+})
 </script>
 
 <template>
@@ -109,7 +114,7 @@ onUpdated(enhanceContent)
 
 <style scoped>
 /* ============================================================
-   1. 基础布局适配 (使用全局变量)
+   1. 基础布局适配
    ============================================================ */
 .blog-wrapper { 
   max-width: 1100px; 
@@ -132,7 +137,7 @@ onUpdated(enhanceContent)
 .date { color: var(--footer-text, #999); margin-bottom: 30px; font-size: 0.9rem; }
 
 /* ============================================================
-   2. 正文样式 (图片 & 链接)
+   2. 正文样式
    ============================================================ */
 .content-body { line-height: 1.8; font-size: 1.1rem; counter-reset: h2counter; word-wrap: break-word; overflow-wrap: break-word; }
 :deep(.content-body img) { 
@@ -143,7 +148,7 @@ onUpdated(enhanceContent)
 :deep(.content-body a) { color: #00c58e; word-break: break-all; }
 
 /* ============================================================
-   3. 自动编号 (修复点 2：增加 h4 支持)
+   3. 自动编号
    ============================================================ */
 :deep(.content-body h2) { counter-reset: h3counter; margin-top: 1.8rem; color: var(--text-main, #222); }
 :deep(.content-body h2)::before { counter-increment: h2counter; content: counter(h2counter) ". "; color: #00c58e; margin-right: 0.5rem; font-weight: bold; }
@@ -151,12 +156,11 @@ onUpdated(enhanceContent)
 :deep(.content-body h3) { counter-reset: h4counter; margin-top: 1.5rem; color: var(--text-main, #222); }
 :deep(.content-body h3)::before { counter-increment: h3counter; content: counter(h2counter) "." counter(h3counter) " "; color: #00c58e; font-size: 0.9em; margin-right: 0.5rem; }
 
-/* 支持原 3 级标题（现在的 h4）显示编号 */
 :deep(.content-body h4) { margin-top: 1.2rem; color: var(--text-main, #222); }
 :deep(.content-body h4)::before { counter-increment: h4counter; content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) " "; color: #00c58e; font-size: 0.8em; margin-right: 0.5rem; }
 
 /* ============================================================
-   4. 目录编号适配 (已统一颜色为绿色)
+   4. 目录编号
    ============================================================ */
 .toc-sidebar { width: 220px; position: sticky; top: 20px; border-left: 2px solid var(--nav-border, #f0f0f0); padding-left: 15px; flex-shrink: 0; }
 .toc-title { margin-bottom: 15px; font-size: 1.1rem; color: var(--text-main, #444); }
@@ -184,7 +188,7 @@ onUpdated(enhanceContent)
 .toc-link:hover { color: #00c58e; }
 
 /* ============================================================
-   5. 代码块美化 (黑暗模式专项优化版)
+   5. 代码块美化
    ============================================================ */
 :deep(pre) { 
   background-color: #f6f8fa !important; 
@@ -207,12 +211,6 @@ onUpdated(enhanceContent)
   color: #d4d4d4 !important; 
 }
 
-:global(html.dark) :deep(.token.keyword),
-:global(html.dark) :deep(.token.tag) { color: #569cd6 !important; }
-:global(html.dark) :deep(.token.string) { color: #ce9178 !important; }
-:global(html.dark) :deep(.token.comment) { color: #6a9955 !important; font-style: italic; }
-:global(html.dark) :deep(.token.function) { color: #dcdcaa !important; }
-
 :deep(.code-tag-wrapper) { 
   position: absolute; top: 0; left: 0; right: 0; height: 32px; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; 
   border-bottom: 1px solid rgba(0,0,0,0.05); background: rgba(0,0,0,0.02); 
@@ -234,10 +232,10 @@ onUpdated(enhanceContent)
 :deep(.copy-code-button:hover) { background: #00c58e; color: white; border-color: #00c58e; }
 
 /* ============================================================
-   6. 其他
+   6. 其他修复 (z-index 提高)
    ============================================================ */
-:deep(.medium-zoom-overlay) { z-index: 99; }
-:deep(.medium-zoom-image--opened) { z-index: 100; }
+:deep(.medium-zoom-overlay) { z-index: 10000 !important; }
+:deep(.medium-zoom-image--opened) { z-index: 10001 !important; }
 
 @media (max-width: 900px) { .article-layout { flex-direction: column; } .toc-sidebar { display: none; } }
 .article-footer { margin-top: 50px; text-align: center; color: var(--footer-text, #eee); padding-bottom: 50px; }
