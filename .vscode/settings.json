@@ -1,0 +1,7 @@
+{
+  "markdown.copyFiles.destination": {
+      "content/posts/**/*.md": "${workspaceFolder}/public/images/${documentBaseName:0:4}/${documentBaseName:5:2}/${documentBaseName:8:2}/"
+  },
+  "markdown.copyFiles.fileNameFormat": "${fileDate}-${fileName}"
+}
+
