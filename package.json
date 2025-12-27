@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nuxt/content": "^3.9.0",
+    "@nuxt/image": "^2.0.0",
     "better-sqlite3": "^12.5.0",
     "medium-zoom": "^1.1.0",
     "nuxt": "^4.2.2"
