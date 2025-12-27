@@ -9,7 +9,7 @@ const { data: page, pending } = await useAsyncData('page-' + route.path, () => {
 })
 
 if (!pending.value && !page.value) {
-  throw createError({ statusCode: 404, statusMessage: '页面不存在', fatal: true })
+  throw createError({ statusCode: 404, statusMessage: '页面不存在' })
 }
 
 // 缓存 zoom 实例，防止重复创建
