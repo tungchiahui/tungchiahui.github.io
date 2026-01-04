@@ -1,0 +1,35 @@
+:root {
+  --bg-color: #ffffff;
+  --text-main: #333333;
+  --nav-border: #eeeeee;
+  --footer-text: #999999;
+}
+
+html.dark {
+  --bg-color: #1a1a1a;
+  --text-main: #dcdcdc;
+  --nav-border: #333333;
+  --footer-text: #777777;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-layout {
+  font-family: sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-body {
+  flex: 1;
+}

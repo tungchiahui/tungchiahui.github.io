@@ -1,0 +1,32 @@
+.main-header {
+  border-bottom: 1px solid var(--nav-border);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-item {
+  margin-right: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+}
+
+.theme-toggle {
+  background: var(--nav-border);
+  border: 1px solid transparent;
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
