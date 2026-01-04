@@ -1,17 +1,30 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // ✅ 关闭 SSR（纯静态核心）
+  ssr: false,
+
+  // ✅ 纯静态输出（nuxi generate）
+  nitro: {
+    preset: 'static'
+  },
+
   modules: ['@nuxt/content', '@nuxt/image'],
+
   image: {
-    // 因为你的图片在 cdn.tungchiahui.cn，建议加上域名许可
+    // CDN 域名（静态完全没问题）
     domains: ['cdn.tungchiahui.cn']
   },
-  // 告诉 Nuxt 使用第 4 版的规范
+
+  // Nuxt 4 规范（可以保留）
   future: {
     compatibilityVersion: 4,
   },
+
   devtools: { enabled: true },
+
   compatibilityDate: '2025-01-01',
-  
+
+  // ✅ 运行时 public 配置（静态可用）
   runtimeConfig: {
     public: {
       icp: '鲁ICP备2025185601号-2',
