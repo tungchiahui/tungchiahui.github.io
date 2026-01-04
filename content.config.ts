@@ -12,11 +12,10 @@ export default defineContentConfig({
       })
     }),
   },
-  // 强制配置高亮主题
-  content: {
+  // 高亮配置要放在 markdown 下
+  markdown: {
     highlight: {
-      // 使用 github-light 主题，这样背景是浅色，代码是深色，绝对看得清
-      theme: 'github-light'
+      theme: 'github-light' // 使用 github-light 主题
     }
   }
 })

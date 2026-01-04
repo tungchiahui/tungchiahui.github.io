@@ -11,8 +11,13 @@
   "dependencies": {
     "@nuxt/content": "^3.9.0",
     "@nuxt/image": "^2.0.0",
+    "aplayer": "^1.10.1",
     "better-sqlite3": "^12.5.0",
     "medium-zoom": "^1.1.0",
+    "meting": "^2.0.2",
     "nuxt": "^4.2.2"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.97.1"
   }
 }
