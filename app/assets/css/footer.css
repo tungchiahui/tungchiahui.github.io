@@ -6,6 +6,31 @@
   padding-bottom: 20px;
 }
 
+
+/* 社交图标容器 */
+footer .footer-social {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;        /* ✅ 自动换行（图标多时换行） */
+  gap: 14px;              /* 图标间距 */
+  margin: 6px 0;         /* 上下间距 */
+  font-size: 1.5em;       /* 图标大小 */
+  max-width: 280px;       /* ✅ 限制宽度，图标多时自动分行，少时保持一行 */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 社交图标悬停效果 */
+footer .footer-social a {
+  color: #666;            /* 默认颜色 */
+  transition: color 0.3s;
+}
+
+footer .footer-social a:hover {
+  color: #1da1f2;         /* 鼠标悬停变蓝，可按需调整 */
+}
+
+/* 备案号 */
 .footer-records {
   margin-top: 8px;
   display: flex;
@@ -31,4 +56,18 @@
 
 .footer-record:hover {
   text-decoration: underline;
+}
+
+/* IPv6和SSL */
+.footer-cert {
+  display: flex;
+  justify-content: center;   /* 水平居中 */
+  align-items: center;        /* 垂直对齐 */
+  gap: 10px;                  /* 两图标间距 */
+  margin-top: 10px;           /* 适当留白 */
+}
+
+.footer-cert img {
+  height: 36px;               /* 稍微统一一下大小 */
+  vertical-align: middle;
 }

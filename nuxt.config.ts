@@ -47,8 +47,27 @@ export default defineNuxtConfig({
   // ✅ 运行时 public 配置（静态可用）
   runtimeConfig: {
     public: {
-      icp: '鲁ICP备2025185601号-2',
-      beian: '鲁公网安备37030302001121号'
+      url: 'www.tungchiahui.cn',
+
+      record:{
+        icp: '鲁ICP备2025185601号-2',
+        beian: '鲁公网安备37030302001121号',
+      },
+
+            // ✅ 社交/联系方式配置
+      social: {
+        email: "mailto:tungchiahui@gmail.com",
+        website: "https://blog.tungchiahui.cn",
+        github: "https://github.com/tungchiahui",
+        qq: "https://qm.qq.com/q/JRhksaNK82?from=qq",
+        telegram: "https://t.me/tungchiahui",
+        bilibili: "https://space.bilibili.com/141482453",
+        coolapk: "http://www.coolapk.com/u/3224578",
+        twitter: "https://twitter.com/tungchiahui",
+        youtube: "https://www.youtube.com/@Chia-huiTung",
+        facebook: "https://www.facebook.com/tungchiahui",
+        instagram: "https://www.instagram.com/tungchiahui"
+      }
     }
   }
 })
