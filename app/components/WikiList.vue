@@ -5,7 +5,7 @@
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="搜索文章标题..."
+        placeholder="搜索 Wiki 标题..."
         style="
           width: 100%;
           padding: 10px;
@@ -17,37 +17,40 @@
     </div>
 
     <!-- 加载中 -->
-    <div v-if="pending">正在扫描文件...</div>
+    <div v-if="pending">正在扫描 Wiki...</div>
 
     <!-- 列表 -->
-    <ul v-else-if="filteredPosts.length">
+    <ul v-else-if="filteredWikis.length">
       <li
-        v-for="post in filteredPosts"
-        :key="post.path"
-        style="margin-bottom: 20px; list-style: none;"
+        v-for="wiki in filteredWikis"
+        :key="wiki.path"
+        style="margin-bottom: 16px; list-style: none;"
       >
         <NuxtLink
-          :to="post.path"
+          :to="wiki.path"
           style="
-            font-size: 1.2rem;
-            color: #42b883;
-            text-decoration: none;
+            font-size: 1.1rem;
             font-weight: bold;
+            text-decoration: none;
           "
         >
-          {{ post.title || '无标题' }}
+          {{ wiki.title || '无标题' }}
         </NuxtLink>
 
         <div style="font-size: 0.8rem; color: #888;">
-          {{ post.date || '未标注日期' }}
+          {{ wiki.date || wiki.updatedAt || '未标注日期' }}
+        </div>
+
+        <div v-if="wiki.category" style="font-size: 0.8rem; color: #888;">
+          {{ wiki.category }}
         </div>
       </li>
     </ul>
 
     <!-- 空状态 -->
     <div v-else>
-      <p v-if="searchQuery">没有找到包含 "{{ searchQuery }}" 的文章</p>
-      <p v-else>仓库中似乎还没有文章...</p>
+      <p v-if="searchQuery">没有找到相关 Wiki</p>
+      <p v-else>Wiki 还没有内容</p>
     </div>
   </section>
 </template>
@@ -62,23 +65,23 @@ const props = defineProps({
   }
 })
 
-const { data: posts, pending } = await useAsyncData('posts-list', () => {
+const { data: wikis, pending } = await useAsyncData('wiki-list', () => {
   return queryCollection('content')
-    .where('stem', 'LIKE', 'posts/%')  // 保留原来逻辑
+    .where('stem', 'LIKE', 'wiki/%') // 保留原来逻辑
     .all()
 })
 
 const searchQuery = ref('')
 
-const filteredPosts = computed(() => {
-  if (!posts.value) return []
+const filteredWikis = computed(() => {
+  if (!wikis.value) return []
 
-  let list = [...posts.value]
+  let list = [...wikis.value]
 
   // 搜索标题
   if (searchQuery.value.trim()) {
     const q = searchQuery.value.toLowerCase()
-    list = list.filter(post => post.title?.toLowerCase().includes(q))
+    list = list.filter(wiki => wiki.title?.toLowerCase().includes(q))
   }
 
   // 倒序（date 有的排前面，date 没有的靠后）

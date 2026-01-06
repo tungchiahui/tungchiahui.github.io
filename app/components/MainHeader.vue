@@ -36,6 +36,7 @@ onMounted(() => {
       <div class="nav-links">
         <NuxtLink to="/" class="nav-item">首页</NuxtLink>
         <NuxtLink to="/blog" class="nav-item">博客</NuxtLink>
+        <NuxtLink to="/wiki" class="nav-item">Wiki</NuxtLink>
         <NuxtLink to="/stats" class="nav-item">数据</NuxtLink>
         <NuxtLink to="/about" class="nav-item">关于</NuxtLink>
       </div>

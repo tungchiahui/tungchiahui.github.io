@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content-page">
     <h1>📚 博客列表</h1>
     <PostList />
   </div>
