@@ -1,4 +1,8 @@
 <!-- app/components/Assets.vue -->
+<template>
+  <div v-if="false"></div>
+</template>
+
 <script setup lang="ts">
 // 这个组件不需要任何逻辑
 </script>
