@@ -46,6 +46,8 @@ useHead({
 <style src="~/assets/css/index.css"></style>
 <style src="~/assets/css/blogwiki.css"></style>
 <style src="~/assets/css/musicplayer.css"></style>
+<style src="~/assets/css/friend.css"></style>
+<style src="~/assets/css/more.css" />
 
 <style lang="scss">
 @use "~/assets/scss/index.scss" as *;

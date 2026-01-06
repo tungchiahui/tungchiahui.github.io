@@ -57,7 +57,7 @@ export default defineNuxtConfig({
             // ✅ 社交/联系方式配置
       social: {
         email: "mailto:tungchiahui@gmail.com",
-        website: "https://blog.tungchiahui.cn",
+        website: "https://www.tungchiahui.cn",
         github: "https://github.com/tungchiahui",
         qq: "https://qm.qq.com/q/JRhksaNK82?from=qq",
         telegram: "https://t.me/tungchiahui",
