@@ -10,7 +10,9 @@
       type="playlist"
       id="9619599108"
       autoplay="false"
+      api="https://music.3e0.cn/?server=:server&type=:type&id=:id&r=:r"
     />
+    <!-- api="https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r" -->
   </div>
 
   <!-- 🎧 收起 / 展开按钮 -->
