@@ -6,12 +6,14 @@
     :class="{ hidden: hidden }"
   >
     <meting-js
+      v-if="ready"
       server="tencent"
       type="playlist"
       id="9619599108"
       autoplay="false"
-      api="https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r"
+      api="https://music.3e0.cn/?server=:server&type=:type&id=:id&r=:r"
     />
+    <!-- api="https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r" -->
   </div>
 
   <!-- 🎧 收起 / 展开按钮 -->
@@ -29,6 +31,7 @@
 import { ref, onMounted } from 'vue'
 
 const hidden = ref(false)
+const ready = ref(false)   // 延迟挂载标志
 const player = ref<HTMLElement | null>(null)
 
 onMounted(() => {
@@ -38,6 +41,11 @@ onMounted(() => {
       hidden.value = true
     }
   } catch (e) {}
+
+  // 延迟挂载，确保 MetingJS 脚本已经加载完
+  setTimeout(() => {
+    ready.value = true
+  }, 300) // 延迟 300ms，可根据需要调整
 })
 
 function toggle() {
@@ -50,4 +58,3 @@ function toggle() {
   } catch (e) {}
 }
 </script>
-
