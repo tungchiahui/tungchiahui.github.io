@@ -29,11 +29,11 @@ useHead({
     },
     {
       src: 'https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js',
-      // defer: true
+      defer: true
     },
     {
-      src: 'https://cdn.tungchiahui.cn/libs/meting/1.2.0/Meting.min.js',
-      // defer: true
+      src: 'https://cdn.tungchiahui.cn/libs/meting/2.0.2/Meting.min.js',
+      defer: true
     }
   ],
   link: [

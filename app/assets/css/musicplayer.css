@@ -1,0 +1,49 @@
+/* 播放器容器 */
+#music-player {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+  width: 330px;
+  box-sizing: content-box;
+  transition: transform .32s ease, opacity .32s ease;
+}
+
+/* APlayer 自适应高度 */
+:deep(.aplayer) {
+  height: auto !important;
+}
+
+/* 隐藏状态 */
+#music-player.hidden {
+  transform: translateY(460px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 🎧 按钮 */
+#toggle-player-fixed {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10000;
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  box-shadow: 0 3s 8px rgba(0,0,0,0.25);
+  font-size: 14px;
+  transition: transform .3s ease, background .2s ease;
+}
+
+/* hover */
+#toggle-player-fixed:hover {
+  background: #e04345;
+}
+
+/* 展开状态：按钮上移 */
+#toggle-player-fixed.open {
+  transform: translateY(-48px);
+}

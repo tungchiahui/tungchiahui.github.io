@@ -9,6 +9,7 @@
 
 <style src="~/assets/css/index.css"></style>
 <style src="~/assets/css/blogwiki.css"></style>
+<style src="~/assets/css/musicplayer.css"></style>
 
 
 <style lang="scss">
