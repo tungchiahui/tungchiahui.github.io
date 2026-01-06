@@ -1,0 +1,107 @@
+/* -----------------------------
+   首页头部
+------------------------------*/
+.home-header {
+  text-align: center;       /* 文本居中 */
+  margin-bottom: 2rem;      /* 下方间距 */
+}
+
+.home-header .subtitle {
+  color: #666;              /* 副标题颜色 */
+  font-size: 1.1rem;        /* 字号 */
+  margin-top: 0.5rem;       /* 与标题间距 */
+}
+
+/* 按钮容器 */
+.home-header .btn-group {
+  margin-top: 1rem;         /* 顶部间距 */
+  display: flex;            /* 使用 flex 布局 */
+  justify-content: center;  /* 水平居中 */
+  gap: 1rem;                /* 按钮间距 */
+}
+
+/* 按钮样式 */
+.btn-primary {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;           /* 内边距：上下0.6rem，左右1.2rem */
+  background-color: #42b883;        /* 绿色背景 */
+  color: white;                     /* 字体白色 */
+  border-radius: 6px;               /* 圆角 */
+  text-decoration: none;            /* 去掉下划线 */
+  font-weight: bold;                 /* 字体加粗 */
+  transition: background 0.3s;      /* 悬停过渡效果 */
+}
+
+/* 悬停效果 */
+.btn-primary:hover {
+  background-color: #369870;        /* 深绿色 */
+}
+
+/* -----------------------------
+   卡片区域
+------------------------------*/
+.cards {
+  display: flex;             /* flex 布局 */
+  flex-wrap: wrap;           /* 多行换行 */
+  gap: 1rem;                 /* 卡片间距 */
+  margin-top: 1rem;          /* 顶部间距 */
+}
+
+/* 单个卡片样式 */
+.card {
+  flex: 1 1 30%;             /* 弹性占位，最小宽度 30% */
+  min-width: 220px;          /* 最小宽度保证移动端不太窄 */
+  background: #f9f9f9;       /* 浅灰背景 */
+  padding: 1rem;             /* 内边距 */
+  border-radius: 8px;        /* 圆角 */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* 阴影 */
+}
+
+.card h3 {
+  margin-bottom: 0.5rem;     /* 标题和内容间距 */
+}
+
+/* -----------------------------
+   内容页面区块（博客/Wiki）
+------------------------------*/
+.content-page {
+  margin-top: 3rem;          /* 与上一块内容间距 */
+}
+
+
+/* -----------------------------
+   内容页区块标题 + 按钮布局
+------------------------------*/
+.content-page .section-header {
+  display: flex;                   
+  justify-content: flex-start;     
+  align-items: center;             
+  margin-bottom: 1rem;             
+  gap: 1rem;                       /* 标题与按钮间距 */
+}
+
+/* 看更多按钮样式（低调版，和首页蓝色按钮一致） */
+.content-page .section-header .btn-primary {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;           /* 内边距 */
+  background-color: #42b883;        /* 绿色背景 */
+  color: white;                     
+  font-weight: bold;                
+  font-size: 0.95rem;
+  border-radius: 6px;               
+  text-decoration: none;            
+  transition: background 0.3s;      /* 仅背景渐变过渡 */
+}
+
+/* 悬停效果：只改变背景色，低调 */
+.content-page .section-header .btn-primary:hover {
+  background-color: #369870;        /* 深一点的绿色 */
+  /* 去掉 scale 和 translateY，保持静止 */
+}
+
+/* 箭头图标间距 */
+.content-page .section-header .btn-primary .icon {
+  margin-left: 0.4rem;
+}
+
+
