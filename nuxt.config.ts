@@ -39,8 +39,8 @@ export default defineNuxtConfig({
       },
       langs: [
         'ts', 'js', 'vue', 'json', 'bash', 'md', 'html', 'css', 'scss',
-        'python', 'py', 'java', 'cpp', 'c', 'csharp', 'go', 'rust', 
-        'php', 'sql', 'yaml', 'toml', 'docker', 'dockerfile', 'kotlin', 
+        'python', 'py', 'java','cmake', 'cpp', 'c', 'csharp', 'go', 'rust', 
+        'php', 'sql', 'yaml','yml','xml', 'toml', 'docker', 'dockerfile', 'kotlin', 
         'swift', 'ruby', 'dart', 'lua', 'perl', 'r', 'zig'
       ]
     }
