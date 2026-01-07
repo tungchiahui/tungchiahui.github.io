@@ -1,5 +1,4 @@
 <template>
-  <!-- 🎵 音乐播放器 -->
   <div
     ref="player"
     id="music-player"
@@ -13,10 +12,8 @@
       autoplay="false"
       api="https://music.3e0.cn/?server=:server&type=:type&id=:id&r=:r"
     />
-    <!-- api="https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&r=:r" -->
   </div>
 
-  <!-- 🎧 收起 / 展开按钮 -->
   <button
     id="toggle-player-fixed"
     :class="{ open: !hidden }"
@@ -30,22 +27,26 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+// 默认设为 false，确保初始状态是展开的
 const hidden = ref(false)
-const ready = ref(false)   // 延迟挂载标志
+const ready = ref(false)
 const player = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   try {
     const saved = localStorage.getItem('music_player_hidden')
+    // 只有当本地存储明确记录为 'true' 时才隐藏
+    // 如果没有记录（第一次打开），则保持 hidden.value = false
     if (saved === 'true') {
       hidden.value = true
+    } else if (saved === 'false') {
+      hidden.value = false
     }
   } catch (e) {}
 
-  // 延迟挂载，确保 MetingJS 脚本已经加载完
   setTimeout(() => {
     ready.value = true
-  }, 300) // 延迟 300ms，可根据需要调整
+  }, 300)
 })
 
 function toggle() {
