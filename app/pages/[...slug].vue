@@ -77,6 +77,19 @@ watch(() => page.value, () => {
 const closeToc = () => {
   showToc.value = false
 }
+
+//3. 防止开启目录时背景还能滚动（即滚动穿透）。
+// 监控 showToc 状态，开启时锁死网页滚动，关闭时恢复
+watch(showToc, (newVal) => {
+  // 使用 import.meta.client 代替 process.client
+  if (import.meta.client) {
+    if (newVal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  }
+})
 </script>
 
 <template>
@@ -96,8 +109,13 @@ const closeToc = () => {
     <div v-if="pending" class="status">加载中...</div>
 
     <div v-else-if="page" class="article-layout">
+      
       <Transition name="fade">
-        <div v-if="showToc" class="toc-overlay" @click="showToc = false"></div>
+        <div 
+          v-if="showToc" 
+          class="toc-overlay" 
+          @click="showToc = false"
+        ></div>
       </Transition>
 
       <article class="main-content">
@@ -483,4 +501,42 @@ const closeToc = () => {
     cursor: pointer;
   }
 }
+
+/* ============================================================
+   7. 遮罩层与抽屉逻辑增强
+   ============================================================ */
+
+/* 全屏遮罩层 */
+.toc-overlay { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100vw; 
+  height: 100vh; 
+  background: rgba(0, 0, 0, 0.4); 
+  backdrop-filter: blur(2px); /* 增加磨砂感，提示用户正文不可点 */
+  z-index: 2000; /* 必须小于 .toc-sidebar 的 2001 */
+  cursor: pointer;
+}
+
+/* 动画效果 */
+.fade-enter-active, .fade-leave-active { 
+  transition: opacity 0.3s ease; 
+}
+.fade-enter-from, .fade-leave-to { 
+  opacity: 0; 
+}
+
+@media (max-width: 900px) {
+  /* 确保抽屉始终在遮罩层之上 */
+  .toc-sidebar {
+    z-index: 2001 !important;
+  }
+  
+  /* 当抽屉打开时，禁止 body 滚动（可选优化） */
+  :global(body.overflow-hidden) {
+    overflow: hidden;
+  }
+}
+
 </style>
