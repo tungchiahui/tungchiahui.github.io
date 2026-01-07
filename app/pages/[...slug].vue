@@ -84,14 +84,15 @@ const closeToc = () => {
   <div class="blog-wrapper">
     <nav class="top-nav">
       <NuxtLink to="/" class="back-link">← 返回首页</NuxtLink>
-      <button 
-        v-if="page?.body?.toc?.links?.length" 
-        class="mobile-toc-trigger" 
-        @click="showToc = true"
-      >
-        <span class="icon">目</span> 目录
-      </button>
     </nav>
+
+    <button 
+      v-if="page?.body?.toc?.links?.length" 
+      class="mobile-toc-trigger" 
+      @click="showToc = true"
+    >
+      <span class="icon">目</span> 目录
+    </button>
 
     <div v-if="pending" class="status">加载中...</div>
 
@@ -146,22 +147,26 @@ const closeToc = () => {
 .top-nav { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
 .back-link { color: #00c58e; text-decoration: none; font-weight: bold; }
 
-/* 移动端顶部目录按钮 */
+/* 移动端悬浮目录按钮 - 改进为固定位置 */
 .mobile-toc-trigger {
   display: none;
-  background: #f0fdf4;
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  z-index: 100;
+  background: rgba(240, 253, 244, 0.8);
+  backdrop-filter: blur(8px);
   color: #00c58e;
   border: 1px solid #dcfce7;
-  padding: 5px 12px;
-  border-radius: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  align-items: center;
-  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 197, 142, 0.15);
 }
 :global(html.dark) .mobile-toc-trigger {
-  background: #064e3b;
+  background: rgba(6, 78, 59, 0.8);
   color: #34d399;
   border-color: #065f46;
 }
@@ -190,7 +195,7 @@ const closeToc = () => {
 /* ============================================================
    4. 目录样式 & 美化抽屉
    ============================================================ */
-.toc-sidebar { width: 220px; position: sticky; top: 20px; border-left: 2px solid var(--nav-border, #f0f0f0); padding-left: 15px; flex-shrink: 0; height: fit-content; max-height: 90vh; overflow-y: auto; }
+.toc-sidebar { width: 220px; position: sticky; top: 20px; border-left: 2px solid var(--nav-border, #f0f0f0); padding-left: 15px; flex-shrink: 0; height: fit-content; max-height: 90vh; overflow-y: auto; transition: transform 0.3s ease; }
 .toc-header-mobile { display: none; margin-bottom: 20px; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 .toc-title { margin: 0; font-size: 1.1rem; color: var(--text-main, #444); }
 .toc-list-container { counter-reset: t1; }
@@ -206,11 +211,9 @@ const closeToc = () => {
 :deep(pre) { background-color: #f6f8fa !important; border: 1px solid #e1e4e8; padding: 40px 16px 16px 16px; border-radius: 8px; margin: 24px 0; position: relative; overflow-x: auto; }
 :deep(pre code) { font-family: 'Fira Code', monospace; font-size: 0.95rem; }
 :deep(.code-tag-wrapper) { position: absolute; top: 0; left: 0; right: 0; height: 32px; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-:deep(.copy-code-button) { opacity: 0; transition: all 0.2s; cursor: pointer; }
-:deep(pre:hover .copy-code-button) { opacity: 1; }
 
 /* ============================================================
-   6. 移动端美化逻辑
+   6. 移动端优化逻辑
    ============================================================ */
 .toc-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -218,13 +221,13 @@ const closeToc = () => {
 }
 
 @media (max-width: 900px) {
-  .mobile-toc-trigger { display: flex; }
+  .mobile-toc-trigger { display: block; }
   .article-layout { flex-direction: column; }
 
   .toc-sidebar {
     position: fixed;
     top: 0;
-    right: -300px; /* 初始隐藏 */
+    right: 0;
     width: 280px;
     height: 100vh;
     background: var(--bg-main, #fff);
@@ -233,14 +236,16 @@ const closeToc = () => {
     padding: 25px;
     border-left: none;
     box-shadow: -10px 0 25px rgba(0,0,0,0.1);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     max-height: 100vh;
+    /* 核心修改：使用 translate 完全移出屏幕外部 */
+    transform: translateX(105%); 
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   :global(html.dark) .toc-sidebar { background: #1a1a1a; box-shadow: -10px 0 25px rgba(0,0,0,0.3); }
 
   .toc-sidebar.is-mobile-open {
-    transform: translateX(-300px); /* 滑出 */
+    transform: translateX(0); /* 滑入 */
   }
 
   .toc-header-mobile { display: flex; }
@@ -251,7 +256,6 @@ const closeToc = () => {
   :global(html.dark) .close-btn { background: #333; }
 }
 
-/* 简单的过渡动画 */
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 
