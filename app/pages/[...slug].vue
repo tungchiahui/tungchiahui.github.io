@@ -15,7 +15,7 @@ if (!pending.value && !page.value) {
 // 控制移动端目录显示
 const showToc = ref(false)
 
-// 缓存 zoom 实例，防止重复创建
+// 缓存 zoom 实例
 let zoom: any = null
 
 const enhanceContent = async () => {
@@ -140,7 +140,7 @@ const closeToc = () => {
 
 <style scoped>
 /* ============================================================
-   1. 基础布局适配 (强制禁止横向滚动)
+   1. 基础布局适配
    ============================================================ */
 .blog-wrapper { 
   max-width: 1100px; 
@@ -148,12 +148,10 @@ const closeToc = () => {
   padding: 30px 20px; 
   font-family: sans-serif; 
   color: var(--text-main, #333); 
-  overflow-x: hidden; /* 修复晃动核心 */
 }
 .top-nav { margin-bottom: 30px; }
 .back-link { color: #00c58e; text-decoration: none; font-weight: bold; }
 
-/* 移动端悬浮按钮风格保留 */
 .mobile-toc-trigger {
   display: none;
   position: fixed;
@@ -173,14 +171,21 @@ const closeToc = () => {
 }
 :global(html.dark) .mobile-toc-trigger { background: rgba(6, 78, 59, 0.8); color: #34d399; border-color: #065f46; }
 
-.article-layout { display: flex; gap: 40px; width: 100%; position: relative; }
+/* 核心修复：确保父级不会限制吸顶 */
+.article-layout { 
+  display: flex; 
+  gap: 40px; 
+  width: 100%; 
+  position: relative; 
+  align-items: flex-start; /* 关键：防止侧边栏被拉伸，从而产生滑动空间 */
+}
 .main-content { flex: 1; min-width: 0; }
 
 .page-main-title { font-size: 2.2rem; margin-bottom: 10px; color: var(--text-main, #222); }
 .date { color: var(--footer-text, #999); margin-bottom: 30px; font-size: 0.9rem; }
 
 /* ============================================================
-   2. 正文样式 (完全还原)
+   2. 正文样式 (保持不变)
    ============================================================ */
 .content-body { line-height: 1.8; font-size: 1.1rem; counter-reset: h2counter; word-wrap: break-word; overflow-wrap: break-word; }
 :deep(.content-body img) { 
@@ -191,7 +196,84 @@ const closeToc = () => {
 :deep(.content-body a) { color: #00c58e; word-break: break-all; }
 
 /* ============================================================
-   3. 自动编号 (完全还原)
+   2.1 表格美化 (Excel 风格：条理分明)
+   ============================================================ */
+/* 容器支持滚动，防止表格撑破布局 */
+.content-body {
+  overflow-x: auto;
+}
+
+:deep(.content-body table) {
+  width: 100%;
+  border-collapse: collapse; /* 关键：合并边框形成单线 */
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid #d1d5db; /* 外边框 */
+  background-color: #fff;
+}
+
+:deep(.content-body th) {
+  background-color: #f3f4f6; /* Excel 灰色表头感 */
+  color: #374151;
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db; /* 单元格边框 */
+  border-bottom: 2px solid #00c58e; /* 底部主题色加强 */
+}
+
+:deep(.content-body td) {
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb; /* 细边框 */
+  color: #4b5563;
+}
+
+/* 斑马纹：模拟 Excel 隔行填色 */
+:deep(.content-body tr:nth-child(even)) {
+  background-color: #f9fafb;
+}
+
+/* 悬浮高亮：Excel 选中感 */
+:deep(.content-body tr:hover td) {
+  background-color: #ecfdf5; 
+  color: #059669;
+}
+
+/* 深色模式适配 (针对 Excel 框线风格优化) */
+:global(html.dark) :deep(.content-body table) {
+  background-color: #1a1a1a;
+  border-color: #374151;
+}
+:global(html.dark) :deep(.content-body th) {
+  background-color: #2d2d2d;
+  color: #e5e7eb;
+  border-color: #4b5563;
+  border-bottom-color: #34d399;
+}
+:global(html.dark) :deep(.content-body td) {
+  border-color: #374151;
+  color: #d1d5db;
+}
+:global(html.dark) :deep(.content-body tr:nth-child(even)) {
+  background-color: #242424;
+}
+:global(html.dark) :deep(.content-body tr:hover td) {
+  background-color: #1e2923;
+  color: #34d399;
+}
+
+/* 移动端特殊处理：保持 Excel 完整形态但允许横滑 */
+@media (max-width: 768px) {
+  :deep(.content-body table) {
+    display: table; /* 恢复 table 模式以保持框线完整 */
+    min-width: 500px; /* 强制产生横滑，防止挤压变形 */
+  }
+}
+
+
+/* ============================================================
+   3. 自动编号 (保持不变)
    ============================================================ */
 :deep(.content-body h2) { counter-reset: h3counter; margin-top: 1.8rem; color: var(--text-main, #222); }
 :deep(.content-body h2)::before { counter-increment: h2counter; content: counter(h2counter) ". "; color: #00c58e; margin-right: 0.5rem; font-weight: bold; }
@@ -201,9 +283,26 @@ const closeToc = () => {
 :deep(.content-body h4)::before { counter-increment: h4counter; content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) " "; color: #00c58e; font-size: 0.8em; margin-right: 0.5rem; }
 
 /* ============================================================
-   4. 目录 & 抽屉逻辑 (彻底移除侧边残留)
+   4. 目录逻辑 (同步平滑版)
    ============================================================ */
-.toc-sidebar { width: 220px; position: sticky; top: 20px; border-left: 2px solid var(--nav-border, #f0f0f0); padding-left: 15px; flex-shrink: 0; }
+.toc-sidebar { 
+  width: 220px; 
+  flex-shrink: 0; 
+  padding-left: 15px; 
+  border-left: 2px solid var(--nav-border, #f0f0f0); 
+  
+  /* 核心：原生 CSS 吸顶，与滑动完全同步 */
+  position: sticky; 
+  top: 20px; 
+  align-self: flex-start; /* 必须设置，否则侧边栏高度会撑满父级导致吸顶失效 */
+  
+  /* 优化：如果目录超长可内部滚动 */
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.toc-sidebar::-webkit-scrollbar { display: none; }
+
 .toc-header-mobile { display: none; }
 .toc-title { margin-bottom: 15px; font-size: 1.1rem; color: var(--text-main, #444); }
 .toc-list-container { counter-reset: t1; }
@@ -214,7 +313,7 @@ const closeToc = () => {
 .toc-link:hover { color: #00c58e; }
 
 /* ============================================================
-   5. 代码块美化 (完全还原你的原始属性)
+   5. 代码块美化 (保持不变)
    ============================================================ */
 :deep(pre) { 
   background-color: #f6f8fa !important; 
@@ -222,11 +321,8 @@ const closeToc = () => {
   padding: 40px 16px 16px 16px; border-radius: 8px; margin: 24px 0; position: relative; overflow-x: auto; 
 }
 :global(html.dark) :deep(pre) { background-color: #1e1e1e !important; border-color: #333; }
-:deep(pre code) { 
-  color: #24292e !important; 
-  font-family: 'Fira Code', monospace; font-size: 0.95rem; line-height: 1.6; 
-}
-:global(html.dark) :deep(pre code), :global(html.dark) :deep(pre span) { color: #d4d4d4 !important; }
+:deep(pre code) { font-family: 'Fira Code', monospace; font-size: 0.95rem; line-height: 1.6; color: inherit !important; }
+:deep(pre code span) { color: inherit !important; }
 :deep(.code-tag-wrapper) { 
   position: absolute; top: 0; left: 0; right: 0; height: 32px; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; 
   border-bottom: 1px solid rgba(0,0,0,0.05); background: rgba(0,0,0,0.02); 
@@ -241,20 +337,18 @@ const closeToc = () => {
 :deep(.copy-code-button:hover) { background: #00c58e; color: white; border-color: #00c58e; }
 
 /* ============================================================
-   6. 移动端优化 (修复晃动 & 还原代码块)
+   6. 移动端优化 (保持不变)
    ============================================================ */
-.toc-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(2px); z-index: 2000; }
-
 @media (max-width: 900px) {
   .mobile-toc-trigger { display: block; }
-  .article-layout { flex-direction: column; width: 100%; overflow: hidden; }
-
+  .article-layout { flex-direction: column; width: 100%; }
   .toc-sidebar {
     position: fixed; top: 0; right: 0; width: 280px; height: 100vh;
     background: var(--bg-main, #fff); z-index: 2001; margin: 0; padding: 25px; border-left: none;
     box-shadow: -10px 0 25px rgba(0,0,0,0.1);
-    transform: translateX(200%); /* 彻底隐藏，防止左右滑动 */
+    transform: translateX(200%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: none;
   }
   :global(html.dark) .toc-sidebar { background: #1a1a1a; }
   .toc-sidebar.is-mobile-open { transform: translateX(0); }
@@ -262,9 +356,9 @@ const closeToc = () => {
   .close-btn { background: #f5f5f5; border: none; font-size: 24px; width: 32px; height: 32px; border-radius: 50%; color: #999; }
 }
 
+.toc-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(2px); z-index: 2000; }
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
-
 :deep(.medium-zoom-overlay) { z-index: 10000 !important; }
 :deep(.medium-zoom-image--opened) { z-index: 10001 !important; }
 .article-footer { margin-top: 50px; text-align: center; color: var(--footer-text, #eee); padding-bottom: 50px; }
