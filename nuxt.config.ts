@@ -30,6 +30,22 @@ export default defineNuxtConfig({
     }
   },
 
+  // ✅ 核心修改：在 v3 中，高亮配置必须写在 mdc 节点下，而不是 content 节点下
+  mdc: {
+    highlight: {
+      theme: {
+        default: 'github-light',
+        dark: 'github-dark'
+      },
+      langs: [
+        'ts', 'js', 'vue', 'json', 'bash', 'md', 'html', 'css', 'scss',
+        'python', 'py', 'java', 'cpp', 'c', 'csharp', 'go', 'rust', 
+        'php', 'sql', 'yaml', 'toml', 'docker', 'dockerfile', 'kotlin', 
+        'swift', 'ruby', 'dart', 'lua', 'perl', 'r', 'zig'
+      ]
+    }
+  },
+
 
   // ✅ 运行时 public 配置（静态可用）
   runtimeConfig: {
