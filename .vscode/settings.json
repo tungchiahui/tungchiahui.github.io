@@ -2,6 +2,7 @@
   "markdown.editor.filePaste.enabled": "always",
   "markdown.copyFiles.destination": {
     "**/content/posts/*.md": "/public/images/${documentBaseName}/${unixTime}.${fileExtName}",
+    "**/content/wiki/*.md": "/public/images/${documentBaseName}/${unixTime}.${fileExtName}",
     "**/content/pages/*.md": "/public/images/pages/${unixTime}.${fileExtName}"
   },
   "markdown.copyFiles.overwriteBehavior": "nameIncrementally"
