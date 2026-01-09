@@ -59,14 +59,14 @@ const config = useRuntimeConfig()
       </a>
 
       <a
-        v-if="config.public.social?.coolapk"
-        :href="config.public.social.coolapk"
+        v-if="config.public.social?.douyin"
+        :href="config.public.social.douyin"
         target="_blank"
         rel="noopener"
-        title="CoolAPK"
+        title="抖音"
       >
-        <i class="fab fa-android"></i>
-      </a>
+      <i class="fab fa-tiktok"></i>
+    </a>
 
       <a
         v-if="config.public.social?.bilibili"
@@ -117,6 +117,27 @@ const config = useRuntimeConfig()
       >
         <i class="fab fa-instagram"></i>
       </a>
+
+      <a
+      v-if="config.public.social?.tiktok"
+      :href="config.public.social.tiktok"
+      target="_blank"
+      rel="noopener"
+      title="TikTok"
+    >
+      <i class="fab fa-tiktok"></i>
+    </a>
+
+      <a
+        v-if="config.public.social?.coolapk"
+        :href="config.public.social.coolapk"
+        target="_blank"
+        rel="noopener"
+        title="CoolAPK"
+      >
+        <i class="fab fa-android"></i>
+      </a>
+
     </div>
 
     <!-- IPv6 / SSL 认证徽章 -->

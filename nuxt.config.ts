@@ -57,19 +57,21 @@ export default defineNuxtConfig({
         beian: '鲁公网安备37030302001121号',
       },
 
-            // ✅ 社交/联系方式配置
+      // ✅ 社交/联系方式配置(没有的就注释掉那一行)
       social: {
         email: "mailto:tungchiahui@gmail.com",
         website: "https://www.tungchiahui.cn",
         github: "https://github.com/tungchiahui",
         qq: "https://qm.qq.com/q/JRhksaNK82?from=qq",
         telegram: "https://t.me/tungchiahui",
+        douyin: "https://www.douyin.com/user/MS4wLjABAAAA3V6NoUIGPi3_EjzGc4Uxb-JZHOwWtuclAlrKF6SJTM7SET0PseLNV1bcDYwmcu9T",
         bilibili: "https://space.bilibili.com/141482453",
         coolapk: "http://www.coolapk.com/u/3224578",
         twitter: "https://twitter.com/tungchiahui",
         youtube: "https://www.youtube.com/@Chia-huiTung",
         facebook: "https://www.facebook.com/tungchiahui",
-        instagram: "https://www.instagram.com/tungchiahui"
+        instagram: "https://www.instagram.com/tungchiahui",
+        tiktok: "https://www.tiktok.com/@tungchiahui"
       }
     }
   }
