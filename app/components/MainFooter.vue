@@ -4,7 +4,7 @@ const config = useRuntimeConfig()
 
 <template>
   <footer class="main-footer">
-    <div>© 2025 东澈的折腾天地 - Powered by Nuxt</div>
+    <div>© 2026 东澈的折腾天地 - Powered by Nuxt</div>
 
     <!-- 社交图标 -->
     <div class="footer-social">
