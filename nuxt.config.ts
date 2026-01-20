@@ -1,11 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // ✅ 关闭 SSR（纯静态核心）
-  ssr: false,
+  // ssr: false,
 
   // ✅ 纯静态输出（nuxi generate）
   nitro: {
-    preset: 'static'
+    // preset: 'static'
+    // preset: 'node-server'
   },
 
   modules: ['@nuxt/content', '@nuxt/image'],
