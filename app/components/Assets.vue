@@ -9,7 +9,7 @@ useHead({
     // Umami
     {
       src: 'https://umami.tungchiahui.cn/script.js',
-      'data-website-id': '88a069a8-ac00-4d45-8d5b-a4ed480e8cc3',
+      'data-website-id': '993e907c-7120-4da5-9eaf-85a914ffbc9c',
       defer: true
     },
     // APlayer
