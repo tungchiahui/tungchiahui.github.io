@@ -53,6 +53,11 @@
           <div class="card-title">🤝 友情链接</div>
           <div class="card-sub">汇聚优质网站、社区和团队</div>
         </NuxtLink>
+        
+        <NuxtLink class="more-card" to="/tech-stack">
+          <div class="card-title">🛠️ 技术栈</div>
+          <div class="card-sub">技术栈介绍</div>
+        </NuxtLink>
 
       </div>
     </div>

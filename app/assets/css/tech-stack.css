@@ -1,0 +1,352 @@
+/* ============================================================
+   技术栈页面样式
+   ============================================================ */
+
+.tech-stack-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  font-family: sans-serif;
+  color: var(--text-main, #333);
+}
+
+/* ============================================================
+   顶部导航
+   ============================================================ */
+.top-nav {
+  margin-bottom: 30px;
+}
+
+.back-link {
+  color: #00c58e;
+  text-decoration: none;
+  font-weight: bold;
+  transition: opacity 0.2s;
+}
+
+.back-link:hover {
+  opacity: 0.8;
+}
+
+/* ============================================================
+   页面标题
+   ============================================================ */
+.page-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: var(--text-main, #222);
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--footer-text, #999);
+  margin: 0;
+}
+
+/* ============================================================
+   熟练度图例
+   ============================================================ */
+.level-legend {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: rgba(0, 197, 142, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 197, 142, 0.1);
+}
+
+html.dark .level-legend {
+  background: rgba(0, 197, 142, 0.1);
+  border-color: rgba(0, 197, 142, 0.2);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-label {
+  color: var(--text-main, #555);
+  font-weight: 500;
+}
+
+/* ============================================================
+   技术分类展示
+   ============================================================ */
+.tech-categories {
+  display: grid;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.category-section {
+  background: var(--bg-color, #fff);
+  border: 1px solid var(--nav-border, #eee);
+  border-radius: 12px;
+  padding: 30px;
+  transition: all 0.3s ease;
+}
+
+.category-section:hover {
+  box-shadow: 0 8px 24px rgba(0, 197, 142, 0.08);
+  border-color: rgba(0, 197, 142, 0.3);
+}
+
+html.dark .category-section {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: #333;
+}
+
+html.dark .category-section:hover {
+  box-shadow: 0 8px 24px rgba(0, 197, 142, 0.15);
+  border-color: rgba(0, 197, 142, 0.4);
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.category-icon {
+  font-size: 2rem;
+}
+
+.category-title {
+  font-size: 1.6rem;
+  color: var(--text-main, #222);
+  margin: 0;
+  font-weight: 600;
+}
+
+.category-desc {
+  color: var(--footer-text, #999);
+  margin: 0 0 25px 0;
+  font-size: 0.95rem;
+}
+
+/* ============================================================
+   技能卡片网格
+   ============================================================ */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.skill-card {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--nav-border, #f0f0f0);
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+html.dark .skill-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: #2a2a2a;
+}
+
+.skill-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-color: #00c58e;
+}
+
+html.dark .skill-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 197, 142, 0.25);
+}
+
+.skill-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.skill-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.skill-card:hover .skill-logo {
+  transform: scale(1.1);
+}
+
+.skill-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.skill-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main, #333);
+  text-align: center;
+}
+
+.skill-badge {
+  font-size: 0.7rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   学习路线
+   ============================================================ */
+.learning-roadmap {
+  background: linear-gradient(135deg, rgba(0, 197, 142, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(0, 197, 142, 0.2);
+  border-radius: 12px;
+  padding: 35px;
+  margin-top: 40px;
+}
+
+html.dark .learning-roadmap {
+  background: linear-gradient(135deg, rgba(0, 197, 142, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+  border-color: rgba(0, 197, 142, 0.3);
+}
+
+.roadmap-title {
+  text-align: center;
+  font-size: 1.8rem;
+  color: var(--text-main, #222);
+  margin: 0 0 30px 0;
+  font-weight: 600;
+}
+
+.roadmap-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.roadmap-item {
+  flex: 1;
+  background: var(--bg-color, #fff);
+  border: 2px solid var(--nav-border, #eee);
+  border-radius: 10px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+html.dark .roadmap-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: #333;
+}
+
+.roadmap-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 197, 142, 0.15);
+  border-color: #00c58e;
+}
+
+.roadmap-stage {
+  font-size: 0.85rem;
+  color: #00c58e;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.roadmap-text {
+  color: var(--text-main, #555);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.roadmap-arrow {
+  font-size: 2rem;
+  color: #00c58e;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   响应式设计
+   ============================================================ */
+@media (max-width: 768px) {
+  .tech-stack-page {
+    padding: 20px 15px;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .level-legend {
+    flex-direction: column;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-section {
+    padding: 20px;
+  }
+
+  .roadmap-content {
+    flex-direction: column;
+  }
+
+  .roadmap-arrow {
+    transform: rotate(90deg);
+    margin: 10px 0;
+  }
+
+  .roadmap-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.6rem;
+  }
+
+  .category-title {
+    font-size: 1.3rem;
+  }
+
+  .category-icon {
+    font-size: 1.5rem;
+  }
+}
