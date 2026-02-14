@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { useHead } from '#app'
-import { techStacks, levelConfig, weeklyPlans, priorityConfig, longTermGoals, goalStatusConfig } from '~/data/techstack.js'
+import { techStacks, levelConfig, weeklyPlans, priorityConfig, longTermGoals, goalStatusConfig } from '~/data/tech-footprint.js'
 import { computed, ref } from 'vue'
 
 useHead({
-  title: '技术栈 - Tung Chia-hui',
+  title: '技术足迹 - Tung Chia-hui',
   meta: [
-    { name: 'description', content: '我的技术能力图谱与学习路线' }
+    { name: 'description', content: '我的技术成长轨迹 - 技能图谱、长期目标与任务管理' }
   ]
 })
 
-// 定义熟练度类型
+// 定义类型
 type SkillLevel = 'expert' | 'intermediate' | 'learning'
+type Priority = 'high' | 'medium' | 'low'
+type GoalStatus = 'in-progress' | 'completed' | 'planned'
 
 // 当前选中的视图 tab
 const activeTab = ref<'current' | 'history'>('current')
@@ -58,7 +60,8 @@ const plansByWeek = computed(() => {
     if (!groups[plan.week]) {
       groups[plan.week] = []
     }
-    groups[plan.week].push(plan)
+    // 修复：添加类型断言，确保 groups[plan.week] 不是 undefined
+    groups[plan.week]!.push(plan)
   })
   
   // 转换成数组并按周次倒序排列（最新的在前），然后应用分页
@@ -89,16 +92,35 @@ const planStats = computed(() => {
 
 // 按优先级排序计划（用于本周任务）
 const sortedPlans = computed(() => {
-  const priorityOrder = { high: 1, medium: 2, low: 3 }
+  const priorityOrder: Record<Priority, number> = { 
+    high: 1, 
+    medium: 2, 
+    low: 3 
+  }
   return [...filteredPlans.value].sort((a, b) => {
     // 先按完成状态排序（未完成的在前）
     if (a.completed !== b.completed) {
       return a.completed ? 1 : -1
     }
-    // 再按优先级排序
-    return priorityOrder[a.priority] - priorityOrder[b.priority]
+    // 修复：添加类型断言
+    const aPriority = a.priority as Priority
+    const bPriority = b.priority as Priority
+    return priorityOrder[aPriority] - priorityOrder[bPriority]
   })
 })
+
+// 类型安全的辅助函数
+const getLevelConfig = (level: string) => {
+  return levelConfig[level as SkillLevel]
+}
+
+const getPriorityConfig = (priority: string) => {
+  return priorityConfig[priority as Priority]
+}
+
+const getGoalStatusConfig = (status: string) => {
+  return goalStatusConfig[status as GoalStatus]
+}
 </script>
 
 <template>
@@ -110,62 +132,13 @@ const sortedPlans = computed(() => {
 
     <!-- 页面标题 -->
     <header class="page-header">
-      <h1 class="main-title">🚀 技术能力图谱</h1>
-      <p class="subtitle">持续学习，不断进步</p>
+      <h1 class="main-title">🚀 技术足迹</h1>
+      <p class="subtitle">记录成长，见证进步</p>
     </header>
-
-    <!-- 熟练度说明 -->
-    <div class="level-legend">
-      <div class="legend-item" v-for="(config, key) in levelConfig" :key="key">
-        <span class="legend-dot" :style="{ backgroundColor: config.color }"></span>
-        <span class="legend-label">{{ config.label }}</span>
-      </div>
-    </div>
-
-    <!-- 技术栈分类展示 -->
-    <div class="tech-categories">
-      <section 
-        v-for="stack in techStacks" 
-        :key="stack.category" 
-        class="category-section"
-      >
-        <div class="category-header">
-          <span class="category-icon">{{ stack.icon }}</span>
-          <h2 class="category-title">{{ stack.category }}</h2>
-        </div>
-        <p class="category-desc">{{ stack.description }}</p>
-        
-        <div class="skills-grid">
-          <div 
-            v-for="skill in stack.skills" 
-            :key="skill.name" 
-            class="skill-card"
-          >
-            <div class="skill-content">
-              <img 
-                :src="skill.logo" 
-                :alt="skill.name" 
-                class="skill-logo"
-                loading="lazy"
-              />
-              <div class="skill-info">
-                <span class="skill-name">{{ skill.name }}</span>
-                <span 
-                  class="skill-badge" 
-                  :style="{ backgroundColor: levelConfig[skill.level].color }"
-                >
-                  {{ levelConfig[skill.level].label }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
 
     <!-- 长期目标 -->
     <section class="long-term-goals">
-      <h2 class="goals-title">🎯 长期目标</h2>
+      <h2 class="section-title">🎯 长期目标</h2>
       <div class="goals-grid">
         <div 
           v-for="goal in longTermGoals" 
@@ -177,9 +150,9 @@ const sortedPlans = computed(() => {
             <span class="goal-period">{{ goal.period }}</span>
             <span 
               class="goal-status" 
-              :style="{ color: goalStatusConfig[goal.status].color }"
+              :style="{ color: getGoalStatusConfig(goal.status).color }"
             >
-              {{ goalStatusConfig[goal.status].icon }} {{ goalStatusConfig[goal.status].label }}
+              {{ getGoalStatusConfig(goal.status).icon }} {{ getGoalStatusConfig(goal.status).label }}
             </span>
           </div>
           <h3 class="goal-title">{{ goal.title }}</h3>
@@ -193,7 +166,7 @@ const sortedPlans = computed(() => {
     <!-- 任务管理 -->
     <section class="task-management">
       <div class="task-header">
-        <h2 class="task-title">📋 任务管理</h2>
+        <h2 class="section-title">📋 任务管理</h2>
         
         <!-- Tab 切换（只保留2个） -->
         <div class="task-tabs">
@@ -251,8 +224,8 @@ const sortedPlans = computed(() => {
             <div class="plan-checkbox">
               <span v-if="plan.completed" class="check-icon">✓</span>
             </div>
-            <div class="plan-priority" :style="{ color: priorityConfig[plan.priority].color }">
-              {{ priorityConfig[plan.priority].icon }}
+            <div class="plan-priority" :style="{ color: getPriorityConfig(plan.priority).color }">
+              {{ getPriorityConfig(plan.priority).icon }}
             </div>
           </div>
           
@@ -308,8 +281,8 @@ const sortedPlans = computed(() => {
                     <div class="plan-checkbox">
                       <span v-if="plan.completed" class="check-icon">✓</span>
                     </div>
-                    <div class="plan-priority" :style="{ color: priorityConfig[plan.priority].color }">
-                      {{ priorityConfig[plan.priority].icon }}
+                    <div class="plan-priority" :style="{ color: getPriorityConfig(plan.priority).color }">
+                      {{ getPriorityConfig(plan.priority).icon }}
                     </div>
                   </div>
                   
@@ -345,7 +318,61 @@ const sortedPlans = computed(() => {
         </div>
       </div>
     </section>
+
+    <!-- 技术栈 -->
+    <section class="tech-stack-section">
+      <h2 class="section-title">💻 技术栈</h2>
+      
+      <!-- 熟练度说明 -->
+      <div class="level-legend">
+        <div class="legend-item" v-for="(config, key) in levelConfig" :key="key">
+          <span class="legend-dot" :style="{ backgroundColor: config.color }"></span>
+          <span class="legend-label">{{ config.label }}</span>
+        </div>
+      </div>
+
+      <!-- 技术栈分类展示 -->
+      <div class="tech-categories">
+        <div 
+          v-for="stack in techStacks" 
+          :key="stack.category" 
+          class="category-section"
+        >
+          <div class="category-header">
+            <span class="category-icon">{{ stack.icon }}</span>
+            <h3 class="category-title">{{ stack.category }}</h3>
+          </div>
+          <p class="category-desc">{{ stack.description }}</p>
+          
+          <div class="skills-grid">
+            <div 
+              v-for="skill in stack.skills" 
+              :key="skill.name" 
+              class="skill-card"
+            >
+              <div class="skill-content">
+                <img 
+                  :src="skill.logo" 
+                  :alt="skill.name" 
+                  class="skill-logo"
+                  loading="lazy"
+                />
+                <div class="skill-info">
+                  <span class="skill-name">{{ skill.name }}</span>
+                  <span 
+                    class="skill-badge" 
+                    :style="{ backgroundColor: getLevelConfig(skill.level).color }"
+                  >
+                    {{ getLevelConfig(skill.level).label }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
-<style src="~/assets/css/tech-stack.css" scoped></style>
+<style src="~/assets/css/tech-footprint.css" scoped></style>

@@ -11,7 +11,8 @@ export const techStacks = [
       { name: 'C++', level: 'expert', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
       { name: 'Python', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
       { name: 'JavaScript', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-      { name: 'Rust', level: 'learning', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg' }
+      { name: 'Rust', level: 'learning', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg' },
+      { name: 'Dart', level: 'learning', logo: 'https://dart.cn/assets/img/logo/dart-192.svg' }
     ]
   },
   {
@@ -80,7 +81,7 @@ export const longTermGoals = [
     goals: [
       '深化 C/C++ 在嵌入式项目中的应用',
       '完成 ROS2 机器人导航项目实战',
-      '学习 Rust 基础语法和所有权系统'
+      '学习 Dart 语言 与 Flutter 框架入门'
     ],
     status: 'in-progress' // in-progress, completed, planned
   },
@@ -91,7 +92,7 @@ export const longTermGoals = [
     goals: [
       '掌握 Flutter 跨平台开发',
       '构建完整的机器人上位机应用',
-      '提升前端工程化能力（Vue3 + TypeScript）'
+      '完善 ROS2 导航项目并开源分享'
     ],
     status: 'planned'
   },
@@ -100,9 +101,9 @@ export const longTermGoals = [
     period: '2026 下半年',
     title: '技术深耕',
     goals: [
-      '深入 Rust 系统编程和异步编程',
-      '探索嵌入式 Linux 和 Yocto 项目',
-      '参与开源机器人项目贡献'
+      '系统学习 OpenCV 计算机视觉算法',
+      '探索嵌入式 Linux',
+      '学习 YOLO 目标检测算法并应用于机器人视觉'
     ],
     status: 'planned'
   },
@@ -121,35 +122,37 @@ export const longTermGoals = [
 
 // 周计划数据（增加 week 字段标识是哪一周）
 export const weeklyPlans = [
-  // 2026年第7周（本周）
+    // 2026年第5周（前两周）
   {
     id: 1,
-    week: '2026-W07',
-    weekLabel: '2月10日 - 2月16日',
-    title: '学习 Rust 基础语法',
-    description: '完成 The Rust Programming Language 前 5 章内容',
-    completed: false,
+    week: '2026-W05',
+    weekLabel: '1月27日 - 2月2日',
+    title: 'ESP32 IDF库基础学习1',
+    description: '完成 ESP32 GPIO 和 EXIT 的基本使用',
+    completed: true,
     priority: 'high',
     category: '学习',
-    dueDate: '2026-02-16'
+    dueDate: '2026-01-31'
   },
+    // 2026年第6周（上周）
   {
     id: 2,
-    week: '2026-W07',
-    weekLabel: '2月10日 - 2月16日',
-    title: '完成博客 ROS2 导航教程',
-    description: '编写 ROS2 Nav2 导航框架使用指南',
+    week: '2026-W06',
+    weekLabel: '2月3日 - 2月9日',
+    title: 'ESP32 IDF库基础学习2',
+    description: '完成 ESP32 UART 和 PWM 的基本使用',
     completed: true,
-    priority: 'medium',
-    category: '创作',
-    dueDate: '2026-02-14'
+    priority: 'high',
+    category: '学习',
+    dueDate: '2026-02-07'
   },
+  // 2026年第7周（本周）
   {
     id: 3,
     week: '2026-W07',
     weekLabel: '2月10日 - 2月16日',
-    title: 'STM32 项目代码重构',
-    description: '优化 FreeRTOS 任务调度，减少 CPU 占用',
+    title: 'Nuxt博客技术栈页面重构',
+    description: '重构博客技术栈页面，提升性能和用户体验',
     completed: true,
     priority: 'high',
     category: '开发',
@@ -159,83 +162,13 @@ export const weeklyPlans = [
     id: 4,
     week: '2026-W07',
     weekLabel: '2月10日 - 2月16日',
-    title: '研究 Flutter 状态管理',
-    description: '学习 Provider 和 Riverpod 使用方法',
+    title: '修复 Serial_Port库数据错误问题',
+    description: '修复 Serial_Port库中数据解析错误问题，提升稳定性',
     completed: false,
     priority: 'medium',
-    category: '学习',
-    dueDate: '2026-02-17'
-  },
-  {
-    id: 5,
-    week: '2026-W07',
-    weekLabel: '2月10日 - 2月16日',
-    title: '更新博客技术栈页面',
-    description: '添加新学习的技术和本周计划功能',
-    completed: false,
-    priority: 'low',
     category: '维护',
-    dueDate: '2026-02-18'
+    dueDate: '2026-02-16'
   },
-  
-  // 2026年第6周（上周）
-  {
-    id: 6,
-    week: '2026-W06',
-    weekLabel: '2月3日 - 2月9日',
-    title: '完成 OpenCV 图像处理项目',
-    description: '实现实时物体检测和跟踪功能',
-    completed: true,
-    priority: 'high',
-    category: '开发',
-    dueDate: '2026-02-07'
-  },
-  {
-    id: 7,
-    week: '2026-W06',
-    weekLabel: '2月3日 - 2月9日',
-    title: '学习 Qt Quick QML',
-    description: '掌握 Qt Quick 声明式 UI 开发',
-    completed: true,
-    priority: 'medium',
-    category: '学习',
-    dueDate: '2026-02-08'
-  },
-  {
-    id: 8,
-    week: '2026-W06',
-    weekLabel: '2月3日 - 2月9日',
-    title: '博客性能优化',
-    description: '优化 Nuxt 页面加载速度和 SEO',
-    completed: false,
-    priority: 'low',
-    category: '维护',
-    dueDate: '2026-02-09'
-  },
-
-  // 2026年第5周（前两周）
-  {
-    id: 9,
-    week: '2026-W05',
-    weekLabel: '1月27日 - 2月2日',
-    title: 'ROS2 节点通信优化',
-    description: '优化多节点间的 Topic 通信效率',
-    completed: true,
-    priority: 'high',
-    category: '开发',
-    dueDate: '2026-01-31'
-  },
-  {
-    id: 10,
-    week: '2026-W05',
-    weekLabel: '1月27日 - 2月2日',
-    title: '学习 Linux 内核模块',
-    description: '编写简单的字符设备驱动',
-    completed: true,
-    priority: 'medium',
-    category: '学习',
-    dueDate: '2026-02-01'
-  }
 ]
 
 // 优先级配置

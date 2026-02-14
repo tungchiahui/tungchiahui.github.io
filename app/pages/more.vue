@@ -54,9 +54,9 @@
           <div class="card-sub">汇聚优质网站、社区和团队</div>
         </NuxtLink>
         
-        <NuxtLink class="more-card" to="/tech-stack">
-          <div class="card-title">🛠️ 技术栈</div>
-          <div class="card-sub">技术栈介绍</div>
+        <NuxtLink class="more-card" to="/tech-footprint">
+          <div class="card-title">🛠️ 技术足迹</div>
+          <div class="card-sub">技术栈介绍与ToDoList</div>
         </NuxtLink>
 
       </div>

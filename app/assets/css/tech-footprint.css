@@ -50,6 +50,17 @@
 }
 
 /* ============================================================
+   区块标题（统一样式）
+   ============================================================ */
+.section-title {
+  text-align: center;
+  font-size: 1.8rem;
+  color: var(--text-main, #222);
+  margin: 0 0 30px 0;
+  font-weight: 600;
+}
+
+/* ============================================================
    熟练度图例
    ============================================================ */
 .level-legend {
@@ -85,6 +96,27 @@ html.dark .level-legend {
 .legend-label {
   color: var(--text-main, #555);
   font-weight: 500;
+}
+
+/* ============================================================
+   技术栈区块
+   ============================================================ */
+.tech-stack-section {
+  margin-top: 50px;
+  padding: 35px;
+  background: linear-gradient(135deg, rgba(0, 197, 142, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
+  border: 1px solid rgba(0, 197, 142, 0.1);
+  border-radius: 12px;
+}
+
+html.dark .tech-stack-section {
+  background: linear-gradient(135deg, rgba(0, 197, 142, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
+  border-color: rgba(0, 197, 142, 0.2);
+}
+
+.tech-stack-section .level-legend {
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 /* ============================================================
@@ -236,14 +268,6 @@ html.dark .long-term-goals {
   border-color: rgba(0, 197, 142, 0.3);
 }
 
-.goals-title {
-  text-align: center;
-  font-size: 1.8rem;
-  color: var(--text-main, #222);
-  margin: 0 0 30px 0;
-  font-weight: 600;
-}
-
 .goals-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -382,13 +406,6 @@ html.dark .task-management {
   margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 20px;
-}
-
-.task-title {
-  font-size: 1.8rem;
-  color: var(--text-main, #222);
-  margin: 0;
-  font-weight: 600;
 }
 
 /* Tab 切换按钮 */
@@ -876,7 +893,7 @@ html.dark .plan-category {
     padding: 25px 15px;
   }
 
-  .goals-title {
+  .section-title {
     font-size: 1.5rem;
   }
 
@@ -892,10 +909,6 @@ html.dark .plan-category {
   .task-header {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .task-title {
-    font-size: 1.5rem;
   }
 
   .task-tabs {
