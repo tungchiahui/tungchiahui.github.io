@@ -510,36 +510,190 @@ html.dark .progress-bar {
   100% { transform: translateX(100%); }
 }
 
-/* 历史记录视图 */
+/* 历史记录视图 - 手风琴模式 */
 .history-view {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 15px;
 }
 
-.week-group {
-  position: relative;
+.week-accordion {
+  background: var(--bg-color, #fff);
+  border: 1px solid var(--nav-border, #eee);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+html.dark .week-accordion {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: #333;
+}
+
+.week-accordion:hover {
+  border-color: #a855f7;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.1);
+}
+
+html.dark .week-accordion:hover {
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.2);
+}
+
+/* 可点击的周标题 */
+.week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 25px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+
+.week-header:hover {
+  background: rgba(168, 85, 247, 0.05);
+}
+
+html.dark .week-header:hover {
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.week-header.expanded {
+  border-bottom: 1px solid var(--nav-border, #eee);
+}
+
+html.dark .week-header.expanded {
+  border-bottom-color: #333;
+}
+
+.week-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.expand-icon {
+  font-size: 0.8rem;
+  color: #a855f7;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+  display: inline-block;
+  width: 16px;
 }
 
 .week-title {
-  font-size: 1.2rem;
-  color: #a855f7;
-  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  color: var(--text-main, #333);
+  margin: 0;
   font-weight: 600;
-  padding-left: 20px;
-  position: relative;
 }
 
-.week-title::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 8px;
-  height: 8px;
-  background: #a855f7;
-  border-radius: 50%;
+.week-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.week-complete-count {
+  font-size: 0.9rem;
+  color: #00c58e;
+  font-weight: 600;
+  background: rgba(0, 197, 142, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+html.dark .week-complete-count {
+  background: rgba(0, 197, 142, 0.2);
+}
+
+/* 可展开的内容区域 */
+.week-content {
+  padding: 20px 25px 25px 25px;
+}
+
+/* 加载更多按钮 */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.load-more-btn {
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.load-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
+}
+
+.load-more-btn:active {
+  transform: translateY(0);
+}
+
+.load-more-icon {
+  font-size: 1.1rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* 已加载全部提示 */
+.all-loaded-hint {
+  text-align: center;
+  padding: 20px;
+  color: var(--footer-text, #999);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.hint-icon {
+  color: #00c58e;
+  font-size: 1.1rem;
+}
+
+/* 手风琴过渡动画 */
+.accordion-enter-active,
+.accordion-leave-active {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.accordion-enter-from,
+.accordion-leave-to {
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.accordion-enter-to,
+.accordion-leave-from {
+  opacity: 1;
+  max-height: 2000px;
 }
 
 /* 计划卡片网格 */

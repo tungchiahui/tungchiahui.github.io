@@ -14,26 +14,44 @@ useHead({
 type SkillLevel = 'expert' | 'intermediate' | 'learning'
 
 // 当前选中的视图 tab
-const activeTab = ref<'current' | 'history' | 'all'>('current')
+const activeTab = ref<'current' | 'history'>('current')
 
 // 当前周标识（根据数据文件中的最新周次）
 const currentWeek = '2026-W07'
+
+// 历史记录分页 - 每页显示的周数
+const WEEKS_PER_PAGE = 10
+const displayedWeeksCount = ref(WEEKS_PER_PAGE)
+
+// 手风琴展开状态（记录哪些周是展开的）
+const expandedWeeks = ref<Set<string>>(new Set(['2026-W06'])) // 默认展开最近一周
+
+// 切换周的展开/收起
+const toggleWeek = (week: string) => {
+  if (expandedWeeks.value.has(week)) {
+    expandedWeeks.value.delete(week)
+  } else {
+    expandedWeeks.value.add(week)
+  }
+}
+
+// 加载更多历史记录
+const loadMore = () => {
+  displayedWeeksCount.value += WEEKS_PER_PAGE
+}
 
 // 按视图过滤计划
 const filteredPlans = computed(() => {
   if (activeTab.value === 'current') {
     // 本周任务
     return weeklyPlans.filter(p => p.week === currentWeek)
-  } else if (activeTab.value === 'history') {
+  } else {
     // 历史记录（本周之前的）
     return weeklyPlans.filter(p => p.week !== currentWeek)
-  } else {
-    // 全部任务
-    return weeklyPlans
   }
 })
 
-// 按周分组（用于历史记录视图）
+// 按周分组 - 按周次倒序排列，并应用分页限制
 const plansByWeek = computed(() => {
   const groups: Record<string, any[]> = {}
   filteredPlans.value.forEach(plan => {
@@ -42,7 +60,22 @@ const plansByWeek = computed(() => {
     }
     groups[plan.week].push(plan)
   })
-  return groups
+  
+  // 转换成数组并按周次倒序排列（最新的在前），然后应用分页
+  const sortedWeeks = Object.entries(groups)
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .map(([week, plans]) => ({ week, plans }))
+  
+  // 只返回当前显示数量的周
+  return sortedWeeks.slice(0, displayedWeeksCount.value)
+})
+
+// 是否还有更多历史记录可加载
+const hasMoreHistory = computed(() => {
+  const totalHistoryWeeks = new Set(
+    weeklyPlans.filter(p => p.week !== currentWeek).map(p => p.week)
+  ).size
+  return displayedWeeksCount.value < totalHistoryWeeks
 })
 
 // 计算完成状态统计（仅针对当前视图）
@@ -54,7 +87,7 @@ const planStats = computed(() => {
   return { total, completed, percentage }
 })
 
-// 按优先级排序计划
+// 按优先级排序计划（用于本周任务）
 const sortedPlans = computed(() => {
   const priorityOrder = { high: 1, medium: 2, low: 3 }
   return [...filteredPlans.value].sort((a, b) => {
@@ -162,7 +195,7 @@ const sortedPlans = computed(() => {
       <div class="task-header">
         <h2 class="task-title">📋 任务管理</h2>
         
-        <!-- Tab 切换 -->
+        <!-- Tab 切换（只保留2个） -->
         <div class="task-tabs">
           <button 
             class="tab-button" 
@@ -177,13 +210,6 @@ const sortedPlans = computed(() => {
             @click="activeTab = 'history'"
           >
             历史记录
-          </button>
-          <button 
-            class="tab-button" 
-            :class="{ active: activeTab === 'all' }"
-            @click="activeTab = 'all'"
-          >
-            全部任务
           </button>
         </div>
       </div>
@@ -213,8 +239,8 @@ const sortedPlans = computed(() => {
         </div>
       </div>
 
-      <!-- 任务列表 - 本周/全部视图 -->
-      <div v-if="activeTab === 'current' || activeTab === 'all'" class="plans-grid">
+      <!-- 本周任务视图 -->
+      <div v-if="activeTab === 'current'" class="plans-grid">
         <div 
           v-for="plan in sortedPlans" 
           :key="plan.id" 
@@ -244,43 +270,78 @@ const sortedPlans = computed(() => {
         </div>
       </div>
 
-      <!-- 任务列表 - 历史记录视图（按周分组） -->
+      <!-- 历史记录视图（手风琴折叠模式 + 分页加载） -->
       <div v-if="activeTab === 'history'" class="history-view">
         <div 
-          v-for="(plans, week) in plansByWeek" 
+          v-for="{ week, plans } in plansByWeek" 
           :key="week"
-          class="week-group"
+          class="week-accordion"
         >
-          <h3 class="week-title">{{ plans[0].weekLabel }}</h3>
-          <div class="plans-grid">
-            <div 
-              v-for="plan in plans" 
-              :key="plan.id" 
-              class="plan-card"
-              :class="{ 'completed': plan.completed }"
-            >
-              <div class="plan-header">
-                <div class="plan-checkbox">
-                  <span v-if="plan.completed" class="check-icon">✓</span>
-                </div>
-                <div class="plan-priority" :style="{ color: priorityConfig[plan.priority].color }">
-                  {{ priorityConfig[plan.priority].icon }}
-                </div>
-              </div>
-              
-              <div class="plan-content">
-                <h3 class="plan-title" :class="{ 'line-through': plan.completed }">
-                  {{ plan.title }}
-                </h3>
-                <p class="plan-description">{{ plan.description }}</p>
-                
-                <div class="plan-meta">
-                  <span class="plan-category">{{ plan.category }}</span>
-                  <span class="plan-date">📆 {{ plan.dueDate }}</span>
+          <!-- 可点击的周标题 -->
+          <div 
+            class="week-header" 
+            @click="toggleWeek(week)"
+            :class="{ 'expanded': expandedWeeks.has(week) }"
+          >
+            <div class="week-header-left">
+              <span class="expand-icon">{{ expandedWeeks.has(week) ? '▼' : '▶' }}</span>
+              <h3 class="week-title">{{ plans[0].weekLabel }}</h3>
+            </div>
+            <div class="week-stats">
+              <span class="week-complete-count">
+                {{ plans.filter(p => p.completed).length }}/{{ plans.length }} 完成
+              </span>
+            </div>
+          </div>
+          
+          <!-- 可展开的任务列表 -->
+          <transition name="accordion">
+            <div v-if="expandedWeeks.has(week)" class="week-content">
+              <div class="plans-grid">
+                <div 
+                  v-for="plan in plans" 
+                  :key="plan.id" 
+                  class="plan-card"
+                  :class="{ 'completed': plan.completed }"
+                >
+                  <div class="plan-header">
+                    <div class="plan-checkbox">
+                      <span v-if="plan.completed" class="check-icon">✓</span>
+                    </div>
+                    <div class="plan-priority" :style="{ color: priorityConfig[plan.priority].color }">
+                      {{ priorityConfig[plan.priority].icon }}
+                    </div>
+                  </div>
+                  
+                  <div class="plan-content">
+                    <h3 class="plan-title" :class="{ 'line-through': plan.completed }">
+                      {{ plan.title }}
+                    </h3>
+                    <p class="plan-description">{{ plan.description }}</p>
+                    
+                    <div class="plan-meta">
+                      <span class="plan-category">{{ plan.category }}</span>
+                      <span class="plan-date">📆 {{ plan.dueDate }}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </transition>
+        </div>
+
+        <!-- 加载更多按钮 -->
+        <div v-if="hasMoreHistory" class="load-more-container">
+          <button class="load-more-btn" @click="loadMore">
+            <span class="load-more-icon">⬇</span>
+            加载更多历史记录
+          </button>
+        </div>
+
+        <!-- 已加载全部提示 -->
+        <div v-else-if="plansByWeek.length > 0" class="all-loaded-hint">
+          <span class="hint-icon">✓</span>
+          已显示全部历史记录
         </div>
       </div>
     </section>

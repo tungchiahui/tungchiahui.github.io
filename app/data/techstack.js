@@ -125,7 +125,7 @@ export const weeklyPlans = [
   {
     id: 1,
     week: '2026-W07',
-    weekLabel: '第7周 (2/10-2/16)',
+    weekLabel: '2月10日 - 2月16日',
     title: '学习 Rust 基础语法',
     description: '完成 The Rust Programming Language 前 5 章内容',
     completed: false,
@@ -136,7 +136,7 @@ export const weeklyPlans = [
   {
     id: 2,
     week: '2026-W07',
-    weekLabel: '第7周 (2/10-2/16)',
+    weekLabel: '2月10日 - 2月16日',
     title: '完成博客 ROS2 导航教程',
     description: '编写 ROS2 Nav2 导航框架使用指南',
     completed: true,
@@ -147,7 +147,7 @@ export const weeklyPlans = [
   {
     id: 3,
     week: '2026-W07',
-    weekLabel: '第7周 (2/10-2/16)',
+    weekLabel: '2月10日 - 2月16日',
     title: 'STM32 项目代码重构',
     description: '优化 FreeRTOS 任务调度，减少 CPU 占用',
     completed: true,
@@ -158,7 +158,7 @@ export const weeklyPlans = [
   {
     id: 4,
     week: '2026-W07',
-    weekLabel: '第7周 (2/10-2/16)',
+    weekLabel: '2月10日 - 2月16日',
     title: '研究 Flutter 状态管理',
     description: '学习 Provider 和 Riverpod 使用方法',
     completed: false,
@@ -169,7 +169,7 @@ export const weeklyPlans = [
   {
     id: 5,
     week: '2026-W07',
-    weekLabel: '第7周 (2/10-2/16)',
+    weekLabel: '2月10日 - 2月16日',
     title: '更新博客技术栈页面',
     description: '添加新学习的技术和本周计划功能',
     completed: false,
@@ -182,7 +182,7 @@ export const weeklyPlans = [
   {
     id: 6,
     week: '2026-W06',
-    weekLabel: '第6周 (2/3-2/9)',
+    weekLabel: '2月3日 - 2月9日',
     title: '完成 OpenCV 图像处理项目',
     description: '实现实时物体检测和跟踪功能',
     completed: true,
@@ -193,7 +193,7 @@ export const weeklyPlans = [
   {
     id: 7,
     week: '2026-W06',
-    weekLabel: '第6周 (2/3-2/9)',
+    weekLabel: '2月3日 - 2月9日',
     title: '学习 Qt Quick QML',
     description: '掌握 Qt Quick 声明式 UI 开发',
     completed: true,
@@ -204,7 +204,7 @@ export const weeklyPlans = [
   {
     id: 8,
     week: '2026-W06',
-    weekLabel: '第6周 (2/3-2/9)',
+    weekLabel: '2月3日 - 2月9日',
     title: '博客性能优化',
     description: '优化 Nuxt 页面加载速度和 SEO',
     completed: false,
@@ -217,7 +217,7 @@ export const weeklyPlans = [
   {
     id: 9,
     week: '2026-W05',
-    weekLabel: '第5周 (1/27-2/2)',
+    weekLabel: '1月27日 - 2月2日',
     title: 'ROS2 节点通信优化',
     description: '优化多节点间的 Topic 通信效率',
     completed: true,
@@ -228,7 +228,7 @@ export const weeklyPlans = [
   {
     id: 10,
     week: '2026-W05',
-    weekLabel: '第5周 (1/27-2/2)',
+    weekLabel: '1月27日 - 2月2日',
     title: '学习 Linux 内核模块',
     description: '编写简单的字符设备驱动',
     completed: true,
