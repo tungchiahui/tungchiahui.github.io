@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '#app'
+import { techStacks, levelConfig, weeklyPlans, priorityConfig, longTermGoals, goalStatusConfig } from '~/data/techstack.js'
+import { computed, ref } from 'vue'
 
 useHead({
   title: '技术栈 - Tung Chia-hui',
@@ -11,89 +13,59 @@ useHead({
 // 定义熟练度类型
 type SkillLevel = 'expert' | 'intermediate' | 'learning'
 
-// 技术栈数据结构
-interface Skill {
-  name: string
-  level: SkillLevel
-  logo: string
-}
+// 当前选中的视图 tab
+const activeTab = ref<'current' | 'history' | 'all'>('current')
 
-interface TechStack {
-  category: string
-  icon: string
-  description: string
-  skills: Skill[]
-}
+// 当前周标识（根据数据文件中的最新周次）
+const currentWeek = '2026-W07'
 
-const techStacks: TechStack[] = [
-  {
-    category: '编程语言',
-    icon: '💻',
-    description: '日常开发使用的编程语言',
-    skills: [
-      { name: 'C', level: 'expert', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg' },
-      { name: 'C++', level: 'expert', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
-      { name: 'Python', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-      { name: 'JavaScript', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-      { name: 'Rust', level: 'learning', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg' }
-    ]
-  },
-  {
-    category: '前端开发',
-    icon: '🎨',
-    description: 'Web 界面设计与开发',
-    skills: [
-      { name: 'Vue.js', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg' },
-      { name: 'CSS3', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
-      { name: 'HTML5', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
-      { name: 'Nuxt.js', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg' }
-    ]
-  },
-  {
-    category: '嵌入式开发',
-    icon: '🔌',
-    description: '单片机与实时操作系统',
-    skills: [
-      { name: 'STM32', level: 'expert', logo: 'https://www.st.com.cn/content/dam/st-crew/st-logo-blue.svg' },
-      { name: 'FreeRTOS', level: 'expert', logo: 'https://www.freertos.org/media/2023/logo.png' }
-    ]
-  },
-  {
-    category: '机器人与视觉',
-    icon: '🤖',
-    description: '机器人操作系统与计算机视觉',
-    skills: [
-      { name: 'ROS2', level: 'intermediate', logo: 'https://roboticsbackend.com/wp-content/uploads/2022/04/ros_logo.png' },
-      { name: 'OpenCV', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg' }
-    ]
-  },
-  {
-    category: '应用开发',
-    icon: '📱',
-    description: '桌面与移动应用开发框架',
-    skills: [
-      { name: 'Qt6', level: 'intermediate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/qt/qt-original.svg' },
-      { name: 'Flutter', level: 'learning', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg' }
-    ]
-  },
-  {
-    category: '系统与工具',
-    icon: '🛠️',
-    description: '开发环境与工具链',
-    skills: [
-      { name: 'Linux', level: 'expert', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg' },
-      { name: 'Markdown', level: 'expert', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg' },
-      { name: '立创EDA', level: 'intermediate', logo: 'https://image.lceda.cn/avatars/2022/5/hHXK4NNkCdJZmyW59sl0XiBLLiQSzGVswv4SWW6w.png' }
-    ]
+// 按视图过滤计划
+const filteredPlans = computed(() => {
+  if (activeTab.value === 'current') {
+    // 本周任务
+    return weeklyPlans.filter(p => p.week === currentWeek)
+  } else if (activeTab.value === 'history') {
+    // 历史记录（本周之前的）
+    return weeklyPlans.filter(p => p.week !== currentWeek)
+  } else {
+    // 全部任务
+    return weeklyPlans
   }
-]
+})
 
-// 熟练度配置
-const levelConfig: Record<SkillLevel, { label: string; color: string }> = {
-  expert: { label: '日常使用', color: '#00c58e' },
-  intermediate: { label: '能做开发', color: '#3b82f6' },
-  learning: { label: '规划学习', color: '#a855f7' }
-}
+// 按周分组（用于历史记录视图）
+const plansByWeek = computed(() => {
+  const groups: Record<string, any[]> = {}
+  filteredPlans.value.forEach(plan => {
+    if (!groups[plan.week]) {
+      groups[plan.week] = []
+    }
+    groups[plan.week].push(plan)
+  })
+  return groups
+})
+
+// 计算完成状态统计（仅针对当前视图）
+const planStats = computed(() => {
+  const plans = filteredPlans.value
+  const total = plans.length
+  const completed = plans.filter(p => p.completed).length
+  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
+  return { total, completed, percentage }
+})
+
+// 按优先级排序计划
+const sortedPlans = computed(() => {
+  const priorityOrder = { high: 1, medium: 2, low: 3 }
+  return [...filteredPlans.value].sort((a, b) => {
+    // 先按完成状态排序（未完成的在前）
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1
+    }
+    // 再按优先级排序
+    return priorityOrder[a.priority] - priorityOrder[b.priority]
+  })
+})
 </script>
 
 <template>
@@ -158,28 +130,156 @@ const levelConfig: Record<SkillLevel, { label: string; color: string }> = {
       </section>
     </div>
 
-    <!-- 学习路线 -->
-    <section class="learning-roadmap">
-      <h2 class="roadmap-title">📚 持续学习计划</h2>
-      <div class="roadmap-content">
-        <div class="roadmap-item">
-          <div class="roadmap-stage">当前阶段</div>
-          <div class="roadmap-text">
-            深化嵌入式开发经验，提升 ROS2 机器人开发能力，完善前端技术栈
+    <!-- 长期目标 -->
+    <section class="long-term-goals">
+      <h2 class="goals-title">🎯 长期目标</h2>
+      <div class="goals-grid">
+        <div 
+          v-for="goal in longTermGoals" 
+          :key="goal.id" 
+          class="goal-card"
+          :class="'status-' + goal.status"
+        >
+          <div class="goal-header">
+            <span class="goal-period">{{ goal.period }}</span>
+            <span 
+              class="goal-status" 
+              :style="{ color: goalStatusConfig[goal.status].color }"
+            >
+              {{ goalStatusConfig[goal.status].icon }} {{ goalStatusConfig[goal.status].label }}
+            </span>
+          </div>
+          <h3 class="goal-title">{{ goal.title }}</h3>
+          <ul class="goal-list">
+            <li v-for="(item, index) in goal.goals" :key="index">{{ item }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 任务管理 -->
+    <section class="task-management">
+      <div class="task-header">
+        <h2 class="task-title">📋 任务管理</h2>
+        
+        <!-- Tab 切换 -->
+        <div class="task-tabs">
+          <button 
+            class="tab-button" 
+            :class="{ active: activeTab === 'current' }"
+            @click="activeTab = 'current'"
+          >
+            本周任务
+          </button>
+          <button 
+            class="tab-button" 
+            :class="{ active: activeTab === 'history' }"
+            @click="activeTab = 'history'"
+          >
+            历史记录
+          </button>
+          <button 
+            class="tab-button" 
+            :class="{ active: activeTab === 'all' }"
+            @click="activeTab = 'all'"
+          >
+            全部任务
+          </button>
+        </div>
+      </div>
+
+      <!-- 统计信息 -->
+      <div class="task-stats">
+        <span class="stat-item">
+          总计 <strong>{{ planStats.total }}</strong> 项
+        </span>
+        <span class="stat-divider">•</span>
+        <span class="stat-item">
+          已完成 <strong class="completed-count">{{ planStats.completed }}</strong> 项
+        </span>
+        <span class="stat-divider">•</span>
+        <span class="stat-item">
+          完成率 <strong class="percentage">{{ planStats.percentage }}%</strong>
+        </span>
+      </div>
+
+      <!-- 进度条 -->
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            :style="{ width: planStats.percentage + '%' }"
+          ></div>
+        </div>
+      </div>
+
+      <!-- 任务列表 - 本周/全部视图 -->
+      <div v-if="activeTab === 'current' || activeTab === 'all'" class="plans-grid">
+        <div 
+          v-for="plan in sortedPlans" 
+          :key="plan.id" 
+          class="plan-card"
+          :class="{ 'completed': plan.completed }"
+        >
+          <div class="plan-header">
+            <div class="plan-checkbox">
+              <span v-if="plan.completed" class="check-icon">✓</span>
+            </div>
+            <div class="plan-priority" :style="{ color: priorityConfig[plan.priority].color }">
+              {{ priorityConfig[plan.priority].icon }}
+            </div>
+          </div>
+          
+          <div class="plan-content">
+            <h3 class="plan-title" :class="{ 'line-through': plan.completed }">
+              {{ plan.title }}
+            </h3>
+            <p class="plan-description">{{ plan.description }}</p>
+            
+            <div class="plan-meta">
+              <span class="plan-category">{{ plan.category }}</span>
+              <span class="plan-date">📆 {{ plan.dueDate }}</span>
+            </div>
           </div>
         </div>
-        <div class="roadmap-arrow">→</div>
-        <div class="roadmap-item">
-          <div class="roadmap-stage">下一步</div>
-          <div class="roadmap-text">
-            学习 Rust 系统编程，掌握 Flutter 跨平台开发
-          </div>
-        </div>
-        <div class="roadmap-arrow">→</div>
-        <div class="roadmap-item">
-          <div class="roadmap-stage">长远目标</div>
-          <div class="roadmap-text">
-            构建完整的全栈开发能力，在嵌入式与机器人领域深耕
+      </div>
+
+      <!-- 任务列表 - 历史记录视图（按周分组） -->
+      <div v-if="activeTab === 'history'" class="history-view">
+        <div 
+          v-for="(plans, week) in plansByWeek" 
+          :key="week"
+          class="week-group"
+        >
+          <h3 class="week-title">{{ plans[0].weekLabel }}</h3>
+          <div class="plans-grid">
+            <div 
+              v-for="plan in plans" 
+              :key="plan.id" 
+              class="plan-card"
+              :class="{ 'completed': plan.completed }"
+            >
+              <div class="plan-header">
+                <div class="plan-checkbox">
+                  <span v-if="plan.completed" class="check-icon">✓</span>
+                </div>
+                <div class="plan-priority" :style="{ color: priorityConfig[plan.priority].color }">
+                  {{ priorityConfig[plan.priority].icon }}
+                </div>
+              </div>
+              
+              <div class="plan-content">
+                <h3 class="plan-title" :class="{ 'line-through': plan.completed }">
+                  {{ plan.title }}
+                </h3>
+                <p class="plan-description">{{ plan.description }}</p>
+                
+                <div class="plan-meta">
+                  <span class="plan-category">{{ plan.category }}</span>
+                  <span class="plan-date">📆 {{ plan.dueDate }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

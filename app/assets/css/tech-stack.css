@@ -221,9 +221,9 @@ html.dark .skill-card:hover {
 }
 
 /* ============================================================
-   学习路线
+   长期目标
    ============================================================ */
-.learning-roadmap {
+.long-term-goals {
   background: linear-gradient(135deg, rgba(0, 197, 142, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
   border: 1px solid rgba(0, 197, 142, 0.2);
   border-radius: 12px;
@@ -231,12 +231,12 @@ html.dark .skill-card:hover {
   margin-top: 40px;
 }
 
-html.dark .learning-roadmap {
+html.dark .long-term-goals {
   background: linear-gradient(135deg, rgba(0, 197, 142, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
   border-color: rgba(0, 197, 142, 0.3);
 }
 
-.roadmap-title {
+.goals-title {
   text-align: center;
   font-size: 1.8rem;
   color: var(--text-main, #222);
@@ -244,53 +244,447 @@ html.dark .learning-roadmap {
   font-weight: 600;
 }
 
-.roadmap-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
 
-.roadmap-item {
-  flex: 1;
+.goal-card {
+  background: var(--bg-color, #fff);
+  border: 2px solid var(--nav-border, #eee);
+  border-radius: 10px;
+  padding: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+html.dark .goal-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: #333;
+}
+
+.goal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 197, 142, 0.15);
+  border-color: #00c58e;
+}
+
+html.dark .goal-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 197, 142, 0.25);
+}
+
+/* 状态标识条 */
+.goal-card.status-in-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #00c58e;
+}
+
+.goal-card.status-completed::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #3b82f6;
+}
+
+.goal-card.status-planned::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #a855f7;
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.goal-period {
+  font-size: 0.85rem;
+  color: var(--text-main, #666);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.goal-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.goal-title {
+  font-size: 1.2rem;
+  color: var(--text-main, #333);
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.goal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.goal-list li {
+  color: var(--text-main, #555);
+  font-size: 0.9rem;
+  line-height: 1.8;
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.goal-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #00c58e;
+  font-weight: bold;
+}
+
+/* ============================================================
+   任务管理
+   ============================================================ */
+.task-management {
+  margin-top: 50px;
+  padding: 35px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 12px;
+}
+
+html.dark .task-management {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.task-title {
+  font-size: 1.8rem;
+  color: var(--text-main, #222);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Tab 切换按钮 */
+.task-tabs {
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+html.dark .task-tabs {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-button {
+  padding: 8px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main, #666);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+}
+
+.tab-button.active {
+  background: #a855f7;
+  color: white;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
+}
+
+/* 统计信息 */
+.task-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: var(--text-main, #666);
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-item strong {
+  color: var(--text-main, #333);
+  font-weight: 700;
+}
+
+.completed-count {
+  color: #00c58e;
+}
+
+.percentage {
+  color: #a855f7;
+}
+
+.stat-divider {
+  color: var(--footer-text, #999);
+}
+
+/* 进度条 */
+.progress-bar-wrapper {
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+html.dark .progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00c58e 0%, #a855f7 100%);
+  border-radius: 10px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 历史记录视图 */
+.history-view {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.week-group {
+  position: relative;
+}
+
+.week-title {
+  font-size: 1.2rem;
+  color: #a855f7;
+  margin: 0 0 20px 0;
+  font-weight: 600;
+  padding-left: 20px;
+  position: relative;
+}
+
+.week-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: #a855f7;
+  border-radius: 50%;
+}
+
+/* 计划卡片网格 */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.plan-card {
   background: var(--bg-color, #fff);
   border: 2px solid var(--nav-border, #eee);
   border-radius: 10px;
   padding: 20px;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-html.dark .roadmap-item {
+html.dark .plan-card {
   background: rgba(255, 255, 255, 0.03);
   border-color: #333;
 }
 
-.roadmap-item:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 197, 142, 0.15);
+.plan-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15);
+  border-color: #a855f7;
+}
+
+html.dark .plan-card:hover {
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.25);
+}
+
+/* 已完成的卡片样式 */
+.plan-card.completed {
+  opacity: 0.7;
+  border-color: #00c58e;
+  background: linear-gradient(135deg, rgba(0, 197, 142, 0.03) 0%, transparent 100%);
+}
+
+html.dark .plan-card.completed {
+  background: linear-gradient(135deg, rgba(0, 197, 142, 0.08) 0%, transparent 100%);
+}
+
+.plan-card.completed::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #00c58e;
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.plan-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--nav-border, #ddd);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: var(--bg-color, #fff);
+}
+
+html.dark .plan-checkbox {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #444;
+}
+
+.plan-card.completed .plan-checkbox {
+  background: #00c58e;
   border-color: #00c58e;
 }
 
-.roadmap-stage {
-  font-size: 0.85rem;
-  color: #00c58e;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-
-.roadmap-text {
-  color: var(--text-main, #555);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.roadmap-arrow {
-  font-size: 2rem;
-  color: #00c58e;
+.check-icon {
+  color: white;
+  font-size: 16px;
   font-weight: bold;
-  flex-shrink: 0;
+  line-height: 1;
+}
+
+.plan-priority {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.plan-content {
+  flex: 1;
+}
+
+.plan-title {
+  font-size: 1.15rem;
+  color: var(--text-main, #333);
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.plan-title.line-through {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.plan-description {
+  color: var(--footer-text, #777);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 15px 0;
+}
+
+.plan-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.plan-category {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+html.dark .plan-category {
+  background: rgba(168, 85, 247, 0.2);
+}
+
+.plan-date {
+  color: var(--footer-text, #999);
+  font-weight: 500;
 }
 
 /* ============================================================
@@ -323,17 +717,53 @@ html.dark .roadmap-item {
     padding: 20px;
   }
 
-  .roadmap-content {
+  /* 长期目标响应式 */
+  .long-term-goals {
+    padding: 25px 15px;
+  }
+
+  .goals-title {
+    font-size: 1.5rem;
+  }
+
+  .goals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 任务管理响应式 */
+  .task-management {
+    padding: 25px 15px;
+  }
+
+  .task-header {
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .roadmap-arrow {
-    transform: rotate(90deg);
-    margin: 10px 0;
+  .task-title {
+    font-size: 1.5rem;
   }
 
-  .roadmap-item {
+  .task-tabs {
     width: 100%;
+  }
+
+  .tab-button {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .task-stats {
+    font-size: 0.85rem;
+  }
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-card {
+    padding: 15px;
   }
 }
 
@@ -348,5 +778,19 @@ html.dark .roadmap-item {
 
   .category-icon {
     font-size: 1.5rem;
+  }
+
+  .task-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .tab-button {
+    font-size: 0.75rem;
+    padding: 8px 8px;
   }
 }
