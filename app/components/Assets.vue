@@ -49,6 +49,6 @@ useHead({
 <style src="~/assets/css/friend.css"></style>
 <style src="~/assets/css/more.css" />
 
-<style lang="scss">
+<!-- <style lang="scss">
 @use "~/assets/scss/index.scss" as *;
-</style>
+</style> -->

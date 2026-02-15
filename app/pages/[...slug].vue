@@ -1165,11 +1165,12 @@ html.dark {
 
 /* 📱 手机端适配 */
 @media (max-width: 1100px) {
-  .blog-page {
-    padding: 16px 12px 60px;
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
+.blog-page {
+  min-height: 100vh;
+  padding: 0 20px 60px;
+  /* overflow-x: hidden; 👈 删除了这行。因为父级设置 hidden 会导致子元素 sticky 失效 */
+  overflow-x: clip; /* ✨ 改用 clip，既能防止横向溢出，又不会破坏粘性定位（如果浏览器支持） */
+}
 
   .content-container {
     max-width: 100%;
