@@ -12,7 +12,6 @@ useHead({
 </script>
 
 
-
 <template>
   <div>
     <!-- 首页头部 -->

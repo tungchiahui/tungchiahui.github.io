@@ -1,15 +1,19 @@
 :root {
   --bg-color: #ffffff;
-  --text-main: #333333;
-  --nav-border: #eeeeee;
-  --footer-text: #999999;
+  --bg-secondary: #f7f7f8;
+  --text-main: #1f1f1f;
+  --text-secondary: #666666;
+  --nav-border: #e5e7eb;
+  --accent-color: #3b82f6;
 }
 
 html.dark {
-  --bg-color: #1a1a1a;
-  --text-main: #dcdcdc;
-  --nav-border: #333333;
-  --footer-text: #777777;
+  --bg-color: #0f172a;        /* 深蓝黑，比纯黑舒服 */
+  --bg-secondary: #1e293b;    /* 卡片背景 */
+  --text-main: #f1f5f9;       /* 主文字亮一点 */
+  --text-secondary: #94a3b8;
+  --nav-border: #334155;
+  --accent-color: #60a5fa;
 }
 
 html, body {
@@ -17,11 +21,11 @@ html, body {
   padding: 0;
   background-color: var(--bg-color);
   color: var(--text-main);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .app-layout {
-  font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;

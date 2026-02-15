@@ -1,107 +1,140 @@
-/* -----------------------------
-   首页头部
-------------------------------*/
+/* 首页头部 */
 .home-header {
-  text-align: center;       /* 文本居中 */
-  margin-bottom: 2rem;      /* 下方间距 */
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .home-header .subtitle {
-  color: #666;              /* 副标题颜色 */
-  font-size: 1.1rem;        /* 字号 */
-  margin-top: 0.5rem;       /* 与标题间距 */
+  color: #666;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* 黑暗模式 - 使用白色文字 */
+:global(html.dark) .home-header h1 {
+  color: #ffffff;
+}
+
+:global(html.dark) .home-header h1 b {
+  color: #ffffff;
+}
+
+:global(html.dark) .home-header .subtitle {
+  color: #e5e7eb;
 }
 
 /* 按钮容器 */
 .home-header .btn-group {
-  margin-top: 1rem;         /* 顶部间距 */
-  display: flex;            /* 使用 flex 布局 */
-  justify-content: center;  /* 水平居中 */
-  gap: 1rem;                /* 按钮间距 */
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 /* 按钮样式 */
 .btn-primary {
   display: inline-block;
-  padding: 0.6rem 1.2rem;           /* 内边距：上下0.6rem，左右1.2rem */
-  background-color: #42b883;        /* 绿色背景 */
-  color: white;                     /* 字体白色 */
-  border-radius: 6px;               /* 圆角 */
-  text-decoration: none;            /* 去掉下划线 */
-  font-weight: bold;                 /* 字体加粗 */
-  transition: background 0.3s;      /* 悬停过渡效果 */
+  padding: 0.6rem 1.2rem;
+  background-color: #42b883;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
 }
 
-/* 悬停效果 */
 .btn-primary:hover {
-  background-color: #369870;        /* 深绿色 */
+  background-color: #369870;
 }
 
-/* -----------------------------
-   卡片区域
-------------------------------*/
+:global(html.dark) .btn-primary {
+  background-color: #00c58e;
+  color: #1a1a1a;
+}
+
+:global(html.dark) .btn-primary:hover {
+  background-color: #00a576;
+}
+
+/* 卡片区域 */
 .cards {
-  display: flex;             /* flex 布局 */
-  flex-wrap: wrap;           /* 多行换行 */
-  gap: 1rem;                 /* 卡片间距 */
-  margin-top: 1rem;          /* 顶部间距 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-/* 单个卡片样式 */
 .card {
-  flex: 1 1 30%;             /* 弹性占位，最小宽度 30% */
-  min-width: 220px;          /* 最小宽度保证移动端不太窄 */
-  background: #f9f9f9;       /* 浅灰背景 */
-  padding: 1rem;             /* 内边距 */
-  border-radius: 8px;        /* 圆角 */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* 阴影 */
+  flex: 1 1 30%;
+  min-width: 220px;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .card h3 {
-  margin-bottom: 0.5rem;     /* 标题和内容间距 */
+  margin-bottom: 0.5rem;
+  color: #333;
 }
 
-/* -----------------------------
-   内容页面区块（博客/Wiki）
-------------------------------*/
+.card p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 黑暗模式 - 卡片使用白色文字 */
+:global(html.dark) .card {
+  background: #2d2d2d;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+:global(html.dark) .card h3 {
+  color: #ffffff;
+}
+
+:global(html.dark) .card p {
+  color: #e5e7eb;
+}
+
+/* 内容页面区块 */
 .content-page {
-  margin-top: 3rem;          /* 与上一块内容间距 */
+  margin-top: 3rem;
 }
 
-
-/* -----------------------------
-   内容页区块标题 + 按钮布局
-------------------------------*/
 .content-page .section-header {
-  display: flex;                   
-  justify-content: flex-start;     
-  align-items: center;             
-  margin-bottom: 1rem;             
-  gap: 1rem;                       /* 标题与按钮间距 */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
 }
 
-/* 看更多按钮样式（低调版，和首页蓝色按钮一致） */
 .content-page .section-header .btn-primary {
-  display: inline-block;
-  padding: 0.6rem 1.2rem;           /* 内边距 */
-  background-color: #42b883;        /* 绿色背景 */
-  color: white;                     
-  font-weight: bold;                
+  padding: 0.6rem 1.2rem;
   font-size: 0.95rem;
-  border-radius: 6px;               
-  text-decoration: none;            
-  transition: background 0.3s;      /* 仅背景渐变过渡 */
 }
 
-/* 悬停效果：只改变背景色，低调 */
-.content-page .section-header .btn-primary:hover {
-  background-color: #369870;        /* 深一点的绿色 */
-  /* 去掉 scale 和 translateY，保持静止 */
-}
-
-/* 箭头图标间距 */
 .content-page .section-header .btn-primary .icon {
   margin-left: 0.4rem;
 }
 
+/* 黑暗模式 - 通用文本使用白色 */
+:global(html.dark) h1,
+:global(html.dark) h2,
+:global(html.dark) h3 {
+  color: #ffffff;
+}
 
+:global(html.dark) p,
+:global(html.dark) .intro {
+  color: #e5e7eb;
+}
+
+:global(html.dark) a {
+  color: #00c58e;
+}
+
+:global(html.dark) a:hover {
+  color: #34d399;
+}
