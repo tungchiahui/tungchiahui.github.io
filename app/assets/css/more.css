@@ -22,12 +22,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 20px;
+  justify-items: center;
 }
 
 .more-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   background: var(--bg-secondary, #fff);
   padding: 20px;
   border-radius: 16px;
@@ -36,6 +38,9 @@
   color: inherit;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   cursor: pointer;
+  width: 100%;
+  max-width: 320px;
+  min-width: 220px;
 }
 
 .more-card:hover {
@@ -52,12 +57,14 @@
   font-size: 1.2rem;
   margin-bottom: 6px;
   color: var(--text-main, #333);
+  text-align: center;
 }
 
 .card-sub {
   font-size: 0.9rem;
   color: var(--text-secondary, #555);
   line-height: 1.4;
+  text-align: center;
 }
 
 @media (max-width: 600px) {
@@ -68,7 +75,7 @@
 
 .more-category {
   margin-bottom: 40px;
-  text-align: left;
+  text-align: center;
 }
 
 .category-title {
@@ -76,6 +83,7 @@
   font-weight: 600;
   color: #ff4d4f;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 :global(html.dark) .category-title {
