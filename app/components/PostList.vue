@@ -12,18 +12,10 @@
     <div v-if="pending" class="loading">正在扫描文件...</div>
 
     <ul v-else-if="filteredPosts.length" class="post-items">
-      <li
-        v-for="post in filteredPosts"
-        :key="post.path"
-        class="post-item"
-      >
-        <NuxtLink
-          :to="post.path"
-          class="post-link"
-        >
+      <li v-for="post in filteredPosts" :key="post.path" class="post-item">
+        <NuxtLink :to="post.path" class="post-link">
           {{ post.title || '无标题' }}
         </NuxtLink>
-
         <div class="post-date">
           {{ post.date || '未标注日期' }}
         </div>
@@ -94,8 +86,8 @@ const filteredPosts = computed(() => {
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  background: #fff;
-  color: #333;
+  background: var(--bg-color, #fff);
+  color: var(--text-main, #333);
 }
 
 .search-input:focus {
@@ -104,23 +96,15 @@ const filteredPosts = computed(() => {
 }
 
 :global(html.dark) .search-input {
-  background: #2d2d2d;
-  border-color: #374151;
-  color: #ffffff;
-}
-
-:global(html.dark) .search-input::placeholder {
-  color: #9ca3af;
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--nav-border, #374151);
+  color: var(--text-main, #f1f5f9);
 }
 
 .loading {
   padding: 20px;
   text-align: center;
-  color: #666;
-}
-
-:global(html.dark) .loading {
-  color: #e5e7eb;
+  color: var(--text-secondary, #666);
 }
 
 .post-items {
@@ -148,27 +132,15 @@ const filteredPosts = computed(() => {
   color: #00c58e;
 }
 
-:global(html.dark) .post-link:hover {
-  color: #34d399;
-}
-
 .post-date {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--text-secondary, #888);
   margin-top: 4px;
-}
-
-:global(html.dark) .post-date {
-  color: #9ca3af;
 }
 
 .empty-state {
   padding: 40px 20px;
   text-align: center;
-  color: #666;
-}
-
-:global(html.dark) .empty-state {
-  color: #e5e7eb;
+  color: var(--text-secondary, #666);
 }
 </style>

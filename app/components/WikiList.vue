@@ -12,22 +12,13 @@
     <div v-if="pending" class="loading">正在扫描 Wiki...</div>
 
     <ul v-else-if="filteredWikis.length" class="wiki-items">
-      <li
-        v-for="wiki in filteredWikis"
-        :key="wiki.path"
-        class="wiki-item"
-      >
-        <NuxtLink
-          :to="wiki.path"
-          class="wiki-link"
-        >
+      <li v-for="wiki in filteredWikis" :key="wiki.path" class="wiki-item">
+        <NuxtLink :to="wiki.path" class="wiki-link">
           {{ wiki.title || '无标题' }}
         </NuxtLink>
-
         <div class="wiki-date">
           {{ wiki.date || wiki.updatedAt || '未标注日期' }}
         </div>
-
         <div v-if="wiki.category" class="wiki-category">
           {{ wiki.category }}
         </div>
@@ -98,8 +89,8 @@ const filteredWikis = computed(() => {
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  background: #fff;
-  color: #333;
+  background: var(--bg-color, #fff);
+  color: var(--text-main, #333);
 }
 
 .search-input:focus {
@@ -108,23 +99,15 @@ const filteredWikis = computed(() => {
 }
 
 :global(html.dark) .search-input {
-  background: #2d2d2d;
-  border-color: #374151;
-  color: #ffffff;
-}
-
-:global(html.dark) .search-input::placeholder {
-  color: #9ca3af;
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--nav-border, #374151);
+  color: var(--text-main, #f1f5f9);
 }
 
 .loading {
   padding: 20px;
   text-align: center;
-  color: #666;
-}
-
-:global(html.dark) .loading {
-  color: #e5e7eb;
+  color: var(--text-secondary, #666);
 }
 
 .wiki-items {
@@ -152,37 +135,16 @@ const filteredWikis = computed(() => {
   color: #00c58e;
 }
 
-:global(html.dark) .wiki-link:hover {
-  color: #34d399;
-}
-
-.wiki-date {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 4px;
-}
-
-:global(html.dark) .wiki-date {
-  color: #9ca3af;
-}
-
+.wiki-date,
 .wiki-category {
   font-size: 0.8rem;
-  color: #888;
-  margin-top: 2px;
-}
-
-:global(html.dark) .wiki-category {
-  color: #9ca3af;
+  color: var(--text-secondary, #888);
+  margin-top: 4px;
 }
 
 .empty-state {
   padding: 40px 20px;
   text-align: center;
-  color: #666;
-}
-
-:global(html.dark) .empty-state {
-  color: #e5e7eb;
+  color: var(--text-secondary, #666);
 }
 </style>
