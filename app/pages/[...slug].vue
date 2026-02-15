@@ -27,7 +27,7 @@ interface BlogPost {
 const route = useRoute()
 
 // ⚙️ 可配置的目录深度（1-6，对应 h1-h6）
-const MAX_TOC_DEPTH = ref(4) // 👈 修改这个数字来控制目录显示的层级深度
+const MAX_TOC_DEPTH = ref(6) // 👈 修改这个数字来控制目录显示的层级深度（显示到 h6）
 
 const { data: page, pending } = await useAsyncData(
   `page-${route.path}`,
@@ -338,11 +338,12 @@ const numberedTocLinks = computed(() => {
       v-if="filteredTocLinks.length" 
       class="mobile-toc-button" 
       @click="showToc = true"
+      aria-label="打开目录"
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
+        <line x1="3" y1="12" x2="15" y2="12"></line>
+        <line x1="3" y1="18" x2="18" y2="18"></line>
       </svg>
       <span>目录</span>
     </button>
@@ -520,16 +521,19 @@ const numberedTocLinks = computed(() => {
   --color-text-lighter: #999999;
   --color-border: var(--nav-border);
   --color-code-bg: #f6f8fa;
+  --color-frame-border: #b0b8c1;
 }
 
 html.dark {
   --color-code-bg: #1a1f2e;
   --color-text-lighter: #a0aec0;
+  --color-frame-border: #4a5568;
 }
 
 .blog-page {
   min-height: 100vh;
   padding: 0 20px 60px;
+  overflow-x: hidden;
 }
 
 .reading-progress-bar {
@@ -573,25 +577,28 @@ html.dark {
 .mobile-toc-button {
   display: none;
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  top: 70px;
+  right: 16px;
   z-index: 998;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 24px;
-  font-weight: 600;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #00c58e;
+  color: #fff;
+  border: 2px solid #0a8f68;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 197, 142, 0.4);
-  transition: all 0.2s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
 }
 
-.mobile-toc-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 197, 142, 0.5);
+.mobile-toc-button:hover,
+.mobile-toc-button:active {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  background: #00a577;
 }
 
 .loading-state {
@@ -769,32 +776,47 @@ html.dark {
   color: inherit;
 }
 
-/* ✨ 表格美化 - 恢复边框 */
+/* ✨ 表格容器 - 手机端可横向滚动 */
+:deep(.article-content .table-wrapper),
 :deep(.article-content table) {
+  display: block;
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+:deep(.article-content table) {
+  display: table;
+  min-width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   background: var(--color-bg);
-  border: 2px solid var(--color-primary);
+  border: 2px solid var(--color-frame-border);
   margin: 2rem 0;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 197, 142, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 197, 142, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 :deep(.article-content th) {
-  background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg) 100%);
+  background: linear-gradient(135deg, rgba(0, 197, 142, 0.08) 0%, var(--color-bg-secondary) 100%);
   color: var(--color-primary);
   padding: 14px 18px;
-  border-bottom: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-frame-border);
   white-space: nowrap;
   font-weight: 700;
   text-align: left;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+:deep(.article-content th:not(:last-child)),
+:deep(.article-content td:not(:last-child)) {
+  border-right: 1px solid var(--color-frame-border);
 }
 
 :deep(.article-content td) {
   padding: 12px 18px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-frame-border);
   color: var(--color-text);
 }
 
@@ -802,14 +824,18 @@ html.dark {
   border-bottom: none;
 }
 
-:deep(.article-content tr:hover) {
-  background: var(--color-bg-secondary);
+:deep(.article-content tr:nth-child(even)) {
+  background: rgba(0, 197, 142, 0.03);
 }
 
-/* ✨ 代码块美化 - 恢复边框 */
+:deep(.article-content tr:hover) {
+  background: rgba(0, 197, 142, 0.08);
+}
+
+/* ✨ 代码块美化 */
 :deep(.article-content pre) {
   background: var(--color-code-bg) !important;
-  border: 2px solid var(--color-primary);
+  border: 2px solid var(--color-frame-border);
   padding: 16px;
   padding-top: 0;
   border-radius: 12px;
@@ -817,7 +843,7 @@ html.dark {
   overflow-x: auto;
   max-width: 100%;
   margin: 1.5rem 0;
-  box-shadow: 0 4px 12px rgba(0, 197, 142, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 197, 142, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 :deep(.code-toolbar) {
@@ -825,13 +851,13 @@ html.dark {
   top: 0;
   left: 0;
   right: 0;
-  height: 34px;
+  height: 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 16px;
   background: linear-gradient(135deg, rgba(0, 197, 142, 0.1) 0%, var(--color-bg-secondary) 100%);
-  border-bottom: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-frame-border);
   border-radius: 10px 10px 0 0;
   z-index: 10;
   margin: 0 -16px 12px -16px;
@@ -950,7 +976,7 @@ html.dark {
   overflow: hidden;
 }
 
-/* ✨ 目录美化 - 恢复精美边框 */
+/* ✨ 目录美化 */
 .toc-sidebar {
   width: 320px;
   position: sticky;
@@ -959,11 +985,11 @@ html.dark {
   max-height: calc(100vh - 100px);
   overflow-y: auto;
   padding: 24px;
-  background: var(--color-bg-secondary);
-  border: 2px solid var(--color-primary);
+  background: var(--color-bg);
+  border: 2px solid var(--color-frame-border);
   border-radius: 16px;
   flex-shrink: 0;
-  box-shadow: 0 4px 20px rgba(0, 197, 142, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 197, 142, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .toc-sidebar::-webkit-scrollbar {
@@ -989,7 +1015,7 @@ html.dark {
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-frame-border);
 }
 
 .toc-title {
@@ -1074,7 +1100,7 @@ html.dark {
   padding: 0;
   margin: 6px 0 0 0;
   padding-left: 16px;
-  border-left: 2px solid var(--color-primary);
+  border-left: 2px solid var(--color-frame-border);
 }
 
 .toc-subitem {
@@ -1089,7 +1115,7 @@ html.dark {
 .toc-sublist .toc-sublist {
   margin-left: 0;
   padding-left: 14px;
-  border-left-color: rgba(0, 197, 142, 0.5);
+  border-left-color: var(--color-frame-border);
 }
 
 .toc-sublist .toc-sublist .toc-link {
@@ -1126,26 +1152,38 @@ html.dark {
 /* 📱 手机端适配 */
 @media (max-width: 1100px) {
   .blog-page {
-    padding: 20px 16px 80px;
+    padding: 16px 12px 60px;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  .content-container {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .content-wrapper {
     gap: 0;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .article-main {
     max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
   }
 
   .toc-sidebar {
     display: none;
   }
 
-  /* ✨ 恢复手机端目录按钮 */
+  /* ✨ 手机端目录按钮 - 右上角 */
   .mobile-toc-button {
     display: flex !important;
   }
 
+  /* ✨ 手机端目录弹窗 - 实心白色/深色背景 + 深色边框 */
   .toc-sidebar.is-open {
     display: block;
     position: fixed;
@@ -1153,10 +1191,14 @@ html.dark {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
-    max-width: 400px;
-    max-height: 70vh;
+    max-width: 420px;
+    max-height: 75vh;
     z-index: 1000;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    background: var(--color-bg);
+    border: 2.5px solid #3a3a3a;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    opacity: 1;
   }
 
   .toc-close-btn {
@@ -1164,35 +1206,125 @@ html.dark {
   }
 
   .article-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .article-navigation {
     grid-template-columns: 1fr;
   }
 
+  /* 代码块手机端适配 */
   :deep(.article-content pre) {
-    margin-left: -16px;
-    margin-right: -16px;
+    margin-left: -12px;
+    margin-right: -12px;
     border-radius: 0;
+    border-left: none;
+    border-right: none;
+    max-width: calc(100% + 24px);
   }
 
   :deep(.code-toolbar) {
     border-radius: 0;
   }
+
+  /* 表格手机端横向滚动 */
+  :deep(.article-content table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  :deep(.article-content thead),
+  :deep(.article-content tbody),
+  :deep(.article-content tr) {
+    display: table;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  :deep(.article-content table) {
+    display: block;
+  }
+
+  :deep(.article-content thead) {
+    display: table-header-group;
+  }
+
+  :deep(.article-content tbody) {
+    display: table-row-group;
+  }
+
+  :deep(.article-content tr) {
+    display: table-row;
+  }
+
+  :deep(.article-content th),
+  :deep(.article-content td) {
+    display: table-cell;
+  }
+
+  /* 图片手机端适配 */
+  :deep(.article-content img) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .top-navigation {
+    padding: 12px 0;
+    margin-bottom: 12px;
+  }
+
+  .nav-back-link {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 640px) {
-  .article-title {
-    font-size: 1.75rem;
+  .blog-page {
+    padding: 12px 10px 50px;
   }
 
-  :deep(.article-content h2) {
+  .article-title {
     font-size: 1.5rem;
   }
 
+  .article-header {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+  }
+
+  :deep(.article-content h2) {
+    font-size: 1.4rem;
+  }
+
   :deep(.article-content h3) {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+  }
+
+  :deep(.article-content h4) {
+    font-size: 1.1rem;
+  }
+
+  .article-meta {
+    gap: 12px;
+    font-size: 0.85rem;
+  }
+
+  :deep(.article-content) {
+    font-size: 1rem;
+  }
+
+  :deep(.article-content pre) {
+    font-size: 0.85rem;
+  }
+
+  .mobile-toc-button {
+    top: 60px;
+    right: 10px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
 }
 </style>
