@@ -27,6 +27,10 @@
   text-decoration: none;
   color: inherit;
   transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 .nav-item:hover {

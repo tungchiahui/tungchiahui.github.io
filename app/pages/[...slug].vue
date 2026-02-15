@@ -293,14 +293,10 @@ const isLinkActive = (linkId: string): boolean => {
 const scrollToHeading = (id: string) => {
   const element = document.getElementById(id)
   if (element) {
-    // ✨ 精准定位修复 - 增加 offset
-    const offset = 100
-    const elementPosition = element.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.scrollY - offset
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
+    // ✨ 精准定位 - 使用 scrollIntoView 配合 scroll-margin-top
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     })
   }
   closeToc()
@@ -521,13 +517,13 @@ const numberedTocLinks = computed(() => {
   --color-text-lighter: #999999;
   --color-border: var(--nav-border);
   --color-code-bg: #f6f8fa;
-  --color-frame-border: #b0b8c1;
+  --color-frame-border: #8b95a1;
 }
 
 html.dark {
   --color-code-bg: #1a1f2e;
   --color-text-lighter: #a0aec0;
-  --color-frame-border: #4a5568;
+  --color-frame-border: #5a6782;
 }
 
 .blog-page {
@@ -569,9 +565,15 @@ html.dark {
 
 .nav-back-link:hover {
   background: var(--color-primary);
-  color: white;
+  color: #ffffff;
   border-color: var(--color-primary);
   transform: translateX(-4px);
+}
+
+.nav-back-link:hover span,
+.nav-back-link:hover svg {
+  color: #ffffff;
+  stroke: #ffffff;
 }
 
 .mobile-toc-button {
@@ -676,42 +678,46 @@ html.dark {
   color: var(--color-text);
 }
 
-/* ✨ 标题恢复绿色 */
+/* ✨ 标题绿色 + scroll-margin 锚点精准定位 */
+:deep(.article-content h2),
+:deep(.article-content h3),
+:deep(.article-content h4),
+:deep(.article-content h5),
+:deep(.article-content h6) {
+  scroll-margin-top: 80px;
+  color: var(--color-primary);
+}
+
 :deep(.article-content h2) {
   font-size: 1.8rem;
   font-weight: 700;
   margin: 3rem 0 1.5rem 0;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid var(--color-border);
-  color: var(--color-primary);
 }
 
 :deep(.article-content h3) {
   font-size: 1.5rem;
   font-weight: 700;
   margin: 2.5rem 0 1.2rem 0;
-  color: var(--color-primary);
 }
 
 :deep(.article-content h4) {
   font-size: 1.3rem;
   font-weight: 600;
   margin: 2rem 0 1rem 0;
-  color: var(--color-primary);
 }
 
 :deep(.article-content h5) {
   font-size: 1.15rem;
   font-weight: 600;
   margin: 1.8rem 0 0.9rem 0;
-  color: var(--color-primary);
 }
 
 :deep(.article-content h6) {
   font-size: 1.05rem;
   font-weight: 600;
   margin: 1.5rem 0 0.8rem 0;
-  color: var(--color-primary);
 }
 
 :deep(.article-content p) {
@@ -791,10 +797,10 @@ html.dark {
   border-collapse: separate;
   border-spacing: 0;
   background: var(--color-bg);
-  border: 2px solid var(--color-frame-border);
+  border: 3px solid var(--color-frame-border);
   margin: 2rem 0;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 197, 142, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 197, 142, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 :deep(.article-content th) {
@@ -802,6 +808,7 @@ html.dark {
   color: var(--color-primary);
   padding: 14px 18px;
   border-bottom: 2px solid var(--color-frame-border);
+  border-right: 2px solid var(--color-frame-border);
   white-space: nowrap;
   font-weight: 700;
   text-align: left;
@@ -809,15 +816,19 @@ html.dark {
   letter-spacing: 0.3px;
 }
 
-:deep(.article-content th:not(:last-child)),
-:deep(.article-content td:not(:last-child)) {
-  border-right: 1px solid var(--color-frame-border);
+:deep(.article-content th:last-child) {
+  border-right: none;
 }
 
 :deep(.article-content td) {
   padding: 12px 18px;
-  border-bottom: 1px solid var(--color-frame-border);
+  border-bottom: 1.5px solid var(--color-frame-border);
+  border-right: 1.5px solid var(--color-frame-border);
   color: var(--color-text);
+}
+
+:deep(.article-content td:last-child) {
+  border-right: none;
 }
 
 :deep(.article-content tr:last-child td) {
@@ -835,7 +846,7 @@ html.dark {
 /* ✨ 代码块美化 */
 :deep(.article-content pre) {
   background: var(--color-code-bg) !important;
-  border: 2px solid var(--color-frame-border);
+  border: 3px solid var(--color-frame-border);
   padding: 16px;
   padding-top: 0;
   border-radius: 12px;
@@ -843,7 +854,7 @@ html.dark {
   overflow-x: auto;
   max-width: 100%;
   margin: 1.5rem 0;
-  box-shadow: 0 4px 16px rgba(0, 197, 142, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 197, 142, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 :deep(.code-toolbar) {
@@ -856,12 +867,11 @@ html.dark {
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  background: linear-gradient(135deg, rgba(0, 197, 142, 0.1) 0%, var(--color-bg-secondary) 100%);
-  border-bottom: 2px solid var(--color-frame-border);
+  background: var(--color-bg-secondary);
+  border-bottom: 3px solid var(--color-frame-border);
   border-radius: 10px 10px 0 0;
   z-index: 10;
-  margin: 0 -16px 12px -16px;
-  backdrop-filter: blur(10px);
+  margin: 0 -16px 14px -16px;
 }
 
 :deep(.code-language) {
@@ -976,20 +986,19 @@ html.dark {
   overflow: hidden;
 }
 
-/* ✨ 目录美化 */
+/* ✨ 目录美化 - 随滚动粘性固定 */
 .toc-sidebar {
   width: 320px;
   position: sticky;
-  top: 80px;
-  align-self: flex-start;
-  max-height: calc(100vh - 100px);
+  top: 20px;
+  max-height: calc(100vh - 40px);
   overflow-y: auto;
   padding: 24px;
   background: var(--color-bg);
-  border: 2px solid var(--color-frame-border);
+  border: 3px solid var(--color-frame-border);
   border-radius: 16px;
   flex-shrink: 0;
-  box-shadow: 0 4px 20px rgba(0, 197, 142, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 197, 142, 0.15), 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .toc-sidebar::-webkit-scrollbar {
@@ -1053,7 +1062,9 @@ html.dark {
 }
 
 .toc-item {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  padding: 2px;
+  border-radius: 8px;
 }
 
 .toc-link {
@@ -1062,24 +1073,27 @@ html.dark {
   padding: 8px 12px;
   color: var(--color-text-light);
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: all 0.2s;
   font-size: 0.9rem;
   line-height: 1.4;
-  border: 1px solid transparent;
+  border: 1.5px solid var(--color-frame-border);
+  background: var(--color-bg);
+  margin-bottom: 2px;
 }
 
 .toc-link:hover {
-  background: rgba(0, 197, 142, 0.1);
+  background: rgba(0, 197, 142, 0.12);
   color: var(--color-primary);
   border-color: var(--color-primary);
 }
 
 .toc-link.is-active {
-  background: rgba(0, 197, 142, 0.2);
+  background: rgba(0, 197, 142, 0.18);
   color: var(--color-primary);
   font-weight: 600;
   border-color: var(--color-primary);
+  box-shadow: 0 0 6px rgba(0, 197, 142, 0.3);
 }
 
 .toc-number {
@@ -1104,7 +1118,7 @@ html.dark {
 }
 
 .toc-subitem {
-  margin-bottom: 6px;
+  margin-bottom: 3px;
 }
 
 .toc-subitem .toc-link {
@@ -1183,7 +1197,7 @@ html.dark {
     display: flex !important;
   }
 
-  /* ✨ 手机端目录弹窗 - 实心白色/深色背景 + 深色边框 */
+  /* ✨ 手机端目录弹窗 - 纯色背景 + 绿色边框 */
   .toc-sidebar.is-open {
     display: block;
     position: fixed;
@@ -1194,11 +1208,17 @@ html.dark {
     max-width: 420px;
     max-height: 75vh;
     z-index: 1000;
-    background: var(--color-bg);
-    border: 2.5px solid #3a3a3a;
+    background: #ffffff;
+    border: 3px solid var(--color-primary);
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 197, 142, 0.2);
     opacity: 1;
+    overflow-y: auto;
+  }
+
+  html.dark .toc-sidebar.is-open {
+    background: #0f172a;
+    border-color: var(--color-primary);
   }
 
   .toc-close-btn {
