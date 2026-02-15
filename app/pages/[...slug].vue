@@ -1,63 +1,71 @@
 <template>
-  <div class="post">
-    <div class="toc" :style="{ position: isMobile ? 'sticky' : 'relative', top: isMobile ? '10px' : 'auto' }">
-      <h2>Table of Contents</h2>
-      <ul>
-        <li v-for="(item, index) in toc" :key="index">
-          <a :href="item.link">{{ item.title }}</a>
-        </li>
-      </ul>
-    </div>
-    <h1 :style="{ color: darkMode ? '#ffffff' : '' }">{{ title }}</h1>
-    <div class="content" :style="{ color: darkMode ? '#e5e7eb' : '' }">
-      <slot></slot>
-    </div>
-    <div class="previous-next-button">
-      <router-link :to="previousLink">Previous</router-link>
-      <router-link :to="nextLink">Next</router-link>
-    </div>
+  <div class="blog-page">
+    <table-of-contents :contents="toc" v-if="toc.length" />
+    <main class="content" v-html="content" />
+    <navigation :prev="prevPost" :next="nextPost" />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import Navigation from '@/components/Navigation.vue';
+import TableOfContents from '@/components/TableOfContents.vue';
 
-export default defineComponent({
-  name: 'BlogPost',
-  props: {
-    title: String,
-    previousLink: String,
-    nextLink: String,
-    toc: Array,
-    darkMode: Boolean,
-    isMobile: Boolean,
-  },
-});
+const route = useRoute();
+const content = ref('');
+const toc = ref([]);
+const prevPost = ref(null);
+const nextPost = ref(null);
+
+const fetchPost = async () => {
+  // Fetch the blog post data based on the slug
+  const response = await fetch(`/api/posts/${route.params.slug}`);
+  const post = await response.json();
+  content.value = post.content;
+  toc.value = post.toc;
+  prevPost.value = post.prev;
+  nextPost.value = post.next;
+};
+
+onMounted(fetchPost);
 </script>
 
 <style scoped>
-.post {
-  max-width: 1200px;
-  margin: 0 auto;
+.blog-page {
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding: 20px;
-  overflow-x: hidden;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
-.toc {
-  /* Adjustments for mobile TOC button positioning */
+
+.content {
+  margin: 20px 0;
 }
-.code-block {
-  position: relative;
+
+h1, h2, h3 {
+  color: var(--primary-color);
 }
-.copy-button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  z-index: 1;
-  /* Add additional styling for the button */
+
+.table-of-contents {
+  margin: 20px 0;
 }
-@media (max-width: 768px) {
+
+.dark-mode {
+  --background-color: #121212;
+  --text-color: #e0e0e0;
+  --primary-color: #bb86fc;
+}
+
+.light-mode {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #6200ee;
+}
+
+@media (max-width: 600px) {
   .content {
-    overflow: hidden;
+    font-size: 14px;
   }
 }
 </style>
