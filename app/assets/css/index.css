@@ -123,11 +123,12 @@ html.dark .section-header .btn-primary {
   }
   .card {
     background: #fff;
+    border: 1px solid rgba(0, 197, 142, 0.22);
     border-radius: 12px;
     padding: 20px;
     max-width: 300px;
     min-width: 220px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 18px rgba(0, 197, 142, 0.12), 0 4px 12px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
     flex: 1 1 30%;
     display: flex;
@@ -158,10 +159,13 @@ html.dark .section-header .btn-primary {
   }
   .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    box-shadow: 0 12px 28px rgba(0, 197, 142, 0.2), 0 8px 20px rgba(0,0,0,0.12);
+    border-color: rgba(0, 197, 142, 0.4);
   }
   html.dark .card {
     background: #1a2f39;
+    border: 1px solid rgba(0, 197, 142, 0.35);
+    box-shadow: 0 8px 22px rgba(0, 197, 142, 0.2), 0 6px 18px rgba(0, 0, 0, 0.28);
   }
 }
 
@@ -177,7 +181,7 @@ html.dark .home-page .intro {
 html.dark .home-page .card {
   background: #1e293b;
   border: 1px solid #334155;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 10px 26px rgba(0, 197, 142, 0.2), 0 8px 20px rgba(0, 0, 0, 0.28);
 }
 
 html.dark .home-page .card h3 {
