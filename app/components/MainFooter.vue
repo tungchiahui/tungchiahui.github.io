@@ -4,7 +4,26 @@ const config = useRuntimeConfig()
 
 <template>
   <footer class="main-footer">
-    <div>© 2026 东澈的折腾天地 - Powered by Nuxt</div>
+    <div class="footer-brand">
+      <span>© 2026 东澈的折腾天地</span>
+      <span class="brand-sep">-</span>
+      <a
+        class="powered-link"
+        href="https://nuxt.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="访问 Nuxt 官网"
+      >
+        <img
+          class="nuxt-favicon"
+          src="https://nuxt.com/icon.png"
+          alt="Nuxt"
+          loading="lazy"
+          decoding="async"
+        />
+        <span>Powered by Nuxt</span>
+      </a>
+    </div>
 
     <!-- 社交图标 -->
     <div class="footer-social">

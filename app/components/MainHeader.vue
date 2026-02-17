@@ -40,15 +40,16 @@ onMounted(() => {
         <NuxtLink to="/about" class="nav-item">关于</NuxtLink>
         <NuxtLink to="/more" class="nav-item">更多页面</NuxtLink>
       </div>
-      <button
-        @click="toggleDarkMode"
-        class="theme-toggle"
-        :title="isDark ? '切换到浅色' : '切换到深色'"
-      >
-        {{ isDark ? '🌙' : '☀️' }}
-      </button>
     </nav>
   </header>
+
+  <button
+    @click="toggleDarkMode"
+    class="theme-toggle floating-theme-toggle"
+    :title="isDark ? '切换到浅色' : '切换到深色'"
+  >
+    {{ isDark ? '🌙' : '☀️' }}
+  </button>
 </template>
 
 <style src="~/assets/css/header.css"></style>
