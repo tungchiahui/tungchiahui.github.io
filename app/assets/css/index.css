@@ -164,3 +164,27 @@ html.dark .section-header .btn-primary {
     background: #1a2f39;
   }
 }
+
+/* 首页黑暗模式可读性增强（顶层覆盖，确保生效） */
+html.dark .home-page .home-header .subtitle {
+  color: #dbeafe;
+}
+
+html.dark .home-page .intro {
+  color: #dbeafe;
+}
+
+html.dark .home-page .card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+html.dark .home-page .card h3 {
+  color: #86efac !important;
+  text-shadow: none;
+}
+
+html.dark .home-page .card p {
+  color: #e2e8f0;
+}

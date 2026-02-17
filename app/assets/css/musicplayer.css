@@ -27,8 +27,8 @@
   bottom: 10px;
   right: 10px;
   z-index: 10000;
-  background: #ff4d4f;
-  color: #fff;
+  background: #09ff00;
+  color: #000000;
   border: none;
   border-radius: 20px;
   padding: 6px 12px;
@@ -40,7 +40,7 @@
 
 /* hover */
 #toggle-player-fixed:hover {
-  background: #e04345;
+  background: #ff0000;
 }
 
 /* 展开状态：按钮上移 */
