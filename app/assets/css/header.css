@@ -5,7 +5,8 @@
   max-width: 1400px;
   margin: 0 auto 20px;
   padding: 10px 0 12px;
-  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .nav-container {

@@ -703,7 +703,7 @@ html.dark {
 .mobile-toc-button {
   display: none;
   position: fixed;
-  top: 70px;
+  top: 76px;
   right: 16px;
   z-index: 998;
   align-items: center;
@@ -1435,7 +1435,7 @@ html.dark {
   }
 
   .mobile-toc-button {
-    top: 60px;
+    top: 86px;
     right: 10px;
     padding: 6px 12px;
     font-size: 0.8rem;
