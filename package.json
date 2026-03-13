@@ -13,7 +13,8 @@
     "@nuxt/image": "^2.0.0",
     "better-sqlite3": "^12.5.0",
     "medium-zoom": "^1.1.0",
-    "nuxt": "^4.2.2"
+    "nuxt": "^4.2.2",
+    "pdfjs-dist": "^5.5.207"
   },
   "devDependencies": {
     "sass-embedded": "^1.97.1"
