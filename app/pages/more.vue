@@ -54,9 +54,22 @@
           <div class="card-sub">汇聚优质网站、社区和团队</div>
         </NuxtLink>
         
+        <!-- 技术栈与计划 -->
         <NuxtLink class="more-card" to="/tech-footprint">
           <div class="card-title">🛠️ 技术足迹</div>
           <div class="card-sub">技术栈介绍与ToDoList</div>
+        </NuxtLink>
+
+        <!-- 简历 -->
+        <NuxtLink class="more-card" to="/cv">
+          <div class="card-title">📔 简历</div>
+          <div class="card-sub">个人简历</div>
+        </NuxtLink>
+
+        <!-- 导航页 -->
+        <NuxtLink class="more-card" to="/start">
+          <div class="card-title">🗺 导航页</div>
+          <div class="card-sub">导航页</div>
         </NuxtLink>
 
       </div>
