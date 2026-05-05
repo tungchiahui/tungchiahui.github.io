@@ -51,7 +51,7 @@
         <form class="search-console" @submit.prevent="doSearch" @keydown="onSearchKeydown">
           <div
             class="search-box"
-            :class="{ focused: searchFocused, 'has-dropdown': showHistory && filteredHistory.length > 0 }"
+            :class="{ focused: searchFocused, 'has-dropdown': showSearchPanel }"
           >
             <button
               class="engine-inline-button"
@@ -105,24 +105,25 @@
           </div>
 
           <Transition name="dropdown">
-            <div v-if="showHistory && filteredHistory.length > 0" class="history-popover">
+            <div v-if="showSearchPanel" class="history-popover">
               <div class="history-head">
-                <span>最近搜索</span>
-                <button type="button" @mousedown.prevent="clearHistory">清除</button>
+                <span>{{ query.trim() ? '搜索建议' : '最近搜索' }}</span>
+                <button v-if="history.length" type="button" @mousedown.prevent="clearHistory">清除历史</button>
               </div>
 
-              <div class="history-list">
+              <div v-if="searchOptions.length" class="history-list">
                 <div
-                  v-for="(item, i) in filteredHistory"
-                  :key="`${item.text}-${item.timestamp}`"
+                  v-for="(item, i) in searchOptions"
+                  :key="`${item.source}-${item.text}`"
                   class="history-item"
                   :class="{ active: historyIndex === i }"
-                  @mousedown.prevent="selectHistory(item)"
+                  @mousedown.prevent="selectSearchOption(item)"
                 >
-                  <span class="history-dot" aria-hidden="true"></span>
+                  <span class="history-dot" :class="item.source" aria-hidden="true"></span>
                   <span class="history-text">{{ item.text }}</span>
-                  <span class="history-engine">{{ item.engine }}</span>
+                  <span class="history-engine">{{ item.source === 'suggestion' ? currentEngine.name : item.engine }}</span>
                   <button
+                    v-if="item.source === 'history'"
                     class="history-remove"
                     type="button"
                     aria-label="移除此条历史"
@@ -135,6 +136,8 @@
                   </button>
                 </div>
               </div>
+
+              <div v-else class="suggest-loading">正在获取建议</div>
             </div>
           </Transition>
 
@@ -346,6 +349,13 @@ interface HistoryEntry {
   timestamp: number
 }
 
+interface SearchOption {
+  text: string
+  engine: string
+  source: 'suggestion' | 'history'
+  timestamp?: number
+}
+
 type ViewMode = 'simple' | 'detailed'
 
 const defaultSections: BookmarkSection[] = [
@@ -430,9 +440,13 @@ const historyIndex = ref(-1)
 const searchInput = ref<HTMLInputElement | null>(null)
 const now = ref(new Date())
 const history = ref<HistoryEntry[]>([])
+const suggestions = ref<string[]>([])
+const suggestionLoading = ref(false)
 
 let timer: ReturnType<typeof setInterval> | undefined
 let backgroundTimer: ReturnType<typeof setInterval> | undefined
+let suggestionTimer: ReturnType<typeof setTimeout> | undefined
+let suggestionRequestId = 0
 
 const currentEngine = computed(() => engines[engineIdx.value] || engines[0])
 
@@ -474,6 +488,47 @@ const filteredHistory = computed(() => {
   const q = query.value.trim().toLowerCase()
   if (!q) return history.value
   return history.value.filter(item => item.text.toLowerCase().includes(q))
+})
+
+const searchOptions = computed<SearchOption[]>(() => {
+  const q = query.value.trim()
+  const seen = new Set<string>()
+  const options: SearchOption[] = []
+
+  const push = (item: SearchOption) => {
+    const key = item.text.trim().toLowerCase()
+    if (!key || seen.has(key)) return
+
+    seen.add(key)
+    options.push(item)
+  }
+
+  if (q) {
+    for (const text of suggestions.value) {
+      push({
+        text,
+        engine: currentEngine.value.name,
+        source: 'suggestion',
+      })
+    }
+  }
+
+  for (const item of filteredHistory.value) {
+    push({
+      text: item.text,
+      engine: item.engine,
+      source: 'history',
+      timestamp: item.timestamp,
+    })
+  }
+
+  return options.slice(0, 8)
+})
+
+const showSearchPanel = computed(() => {
+  if (!showHistory.value) return false
+  if (searchOptions.value.length > 0) return true
+  return suggestionLoading.value && Boolean(query.value.trim())
 })
 
 function cloneDefaults(): BookmarkSection[] {
@@ -540,10 +595,19 @@ function clearHistory() {
   showHistory.value = false
 }
 
-function selectHistory(item: HistoryEntry) {
+function selectSearchOption(item: SearchOption) {
   query.value = item.text
   showHistory.value = false
   doSearch()
+}
+
+function selectHistory(item: HistoryEntry) {
+  selectSearchOption({
+    text: item.text,
+    engine: item.engine,
+    source: 'history',
+    timestamp: item.timestamp,
+  })
 }
 
 function setViewMode(mode: ViewMode) {
@@ -579,6 +643,10 @@ function nextBackground() {
   setBackground(backgroundIdx.value + 1)
 }
 
+function looksLikeUrl(text: string) {
+  return /^(https?:\/\/|[a-zA-Z0-9-]+\.[a-zA-Z]{2,})/.test(text)
+}
+
 function doSearch() {
   const q = query.value.trim()
   if (!q) return
@@ -586,7 +654,7 @@ function doSearch() {
   addToHistory(q)
   showHistory.value = false
 
-  if (/^(https?:\/\/|[a-zA-Z0-9-]+\.[a-zA-Z]{2,})/.test(q)) {
+  if (looksLikeUrl(q)) {
     const url = q.startsWith('http') ? q : `https://${q}`
     window.open(url, '_self')
     return
@@ -599,6 +667,7 @@ function onSearchFocus() {
   searchFocused.value = true
   showHistory.value = true
   historyIndex.value = -1
+  queueSuggestions()
 }
 
 function onSearchBlur() {
@@ -610,17 +679,17 @@ function onSearchBlur() {
 }
 
 function onSearchKeydown(event: KeyboardEvent) {
-  if (!showHistory.value || filteredHistory.value.length === 0) return
+  if (!showHistory.value || searchOptions.value.length === 0) return
 
   if (event.key === 'ArrowDown') {
     event.preventDefault()
-    historyIndex.value = Math.min(historyIndex.value + 1, filteredHistory.value.length - 1)
+    historyIndex.value = Math.min(historyIndex.value + 1, searchOptions.value.length - 1)
   } else if (event.key === 'ArrowUp') {
     event.preventDefault()
     historyIndex.value = Math.max(historyIndex.value - 1, -1)
   } else if (event.key === 'Enter' && historyIndex.value >= 0) {
     event.preventDefault()
-    query.value = filteredHistory.value[historyIndex.value].text
+    query.value = searchOptions.value[historyIndex.value].text
     historyIndex.value = -1
     doSearch()
   } else if (event.key === 'Escape') {
@@ -628,6 +697,149 @@ function onSearchKeydown(event: KeyboardEvent) {
     historyIndex.value = -1
     searchInput.value?.blur()
   }
+}
+
+function normalizeSuggestionTexts(values: unknown[]) {
+  const current = query.value.trim().toLowerCase()
+  const seen = new Set<string>()
+  const results: string[] = []
+
+  for (const value of values) {
+    const text = String(value || '').trim()
+    const key = text.toLowerCase()
+
+    if (!text || key === current || seen.has(key)) continue
+
+    seen.add(key)
+    results.push(text)
+  }
+
+  return results.slice(0, 8)
+}
+
+function parseSuggestionPayload(payload: unknown) {
+  if (Array.isArray(payload) && Array.isArray(payload[1])) {
+    return normalizeSuggestionTexts(payload[1])
+  }
+
+  if (!payload || typeof payload !== 'object') return []
+
+  const data = payload as {
+    s?: unknown
+    AS?: {
+      Results?: Array<{
+        Suggests?: Array<{
+          Txt?: unknown
+        }>
+      }>
+    }
+  }
+
+  if (Array.isArray(data.s)) {
+    return normalizeSuggestionTexts(data.s)
+  }
+
+  const bingSuggests = data.AS?.Results?.flatMap(result => result.Suggests || []).map(item => item.Txt)
+  if (bingSuggests?.length) {
+    return normalizeSuggestionTexts(bingSuggests)
+  }
+
+  return []
+}
+
+function jsonp(url: string, callbackName: string, charset = 'utf-8') {
+  return new Promise<unknown>((resolve, reject) => {
+    const win = window as Window & Record<string, (payload: unknown) => void>
+    const script = document.createElement('script')
+    const timeout = window.setTimeout(() => {
+      cleanup()
+      reject(new Error('suggestion timeout'))
+    }, 4200)
+
+    function cleanup() {
+      window.clearTimeout(timeout)
+      delete win[callbackName]
+      script.remove()
+    }
+
+    win[callbackName] = (payload: unknown) => {
+      cleanup()
+      resolve(payload)
+    }
+
+    script.async = true
+    script.charset = charset
+    script.src = url
+    script.onerror = () => {
+      cleanup()
+      reject(new Error('suggestion failed'))
+    }
+
+    document.head.appendChild(script)
+  })
+}
+
+function suggestionRequest(queryText: string, callbackName: string) {
+  const encoded = encodeURIComponent(queryText)
+  const engine = currentEngine.value.name
+
+  if (engine === '谷歌') {
+    return {
+      url: `https://suggestqueries.google.com/complete/search?client=chrome&q=${encoded}&jsonp=${callbackName}`,
+      charset: 'utf-8',
+    }
+  }
+
+  if (engine === '必应') {
+    return {
+      url: `https://api.bing.com/osjson.aspx?query=${encoded}&JsonType=callback&JsonCallback=${callbackName}`,
+      charset: 'utf-8',
+    }
+  }
+
+  return {
+    url: `https://suggestion.baidu.com/su?wd=${encoded}&cb=${callbackName}`,
+    charset: 'gbk',
+  }
+}
+
+function queueSuggestions() {
+  if (import.meta.server) return
+
+  const q = query.value.trim()
+  if (suggestionTimer) clearTimeout(suggestionTimer)
+  historyIndex.value = -1
+
+  if (!q || looksLikeUrl(q)) {
+    suggestions.value = []
+    suggestionLoading.value = false
+    suggestionRequestId += 1
+    return
+  }
+
+  suggestions.value = []
+  suggestionLoading.value = true
+  const requestId = ++suggestionRequestId
+
+  suggestionTimer = setTimeout(async () => {
+    const callbackName = `__startSuggest_${Date.now()}_${requestId}`
+    const request = suggestionRequest(q, callbackName)
+
+    try {
+      const payload = await jsonp(request.url, callbackName, request.charset)
+      if (requestId === suggestionRequestId && q === query.value.trim()) {
+        suggestions.value = parseSuggestionPayload(payload)
+      }
+    } catch {
+      if (requestId === suggestionRequestId) {
+        suggestions.value = []
+      }
+    } finally {
+      if (requestId === suggestionRequestId) {
+        suggestionLoading.value = false
+      }
+    }
+  }, 180)
 }
 
 function makeId() {
@@ -736,6 +948,10 @@ function urlHost(url: string) {
   }
 }
 
+watch([query, engineIdx], () => {
+  queueSuggestions()
+})
+
 onMounted(() => {
   document.body.classList.add('start-page-active')
 
@@ -777,6 +993,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (timer) clearInterval(timer)
   if (backgroundTimer) clearInterval(backgroundTimer)
+  if (suggestionTimer) clearTimeout(suggestionTimer)
   document.body.classList.remove('start-page-active')
   document.removeEventListener('keydown', handleKeydown)
 })
@@ -821,13 +1038,13 @@ definePageMeta({ layout: false })
 }
 
 :global(html.dark) .start-page {
-  --start-panel: rgba(22, 25, 28, 0.8);
-  --start-panel-solid: rgba(28, 31, 35, 0.92);
+  --start-panel: rgba(5, 7, 10, 0.86);
+  --start-panel-solid: rgba(7, 9, 12, 0.96);
   --start-text: #eef4f0;
-  --start-muted: #aeb9b3;
-  --start-soft: rgba(37, 42, 47, 0.76);
-  --start-border: rgba(255, 255, 255, 0.15);
-  --start-shadow: 0 28px 100px rgba(0, 0, 0, 0.36);
+  --start-muted: #aab4b0;
+  --start-soft: rgba(19, 22, 27, 0.92);
+  --start-border: rgba(255, 255, 255, 0.12);
+  --start-shadow: 0 28px 100px rgba(0, 0, 0, 0.42);
   --start-line: rgba(255, 255, 255, 0.14);
   --start-accent: #39d4c4;
   --start-accent-2: #f59b59;
@@ -996,7 +1213,8 @@ definePageMeta({ layout: false })
 
 .hero-kicker {
   color: var(--start-hero-muted);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
+  font-weight: 820;
 }
 
 .hero-title {
@@ -1048,7 +1266,7 @@ definePageMeta({ layout: false })
   align-items: center;
   gap: 30px;
   text-align: center;
-  transform: translateY(-58px);
+  transform: translateY(-104px);
 }
 
 .start-page.is-simple .hero-copy {
@@ -1209,6 +1427,43 @@ definePageMeta({ layout: false })
   background: linear-gradient(135deg, var(--start-accent), #36a86a);
 }
 
+:global(html.dark) .brand-mark,
+:global(html.dark) .mode-switch,
+:global(html.dark) .top-icon,
+:global(html.dark) .search-box,
+:global(html.dark) .history-popover,
+:global(html.dark) .engine-inline-button,
+:global(html.dark) .icon-button,
+:global(html.dark) .search-submit,
+:global(html.dark) .bookmark-link,
+:global(html.dark) .aside-panel,
+:global(html.dark) .section-title-input,
+:global(html.dark) .edit-fields input {
+  background: var(--start-panel-solid);
+}
+
+:global(html.dark) .mode-switch button:hover,
+:global(html.dark) .mode-switch button.active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+:global(html.dark) .search-submit {
+  color: var(--start-text);
+  border-color: var(--start-border);
+}
+
+:global(html.dark) .search-submit:hover {
+  color: #ffffff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--start-accent), #36a86a);
+}
+
+:global(html.dark) .edit-toggle.active {
+  color: #ffffff;
+  border-color: var(--start-border);
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .clear-button {
   width: 36px;
   height: 36px;
@@ -1297,6 +1552,10 @@ definePageMeta({ layout: false })
   background: var(--start-accent);
 }
 
+.history-dot.history {
+  background: var(--start-accent-2);
+}
+
 .history-text {
   min-width: 0;
   overflow: hidden;
@@ -1343,6 +1602,13 @@ definePageMeta({ layout: false })
 .history-remove:hover {
   color: var(--start-danger);
   background: color-mix(in srgb, var(--start-danger) 10%, transparent);
+}
+
+.suggest-loading {
+  padding: 14px 18px 18px;
+  color: var(--start-muted);
+  font-size: 0.82rem;
+  font-weight: 740;
 }
 
 .start-main {
@@ -1404,6 +1670,11 @@ definePageMeta({ layout: false })
     color-mix(in srgb, var(--start-panel-solid) 78%, transparent);
   box-shadow: 0 14px 42px rgba(28, 45, 38, 0.08);
   backdrop-filter: blur(18px);
+}
+
+:global(html.dark) .link-section {
+  background: var(--start-panel-solid);
+  box-shadow: var(--start-shadow);
 }
 
 .link-section::before {
@@ -1505,6 +1776,11 @@ a.bookmark-link:hover {
   border-color: color-mix(in srgb, var(--item-accent) 52%, var(--start-border));
   background: color-mix(in srgb, var(--item-accent) 8%, var(--start-panel-solid));
   box-shadow: 0 18px 36px rgba(28, 45, 38, 0.1);
+}
+
+:global(html.dark) a.bookmark-link:hover {
+  background: color-mix(in srgb, var(--item-accent) 12%, var(--start-panel-solid));
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.34);
 }
 
 .bookmark-avatar {
@@ -1809,7 +2085,7 @@ a.bookmark-link:hover {
   }
 
   .start-page.is-simple .hero-inner {
-    transform: translateY(-42px);
+    transform: translateY(-76px);
   }
 
   .hero-copy {
@@ -1909,7 +2185,11 @@ a.bookmark-link:hover {
   }
 
   .start-page.is-simple .hero-inner {
-    transform: translateY(-28px);
+    transform: translateY(-52px);
+  }
+
+  .hero-kicker {
+    font-size: 0.98rem;
   }
 
   .time-main {
