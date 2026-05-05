@@ -1010,15 +1010,15 @@ definePageMeta({ layout: false })
 
 <style scoped>
 .start-page {
-  --start-panel: rgba(255, 255, 255, 0.74);
-  --start-panel-solid: rgba(255, 255, 255, 0.9);
-  --start-text: #111b18;
-  --start-muted: #52605b;
-  --start-soft: rgba(238, 243, 235, 0.82);
-  --start-border: rgba(255, 255, 255, 0.45);
+  --start-panel: color-mix(in srgb, var(--bg-color, #ffffff) 74%, transparent);
+  --start-panel-solid: color-mix(in srgb, var(--bg-color, #ffffff) 92%, transparent);
+  --start-text: var(--text-main, #111b18);
+  --start-muted: var(--text-secondary, #52605b);
+  --start-soft: color-mix(in srgb, var(--bg-secondary, #f7f7f8) 82%, transparent);
+  --start-border: color-mix(in srgb, var(--nav-border, #e5e7eb) 58%, rgba(255, 255, 255, 0.7));
   --start-shadow: 0 28px 90px rgba(12, 24, 20, 0.18);
-  --start-line: rgba(255, 255, 255, 0.34);
-  --start-accent: #0ea5a4;
+  --start-line: color-mix(in srgb, var(--nav-border, #e5e7eb) 48%, transparent);
+  --start-accent: #00c58e;
   --start-accent-2: #ef7d3c;
   --start-danger: #c9434f;
   --start-hero-text: rgba(255, 255, 255, 0.97);
@@ -1038,24 +1038,24 @@ definePageMeta({ layout: false })
 }
 
 :global(html.dark) .start-page {
-  --start-panel: rgba(5, 7, 10, 0.86);
-  --start-panel-solid: rgba(7, 9, 12, 0.96);
-  --start-text: #eef4f0;
-  --start-muted: #aab4b0;
-  --start-soft: rgba(19, 22, 27, 0.92);
-  --start-border: rgba(255, 255, 255, 0.12);
-  --start-shadow: 0 28px 100px rgba(0, 0, 0, 0.42);
-  --start-line: rgba(255, 255, 255, 0.14);
-  --start-accent: #39d4c4;
-  --start-accent-2: #f59b59;
-  --start-danger: #ff7782;
+  --start-panel: color-mix(in srgb, var(--bg-secondary, #1e293b) 94%, transparent);
+  --start-panel-solid: var(--bg-secondary, #1e293b);
+  --start-text: var(--text-main, #f1f5f9);
+  --start-muted: var(--text-secondary, #cbd5e1);
+  --start-soft: color-mix(in srgb, var(--bg-color, #0f172a) 55%, var(--bg-secondary, #1e293b));
+  --start-border: var(--nav-border, #334155);
+  --start-shadow: 0 28px 100px rgba(0, 0, 0, 0.34);
+  --start-line: color-mix(in srgb, var(--nav-border, #334155) 70%, transparent);
+  --start-accent: #00c58e;
+  --start-accent-2: var(--accent-color, #60a5fa);
+  --start-danger: #f87171;
   --start-hero-text: rgba(255, 255, 255, 0.97);
   --start-hero-muted: rgba(255, 255, 255, 0.86);
   --start-readable-shadow:
     0 1px 2px rgba(0, 0, 0, 0.62),
     0 0 1px rgba(0, 0, 0, 0.42),
     0 10px 34px rgba(0, 0, 0, 0.46);
-  background: #07100d;
+  background: var(--bg-color, #0f172a);
 }
 
 :global(body.start-page-active .main-header),
@@ -1428,28 +1428,33 @@ definePageMeta({ layout: false })
 }
 
 :global(html.dark) .brand-mark,
-:global(html.dark) .mode-switch,
 :global(html.dark) .top-icon,
-:global(html.dark) .search-box,
-:global(html.dark) .history-popover,
 :global(html.dark) .engine-inline-button,
 :global(html.dark) .icon-button,
-:global(html.dark) .search-submit,
+:global(html.dark) .search-submit {
+  background: var(--bg-color, #0f172a);
+  border-color: var(--nav-border, #334155);
+}
+
+:global(html.dark) .mode-switch,
+:global(html.dark) .search-box,
+:global(html.dark) .history-popover,
 :global(html.dark) .bookmark-link,
 :global(html.dark) .aside-panel,
 :global(html.dark) .section-title-input,
 :global(html.dark) .edit-fields input {
-  background: var(--start-panel-solid);
+  background: var(--bg-secondary, #1e293b);
+  border-color: var(--nav-border, #334155);
 }
 
 :global(html.dark) .mode-switch button:hover,
 :global(html.dark) .mode-switch button.active {
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main, #f1f5f9);
+  background: color-mix(in srgb, var(--accent-color, #60a5fa) 18%, var(--bg-color, #0f172a));
 }
 
 :global(html.dark) .search-submit {
   color: var(--start-text);
-  border-color: var(--start-border);
 }
 
 :global(html.dark) .search-submit:hover {
@@ -1460,8 +1465,8 @@ definePageMeta({ layout: false })
 
 :global(html.dark) .edit-toggle.active {
   color: #ffffff;
-  border-color: var(--start-border);
-  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--start-accent);
+  background: color-mix(in srgb, var(--start-accent) 28%, var(--bg-color, #0f172a));
 }
 
 .clear-button {
@@ -1673,7 +1678,8 @@ definePageMeta({ layout: false })
 }
 
 :global(html.dark) .link-section {
-  background: var(--start-panel-solid);
+  background: var(--bg-secondary, #1e293b);
+  border-color: var(--nav-border, #334155);
   box-shadow: var(--start-shadow);
 }
 
