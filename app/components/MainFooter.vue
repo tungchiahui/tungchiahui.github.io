@@ -160,7 +160,7 @@ const config = useRuntimeConfig()
     </div>
 
     <!-- IPv6 / SSL 认证徽章 -->
-    <div class="footer-cert">
+    <!-- <div class="footer-cert">
       <a 
         :href="`https://ipw.cn/ipv6webcheck/?site=${config.public.url}`" 
         title="本站支持IPv6访问" 
@@ -178,7 +178,7 @@ const config = useRuntimeConfig()
         <img alt="本站支持SSL安全访问"
             src="https://static.ipw.cn/icon/ssl-s1.svg">
       </a>
-    </div>
+    </div> -->
 
     <div class="footer-records">
       <!-- 工信部 ICP 备案 -->
