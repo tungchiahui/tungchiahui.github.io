@@ -73,7 +73,7 @@
         </NuxtLink>
 
         <!-- LOGO介绍 -->
-        <NuxtLink class="more-card" to="/mylogo">
+        <NuxtLink class="more-card" to="/start">
           <div class="card-title">🧩 个人LOGO</div>
           <div class="card-sub">LOGO介绍</div>
         </NuxtLink>
