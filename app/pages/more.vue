@@ -72,6 +72,12 @@
           <div class="card-sub">导航页</div>
         </NuxtLink>
 
+        <!-- LOGO介绍 -->
+        <NuxtLink class="more-card" to="/mylogo">
+          <div class="card-title">🧩 个人LOGO</div>
+          <div class="card-sub">LOGO介绍</div>
+        </NuxtLink>
+
       </div>
     </div>
 
