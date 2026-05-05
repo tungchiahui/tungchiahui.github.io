@@ -53,10 +53,21 @@
             class="search-box"
             :class="{ focused: searchFocused, 'has-dropdown': showHistory && filteredHistory.length > 0 }"
           >
-            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" />
-              <path d="m16.3 16.3 4.2 4.2" />
-            </svg>
+            <button
+              class="engine-inline-button"
+              type="button"
+              :aria-label="`当前搜索引擎：${currentEngine.name}，点击切换`"
+              :title="`当前搜索引擎：${currentEngine.name}`"
+              @click="cycleEngine"
+            >
+              <img
+                class="engine-logo"
+                :src="currentEngine.logo"
+                :alt="currentEngine.name"
+                referrerpolicy="no-referrer"
+                draggable="false"
+              />
+            </button>
 
             <input
               ref="searchInput"
@@ -87,8 +98,8 @@
 
             <button class="search-submit" type="submit" aria-label="开始搜索" title="搜索">
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14" />
-                <path d="m13 6 6 6-6 6" />
+                <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" />
+                <path d="m16.3 16.3 4.2 4.2" />
               </svg>
             </button>
           </div>
@@ -127,18 +138,6 @@
             </div>
           </Transition>
 
-          <div class="engine-strip" aria-label="搜索引擎">
-            <button
-              v-for="(engine, i) in engines"
-              :key="engine.name"
-              class="engine-choice"
-              :class="{ active: engineIdx === i }"
-              type="button"
-              @click="setEngine(i)"
-            >
-              {{ engine.name }}
-            </button>
-          </div>
         </form>
       </div>
     </section>
@@ -389,10 +388,9 @@ const defaultSections: BookmarkSection[] = [
 ]
 
 const engines = [
-  { name: '百度', url: 'https://www.baidu.com/s?wd=' },
-  { name: 'Google', url: 'https://www.google.com/search?q=' },
-  { name: 'Bing', url: 'https://www.bing.com/search?q=' },
-  { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=' },
+  { name: '百度', logo: 'https://www.baidu.com/favicon.ico', url: 'https://www.baidu.com/s?wd=' },
+  { name: '谷歌', logo: 'https://www.google.com/favicon.ico', url: 'https://www.google.com/search?q=' },
+  { name: '必应', logo: 'https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico', url: 'https://www.bing.com/search?q=' },
 ]
 
 const backgroundPhotos = [
@@ -563,6 +561,10 @@ function setEngine(index: number) {
   if (import.meta.client) {
     localStorage.setItem(ENGINE_KEY, currentEngine.value.name)
   }
+}
+
+function cycleEngine() {
+  setEngine((engineIdx.value + 1) % engines.length)
 }
 
 function setBackground(index: number) {
@@ -756,10 +758,15 @@ onMounted(() => {
 
     const savedEngine = localStorage.getItem(ENGINE_KEY)
     if (savedEngine) {
-      const byName = engines.findIndex(engine => engine.name === savedEngine)
+      const aliases: Record<string, string> = {
+        Google: '谷歌',
+        Bing: '必应',
+      }
+      const normalizedEngine = aliases[savedEngine] || savedEngine
+      const byName = engines.findIndex(engine => engine.name === normalizedEngine)
       const legacyNames = ['Google', 'Bing', 'DuckDuckGo', '百度']
       const legacyName = legacyNames[Number(savedEngine)]
-      const byLegacyIndex = legacyName ? engines.findIndex(engine => engine.name === legacyName) : -1
+      const byLegacyIndex = legacyName ? engines.findIndex(engine => engine.name === (aliases[legacyName] || legacyName)) : -1
       const nextIndex = byName >= 0 ? byName : byLegacyIndex
 
       if (nextIndex >= 0) engineIdx.value = nextIndex
@@ -797,13 +804,12 @@ definePageMeta({ layout: false })
   --start-accent: #0ea5a4;
   --start-accent-2: #ef7d3c;
   --start-danger: #c9434f;
+  --start-hero-text: rgba(255, 255, 255, 0.97);
+  --start-hero-muted: rgba(255, 255, 255, 0.88);
   --start-readable-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.72),
-    0 1px 0 rgba(255, 255, 255, 0.72),
-    -1px 0 0 rgba(255, 255, 255, 0.64),
-    1px 0 0 rgba(255, 255, 255, 0.64),
-    0 10px 30px rgba(255, 255, 255, 0.42),
-    0 2px 12px rgba(0, 0, 0, 0.22);
+    0 1px 2px rgba(0, 0, 0, 0.36),
+    0 0 1px rgba(0, 0, 0, 0.24),
+    0 10px 30px rgba(0, 0, 0, 0.18);
   min-height: 100vh;
   position: relative;
   isolation: isolate;
@@ -815,21 +821,23 @@ definePageMeta({ layout: false })
 }
 
 :global(html.dark) .start-page {
-  --start-panel: rgba(10, 17, 15, 0.64);
-  --start-panel-solid: rgba(19, 29, 25, 0.88);
-  --start-text: #f5faf6;
-  --start-muted: #b8c6be;
-  --start-soft: rgba(34, 52, 45, 0.82);
-  --start-border: rgba(255, 255, 255, 0.14);
-  --start-shadow: 0 28px 100px rgba(0, 0, 0, 0.45);
-  --start-line: rgba(255, 255, 255, 0.11);
+  --start-panel: rgba(22, 25, 28, 0.8);
+  --start-panel-solid: rgba(28, 31, 35, 0.92);
+  --start-text: #eef4f0;
+  --start-muted: #aeb9b3;
+  --start-soft: rgba(37, 42, 47, 0.76);
+  --start-border: rgba(255, 255, 255, 0.15);
+  --start-shadow: 0 28px 100px rgba(0, 0, 0, 0.36);
+  --start-line: rgba(255, 255, 255, 0.14);
   --start-accent: #39d4c4;
   --start-accent-2: #f59b59;
   --start-danger: #ff7782;
+  --start-hero-text: rgba(255, 255, 255, 0.97);
+  --start-hero-muted: rgba(255, 255, 255, 0.86);
   --start-readable-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.92),
-    0 0 1px rgba(0, 0, 0, 0.95),
-    0 8px 28px rgba(0, 0, 0, 0.78);
+    0 1px 2px rgba(0, 0, 0, 0.62),
+    0 0 1px rgba(0, 0, 0, 0.42),
+    0 10px 34px rgba(0, 0, 0, 0.46);
   background: #07100d;
 }
 
@@ -860,7 +868,7 @@ definePageMeta({ layout: false })
 }
 
 :global(html.dark) .photo-layer {
-  filter: saturate(0.9) contrast(1.1) brightness(0.44);
+  filter: saturate(1.08) contrast(1.02);
 }
 
 .start-page,
@@ -987,6 +995,7 @@ definePageMeta({ layout: false })
 }
 
 .hero-kicker {
+  color: var(--start-hero-muted);
   font-size: 0.9rem;
 }
 
@@ -1002,12 +1011,12 @@ definePageMeta({ layout: false })
 .time-main {
   font-size: 6.15rem;
   font-weight: 520;
-  color: var(--start-text);
+  color: var(--start-hero-text);
 }
 
 .time-second {
   margin-top: 10px;
-  color: var(--start-accent-2);
+  color: var(--start-hero-muted);
   font-size: 1.6rem;
   font-weight: 720;
 }
@@ -1015,7 +1024,7 @@ definePageMeta({ layout: false })
 .hero-greeting {
   max-width: 560px;
   margin: 0;
-  color: var(--start-muted);
+  color: var(--start-hero-muted);
   font-size: 1.08rem;
   line-height: 1.8;
 }
@@ -1039,7 +1048,7 @@ definePageMeta({ layout: false })
   align-items: center;
   gap: 30px;
   text-align: center;
-  transform: translateY(-34px);
+  transform: translateY(-58px);
 }
 
 .start-page.is-simple .hero-copy {
@@ -1069,11 +1078,6 @@ definePageMeta({ layout: false })
   font-size: 1.12rem;
 }
 
-.start-page.is-simple .engine-strip {
-  width: min(560px, 100%);
-  margin: 0 auto;
-}
-
 .search-console {
   position: relative;
   display: flex;
@@ -1095,11 +1099,6 @@ definePageMeta({ layout: false })
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, border-radius 0.2s ease;
 }
 
-:global(html.dark) .search-box {
-  background: rgba(0, 0, 0, 0.78);
-  border-color: rgba(255, 255, 255, 0.18);
-}
-
 .search-box.focused {
   border-color: color-mix(in srgb, var(--start-accent) 58%, var(--start-border));
   box-shadow: 0 26px 90px rgba(14, 165, 164, 0.18), var(--start-shadow);
@@ -1115,15 +1114,37 @@ definePageMeta({ layout: false })
   border-bottom-left-radius: 10px;
 }
 
-.search-icon {
-  width: 24px;
-  height: 24px;
+.engine-inline-button {
+  width: 44px;
+  height: 44px;
   flex: 0 0 auto;
-  fill: none;
-  stroke: var(--start-accent);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--start-border) 72%, transparent);
+  border-radius: 15px;
+  color: var(--start-text);
+  background: color-mix(in srgb, var(--start-panel-solid) 80%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 18px rgba(28, 45, 38, 0.08);
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.engine-inline-button:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--start-accent) 48%, var(--start-border));
+  background: color-mix(in srgb, var(--start-accent) 10%, var(--start-panel-solid));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 12px 24px rgba(14, 165, 164, 0.12);
+}
+
+.engine-logo {
+  width: 23px;
+  height: 23px;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
 }
 
 .search-input {
@@ -1178,13 +1199,14 @@ definePageMeta({ layout: false })
 }
 
 .search-submit {
-  color: #ffffff;
+  color: var(--start-accent);
   border-color: transparent;
-  background: linear-gradient(135deg, var(--start-accent), #36a86a);
+  background: transparent;
 }
 
 .search-submit:hover {
   color: #ffffff;
+  background: linear-gradient(135deg, var(--start-accent), #36a86a);
 }
 
 .clear-button {
@@ -1192,38 +1214,6 @@ definePageMeta({ layout: false })
   height: 36px;
   border-radius: 12px;
   color: var(--start-muted);
-}
-
-.engine-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.engine-choice {
-  min-width: 0;
-  min-height: 40px;
-  border: 1px solid var(--start-border);
-  border-radius: 12px;
-  padding: 0 10px;
-  color: var(--start-muted);
-  background: color-mix(in srgb, var(--start-panel-solid) 52%, transparent);
-  font: inherit;
-  font-size: 0.79rem;
-  font-weight: 760;
-  cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.engine-choice:hover,
-.engine-choice.active {
-  transform: translateY(-1px);
-  color: var(--start-text);
-  border-color: color-mix(in srgb, var(--start-accent) 48%, var(--start-border));
-  background: color-mix(in srgb, var(--start-accent) 12%, var(--start-panel-solid));
 }
 
 .history-popover {
@@ -1819,7 +1809,7 @@ a.bookmark-link:hover {
   }
 
   .start-page.is-simple .hero-inner {
-    transform: translateY(-24px);
+    transform: translateY(-42px);
   }
 
   .hero-copy {
@@ -1851,10 +1841,6 @@ a.bookmark-link:hover {
 
   .start-page.is-simple .history-popover {
     top: 78px;
-  }
-
-  .engine-strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .start-main {
@@ -1923,7 +1909,7 @@ a.bookmark-link:hover {
   }
 
   .start-page.is-simple .hero-inner {
-    transform: translateY(-16px);
+    transform: translateY(-28px);
   }
 
   .time-main {
@@ -1943,7 +1929,13 @@ a.bookmark-link:hover {
     font-size: 0.92rem;
   }
 
-  .search-icon {
+  .engine-inline-button {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+  }
+
+  .engine-logo {
     width: 21px;
     height: 21px;
   }
