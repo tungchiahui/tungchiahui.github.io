@@ -12,14 +12,17 @@
     <div v-if="pending" class="loading">正在扫描 Wiki...</div>
 
     <div v-else-if="filteredDocGroups.length" class="wiki-content">
-      <div class="wiki-doc-grid">
+      <div class="wiki-doc-list">
         <article v-for="doc in filteredDocGroups" :key="doc.key" class="wiki-doc-card">
           <header class="wiki-doc-header">
             <div class="wiki-doc-title-block">
               <NuxtLink :to="doc.path" class="wiki-doc-title">
                 {{ doc.title }}
               </NuxtLink>
-              <span class="wiki-doc-count">{{ doc.chapters.length }} 个章节</span>
+              <div class="wiki-doc-meta">
+                <span>{{ doc.date || '未标注日期' }}</span>
+                <span>{{ doc.chapters.length }} 个章节</span>
+              </div>
             </div>
 
             <button
@@ -103,16 +106,22 @@ const docGroups = computed(() => {
           key,
           title: wiki.docTitle || 'Wiki 文档',
           path: wiki.docRoot || wiki.path,
+          date: wiki.date,
           index: null,
           chapters: []
         })
       }
 
       const group = groups.get(key)
+      if (wiki.date && (!group.date || wiki.date > group.date)) {
+        group.date = wiki.date
+      }
+
       if (wiki.isWikiIndex) {
         group.index = wiki
         group.title = wiki.title || group.title
         group.path = wiki.path || group.path
+        group.date = wiki.date || group.date
         return
       }
 
@@ -197,6 +206,8 @@ function matchesQuery(wiki, query) {
 
 .search-input {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 10px 16px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -217,21 +228,17 @@ function matchesQuery(wiki, query) {
 }
 
 .wiki-content {
-  display: grid;
-  gap: 28px;
+  display: block;
 }
 
-.wiki-doc-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
+.wiki-doc-list {
+  display: block;
 }
 
 .wiki-doc-card {
-  padding: 18px;
-  border: 1px solid var(--nav-border, #e5e7eb);
-  border-radius: 8px;
-  background: var(--bg-secondary, #f7f7f8);
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--nav-border, #e5e7eb);
 }
 
 .wiki-doc-header {
@@ -245,24 +252,32 @@ function matchesQuery(wiki, query) {
 .wiki-doc-title-block {
   display: grid;
   gap: 4px;
+  min-width: 0;
 }
 
 .wiki-doc-title {
-  color: var(--text-main, #1f1f1f);
-  font-size: 1.15rem;
-  font-weight: 800;
+  color: #42b883;
+  font-size: 1.2rem;
+  font-weight: bold;
   line-height: 1.35;
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
 .wiki-doc-title:hover {
-  color: var(--wiki-accent);
+  color: #369870;
 }
 
-.wiki-doc-count {
-  flex: 0 0 auto;
+:global(html.dark) .wiki-doc-title {
+  color: #00c58e;
+}
+
+.wiki-doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
   color: var(--text-secondary, #666);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   line-height: 1.5;
 }
 
@@ -290,8 +305,9 @@ function matchesQuery(wiki, query) {
   display: grid;
   gap: 4px;
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 8px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px dashed var(--nav-border, #e5e7eb);
 }
 
 .wiki-chapter-item {
@@ -332,5 +348,16 @@ function matchesQuery(wiki, query) {
   padding: 40px 20px;
   text-align: center;
   color: var(--text-secondary, #666);
+}
+
+@media (max-width: 640px) {
+  .wiki-doc-header {
+    align-items: flex-start;
+  }
+
+  .wiki-doc-toggle {
+    min-width: 52px;
+    padding: 6px 9px;
+  }
 }
 </style>

@@ -14,19 +14,29 @@ import WikiList from '../../components/WikiList.vue'
 
 <style scoped>
 .wiki-home-page {
-  width: min(1120px, 100%);
+  max-width: 720px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    sans-serif;
 }
 
 .wiki-home-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .wiki-home-header h1 {
   margin: 0 0 0.5rem;
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.1;
+  font-size: 2rem;
+  line-height: 1.2;
 }
 
 .wiki-home-header p {

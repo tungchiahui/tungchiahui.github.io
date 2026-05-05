@@ -863,12 +863,12 @@ function normalizePath(path: string) {
 
   .mobile-actions {
     position: fixed;
-    right: 14px;
+    left: 14px;
     bottom: max(16px, env(safe-area-inset-bottom));
     z-index: 998;
     display: flex;
     gap: 8px;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .mobile-actions button {
