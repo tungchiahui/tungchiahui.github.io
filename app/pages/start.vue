@@ -1108,7 +1108,7 @@ definePageMeta({ layout: false })
 
 .start-hero {
   position: relative;
-  z-index: 1;
+  z-index: 5;
   padding: 44px 24px 46px;
   border-bottom: 1px solid var(--start-line);
 }
@@ -1332,6 +1332,11 @@ definePageMeta({ layout: false })
   border-bottom-left-radius: 10px;
 }
 
+.start-page.is-simple .search-box.has-dropdown {
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
 .engine-inline-button {
   width: 44px;
   height: 44px;
@@ -1484,7 +1489,7 @@ definePageMeta({ layout: false })
   z-index: 20;
   overflow: hidden;
   border: 1px solid var(--start-border);
-  border-radius: 0 0 22px 22px;
+  border-radius: 22px;
   background: color-mix(in srgb, var(--start-panel-solid) 88%, transparent);
   box-shadow: 0 22px 60px rgba(28, 45, 38, 0.18);
   backdrop-filter: blur(22px);
