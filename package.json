@@ -14,7 +14,8 @@
     "better-sqlite3": "^12.5.0",
     "medium-zoom": "^1.1.0",
     "nuxt": "^4.2.2",
-    "pdfjs-dist": "^5.5.207"
+    "pdfjs-dist": "^5.5.207",
+    "pinyin-pro": "^3.28.1"
   },
   "devDependencies": {
     "sass-embedded": "^1.97.1"

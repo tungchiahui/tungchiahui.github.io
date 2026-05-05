@@ -343,6 +343,8 @@ ST-Link就不用配置了，直接开始debug就完事了。
 
 无需任何配置
 
+![alt text](../../public/images/2026-04-17-STM32CubeIDE-VScode环境搭建/1776435639185.png)
+
 ###### JLink
 
 先安装jlink-gdbserver的bundle，如下图所示：
@@ -380,7 +382,7 @@ ST-Link就不用配置了，直接开始debug就完事了。
 
 完事
 
-##### 进行调试：
+##### 进行调试：(这里linux可能会遇到一些usb权限的问题，请自行解决)
 
 如果你是STLink应该是下图所示：
 

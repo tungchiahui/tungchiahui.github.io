@@ -1,3 +1,5 @@
+import { getWikiContentMeta } from './utils/wiki-content-meta'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // ✅ 关闭 SSR
@@ -9,6 +11,22 @@ export default defineNuxtConfig({
   },
 
   modules: ['@nuxt/content', '@nuxt/image'],
+
+  content: {
+    build: {
+      transformers: ['./transformers/wiki-pinyin-path.ts']
+    }
+  },
+
+  hooks: {
+    'content:file:afterParse'({ content }) {
+      const wikiMeta = getWikiContentMeta(content.stem)
+
+      if (wikiMeta) {
+        Object.assign(content, wikiMeta)
+      }
+    }
+  },
 
   image: {
     // CDN 域名（静态完全没问题）
