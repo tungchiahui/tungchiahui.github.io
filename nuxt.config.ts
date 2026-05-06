@@ -49,16 +49,16 @@ export default defineNuxtConfig({
   },
 
   // 设置favicon
-  app: {
-    head: {
-      link: [
-        {
-          rel: 'icon',
-          href: 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/favicon.webp'
-        }
-      ]
-    }
-  },
+  // app: {
+  //   head: {
+  //     link: [
+  //       {
+  //         rel: 'icon',
+  //         href: 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/favicon.png'
+  //       }
+  //     ]
+  //   }
+  // },
 
   // ✅ 核心修改：在 v3 中，高亮配置必须写在 mdc 节点下，而不是 content 节点下
   mdc: {

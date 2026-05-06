@@ -5,7 +5,15 @@
 
     <header class="start-topbar">
       <NuxtLink class="brand-mark" to="/" aria-label="返回首页">
-        <span>TC</span>
+        <img
+          class="brand-logo"
+          src="/favicon.ico"
+          alt=""
+          width="28"
+          height="28"
+          decoding="async"
+          draggable="false"
+        />
       </NuxtLink>
 
       <div class="top-actions">
@@ -1138,9 +1146,11 @@ definePageMeta({ layout: false })
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.brand-mark span {
-  font-weight: 850;
-  font-size: 0.88rem;
+.brand-logo {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .brand-mark:hover {
