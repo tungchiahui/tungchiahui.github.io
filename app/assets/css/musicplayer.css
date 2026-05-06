@@ -1,12 +1,17 @@
 /* 播放器容器 */
 #music-player {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  bottom: 16px;
+  right: 16px;
   z-index: 9999;
   width: 330px;
   box-sizing: content-box;
-  transition: transform .32s ease, opacity .32s ease;
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  will-change: transform, opacity;
+  transition:
+    transform .34s cubic-bezier(.2, .8, .2, 1),
+    opacity .22s ease;
 }
 
 /* APlayer 自适应高度 */
@@ -16,34 +21,143 @@
 
 /* 隐藏状态 */
 #music-player.hidden {
-  transform: translateY(460px);
+  transform: translate3d(0, calc(100% + 72px), 0);
   opacity: 0;
   pointer-events: none;
 }
 
-/* 🎧 按钮 */
+/* 播放器展开/收起按钮 */
 #toggle-player-fixed {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  bottom: 16px;
+  right: 16px;
   z-index: 10000;
-  background: #09ff00;
-  color: #000000;
-  border: none;
-  border-radius: 20px;
-  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 12px 8px 10px;
+  border: 1px solid color-mix(in srgb, #14b8a6 38%, var(--nav-border, #e5e7eb));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-color, #ffffff) 86%, transparent);
+  color: var(--text-main, #1f1f1f);
   cursor: pointer;
-  box-shadow: 0 3s 8px rgba(0,0,0,0.25);
-  font-size: 14px;
-  transition: transform .3s ease, background .2s ease;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.14), 0 4px 12px rgba(20, 184, 166, 0.12);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  font: inherit;
+  will-change: bottom, transform;
+  transition:
+    bottom .34s cubic-bezier(.2, .8, .2, 1),
+    transform .22s ease,
+    border-color .22s ease,
+    background-color .22s ease,
+    box-shadow .22s ease;
 }
 
-/* hover */
 #toggle-player-fixed:hover {
-  background: #ff0000;
+  transform: translateY(-2px);
+  border-color: #14b8a6;
+  background: color-mix(in srgb, #14b8a6 12%, var(--bg-color, #ffffff));
+  box-shadow: 0 14px 30px rgba(20, 184, 166, 0.22), 0 10px 24px rgba(15, 23, 42, 0.14);
 }
 
 /* 展开状态：按钮上移 */
 #toggle-player-fixed.open {
-  transform: translateY(-48px);
+  bottom: 92px;
+}
+
+#toggle-player-fixed.open:hover {
+  transform: translateY(-2px);
+}
+
+.toggle-player-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #14b8a6, #0ea5a4);
+  box-shadow: 0 6px 14px rgba(20, 184, 166, 0.28);
+}
+
+.toggle-player-icon svg,
+.toggle-player-chevron {
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.toggle-player-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2;
+}
+
+.toggle-player-text {
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.toggle-player-chevron {
+  width: 15px;
+  height: 15px;
+  opacity: 0.72;
+  stroke-width: 2.4;
+  transition: transform .22s ease, opacity .22s ease;
+}
+
+#toggle-player-fixed:not(.open) .toggle-player-chevron {
+  transform: rotate(180deg);
+}
+
+#toggle-player-fixed:hover .toggle-player-chevron {
+  opacity: 1;
+}
+
+html.dark #toggle-player-fixed {
+  border-color: color-mix(in srgb, #34d399 30%, var(--nav-border, #334155));
+  background: color-mix(in srgb, var(--bg-secondary, #1e293b) 88%, transparent);
+  color: var(--text-main, #f1f5f9);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), 0 4px 14px rgba(52, 211, 153, 0.14);
+}
+
+html.dark #toggle-player-fixed:hover {
+  border-color: #34d399;
+  background: color-mix(in srgb, #34d399 16%, var(--bg-secondary, #1e293b));
+  box-shadow: 0 14px 32px rgba(52, 211, 153, 0.2), 0 12px 28px rgba(0, 0, 0, 0.36);
+}
+
+html.dark .toggle-player-icon {
+  color: #0f172a;
+  background: linear-gradient(135deg, #34d399, #22d3ee);
+}
+
+@media (max-width: 480px) {
+  #music-player {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+  }
+
+  #toggle-player-fixed {
+    right: 12px;
+    bottom: 12px;
+    min-height: 40px;
+    padding: 7px 11px 7px 9px;
+  }
+
+  #toggle-player-fixed.open {
+    bottom: 84px;
+  }
+
+  #toggle-player-fixed.open:hover {
+    transform: translateY(-2px);
+  }
 }
