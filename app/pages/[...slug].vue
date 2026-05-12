@@ -151,6 +151,7 @@ const pendingAnchorId = ref<string>('')
 const scrollRetryTimers: ReturnType<typeof setTimeout>[] = []
 const imageLoadCleanupFns: Array<() => void> = []
 const tocLinks = ref<TocDisplayLink[]>([])
+const anchorSettleDelays = [820, 1300, 2100]
 
 const filteredTocLinks = computed(() =>
   tocLinks.value.filter(link => link.depth <= MAX_TOC_DEPTH.value)
@@ -185,11 +186,63 @@ const updateActiveHeading = () => {
 }
 
 let zoomInstance: ReturnType<typeof mediumZoom> | null = null
+let anchorAnimationFrame: number | null = null
+
+const easeOutCubic = (progress: number) => 1 - Math.pow(1 - progress, 3)
+
+const cancelAnchorAnimation = () => {
+  if (anchorAnimationFrame === null) return
+
+  window.cancelAnimationFrame(anchorAnimationFrame)
+  anchorAnimationFrame = null
+}
+
+const getHeadingTargetTop = (id: string) => {
+  const element = document.getElementById(id)
+  if (!element) return null
+
+  return Math.max(0, element.getBoundingClientRect().top + window.scrollY - headingScrollOffset)
+}
+
+const animateWindowScrollTo = (top: number, behavior: ScrollBehavior = 'smooth') => {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const startTop = window.scrollY
+  const distance = top - startTop
+
+  if (behavior !== 'smooth' || prefersReducedMotion || Math.abs(distance) < 2) {
+    cancelAnchorAnimation()
+    window.scrollTo({ top, behavior: 'auto' })
+    updateActiveHeading()
+    updateReadingProgress()
+    return
+  }
+
+  cancelAnchorAnimation()
+  const duration = Math.min(720, Math.max(320, Math.abs(distance) * 0.28))
+  const startTime = window.performance.now()
+
+  const step = (now: number) => {
+    const progress = Math.min(1, (now - startTime) / duration)
+    window.scrollTo(0, startTop + distance * easeOutCubic(progress))
+
+    if (progress < 1) {
+      anchorAnimationFrame = window.requestAnimationFrame(step)
+      return
+    }
+
+    anchorAnimationFrame = null
+    updateActiveHeading()
+    updateReadingProgress()
+  }
+
+  anchorAnimationFrame = window.requestAnimationFrame(step)
+}
 
 // 清理：锚点重试计时器
 const clearScrollRetryTimers = () => {
   scrollRetryTimers.forEach(timer => clearTimeout(timer))
   scrollRetryTimers.length = 0
+  cancelAnchorAnimation()
 }
 
 // 清理：图片加载监听器
@@ -200,15 +253,96 @@ const clearImageLoadListeners = () => {
 
 // 锚点滚动：统一顶部偏移
 const scrollHeadingToOffset = (id: string, behavior: ScrollBehavior = 'smooth') => {
-  const element = document.getElementById(id)
-  if (!element) return false
+  const top = getHeadingTargetTop(id)
+  if (top === null) return false
 
-  const top = element.getBoundingClientRect().top + window.scrollY - headingScrollOffset
-  window.scrollTo({
-    top: Math.max(0, top),
-    behavior
-  })
+  animateWindowScrollTo(top, behavior)
   return true
+}
+
+const correctHeadingPosition = (id: string, behavior: ScrollBehavior = 'smooth') => {
+  const top = getHeadingTargetTop(id)
+  if (top === null) return false
+
+  if (Math.abs(window.scrollY - top) > 4) {
+    animateWindowScrollTo(top, behavior)
+  }
+  updateActiveHeading()
+  updateReadingProgress()
+  return true
+}
+
+const decodeAnchorHash = (hash: string) => {
+  const rawHash = hash.startsWith('#') ? hash.slice(1) : hash
+  if (!rawHash) return ''
+
+  try {
+    return decodeURIComponent(rawHash)
+  } catch {
+    return rawHash
+  }
+}
+
+const updateUrlHash = (id: string) => {
+  const nextHash = `#${encodeURIComponent(id)}`
+  if (window.location.hash === nextHash) return
+
+  window.history.replaceState(
+    window.history.state,
+    '',
+    `${window.location.pathname}${window.location.search}${nextHash}`
+  )
+}
+
+const settleScrollToHeading = (
+  id: string,
+  behavior: ScrollBehavior = 'smooth',
+  shouldUpdateHash = false
+) => {
+  clearScrollRetryTimers()
+  pendingAnchorId.value = id
+
+  const hasScrolled = scrollHeadingToOffset(id, behavior)
+  if (!hasScrolled) {
+    pendingAnchorId.value = ''
+    return false
+  }
+
+  if (shouldUpdateHash) {
+    updateUrlHash(id)
+  }
+
+  anchorSettleDelays.forEach((delay) => {
+    const timer = setTimeout(() => {
+      if (pendingAnchorId.value !== id) return
+      correctHeadingPosition(id, 'smooth')
+    }, delay)
+    scrollRetryTimers.push(timer)
+  })
+
+  const doneTimer = setTimeout(() => {
+    if (pendingAnchorId.value === id) {
+      pendingAnchorId.value = ''
+    }
+  }, anchorSettleDelays[anchorSettleDelays.length - 1] + 500)
+  scrollRetryTimers.push(doneTimer)
+
+  return true
+}
+
+const scrollToCurrentHash = (behavior: ScrollBehavior = 'auto') => {
+  const id = decodeAnchorHash(window.location.hash || route.hash)
+  if (!id) return
+  settleScrollToHeading(id, behavior)
+}
+
+const handleHashChange = () => {
+  scrollToCurrentHash('smooth')
+}
+
+const cancelPendingAnchorScroll = () => {
+  pendingAnchorId.value = ''
+  clearScrollRetryTimers()
 }
 
 // 目录生成：从正文实际渲染后的 h2~h6 构建
@@ -366,21 +500,19 @@ const setupImageLoadReflowSync = () => {
   images.forEach((image) => {
     if (image.complete) return
 
-    const handleLoad = () => {
+    const handleImageSettled = () => {
       updateActiveHeading()
       if (pendingAnchorId.value) {
-        const hasScrolled = scrollHeadingToOffset(pendingAnchorId.value, 'auto')
-        if (hasScrolled) {
-          const settleTimer = setTimeout(() => {
-            scrollHeadingToOffset(pendingAnchorId.value, 'smooth')
-          }, 90)
-          scrollRetryTimers.push(settleTimer)
-        }
+        correctHeadingPosition(pendingAnchorId.value, 'smooth')
       }
     }
 
-    image.addEventListener('load', handleLoad, { once: true })
-    imageLoadCleanupFns.push(() => image.removeEventListener('load', handleLoad))
+    image.addEventListener('load', handleImageSettled, { once: true })
+    image.addEventListener('error', handleImageSettled, { once: true })
+    imageLoadCleanupFns.push(() => {
+      image.removeEventListener('load', handleImageSettled)
+      image.removeEventListener('error', handleImageSettled)
+    })
   })
 }
 
@@ -395,19 +527,29 @@ const enhanceContent = async () => {
 }
 
 // ==================== 生命周期与联动实现 ====================
-onMounted(() => {
-  enhanceContent()
+onMounted(async () => {
+  await enhanceContent()
   window.addEventListener('scroll', updateReadingProgress)
   window.addEventListener('scroll', updateActiveHeading)
+  window.addEventListener('hashchange', handleHashChange)
+  window.addEventListener('wheel', cancelPendingAnchorScroll, { passive: true })
+  window.addEventListener('touchstart', cancelPendingAnchorScroll, { passive: true })
+  window.addEventListener('keydown', cancelPendingAnchorScroll)
   updateReadingProgress()
   updateActiveHeading()
+  scrollToCurrentHash('auto')
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', updateReadingProgress)
   window.removeEventListener('scroll', updateActiveHeading)
+  window.removeEventListener('hashchange', handleHashChange)
+  window.removeEventListener('wheel', cancelPendingAnchorScroll)
+  window.removeEventListener('touchstart', cancelPendingAnchorScroll)
+  window.removeEventListener('keydown', cancelPendingAnchorScroll)
   clearScrollRetryTimers()
   clearImageLoadListeners()
+  document.body.style.overflow = ''
   if (zoomInstance) {
     zoomInstance.detach()
   }
@@ -417,6 +559,15 @@ onUnmounted(() => {
 watch(() => page.value, () => {
   enhanceContent()
   updateActiveHeading()
+})
+
+watch(() => route.hash, (hash) => {
+  if (!import.meta.client || !hash) return
+
+  const id = decodeAnchorHash(hash)
+  if (id) {
+    settleScrollToHeading(id, 'smooth')
+  }
 })
 
 // 移动端目录弹窗控制
@@ -434,33 +585,13 @@ const isLinkActive = (linkId: string): boolean => {
   return activeHeadingId.value === linkId
 }
 
-// 目录点击跳转：平滑滚动 + 单次温和校准
+// 目录点击跳转：平滑滚动 + 多次布局校准
 const scrollToHeading = (id: string) => {
-  pendingAnchorId.value = id
-  clearScrollRetryTimers()
-
-  const hasScrolled = scrollHeadingToOffset(id, 'smooth')
+  const hasScrolled = settleScrollToHeading(id, 'smooth', true)
   if (!hasScrolled) {
     closeToc()
     return
   }
-
-  const correctTimer = setTimeout(() => {
-    const element = document.getElementById(id)
-    if (!element) return
-
-    const targetTop = Math.max(0, element.getBoundingClientRect().top + window.scrollY - headingScrollOffset)
-    if (Math.abs(window.scrollY - targetTop) > 6) {
-      window.scrollTo({ top: targetTop, behavior: 'smooth' })
-    }
-    updateActiveHeading()
-  }, 280)
-  scrollRetryTimers.push(correctTimer)
-
-  const doneTimer = setTimeout(() => {
-    pendingAnchorId.value = ''
-  }, 800)
-  scrollRetryTimers.push(doneTimer)
 
   closeToc()
 }

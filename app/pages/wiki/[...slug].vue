@@ -120,7 +120,12 @@ const activeHeadingId = ref('')
 const readingProgress = ref(0)
 const tocLinks = ref<TocDisplayLink[]>([])
 const headingScrollOffset = 88
+const pendingAnchorId = ref('')
+const scrollRetryTimers: ReturnType<typeof setTimeout>[] = []
+const imageLoadCleanupFns: Array<() => void> = []
+const anchorSettleDelays = [820, 1300, 2100]
 let zoomInstance: ReturnType<typeof mediumZoom> | null = null
+let anchorAnimationFrame: number | null = null
 
 const hasMobileDrawer = computed(() => showDocNav.value || showToc.value)
 
@@ -273,24 +278,200 @@ const initImageZoom = () => {
   })
 }
 
+const easeOutCubic = (progress: number) => 1 - Math.pow(1 - progress, 3)
+
+const cancelAnchorAnimation = () => {
+  if (anchorAnimationFrame === null) return
+
+  window.cancelAnimationFrame(anchorAnimationFrame)
+  anchorAnimationFrame = null
+}
+
+const getHeadingTargetTop = (id: string) => {
+  const element = document.getElementById(id)
+  if (!element) return null
+
+  return Math.max(0, element.getBoundingClientRect().top + window.scrollY - headingScrollOffset)
+}
+
+const animateWindowScrollTo = (top: number, behavior: ScrollBehavior = 'smooth') => {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const startTop = window.scrollY
+  const distance = top - startTop
+
+  if (behavior !== 'smooth' || prefersReducedMotion || Math.abs(distance) < 2) {
+    cancelAnchorAnimation()
+    window.scrollTo({ top, behavior: 'auto' })
+    updateActiveHeading()
+    updateReadingProgress()
+    return
+  }
+
+  cancelAnchorAnimation()
+  const duration = Math.min(720, Math.max(320, Math.abs(distance) * 0.28))
+  const startTime = window.performance.now()
+
+  const step = (now: number) => {
+    const progress = Math.min(1, (now - startTime) / duration)
+    window.scrollTo(0, startTop + distance * easeOutCubic(progress))
+
+    if (progress < 1) {
+      anchorAnimationFrame = window.requestAnimationFrame(step)
+      return
+    }
+
+    anchorAnimationFrame = null
+    updateActiveHeading()
+    updateReadingProgress()
+  }
+
+  anchorAnimationFrame = window.requestAnimationFrame(step)
+}
+
+const clearScrollRetryTimers = () => {
+  scrollRetryTimers.forEach(timer => clearTimeout(timer))
+  scrollRetryTimers.length = 0
+  cancelAnchorAnimation()
+}
+
+const clearImageLoadListeners = () => {
+  imageLoadCleanupFns.forEach(fn => fn())
+  imageLoadCleanupFns.length = 0
+}
+
+const scrollHeadingToOffset = (id: string, behavior: ScrollBehavior = 'smooth') => {
+  const top = getHeadingTargetTop(id)
+  if (top === null) return false
+
+  animateWindowScrollTo(top, behavior)
+  return true
+}
+
+const correctHeadingPosition = (id: string, behavior: ScrollBehavior = 'smooth') => {
+  const top = getHeadingTargetTop(id)
+  if (top === null) return false
+
+  if (Math.abs(window.scrollY - top) > 4) {
+    animateWindowScrollTo(top, behavior)
+  }
+  updateActiveHeading()
+  updateReadingProgress()
+  return true
+}
+
+const decodeAnchorHash = (hash: string) => {
+  const rawHash = hash.startsWith('#') ? hash.slice(1) : hash
+  if (!rawHash) return ''
+
+  try {
+    return decodeURIComponent(rawHash)
+  } catch {
+    return rawHash
+  }
+}
+
+const updateUrlHash = (id: string) => {
+  const nextHash = `#${encodeURIComponent(id)}`
+  if (window.location.hash === nextHash) return
+
+  window.history.replaceState(
+    window.history.state,
+    '',
+    `${window.location.pathname}${window.location.search}${nextHash}`
+  )
+}
+
+const settleScrollToHeading = (
+  id: string,
+  behavior: ScrollBehavior = 'smooth',
+  shouldUpdateHash = false
+) => {
+  clearScrollRetryTimers()
+  pendingAnchorId.value = id
+
+  const hasScrolled = scrollHeadingToOffset(id, behavior)
+  if (!hasScrolled) {
+    pendingAnchorId.value = ''
+    return false
+  }
+
+  if (shouldUpdateHash) {
+    updateUrlHash(id)
+  }
+
+  anchorSettleDelays.forEach((delay) => {
+    const timer = setTimeout(() => {
+      if (pendingAnchorId.value !== id) return
+      correctHeadingPosition(id, 'smooth')
+    }, delay)
+    scrollRetryTimers.push(timer)
+  })
+
+  const doneTimer = setTimeout(() => {
+    if (pendingAnchorId.value === id) {
+      pendingAnchorId.value = ''
+    }
+  }, anchorSettleDelays[anchorSettleDelays.length - 1] + 500)
+  scrollRetryTimers.push(doneTimer)
+
+  return true
+}
+
+const scrollToCurrentHash = (behavior: ScrollBehavior = 'auto') => {
+  const id = decodeAnchorHash(window.location.hash || route.hash)
+  if (!id) return
+  settleScrollToHeading(id, behavior)
+}
+
+const handleHashChange = () => {
+  scrollToCurrentHash('smooth')
+}
+
+const cancelPendingAnchorScroll = () => {
+  pendingAnchorId.value = ''
+  clearScrollRetryTimers()
+}
+
+const setupImageLoadReflowSync = () => {
+  clearImageLoadListeners()
+
+  const images = document.querySelectorAll('.wiki-content-body img') as NodeListOf<HTMLImageElement>
+  images.forEach((image) => {
+    if (image.complete) return
+
+    const handleImageSettled = () => {
+      updateActiveHeading()
+      if (pendingAnchorId.value) {
+        correctHeadingPosition(pendingAnchorId.value, 'smooth')
+      }
+    }
+
+    image.addEventListener('load', handleImageSettled, { once: true })
+    image.addEventListener('error', handleImageSettled, { once: true })
+    imageLoadCleanupFns.push(() => {
+      image.removeEventListener('load', handleImageSettled)
+      image.removeEventListener('error', handleImageSettled)
+    })
+  })
+}
+
 const enhanceContent = async () => {
   await nextTick()
   buildTocFromDom()
   enhanceCodeBlocks()
   initImageZoom()
   applyHeadingDecorations()
+  setupImageLoadReflowSync()
   updateActiveHeading()
 }
 
 const scrollToHeading = (id: string) => {
-  const element = document.getElementById(id)
-  if (!element) {
+  const hasScrolled = settleScrollToHeading(id, 'smooth', true)
+  if (!hasScrolled) {
     closeDrawers()
     return
   }
 
-  const top = element.getBoundingClientRect().top + window.scrollY - headingScrollOffset
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
   closeDrawers()
 }
 
@@ -312,16 +493,36 @@ watch(() => page.value, () => {
   enhanceContent()
 })
 
-onMounted(() => {
-  enhanceContent()
+watch(() => route.hash, (hash) => {
+  if (!import.meta.client || !hash) return
+
+  const id = decodeAnchorHash(hash)
+  if (id) {
+    settleScrollToHeading(id, 'smooth')
+  }
+})
+
+onMounted(async () => {
+  await enhanceContent()
   window.addEventListener('scroll', updateReadingProgress)
   window.addEventListener('scroll', updateActiveHeading)
+  window.addEventListener('hashchange', handleHashChange)
+  window.addEventListener('wheel', cancelPendingAnchorScroll, { passive: true })
+  window.addEventListener('touchstart', cancelPendingAnchorScroll, { passive: true })
+  window.addEventListener('keydown', cancelPendingAnchorScroll)
   updateReadingProgress()
+  scrollToCurrentHash('auto')
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', updateReadingProgress)
   window.removeEventListener('scroll', updateActiveHeading)
+  window.removeEventListener('hashchange', handleHashChange)
+  window.removeEventListener('wheel', cancelPendingAnchorScroll)
+  window.removeEventListener('touchstart', cancelPendingAnchorScroll)
+  window.removeEventListener('keydown', cancelPendingAnchorScroll)
+  clearScrollRetryTimers()
+  clearImageLoadListeners()
   document.body.style.overflow = ''
 
   if (zoomInstance) {
