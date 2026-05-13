@@ -6,5 +6,5 @@
 </template>
 
 <script setup lang="ts">
-import PostList from '../components/PostList.vue' // 如果 pages 和 components 同级
+import PostList from '~/components/PostList.vue'
 </script>

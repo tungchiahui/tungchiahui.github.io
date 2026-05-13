@@ -64,7 +64,9 @@ const { data: surroundingPosts } = await useAsyncData(
     if (!page.value) return [null, null] as [BlogPost | null, BlogPost | null]
     
     try {
-      const allPosts = await queryCollection('content').all()
+      const allPosts = await queryCollection('content')
+        .where('stem', 'LIKE', 'posts/%')
+        .all()
       
       const markdownPosts = allPosts.filter((p: any) => 
         p._path && p._path.includes('/')
@@ -608,11 +610,11 @@ const scrollToHeading = (id: string) => {
     <div class="reading-progress-bar" :style="{ width: `${readingProgress}%` }" />
 
     <nav class="top-navigation">
-      <NuxtLink to="/" class="nav-back-link">
+      <NuxtLink to="/blog" class="nav-back-link">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
-        <span>返回首页</span>
+        <span>返回博客</span>
       </NuxtLink>
     </nav>
 

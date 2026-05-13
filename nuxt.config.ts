@@ -12,6 +12,16 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/content', '@nuxt/image'],
 
+  css: [
+    '~/assets/css/app.css',
+    '~/assets/css/index.css',
+    '~/assets/css/blogwiki.css',
+    '~/assets/css/musicplayer.css',
+    '~/assets/css/aplayer_dark.css',
+    '~/assets/css/friend.css',
+    '~/assets/css/more.css',
+  ],
+
   content: {
     build: {
       transformers: ['./transformers/wiki-pinyin-path.ts']
@@ -48,17 +58,37 @@ export default defineNuxtConfig({
     }
   },
 
-  // 设置favicon
-  // app: {
-  //   head: {
-  //     link: [
-  //       {
-  //         rel: 'icon',
-  //         href: 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/favicon.png'
-  //       }
-  //     ]
-  //   }
-  // },
+  app: {
+    head: {
+      script: [
+        {
+          src: 'https://umami.tungchiahui.cn/script.js',
+          'data-website-id': '993e907c-7120-4da5-9eaf-85a914ffbc9c',
+          defer: true
+        },
+        {
+          src: 'https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js'
+        },
+        {
+          src: 'https://cdn.tungchiahui.cn/libs/meting/2.0.2/Meting.min.js'
+        },
+        {
+          src: 'https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/all.min.js',
+          defer: true
+        }
+      ],
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.css'
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/fontawesome.min.css'
+        }
+      ]
+    }
+  },
 
   // ✅ 核心修改：在 v3 中，高亮配置必须写在 mdc 节点下，而不是 content 节点下
   mdc: {
