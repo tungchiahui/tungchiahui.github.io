@@ -9,7 +9,18 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from '#app'
 import WikiList from '../../components/WikiList.vue'
+
+useHead({
+  title: 'Wiki 知识库',
+  meta: [
+    {
+      name: 'description',
+      content: '按教程和章节组织的技术文档与学习笔记。'
+    }
+  ]
+})
 </script>
 
 <style scoped>

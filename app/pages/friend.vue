@@ -48,7 +48,18 @@
 </template>
 
 <script setup>
+import { useHead } from '#app'
 import { friends } from '~/data/friends.js'
+
+useHead({
+  title: '友情链接',
+  meta: [
+    {
+      name: 'description',
+      content: '汇聚技术资源、开源社区、竞赛团队及优质网站。'
+    }
+  ]
+})
 
 // 动态生成分类，只显示实际有的
 const categoriesOrder = [...new Set(friends.map(f => f.category))]

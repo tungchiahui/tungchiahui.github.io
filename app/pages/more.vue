@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { useHead } from '#app'
+
+useHead({
+  title: '更多页面',
+  meta: [
+    {
+      name: 'description',
+      content: '站内重要页面入口，包括数据统计、友链、技术足迹、简历与导航页。'
+    }
+  ]
+})
+</script>
+
 <template>
   <div class="more-wrap">
     <h1>更多页面</h1>

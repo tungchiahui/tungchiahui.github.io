@@ -2,10 +2,17 @@
 import { ref, onMounted } from 'vue'
 
 const isDark = ref(false)
+const headerSearchQuery = ref('')
+const router = useRouter()
 
 const toggleDarkMode = () => {
   isDark.value = !isDark.value
   updateTheme()
+}
+
+const submitHeaderSearch = () => {
+  const q = headerSearchQuery.value.trim()
+  router.push(q ? { path: '/search', query: { q } } : '/search')
 }
 
 const updateTheme = () => {
@@ -40,6 +47,23 @@ onMounted(() => {
         <NuxtLink to="/about" class="nav-item">关于</NuxtLink>
         <NuxtLink to="/more" class="nav-item">更多页面</NuxtLink>
       </div>
+
+      <form class="header-search" role="search" aria-label="全站搜索" @submit.prevent="submitHeaderSearch">
+        <input
+          v-model="headerSearchQuery"
+          type="search"
+          name="q"
+          autocomplete="off"
+          placeholder="搜索"
+          aria-label="搜索全站内容"
+        >
+        <button type="submit" aria-label="搜索">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" />
+            <path d="m16.3 16.3 4.2 4.2" />
+          </svg>
+        </button>
+      </form>
     </nav>
   </header>
 
@@ -53,5 +77,3 @@ onMounted(() => {
 </template>
 
 <style src="~/assets/css/header.css"></style>
-
-
