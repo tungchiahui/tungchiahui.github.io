@@ -294,6 +294,10 @@ const setLocale = (nextLocale: Locale) => {
 
       <figure class="portrait-wrap">
         <img :src="photoUrl" alt="董佳辉 Tung Chia-hui" loading="eager" decoding="async">
+        <figcaption>
+          <strong>Robot systems learner</strong>
+          <span>SLAM / ROS2 / Embedded Control</span>
+        </figcaption>
       </figure>
     </section>
 
@@ -486,6 +490,8 @@ const setLocale = (nextLocale: Locale) => {
 
 .portrait-wrap {
   position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
   min-height: 420px;
   margin: 0;
   overflow: hidden;
@@ -498,8 +504,26 @@ const setLocale = (nextLocale: Locale) => {
   display: block;
   width: 100%;
   height: 100%;
+  min-height: 0;
   object-fit: cover;
   object-position: center top;
+}
+
+.portrait-wrap figcaption {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+  border-top: 1px solid var(--nav-border);
+  background: var(--bg-color);
+}
+
+.portrait-wrap strong {
+  font-size: 1rem;
+}
+
+.portrait-wrap span {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
 }
 
 .metric-grid {

@@ -68,10 +68,10 @@ useHead({
           <div class="card-sub">汇聚优质网站、社区和团队</div>
         </NuxtLink>
         
-        <!-- 技术栈与计划 -->
+        <!-- 技术路线 -->
         <NuxtLink class="more-card" to="/tech-footprint">
           <div class="card-title">🛠️ 技术足迹</div>
-          <div class="card-sub">技术栈介绍与ToDoList</div>
+          <div class="card-sub">个人机器人技术路线清单</div>
         </NuxtLink>
 
         <!-- 简历 -->

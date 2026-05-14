@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useHead } from '#app'
 
-const portraitUrl = 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/tungchiahui.webp'
-
 useHead({
   title: '关于 - Tung Chia-hui',
   meta: [
@@ -85,7 +83,7 @@ const contentChannels = [
   },
   {
     title: '技术足迹',
-    description: '追踪技术栈、长期目标、阶段任务和学习路线。',
+    description: '整理个人机器人技术路线、长期任务清单和项目沉淀。',
     to: '/tech-footprint',
     label: '查看足迹'
   }
@@ -143,14 +141,6 @@ const contacts = [
           <NuxtLink class="about-button secondary" to="/tech-footprint">技术足迹</NuxtLink>
         </div>
       </div>
-
-      <figure class="portrait-panel">
-        <img :src="portraitUrl" alt="董佳辉 Tung Chia-hui" loading="eager" decoding="async">
-        <figcaption>
-          <strong>Robot systems learner</strong>
-          <span>SLAM / ROS2 / Embedded Control</span>
-        </figcaption>
-      </figure>
     </section>
 
     <section class="highlight-grid" aria-label="个人关键词">
@@ -290,7 +280,7 @@ const contacts = [
 
 .about-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
   align-items: stretch;
   padding: 2rem;
@@ -367,41 +357,6 @@ const contacts = [
 .about-button.secondary {
   border-color: #b45309;
   color: #92400e;
-}
-
-.portrait-panel {
-  display: grid;
-  grid-template-rows: minmax(320px, 1fr) auto;
-  min-width: 0;
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  border-radius: 8px;
-  background: var(--bg-color);
-}
-
-.portrait-panel img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-}
-
-.portrait-panel figcaption {
-  display: grid;
-  gap: 0.25rem;
-  padding: 1rem;
-  border-top: 1px solid var(--nav-border);
-}
-
-.portrait-panel strong {
-  font-size: 1rem;
-}
-
-.portrait-panel span {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
 }
 
 .highlight-grid {
@@ -663,15 +618,6 @@ a.contact-card:hover {
   .channel-grid,
   .service-grid {
     grid-template-columns: 1fr;
-  }
-
-  .portrait-panel {
-    order: -1;
-    grid-template-rows: auto auto;
-  }
-
-  .portrait-panel img {
-    max-height: 420px;
   }
 
   .highlight-grid,

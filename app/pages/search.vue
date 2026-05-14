@@ -99,8 +99,8 @@ const STATIC_PAGES = [
     path: '/tech-footprint',
     title: '技术足迹',
     section: '站点页面',
-    summary: '技能图谱、长期目标与任务管理。',
-    keywords: '技术足迹 技术栈 目标 计划 Todolist'
+    summary: '个人机器人技术路线和长期任务清单。',
+    keywords: '技术足迹 机器人 ROS2 SLAM Nav2 ros2_control MoveIt2 TensorRT TodoList'
   },
   {
     path: '/cv',

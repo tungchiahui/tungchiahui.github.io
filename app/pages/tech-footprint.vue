@@ -1,375 +1,318 @@
 <script setup lang="ts">
 import { useHead } from '#app'
-import { techStacks, levelConfig, weeklyPlans, priorityConfig, longTermGoals, goalStatusConfig } from '~/data/tech-footprint.js'
 import { computed, ref } from 'vue'
+import {
+  featuredTools,
+  knowledgeTags,
+  maintenanceNotes,
+  portfolioTracks,
+  priorityConfig,
+  routeIntro,
+  routePriorityGroups,
+  routeProgressStats,
+  routeSections,
+  routeTasks,
+  taskStatusConfig
+} from '~/data/tech-footprint.js'
 
 useHead({
-  title: '技术足迹 - Tung Chia-hui',
+  title: '技术足迹 - 个人机器人技术路线',
   meta: [
-    { name: 'description', content: '我的技术成长轨迹 - 技能图谱、长期目标与任务管理' }
+    {
+      name: 'description',
+      content: '个人机器人技术路线清单，覆盖 ROS2、SLAM、Nav2、ros2_control、多传感器融合、MoveIt2 与部署。'
+    }
   ]
 })
 
-// 定义类型
-type SkillLevel = 'expert' | 'intermediate' | 'learning'
-type Priority = 'high' | 'medium' | 'low'
-type GoalStatus = 'in-progress' | 'completed' | 'planned'
+type ViewKey = 'tasks' | 'stages' | 'archive'
 
-// 当前选中的视图 tab
-const activeTab = ref<'current' | 'history'>('current')
+const activeView = ref<ViewKey>('tasks')
 
-// 当前周标识（根据数据文件中的最新周次）
-const currentWeek = '2026-W07'
+const viewTabs: Array<{ key: ViewKey; label: string; eyebrow: string }> = [
+  { key: 'tasks', label: '路线待办', eyebrow: `${routeTasks.length} 个任务` },
+  { key: 'stages', label: '阶段清单', eyebrow: `${routeSections.length} 个能力层` },
+  { key: 'archive', label: '沉淀归档', eyebrow: '长期维护区' }
+]
 
-// 历史记录分页 - 每页显示的周数
-const WEEKS_PER_PAGE = 10
-const displayedWeeksCount = ref(WEEKS_PER_PAGE)
+const sortedTasks = computed(() => [...routeTasks].sort((a, b) => a.order - b.order))
 
-// 手风琴展开状态（记录哪些周是展开的）
-const expandedWeeks = ref<Set<string>>(new Set(['2026-W06'])) // 默认展开最近一周
+const sectionedTasks = computed(() =>
+  routeSections
+    .map(section => ({
+      ...section,
+      tasks: sortedTasks.value.filter(task => task.section === section.id)
+    }))
+    .filter(section => section.tasks.length > 0)
+)
 
-// 切换周的展开/收起
-const toggleWeek = (week: string) => {
-  if (expandedWeeks.value.has(week)) {
-    expandedWeeks.value.delete(week)
-  } else {
-    expandedWeeks.value.add(week)
-  }
-}
+const architectureNodes = computed(() =>
+  routeSections.map(section => ({
+    title: section.title,
+    subtitle: section.modules.slice(0, 3).join(' / '),
+    points: section.deliverables
+  }))
+)
 
-// 加载更多历史记录
-const loadMore = () => {
-  displayedWeeksCount.value += WEEKS_PER_PAGE
-}
+const coreCount = computed(() => routeTasks.filter(task => task.priority === 'core').length)
+const doingCount = computed(() => routeTasks.filter(task => task.status === 'doing').length)
+const doneCount = computed(() => routeTasks.filter(task => task.status === 'done').length)
 
-// 按视图过滤计划
-const filteredPlans = computed(() => {
-  if (activeTab.value === 'current') {
-    // 本周任务
-    return weeklyPlans.filter(p => p.week === currentWeek)
-  } else {
-    // 历史记录（本周之前的）
-    return weeklyPlans.filter(p => p.week !== currentWeek)
-  }
-})
-
-// 按周分组 - 按周次倒序排列，并应用分页限制
-const plansByWeek = computed(() => {
-  const groups: Record<string, any[]> = {}
-  filteredPlans.value.forEach(plan => {
-    if (!groups[plan.week]) {
-      groups[plan.week] = []
-    }
-    // 修复：添加类型断言，确保 groups[plan.week] 不是 undefined
-    groups[plan.week]!.push(plan)
-  })
-  
-  // 转换成数组并按周次倒序排列（最新的在前），然后应用分页
-  const sortedWeeks = Object.entries(groups)
-    .sort((a, b) => b[0].localeCompare(a[0]))
-    .map(([week, plans]) => ({ week, plans }))
-  
-  // 只返回当前显示数量的周
-  return sortedWeeks.slice(0, displayedWeeksCount.value)
-})
-
-// 是否还有更多历史记录可加载
-const hasMoreHistory = computed(() => {
-  const totalHistoryWeeks = new Set(
-    weeklyPlans.filter(p => p.week !== currentWeek).map(p => p.week)
-  ).size
-  return displayedWeeksCount.value < totalHistoryWeeks
-})
-
-// 计算完成状态统计（仅针对当前视图）
-const planStats = computed(() => {
-  const plans = filteredPlans.value
-  const total = plans.length
-  const completed = plans.filter(p => p.completed).length
-  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
-  return { total, completed, percentage }
-})
-
-// 按优先级排序计划（用于本周任务）
-const sortedPlans = computed(() => {
-  const priorityOrder: Record<Priority, number> = { 
-    high: 1, 
-    medium: 2, 
-    low: 3 
-  }
-  return [...filteredPlans.value].sort((a, b) => {
-    // 先按完成状态排序（未完成的在前）
-    if (a.completed !== b.completed) {
-      return a.completed ? 1 : -1
-    }
-    // 修复：添加类型断言
-    const aPriority = a.priority as Priority
-    const bPriority = b.priority as Priority
-    return priorityOrder[aPriority] - priorityOrder[bPriority]
-  })
-})
-
-// 类型安全的辅助函数
-const getLevelConfig = (level: string) => {
-  return levelConfig[level as SkillLevel]
-}
-
-const getPriorityConfig = (priority: string) => {
-  return priorityConfig[priority as Priority]
-}
-
-const getGoalStatusConfig = (status: string) => {
-  return goalStatusConfig[status as GoalStatus]
-}
+const getPriority = (priority: keyof typeof priorityConfig) => priorityConfig[priority]
+const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[status]
 </script>
 
 <template>
-  <div class="tech-stack-page">
-    <!-- 顶部导航 -->
-    <nav class="top-nav">
-      <NuxtLink to="/" class="back-link">← 返回首页</NuxtLink>
+  <div class="tech-footprint-page">
+    <nav class="route-nav" aria-label="页面导航">
+      <NuxtLink to="/" class="back-link">返回首页</NuxtLink>
+      <span class="nav-divider"></span>
+      <span class="nav-current">技术足迹</span>
     </nav>
 
-    <!-- 页面标题 -->
-    <header class="page-header">
-      <h1 class="main-title">🚀 技术足迹</h1>
-      <p class="subtitle">记录成长，见证进步</p>
+    <header class="route-hero">
+      <div class="hero-copy">
+        <p class="hero-badge">{{ routeIntro.badge }}</p>
+        <h1>{{ routeIntro.title }}</h1>
+        <p class="hero-summary">{{ routeIntro.summary }}</p>
+
+        <div class="track-panel">
+          <div>
+            <span class="track-label">主线</span>
+            <p>{{ routeIntro.mainTrack }}</p>
+          </div>
+          <div>
+            <span class="track-label">副线</span>
+            <p>{{ routeIntro.sideTrack }}</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-label="路线目标">
+        <span class="hero-card-kicker">路线目标</span>
+        <p>{{ routeIntro.finalGoal }}</p>
+        <div class="hero-metrics">
+          <div v-for="stat in routeProgressStats" :key="stat.label" class="metric-item">
+            <strong>{{ stat.value }}</strong>
+            <span>{{ stat.label }}</span>
+            <small>{{ stat.caption }}</small>
+          </div>
+        </div>
+      </aside>
     </header>
 
-    <!-- 长期目标 -->
-    <section class="long-term-goals">
-      <h2 class="section-title">🎯 长期目标</h2>
-      <div class="goals-grid">
-        <div 
-          v-for="goal in longTermGoals" 
-          :key="goal.id" 
-          class="goal-card"
-          :class="'status-' + goal.status"
-        >
-          <div class="goal-header">
-            <span class="goal-period">{{ goal.period }}</span>
-            <span 
-              class="goal-status" 
-              :style="{ color: getGoalStatusConfig(goal.status).color }"
-            >
-              {{ getGoalStatusConfig(goal.status).icon }} {{ getGoalStatusConfig(goal.status).label }}
-            </span>
-          </div>
-          <h3 class="goal-title">{{ goal.title }}</h3>
-          <ul class="goal-list">
-            <li v-for="(item, index) in goal.goals" :key="index">{{ item }}</li>
+    <section class="tool-strip" aria-label="核心工具链">
+      <div v-for="tool in featuredTools" :key="tool.name" class="tool-item">
+        <img :src="tool.logo" :alt="tool.name" loading="lazy" />
+        <div>
+          <strong>{{ tool.name }}</strong>
+          <span>{{ tool.role }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="architecture-section" aria-labelledby="architecture-title">
+      <div class="section-heading">
+        <p class="section-kicker">System Map</p>
+        <h2 id="architecture-title">从底盘到部署的能力链路</h2>
+        <p>这张图来自同一份阶段数据：以后调整阶段时，路线图和任务清单会一起跟着变。</p>
+      </div>
+
+      <div class="architecture-grid">
+        <article v-for="(node, index) in architectureNodes" :key="node.title" class="architecture-card">
+          <span class="node-number">{{ String(index + 1).padStart(2, '0') }}</span>
+          <h3>{{ node.title }}</h3>
+          <p class="node-subtitle">{{ node.subtitle }}</p>
+          <ul>
+            <li v-for="point in node.points" :key="point">{{ point }}</li>
           </ul>
-        </div>
+        </article>
       </div>
     </section>
 
-    <!-- 任务管理 -->
-    <section class="task-management">
-      <div class="task-header">
-        <h2 class="section-title">📋 任务管理</h2>
-        
-        <!-- Tab 切换（只保留2个） -->
-        <div class="task-tabs">
-          <button 
-            class="tab-button" 
-            :class="{ active: activeTab === 'current' }"
-            @click="activeTab = 'current'"
-          >
-            本周任务
-          </button>
-          <button 
-            class="tab-button" 
-            :class="{ active: activeTab === 'history' }"
-            @click="activeTab = 'history'"
-          >
-            历史记录
-          </button>
+    <section class="roadmap-section" aria-labelledby="roadmap-title">
+      <div class="roadmap-header">
+        <div>
+          <p class="section-kicker">Checklist</p>
+          <h2 id="roadmap-title">个人路线任务清单</h2>
+          <p>
+            {{ routeTasks.length }} 个长期任务里，先抓住 {{ coreCount }} 个主线任务；页面上的统计、分组和优先级都从任务清单自动生成。
+          </p>
         </div>
-      </div>
 
-      <!-- 统计信息 -->
-      <div class="task-stats">
-        <span class="stat-item">
-          总计 <strong>{{ planStats.total }}</strong> 项
-        </span>
-        <span class="stat-divider">•</span>
-        <span class="stat-item">
-          已完成 <strong class="completed-count">{{ planStats.completed }}</strong> 项
-        </span>
-        <span class="stat-divider">•</span>
-        <span class="stat-item">
-          完成率 <strong class="percentage">{{ planStats.percentage }}%</strong>
-        </span>
-      </div>
-
-      <!-- 进度条 -->
-      <div class="progress-bar-wrapper">
-        <div class="progress-bar">
-          <div 
-            class="progress-fill" 
-            :style="{ width: planStats.percentage + '%' }"
-          ></div>
-        </div>
-      </div>
-
-      <!-- 本周任务视图 -->
-      <div v-if="activeTab === 'current'" class="plans-grid">
-        <div 
-          v-for="plan in sortedPlans" 
-          :key="plan.id" 
-          class="plan-card"
-          :class="{ 'completed': plan.completed }"
-        >
-          <div class="plan-header">
-            <div class="plan-checkbox">
-              <span v-if="plan.completed" class="check-icon">✓</span>
-            </div>
-            <div class="plan-priority" :style="{ color: getPriorityConfig(plan.priority).color }">
-              {{ getPriorityConfig(plan.priority).icon }}
-            </div>
+        <div class="todo-summary" aria-label="任务统计">
+          <div>
+            <strong>{{ routeTasks.length }}</strong>
+            <span>总任务</span>
           </div>
-          
-          <div class="plan-content">
-            <h3 class="plan-title" :class="{ 'line-through': plan.completed }">
-              {{ plan.title }}
-            </h3>
-            <p class="plan-description">{{ plan.description }}</p>
-            
-            <div class="plan-meta">
-              <span class="plan-category">{{ plan.category }}</span>
-              <span class="plan-date">📆 {{ plan.dueDate }}</span>
-            </div>
+          <div>
+            <strong>{{ coreCount }}</strong>
+            <span>主线</span>
+          </div>
+          <div>
+            <strong>{{ doingCount }}</strong>
+            <span>进行中</span>
+          </div>
+          <div>
+            <strong>{{ doneCount }}</strong>
+            <span>已完成</span>
           </div>
         </div>
-      </div>
 
-      <!-- 历史记录视图（手风琴折叠模式 + 分页加载） -->
-      <div v-if="activeTab === 'history'" class="history-view">
-        <div 
-          v-for="{ week, plans } in plansByWeek" 
-          :key="week"
-          class="week-accordion"
-        >
-          <!-- 可点击的周标题 -->
-          <div 
-            class="week-header" 
-            @click="toggleWeek(week)"
-            :class="{ 'expanded': expandedWeeks.has(week) }"
+        <div class="view-switch" role="tablist" aria-label="路线图视图">
+          <button
+            v-for="tab in viewTabs"
+            :key="tab.key"
+            type="button"
+            role="tab"
+            :aria-selected="activeView === tab.key"
+            class="view-tab"
+            :class="{ active: activeView === tab.key }"
+            @click="activeView = tab.key"
           >
-            <div class="week-header-left">
-              <span class="expand-icon">{{ expandedWeeks.has(week) ? '▼' : '▶' }}</span>
-              <h3 class="week-title">{{ plans[0].weekLabel }}</h3>
-            </div>
-            <div class="week-stats">
-              <span class="week-complete-count">
-                {{ plans.filter(p => p.completed).length }}/{{ plans.length }} 完成
-              </span>
-            </div>
-          </div>
-          
-          <!-- 可展开的任务列表 -->
-          <transition name="accordion">
-            <div v-if="expandedWeeks.has(week)" class="week-content">
-              <div class="plans-grid">
-                <div 
-                  v-for="plan in plans" 
-                  :key="plan.id" 
-                  class="plan-card"
-                  :class="{ 'completed': plan.completed }"
-                >
-                  <div class="plan-header">
-                    <div class="plan-checkbox">
-                      <span v-if="plan.completed" class="check-icon">✓</span>
-                    </div>
-                    <div class="plan-priority" :style="{ color: getPriorityConfig(plan.priority).color }">
-                      {{ getPriorityConfig(plan.priority).icon }}
-                    </div>
-                  </div>
-                  
-                  <div class="plan-content">
-                    <h3 class="plan-title" :class="{ 'line-through': plan.completed }">
-                      {{ plan.title }}
-                    </h3>
-                    <p class="plan-description">{{ plan.description }}</p>
-                    
-                    <div class="plan-meta">
-                      <span class="plan-category">{{ plan.category }}</span>
-                      <span class="plan-date">📆 {{ plan.dueDate }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </transition>
-        </div>
-
-        <!-- 加载更多按钮 -->
-        <div v-if="hasMoreHistory" class="load-more-container">
-          <button class="load-more-btn" @click="loadMore">
-            <span class="load-more-icon">⬇</span>
-            加载更多历史记录
+            <span>{{ tab.eyebrow }}</span>
+            {{ tab.label }}
           </button>
         </div>
-
-        <!-- 已加载全部提示 -->
-        <div v-else-if="plansByWeek.length > 0" class="all-loaded-hint">
-          <span class="hint-icon">✓</span>
-          已显示全部历史记录
-        </div>
-      </div>
-    </section>
-
-    <!-- 技术栈 -->
-    <section class="tech-stack-section">
-      <h2 class="section-title">💻 技术栈</h2>
-      
-      <!-- 熟练度说明 -->
-      <div class="level-legend">
-        <div class="legend-item" v-for="(config, key) in levelConfig" :key="key">
-          <span class="legend-dot" :style="{ backgroundColor: config.color }"></span>
-          <span class="legend-label">{{ config.label }}</span>
-        </div>
       </div>
 
-      <!-- 技术栈分类展示 -->
-      <div class="tech-categories">
-        <div 
-          v-for="stack in techStacks" 
-          :key="stack.category" 
-          class="category-section"
-        >
-          <div class="category-header">
-            <span class="category-icon">{{ stack.icon }}</span>
-            <h3 class="category-title">{{ stack.category }}</h3>
+      <div v-if="activeView === 'tasks'" class="project-lanes">
+        <section v-for="section in sectionedTasks" :key="section.id" class="period-lane">
+          <div class="period-heading">
+            <span>{{ section.stage }}</span>
+            <h3>{{ section.title }}</h3>
+            <p>{{ section.focus }}</p>
           </div>
-          <p class="category-desc">{{ stack.description }}</p>
-          
-          <div class="skills-grid">
-            <div 
-              v-for="skill in stack.skills" 
-              :key="skill.name" 
-              class="skill-card"
+
+          <div class="period-projects">
+            <article
+              v-for="task in section.tasks"
+              :key="task.id"
+              class="project-card"
+              :class="'priority-' + getPriority(task.priority).tone"
             >
-              <div class="skill-content">
-                <img 
-                  :src="skill.logo" 
-                  :alt="skill.name" 
-                  class="skill-logo"
-                  loading="lazy"
-                />
-                <div class="skill-info">
-                  <span class="skill-name">{{ skill.name }}</span>
-                  <span 
-                    class="skill-badge" 
-                    :style="{ backgroundColor: getLevelConfig(skill.level).color }"
-                  >
-                    {{ getLevelConfig(skill.level).label }}
+              <div class="project-topline">
+                <div class="todo-title-line">
+                  <span class="project-check" :class="'status-' + task.status" aria-hidden="true">
+                    <span v-if="task.status === 'done'">✓</span>
                   </span>
+                  <span class="project-index">Task {{ String(task.order).padStart(2, '0') }}</span>
+                </div>
+                <div class="project-pills">
+                  <span class="status-pill" :style="{ color: getStatus(task.status).color }">
+                    {{ getStatus(task.status).label }}
+                  </span>
+                  <span class="priority-pill">{{ getPriority(task.priority).label }}</span>
+                </div>
+              </div>
+
+              <h4>{{ task.title }}</h4>
+              <p class="project-goal">{{ task.goal }}</p>
+
+              <div class="project-stack">
+                <span v-for="item in task.stack" :key="item">{{ item }}</span>
+              </div>
+
+              <ul class="project-outcomes">
+                <li v-for="item in task.checklist" :key="item">
+                  <span class="todo-checkbox" aria-hidden="true"></span>
+                  {{ item }}
+                </li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <div v-else-if="activeView === 'stages'" class="stage-timeline">
+        <article v-for="stage in routeSections" :key="stage.id" class="stage-card">
+          <div class="stage-marker">
+            <span>{{ stage.stage }}</span>
+          </div>
+
+          <div class="stage-content">
+            <h3>{{ stage.title }}</h3>
+            <p class="stage-focus">{{ stage.focus }}</p>
+
+            <div class="module-cloud">
+              <span v-for="module in stage.modules" :key="module">{{ module }}</span>
+            </div>
+
+            <div class="deliverable-list">
+              <strong>阶段成果</strong>
+              <ul>
+                <li v-for="item in stage.deliverables" :key="item">
+                  <span class="todo-checkbox" aria-hidden="true"></span>
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div v-else class="route-archive-board">
+        <div class="portfolio-grid">
+          <article v-for="track in portfolioTracks" :key="track.title" class="portfolio-card">
+            <h3>{{ track.title }}</h3>
+            <p>{{ track.description }}</p>
+            <div class="portfolio-tags">
+              <span v-for="skill in track.skills" :key="skill">{{ skill }}</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="route-archive-columns">
+          <section class="keyword-panel">
+            <h3>能力关键词</h3>
+            <div class="keyword-groups">
+              <div v-for="group in knowledgeTags" :key="group.title" class="keyword-group">
+                <strong>{{ group.title }}</strong>
+                <div>
+                  <span v-for="keyword in group.keywords" :key="keyword">{{ keyword }}</span>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
+
+          <section class="role-panel">
+            <h3>维护规则</h3>
+            <div class="maintenance-groups">
+              <div v-for="group in maintenanceNotes" :key="group.title" class="maintenance-group">
+                <strong>{{ group.title }}</strong>
+                <ul>
+                  <li v-for="note in group.notes" :key="note">{{ note }}</li>
+                </ul>
+              </div>
+            </div>
+          </section>
         </div>
+      </div>
+    </section>
+
+    <section class="priority-section" aria-labelledby="priority-title">
+      <div class="section-heading compact">
+        <p class="section-kicker">Priority</p>
+        <h2 id="priority-title">路线优先级</h2>
+        <p>这里不用单独维护，分组会从任务的 priority 字段自动生成。</p>
+      </div>
+
+      <div class="priority-grid">
+        <article
+          v-for="group in routePriorityGroups"
+          :key="group.title"
+          class="priority-card"
+          :class="'priority-' + getPriority(group.priority).tone"
+        >
+          <div class="priority-card-head">
+            <span>{{ getPriority(group.priority).label }}</span>
+            <h3>{{ group.title }}</h3>
+          </div>
+          <p>{{ getPriority(group.priority).description }}</p>
+          <ol>
+            <li v-for="item in group.items" :key="item">{{ item }}</li>
+          </ol>
+        </article>
       </div>
     </section>
   </div>
