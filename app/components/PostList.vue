@@ -1,6 +1,6 @@
 <template>
-  <section class="post-list">
-    <div class="search-box">
+  <section class="post-list" :class="{ 'is-compact': !showSearch }">
+    <div v-if="showSearch" class="search-box">
       <input
         v-model="searchQuery"
         type="text"
@@ -16,8 +16,10 @@
         <NuxtLink :to="post.path" class="post-link">
           {{ post.title || '无标题' }}
         </NuxtLink>
-        <div class="post-date">
+        <div class="post-meta">
           {{ post.date || '未标注日期' }}
+          <span v-if="showTraffic">{{ getPostTrafficLabel(post.path).pageviews }}</span>
+          <span v-if="showTraffic">{{ getPostTrafficLabel(post.path).visits }}</span>
         </div>
       </li>
     </ul>
@@ -36,48 +38,121 @@ const props = defineProps({
   limit: {
     type: Number,
     default: Infinity
+  },
+  showSearch: {
+    type: Boolean,
+    default: true
+  },
+  showTraffic: {
+    type: Boolean,
+    default: true
   }
 })
 
 const { data: posts, pending } = await useAsyncData('posts-list', () => {
   return queryCollection('content')
     .where('stem', 'LIKE', 'posts/%')
+    .select('path', 'title', 'date')
     .all()
 })
 
 const searchQuery = ref('')
+const normalizedQuery = computed(() => searchQuery.value.trim().toLowerCase())
+const emptyStats = Object.freeze({
+  pageviews: 0,
+  visitors: 0,
+  visits: 0,
+  bounces: 0,
+  totaltime: 0
+})
 
-const filteredPosts = computed(() => {
-  if (!posts.value) return []
+const sortedPosts = computed(() => {
+  if (!posts.value?.length) return []
 
-  let list = [...posts.value]
-
-  if (searchQuery.value.trim()) {
-    const q = searchQuery.value.toLowerCase()
-    list = list.filter(post => post.title?.toLowerCase().includes(q))
-  }
-
-  list.sort((a, b) => {
+  return [...posts.value].sort((a, b) => {
     const da = a.date ? new Date(a.date) : new Date(0)
     const db = b.date ? new Date(b.date) : new Date(0)
     return db - da
   })
+})
 
-  if (!searchQuery.value.trim()) {
-    list = list.slice(0, props.limit)
+const trackedPaths = computed(() => {
+  if (!props.showTraffic) return []
+
+  const paths = new Set()
+  sortedPosts.value.forEach((post) => {
+    if (post.path) paths.add(normalizePath(post.path))
+  })
+  return Array.from(paths)
+})
+
+const umamiDataKey = props.showTraffic ? 'posts-umami-paths-with-traffic' : 'posts-umami-paths-no-traffic'
+
+const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
+  umamiDataKey,
+  async () => {
+    if (!props.showTraffic || !trackedPaths.value.length) {
+      return { statsByPath: {} }
+    }
+
+    const pathMap = await fetchUmamiPathMetricsMap(resolveUmamiRange())
+    const statsByPath = Object.fromEntries(
+      trackedPaths.value.map((path) => {
+        const stats = pathMap.get(path) || emptyStats
+        return [path, stats]
+      })
+    )
+
+    return { statsByPath }
+  },
+  {
+    server: false,
+    default: () => ({ statsByPath: {} }),
+    watch: [trackedPaths, () => props.showTraffic]
+  }
+)
+
+const statsByPath = computed(() => umamiPathsData.value?.statsByPath || {})
+
+const filteredPosts = computed(() => {
+  const list = sortedPosts.value
+  if (!list.length) return []
+
+  if (!normalizedQuery.value) {
+    return list.slice(0, props.limit)
   }
 
-  return list
+  return list.filter(post => post.title?.toLowerCase().includes(normalizedQuery.value))
 })
+
+function normalizePath(path) {
+  return String(path || '/').replace(/\/$/, '') || '/'
+}
+
+function formatNumber(value) {
+  return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
+}
+
+function getPostTrafficLabel(path) {
+  const stats = statsByPath.value[normalizePath(path)] || emptyStats
+  const isLoading = umamiPending.value
+  return {
+    pageviews: isLoading && !stats.pageviews ? '总浏览 加载中...' : `总浏览 ${formatNumber(stats.pageviews)}`,
+    visits: isLoading && !stats.visits ? '总访问 加载中...' : `总访问 ${formatNumber(stats.visits)}`
+  }
+}
 </script>
 
 <style scoped>
 .post-list {
+  --post-accent: #14b8a6;
+  --post-accent-soft: color-mix(in srgb, var(--post-accent) 14%, transparent);
+  --post-border: color-mix(in srgb, var(--nav-border, #dbe5ee) 82%, transparent);
   width: 100%;
 }
 
 .search-box {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .search-input {
@@ -94,13 +169,8 @@ const filteredPosts = computed(() => {
 
 .search-input:focus {
   outline: none;
-  border-color: #42b883;
-}
-
-:global(html.dark) .search-input {
-  background: var(--bg-secondary, #2d2d2d);
-  border-color: var(--nav-border, #374151);
-  color: var(--text-main, #f1f5f9);
+  border-color: var(--post-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--post-accent) 18%, transparent);
 }
 
 .loading {
@@ -113,36 +183,67 @@ const filteredPosts = computed(() => {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  gap: 10px;
 }
 
 .post-item {
-  margin-bottom: 20px;
+  padding: 12px 14px;
+  border: 1px solid var(--post-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg-color, #fff) 92%, #ecfeff);
+  transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.post-item:hover {
+  border-color: color-mix(in srgb, var(--post-accent) 48%, transparent);
+  background: color-mix(in srgb, var(--post-accent) 10%, var(--bg-color, #fff));
+  transform: translateY(-1px);
 }
 
 .post-link {
-  font-size: 1.2rem;
-  color: #42b883;
+  font-size: 1.02rem;
+  color: #0f766e;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .post-link:hover {
-  color: #369870;
+  color: #115e59;
 }
 
-:global(html.dark) .post-link {
-  color: #00c58e;
-}
-
-.post-date {
-  font-size: 0.8rem;
+.post-meta {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  font-size: 0.78rem;
   color: var(--text-secondary, #888);
-  margin-top: 4px;
+  line-height: 1.5;
 }
 
 .empty-state {
   padding: 40px 20px;
   text-align: center;
   color: var(--text-secondary, #666);
+}
+
+.post-list.is-compact .post-items {
+  gap: 8px;
+}
+
+.post-list.is-compact .post-item {
+  padding: 10px 12px;
+}
+
+@media (max-width: 640px) {
+  .post-item {
+    padding: 10px 12px;
+  }
+
+  .post-link {
+    font-size: 0.97rem;
+  }
 }
 </style>

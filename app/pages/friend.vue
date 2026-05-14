@@ -1,7 +1,10 @@
 <template>
   <div class="friends-wrap">
     <div class="friends-header">
-      <h1>🤝 友情链接</h1>
+      <h1>
+        <i class="fas fa-handshake" aria-hidden="true"></i>
+        <span>友情链接</span>
+      </h1>
       <p>汇聚技术资源、开源社区、竞赛团队及优质网站，方便学习、交流与探索更多创新内容。</p>
     </div>
 

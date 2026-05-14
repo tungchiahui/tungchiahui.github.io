@@ -65,8 +65,8 @@ function formatDuration(totalSeconds: number, visits: number) {
 }
 
 // ==================== 配置实现 ====================
-// ⚙️ 可配置的目录深度（1-6，对应 h1-h6）
-const MAX_TOC_DEPTH = ref(6) // 👈 修改这个数字来控制目录显示的层级深度（显示到 h6）
+// 可配置的目录深度（1-6，对应 h1-h6）
+const MAX_TOC_DEPTH = ref(6) // 修改这个数字来控制目录显示的层级深度（显示到 h6）
 
 // ==================== 数据加载实现 ====================
 const { data: page, pending } = await useAsyncData(
@@ -758,7 +758,10 @@ const scrollToHeading = (id: string) => {
 
           <footer v-if="surroundingPosts && (surroundingPosts[0] || surroundingPosts[1])" class="article-footer">
             <div class="footer-divider">
-              <span>📚 继续阅读</span>
+              <span>
+                <i class="fas fa-book-open" aria-hidden="true"></i>
+                <span>继续阅读</span>
+              </span>
             </div>
             
             <nav class="article-navigation">
@@ -796,7 +799,10 @@ const scrollToHeading = (id: string) => {
           :class="{ 'is-open': showToc }"
         >
           <div class="toc-header">
-            <h2 class="toc-title">📋 目录</h2>
+            <h2 class="toc-title">
+              <i class="fas fa-list-ul" aria-hidden="true"></i>
+              <span>目录</span>
+            </h2>
             <button class="toc-close-btn" @click="closeToc">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -961,7 +967,7 @@ html.dark {
   to { transform: rotate(360deg); }
 }
 
-/* ✨ 居中容器 */
+/* 居中容器 */
 .content-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -1047,7 +1053,7 @@ html.dark {
   color: var(--color-text);
 }
 
-/* ✨ 标题绿色 + scroll-margin 锚点精准定位 */
+/* 标题绿色 + scroll-margin 锚点精准定位 */
 :deep(.article-content h2),
 :deep(.article-content h3),
 :deep(.article-content h4),
@@ -1287,12 +1293,19 @@ html.dark {
 }
 
 .footer-divider span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   padding: 8px 24px;
   background: var(--color-bg-secondary);
   color: var(--color-text);
   border-radius: 20px;
   font-weight: 600;
   font-size: 1rem;
+}
+
+.footer-divider i {
+  color: var(--color-primary);
 }
 
 .article-navigation {
@@ -1395,6 +1408,9 @@ html.dark {
 }
 
 .toc-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-primary);
@@ -1505,8 +1521,8 @@ html.dark {
 .blog-page {
   min-height: 100vh;
   padding: 0 20px 60px;
-  /* overflow-x: hidden; 👈 删除了这行。因为父级设置 hidden 会导致子元素 sticky 失效 */
-  overflow-x: clip; /* ✨ 改用 clip，既能防止横向溢出，又不会破坏粘性定位（如果浏览器支持） */
+  /* overflow-x: hidden; 删除这行是因为父级 hidden 会导致子元素 sticky 失效 */
+  overflow-x: clip; /* 改用 clip，既能防止横向溢出，又不会破坏粘性定位（如果浏览器支持） */
 }
 
   .content-container {
@@ -1530,12 +1546,12 @@ html.dark {
     display: none;
   }
 
-  /* ✨ 手机端目录按钮 - 右上角 */
+  /* 手机端目录按钮 - 右上角 */
   .mobile-toc-button {
     display: flex !important;
   }
 
-  /* ✨ 手机端目录弹窗 - 纯色背景 + 绿色边框 */
+  /* 手机端目录弹窗 - 纯色背景 + 绿色边框 */
   .toc-sidebar.is-open {
     display: block;
     position: fixed;

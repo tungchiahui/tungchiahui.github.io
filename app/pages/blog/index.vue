@@ -1,6 +1,9 @@
 <template>
-  <div class="content-page">
-    <h1>📚 博客列表</h1>
+  <div class="blog-page">
+    <h1>
+      <i class="fas fa-newspaper" aria-hidden="true"></i>
+      <span>博客列表</span>
+    </h1>
     <PostList />
   </div>
 </template>

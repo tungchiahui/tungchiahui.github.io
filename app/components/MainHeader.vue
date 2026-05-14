@@ -48,32 +48,35 @@ onMounted(() => {
         <NuxtLink to="/more" class="nav-item">更多页面</NuxtLink>
       </div>
 
-      <form class="header-search" role="search" aria-label="全站搜索" @submit.prevent="submitHeaderSearch">
-        <input
-          v-model="headerSearchQuery"
-          type="search"
-          name="q"
-          autocomplete="off"
-          placeholder="搜索"
-          aria-label="搜索全站内容"
+      <div class="nav-tools">
+        <form class="header-search" role="search" aria-label="全站搜索" @submit.prevent="submitHeaderSearch">
+          <input
+            v-model="headerSearchQuery"
+            type="search"
+            name="q"
+            autocomplete="off"
+            placeholder="搜索"
+            aria-label="搜索全站内容"
+          >
+          <button type="submit" aria-label="搜索">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" />
+              <path d="m16.3 16.3 4.2 4.2" />
+            </svg>
+          </button>
+        </form>
+
+        <button
+          @click="toggleDarkMode"
+          class="theme-toggle"
+          :title="isDark ? '切换到白天模式' : '切换到黑暗模式'"
+          :aria-label="isDark ? '切换到白天模式' : '切换到黑暗模式'"
         >
-        <button type="submit" aria-label="搜索">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" />
-            <path d="m16.3 16.3 4.2 4.2" />
-          </svg>
+          <i :class="isDark ? 'fa-solid fa-moon theme-toggle-icon' : 'fa-solid fa-sun theme-toggle-icon'" aria-hidden="true"></i>
         </button>
-      </form>
+      </div>
     </nav>
   </header>
-
-  <button
-    @click="toggleDarkMode"
-    class="theme-toggle floating-theme-toggle"
-    :title="isDark ? '切换到浅色' : '切换到深色'"
-  >
-    {{ isDark ? '🌙' : '☀️' }}
-  </button>
 </template>
 
 <style src="~/assets/css/header.css"></style>

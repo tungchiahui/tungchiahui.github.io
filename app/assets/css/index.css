@@ -1,194 +1,33 @@
-.home-page section > h2 {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-}
-
 .content-page {
-  max-width: 900px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1.8rem 1rem 2.2rem;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+.content-page h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  line-height: 1.2;
 }
 
-.section-header h2 {
-  text-align: left;
-  margin: 0;
+.content-page h1 i {
+  margin-right: 0.45rem;
+  font-size: 0.86em;
+  color: #14b8a6;
 }
 
-.section-header .btn-primary {
-  display: inline-block;
-  padding: 12px 28px;
-  border-radius: 8px;
-  background: #42b883;
-  color: #fff;
-  font-weight: bold;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+.content-page a {
+  color: #0f766e;
 }
 
-.section-header .btn-primary:hover {
-  background: #369870;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+.content-page a:hover {
+  color: #115e59;
 }
 
-html.dark .section-header .btn-primary {
-  background: #00c58e;
-  color: #0f172a;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.35);
-}
-/* 首页样式合并，支持深色模式 */
-.home-page {
-  /* 头部 */
-  .home-header {
-    text-align: center;
-    margin: 60px 20px 40px;
-  }
-  .home-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-  }
-  .home-header .subtitle {
-    font-size: 1.25rem;
-    color: #555;
-    margin-bottom: 20px;
-    transition: color 0.3s;
-  }
-  html.dark .home-header .subtitle {
-    color: #b5e3ff;
-  }
-  .home-header .btn-group {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-  }
-  .home-header .btn-primary {
-    display: inline-block;
-    padding: 12px 28px;
-    border-radius: 8px;
-    background: #42b883;
-    color: #fff;
-    font-weight: bold;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.18);
-  }
-  .home-header .btn-primary:hover {
-    background: #369870;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-  html.dark .home-header .btn-primary {
-    background: #00c58e;
-    color: #0f172a;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.35);
-  }
-
-  /* 关于本站描述 */
-  .intro {
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 1.1rem;
-    color: #444;
-    transition: color 0.3s;
-  }
-  html.dark .intro {
-    color: #b5e3ff;
-  }
-
-  /* 卡片区 */
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 60px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .card {
-    background: #fff;
-    border: 1px solid rgba(0, 197, 142, 0.22);
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 300px;
-    min-width: 220px;
-    box-shadow: 0 6px 18px rgba(0, 197, 142, 0.12), 0 4px 12px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-    flex: 1 1 30%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .card h3 {
-    margin-bottom: 10px;
-    font-size: 1.25rem;
-    color: #333;
-    font-weight: 700;
-    transition: color 0.3s, text-shadow 0.3s;
-  }
-  html.dark .card h3 {
-    color: #00ffaa !important;
-    font-weight: 900 !important;
-    text-shadow: 0 0 8px rgba(0,255,170,0.8), 0 0 16px rgba(0,255,170,0.5), 0 2px 4px rgba(0,0,0,0.8);
-    letter-spacing: 0.8px;
-  }
-  .card p {
-    font-size: 0.95rem;
-    color: #555;
-    line-height: 1.5;
-    transition: color 0.3s;
-  }
-  html.dark .card p {
-    color: #b5e3ff;
-  }
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(0, 197, 142, 0.2), 0 8px 20px rgba(0,0,0,0.12);
-    border-color: rgba(0, 197, 142, 0.4);
-  }
-  html.dark .card {
-    background: #1a2f39;
-    border: 1px solid rgba(0, 197, 142, 0.35);
-    box-shadow: 0 8px 22px rgba(0, 197, 142, 0.2), 0 6px 18px rgba(0, 0, 0, 0.28);
-  }
+html.dark .content-page a {
+  color: #5eead4;
 }
 
-/* 首页黑暗模式可读性增强（顶层覆盖，确保生效） */
-html.dark .home-page .home-header .subtitle {
-  color: #dbeafe;
-}
-
-html.dark .home-page .intro {
-  color: #dbeafe;
-}
-
-html.dark .home-page .card {
-  background: #1e293b;
-  border: 1px solid #334155;
-  box-shadow: 0 10px 26px rgba(0, 197, 142, 0.2), 0 8px 20px rgba(0, 0, 0, 0.28);
-}
-
-html.dark .home-page .card h3 {
-  color: #86efac !important;
-  text-shadow: none;
-}
-
-html.dark .home-page .card p {
-  color: #e2e8f0;
+html.dark .content-page h1 i {
+  color: #5eead4;
 }

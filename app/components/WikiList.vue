@@ -1,6 +1,6 @@
 <template>
-  <section class="wiki-list">
-    <div class="search-box">
+  <section class="wiki-list" :class="{ 'is-compact': !showSearch }">
+    <div v-if="showSearch" class="search-box">
       <input
         v-model="searchQuery"
         type="text"
@@ -22,13 +22,13 @@
               <div class="wiki-doc-meta">
                 <span>{{ doc.date || '未标注日期' }}</span>
                 <span>{{ doc.chapters.length }} 个章节</span>
-                <span>{{ getDocTrafficLabel(doc).pageviews }}</span>
-                <span>{{ getDocTrafficLabel(doc).visits }}</span>
+                <span v-if="showTraffic">{{ getDocTrafficLabel(doc).pageviews }}</span>
+                <span v-if="showTraffic">{{ getDocTrafficLabel(doc).visits }}</span>
               </div>
             </div>
 
             <button
-              v-if="doc.chapters.length"
+              v-if="showChapters && showToggle && doc.chapters.length"
               class="wiki-doc-toggle"
               type="button"
               :aria-expanded="isDocExpanded(doc)"
@@ -38,7 +38,7 @@
             </button>
           </header>
 
-          <ol v-if="doc.chapters.length && isDocExpanded(doc)" class="wiki-chapter-list">
+          <ol v-if="showChapters && doc.chapters.length && isDocExpanded(doc)" class="wiki-chapter-list">
             <li
               v-for="chapter in doc.chapters"
               :key="chapter.path"
@@ -48,7 +48,7 @@
               <NuxtLink :to="chapter.path" class="wiki-chapter-link">
                 <span v-if="chapter.chapter" class="wiki-chapter-number">{{ chapter.chapter }}</span>
                 <span class="wiki-chapter-title">{{ chapter.title || '无标题' }}</span>
-                <span class="wiki-chapter-stats">{{ getChapterTrafficLabel(chapter.path) }}</span>
+                <span v-if="showTraffic" class="wiki-chapter-stats">{{ getChapterTrafficLabel(chapter.path) }}</span>
               </NuxtLink>
             </li>
           </ol>
@@ -57,7 +57,7 @@
     </div>
 
     <div v-else class="empty-state">
-      <p v-if="searchQuery">没有找到相关 Wiki</p>
+      <p v-if="normalizedQuery">没有找到相关 Wiki</p>
       <p v-else>Wiki 还没有内容</p>
     </div>
   </section>
@@ -70,6 +70,22 @@ const props = defineProps({
   limit: {
     type: Number,
     default: Infinity
+  },
+  showSearch: {
+    type: Boolean,
+    default: true
+  },
+  showTraffic: {
+    type: Boolean,
+    default: true
+  },
+  showChapters: {
+    type: Boolean,
+    default: true
+  },
+  showToggle: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -93,6 +109,10 @@ const { data: wikis, pending } = await useAsyncData('wiki-list', () => {
 })
 
 const searchQuery = ref('')
+const normalizedQuery = computed(() => {
+  if (!props.showSearch) return ''
+  return searchQuery.value.trim().toLowerCase()
+})
 const expandedDocs = ref(new Set())
 
 const emptyStats = Object.freeze({
@@ -106,6 +126,8 @@ const emptyStats = Object.freeze({
 const wikiPages = computed(() => wikis.value || [])
 
 const trackedPaths = computed(() => {
+  if (!props.showTraffic) return []
+
   const paths = new Set()
 
   wikiPages.value
@@ -120,7 +142,7 @@ const trackedPaths = computed(() => {
 const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
   'wiki-umami-paths',
   async () => {
-    if (!trackedPaths.value.length) {
+    if (!props.showTraffic || !trackedPaths.value.length) {
       return { statsByPath: {} }
     }
 
@@ -137,7 +159,7 @@ const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
   {
     server: false,
     default: () => ({ statsByPath: {} }),
-    watch: [trackedPaths]
+    watch: [trackedPaths, () => props.showTraffic]
   }
 )
 
@@ -189,6 +211,8 @@ const docGroups = computed(() => {
 })
 
 const docTrafficByKey = computed(() => {
+  if (!props.showTraffic) return {}
+
   const result = {}
 
   docGroups.value.forEach((doc) => {
@@ -217,8 +241,8 @@ const docTrafficByKey = computed(() => {
 const filteredDocGroups = computed(() => {
   let list = docGroups.value
 
-  if (searchQuery.value.trim()) {
-    const q = searchQuery.value.toLowerCase()
+  if (normalizedQuery.value) {
+    const q = normalizedQuery.value
     list = list
       .map((doc) => {
         const docMatches = doc.title.toLowerCase().includes(q)
@@ -233,7 +257,7 @@ const filteredDocGroups = computed(() => {
       .filter(doc => doc.title.toLowerCase().includes(q) || doc.chapters.length)
   }
 
-  if (!searchQuery.value.trim()) {
+  if (!normalizedQuery.value) {
     list = list.slice(0, props.limit)
   }
 
@@ -277,7 +301,10 @@ function getDocTrafficLabel(doc) {
 }
 
 function isDocExpanded(doc) {
-  return Boolean(searchQuery.value.trim()) || expandedDocs.value.has(doc.key)
+  if (!props.showChapters) return false
+  if (normalizedQuery.value) return true
+  if (!props.showToggle) return true
+  return expandedDocs.value.has(doc.key)
 }
 
 function toggleDoc(key) {
@@ -301,9 +328,9 @@ function matchesQuery(wiki, query) {
 
 <style scoped>
 .wiki-list {
-  --wiki-accent: #00c58e;
-  --wiki-accent-strong: #0a8f68;
-  --wiki-accent-soft: rgba(0, 197, 142, 0.12);
+  --wiki-accent: #14b8a6;
+  --wiki-accent-strong: #115e59;
+  --wiki-accent-soft: color-mix(in srgb, var(--wiki-accent) 14%, transparent);
   width: 100%;
 }
 
@@ -326,12 +353,7 @@ function matchesQuery(wiki, query) {
 .search-input:focus {
   outline: none;
   border-color: var(--wiki-accent);
-}
-
-:global(html.dark) .search-input {
-  background: var(--bg-secondary, #2d2d2d);
-  border-color: var(--nav-border, #374151);
-  color: var(--text-main, #f1f5f9);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--wiki-accent) 18%, transparent);
 }
 
 .wiki-content {
@@ -343,9 +365,18 @@ function matchesQuery(wiki, query) {
 }
 
 .wiki-doc-card {
-  margin-bottom: 20px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--nav-border, #e5e7eb);
+  margin-bottom: 12px;
+  padding: 14px;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg-color, #fff) 92%, #ecfeff);
+  transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.wiki-doc-card:hover {
+  border-color: color-mix(in srgb, var(--wiki-accent) 46%, transparent);
+  background: color-mix(in srgb, var(--wiki-accent) 9%, var(--bg-color, #fff));
+  transform: translateY(-1px);
 }
 
 .wiki-doc-header {
@@ -353,7 +384,7 @@ function matchesQuery(wiki, query) {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .wiki-doc-title-block {
@@ -363,20 +394,16 @@ function matchesQuery(wiki, query) {
 }
 
 .wiki-doc-title {
-  color: #42b883;
-  font-size: 1.2rem;
-  font-weight: bold;
+  color: #0f766e;
+  font-size: 1.04rem;
+  font-weight: 700;
   line-height: 1.35;
   text-decoration: none;
   overflow-wrap: anywhere;
 }
 
 .wiki-doc-title:hover {
-  color: #369870;
-}
-
-:global(html.dark) .wiki-doc-title {
-  color: #00c58e;
+  color: var(--wiki-accent-strong);
 }
 
 .wiki-doc-meta {
@@ -426,7 +453,7 @@ function matchesQuery(wiki, query) {
   grid-template-columns: auto 1fr auto;
   gap: 8px;
   align-items: baseline;
-  min-height: 32px;
+  min-height: 30px;
   padding: 6px 8px;
   border-radius: 6px;
   color: var(--text-main, #333);
@@ -466,6 +493,15 @@ function matchesQuery(wiki, query) {
   padding: 40px 20px;
   text-align: center;
   color: var(--text-secondary, #666);
+}
+
+.wiki-list.is-compact .wiki-doc-card {
+  margin-bottom: 10px;
+  padding: 12px;
+}
+
+.wiki-list.is-compact .wiki-doc-header {
+  margin-bottom: 2px;
 }
 
 @media (max-width: 640px) {

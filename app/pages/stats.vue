@@ -37,7 +37,7 @@ interface OverviewResponse {
 }
 
 useHead({
-  title: '📊 数据统计',
+  title: '数据统计',
   meta: [
     {
       name: 'description',
@@ -214,7 +214,10 @@ const sections = computed(() => {
   <div class="stats-page">
     <header class="stats-header">
       <p class="stats-kicker">Analytics</p>
-      <h1>📊 数据统计</h1>
+      <h1>
+        <i class="fas fa-chart-bar" aria-hidden="true"></i>
+        <span>数据统计</span>
+      </h1>
       <p class="stats-note">以下数据来自 Umami API，支持实时刷新。</p>
       <button class="refresh-btn" type="button" :disabled="pending" @click="handleRefresh">
         {{ pending ? '刷新中...' : '刷新数据' }}
@@ -282,9 +285,17 @@ const sections = computed(() => {
 }
 
 .stats-header h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.1;
+}
+
+.stats-header h1 i {
+  color: #14b8a6;
+  font-size: 0.86em;
 }
 
 .stats-note {
@@ -417,6 +428,10 @@ const sections = computed(() => {
   width: 100%;
   min-height: 900px;
   border: 0;
+}
+
+html.dark .stats-header h1 i {
+  color: #5eead4;
 }
 
 @media (max-width: 640px) {

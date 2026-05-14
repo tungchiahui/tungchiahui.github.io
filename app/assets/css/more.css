@@ -54,11 +54,24 @@
 }
 
 .card-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   font-weight: 600;
   font-size: 1.2rem;
   margin-bottom: 6px;
   color: var(--text-main, #333);
   text-align: center;
+}
+
+.card-title i {
+  color: #14b8a6;
+  font-size: 1rem;
+}
+
+:global(html.dark) .card-title i {
+  color: #5eead4;
 }
 
 .card-sub {

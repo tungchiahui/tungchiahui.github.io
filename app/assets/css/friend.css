@@ -1,14 +1,42 @@
+.friends-wrap {
+  width: min(1120px, 100%);
+  max-width: 1120px;
+  margin: 40px auto;
+  padding: 0 20px 28px;
+  box-sizing: border-box;
+}
+
+.friends-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.friends-header h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+}
+
+.friends-header h1 i {
+  color: #14b8a6;
+  font-size: 1.1rem;
+}
+
 .friend-category-title {
+  width: fit-content;
   font-size: 1.3rem;
   font-weight: 600;
   color: #ff4d4f;
-  margin: 40px 0 20px 0;
-  border-left: 4px solid #ff4d4f;
-  padding-left: 8px;
+  margin: 40px auto 20px;
+  border-bottom: 3px solid #ff4d4f;
+  padding: 0 6px 8px;
+  text-align: center;
 }
 .friends-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 340px));
+  justify-content: center;
   gap: 20px;
 }
 .friend {
@@ -38,6 +66,11 @@
 .tag { background:#f0f0f0; color:#333; border-radius:8px; padding:2px 8px; font-size:0.8rem; }
 .friend-bottom { text-align:right; margin-top:10px; color:#ff4d4f; font-weight:500; transition:color .2s ease; }
 .friend-bottom:hover { color:#d9363e; }
+
+html.dark .friends-header h1 i {
+  color: #5eead4;
+}
+
 @media (max-width: 600px) {
   .friends-wrap { padding:20px 10px; }
   .friend { padding:14px; }
