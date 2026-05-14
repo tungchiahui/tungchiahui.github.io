@@ -22,6 +22,8 @@
               <div class="wiki-doc-meta">
                 <span>{{ doc.date || '未标注日期' }}</span>
                 <span>{{ doc.chapters.length }} 个章节</span>
+                <span>{{ getDocTrafficLabel(doc).pageviews }}</span>
+                <span>{{ getDocTrafficLabel(doc).visits }}</span>
               </div>
             </div>
 
@@ -45,7 +47,8 @@
             >
               <NuxtLink :to="chapter.path" class="wiki-chapter-link">
                 <span v-if="chapter.chapter" class="wiki-chapter-number">{{ chapter.chapter }}</span>
-                <span>{{ chapter.title || '无标题' }}</span>
+                <span class="wiki-chapter-title">{{ chapter.title || '无标题' }}</span>
+                <span class="wiki-chapter-stats">{{ getChapterTrafficLabel(chapter.path) }}</span>
               </NuxtLink>
             </li>
           </ol>
@@ -92,7 +95,53 @@ const { data: wikis, pending } = await useAsyncData('wiki-list', () => {
 const searchQuery = ref('')
 const expandedDocs = ref(new Set())
 
+const emptyStats = Object.freeze({
+  pageviews: 0,
+  visitors: 0,
+  visits: 0,
+  bounces: 0,
+  totaltime: 0
+})
+
 const wikiPages = computed(() => wikis.value || [])
+
+const trackedPaths = computed(() => {
+  const paths = new Set()
+
+  wikiPages.value
+    .filter(wiki => wiki.isWikiDoc && wiki.path)
+    .forEach((wiki) => {
+      paths.add(normalizePath(wiki.path))
+    })
+
+  return Array.from(paths)
+})
+
+const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
+  'wiki-umami-paths',
+  async () => {
+    if (!trackedPaths.value.length) {
+      return { statsByPath: {} }
+    }
+
+    const pathMap = await fetchUmamiPathMetricsMap(resolveUmamiRange())
+    const statsByPath = Object.fromEntries(
+      trackedPaths.value.map((path) => {
+        const stats = pathMap.get(path) || emptyStats
+        return [path, stats]
+      })
+    )
+
+    return { statsByPath }
+  },
+  {
+    server: false,
+    default: () => ({ statsByPath: {} }),
+    watch: [trackedPaths]
+  }
+)
+
+const statsByPath = computed(() => umamiPathsData.value?.statsByPath || {})
 
 const docGroups = computed(() => {
   const groups = new Map()
@@ -139,6 +188,32 @@ const docGroups = computed(() => {
     .sort((a, b) => (b.index?.date || '').localeCompare(a.index?.date || '') || a.title.localeCompare(b.title))
 })
 
+const docTrafficByKey = computed(() => {
+  const result = {}
+
+  docGroups.value.forEach((doc) => {
+    const uniquePaths = new Set([
+      normalizePath(doc.path),
+      ...doc.chapters.map(chapter => normalizePath(chapter.path))
+    ])
+
+    const total = {
+      pageviews: 0,
+      visits: 0
+    }
+
+    uniquePaths.forEach((path) => {
+      const stats = getPathStats(path)
+      total.pageviews += stats.pageviews
+      total.visits += stats.visits
+    })
+
+    result[doc.key] = total
+  })
+
+  return result
+})
+
 const filteredDocGroups = computed(() => {
   let list = docGroups.value
 
@@ -167,6 +242,38 @@ const filteredDocGroups = computed(() => {
 
 function sortByChapter(a, b) {
   return (a.chapterSort || 0) - (b.chapterSort || 0) || a.title.localeCompare(b.title)
+}
+
+function normalizePath(path) {
+  return String(path || '/').replace(/\/$/, '') || '/'
+}
+
+function formatNumber(value) {
+  return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
+}
+
+function getPathStats(path) {
+  return statsByPath.value[normalizePath(path)] || emptyStats
+}
+
+function getChapterTrafficLabel(path) {
+  const stats = getPathStats(path)
+  const isLoading = umamiPending.value
+  if (isLoading && !stats.pageviews && !stats.visits) {
+    return '加载中...'
+  }
+
+  return `${formatNumber(stats.pageviews)} 浏览 · ${formatNumber(stats.visits)} 访问`
+}
+
+function getDocTrafficLabel(doc) {
+  const total = docTrafficByKey.value[doc.key] || { pageviews: 0, visits: 0 }
+  const isLoading = umamiPending.value
+
+  return {
+    pageviews: isLoading && !total.pageviews ? '总浏览 加载中...' : `总浏览 ${formatNumber(total.pageviews)}`,
+    visits: isLoading && !total.visits ? '总访问 加载中...' : `总访问 ${formatNumber(total.visits)}`
+  }
 }
 
 function isDocExpanded(doc) {
@@ -316,7 +423,7 @@ function matchesQuery(wiki, query) {
 
 .wiki-chapter-link {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   gap: 8px;
   align-items: baseline;
   min-height: 32px;
@@ -336,6 +443,17 @@ function matchesQuery(wiki, query) {
   color: var(--wiki-accent);
   font-size: 0.86rem;
   font-weight: 800;
+}
+
+.wiki-chapter-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.wiki-chapter-stats {
+  color: var(--text-secondary, #666);
+  font-size: 0.76rem;
+  white-space: nowrap;
 }
 
 .loading {

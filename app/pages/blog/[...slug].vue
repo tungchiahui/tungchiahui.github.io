@@ -42,6 +42,28 @@ interface BlogPost {
 
 const route = useRoute()
 
+function normalizePath(path: string) {
+  return path.replace(/\/$/, '') || '/'
+}
+
+function formatNumber(value: number | undefined) {
+  return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
+}
+
+function formatPercent(numerator: number, denominator: number) {
+  if (!denominator) return '--'
+  return `${Math.round((numerator / denominator) * 100)}%`
+}
+
+function formatDuration(totalSeconds: number, visits: number) {
+  if (!visits) return '--'
+
+  const seconds = Math.max(0, Math.round(totalSeconds / visits))
+  const minutes = Math.floor(seconds / 60)
+  const remainSeconds = seconds % 60
+  return minutes > 0 ? `${minutes}分 ${remainSeconds}秒` : `${remainSeconds}秒`
+}
+
 // ==================== 配置实现 ====================
 // ⚙️ 可配置的目录深度（1-6，对应 h1-h6）
 const MAX_TOC_DEPTH = ref(6) // 👈 修改这个数字来控制目录显示的层级深度（显示到 h6）
@@ -143,6 +165,36 @@ const formattedDate = computed(() => {
     month: 'long',
     day: 'numeric'
   })
+})
+
+const pagePath = computed(() => normalizePath(route.path))
+
+const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = await useAsyncData(
+  `blog-umami-${route.path}`,
+  () => fetchUmamiPathStats(pagePath.value, resolveUmamiRange()),
+  {
+    server: false,
+    default: () => null
+  }
+)
+
+const trafficStats = computed(() => umamiPathData.value || null)
+
+const trafficDisplay = computed(() => {
+  const stats = trafficStats.value
+  const pageviews = stats?.pageviews || 0
+  const visits = stats?.visits || 0
+  const visitors = stats?.visitors || 0
+  const bounces = stats?.bounces || 0
+  const totaltime = stats?.totaltime || 0
+
+  return {
+    pageviews: formatNumber(pageviews),
+    visits: formatNumber(visits),
+    visitors: formatNumber(visitors),
+    bounceRate: formatPercent(bounces, visits),
+    avgVisitDuration: formatDuration(totaltime, visits)
+  }
 })
 
 // ==================== 目录与锚点实现 ====================
@@ -572,6 +624,10 @@ watch(() => route.hash, (hash) => {
   }
 })
 
+watch(() => route.path, () => {
+  refreshUmamiPathData()
+})
+
 // 移动端目录弹窗控制
 const closeToc = () => {
   showToc.value = false
@@ -669,6 +725,29 @@ const scrollToHeading = (id: string) => {
                   <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
                 {{ readingTime }} 分钟阅读
+              </span>
+            </div>
+
+            <div class="article-traffic" :class="{ 'is-loading': umamiPending }">
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.pageviews }}</span>
+                <span class="traffic-label">浏览次数</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.visits }}</span>
+                <span class="traffic-label">访问次数</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.visitors }}</span>
+                <span class="traffic-label">访客人数</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.bounceRate }}</span>
+                <span class="traffic-label">跳出率</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.avgVisitDuration }}</span>
+                <span class="traffic-label">平均停留</span>
               </span>
             </div>
           </header>
@@ -927,6 +1006,38 @@ html.dark {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.article-traffic {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 18px;
+}
+
+.article-traffic.is-loading {
+  opacity: 0.75;
+}
+
+.traffic-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-bg-secondary);
+}
+
+.traffic-value {
+  color: var(--color-text);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.traffic-label {
+  color: var(--color-text-light);
+  font-size: 0.78rem;
 }
 
 /* B. 正文排版与标题编号实现 */

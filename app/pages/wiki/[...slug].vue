@@ -29,6 +29,24 @@ interface WikiPage {
 const route = useRoute()
 const cleanPath = computed(() => route.path.replace(/\/$/, '') || '/')
 
+function formatNumber(value: number | undefined) {
+  return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
+}
+
+function formatPercent(numerator: number, denominator: number) {
+  if (!denominator) return '--'
+  return `${Math.round((numerator / denominator) * 100)}%`
+}
+
+function formatDuration(totalSeconds: number, visits: number) {
+  if (!visits) return '--'
+
+  const seconds = Math.max(0, Math.round(totalSeconds / visits))
+  const minutes = Math.floor(seconds / 60)
+  const remainSeconds = seconds % 60
+  return minutes > 0 ? `${minutes}分 ${remainSeconds}秒` : `${remainSeconds}秒`
+}
+
 const { data: page, pending } = await useAsyncData(
   `wiki-page-${route.path}`,
   () => queryCollection('content').path(cleanPath.value).first() as Promise<WikiPage | null>
@@ -104,6 +122,36 @@ const docTitle = computed(() =>
 const pageTitle = computed(() => {
   if (!page.value) return '加载中...'
   return page.value.chapter ? `${page.value.chapter} ${page.value.title}` : page.value.title
+})
+
+const pagePath = computed(() => normalizePath(route.path))
+
+const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = await useAsyncData(
+  `wiki-umami-${route.path}`,
+  () => fetchUmamiPathStats(pagePath.value, resolveUmamiRange()),
+  {
+    server: false,
+    default: () => null
+  }
+)
+
+const trafficStats = computed(() => umamiPathData.value || null)
+
+const trafficDisplay = computed(() => {
+  const stats = trafficStats.value
+  const pageviews = stats?.pageviews || 0
+  const visits = stats?.visits || 0
+  const visitors = stats?.visitors || 0
+  const bounces = stats?.bounces || 0
+  const totaltime = stats?.totaltime || 0
+
+  return {
+    pageviews: formatNumber(pageviews),
+    visits: formatNumber(visits),
+    visitors: formatNumber(visitors),
+    bounceRate: formatPercent(bounces, visits),
+    avgVisitDuration: formatDuration(totaltime, visits)
+  }
 })
 
 useHead(() => ({
@@ -502,6 +550,10 @@ watch(() => route.hash, (hash) => {
   }
 })
 
+watch(() => route.path, () => {
+  refreshUmamiPathData()
+})
+
 onMounted(async () => {
   await enhanceContent()
   window.addEventListener('scroll', updateReadingProgress)
@@ -607,6 +659,28 @@ function normalizePath(path: string) {
               第 {{ (page as WikiPage).chapter }} 节
             </div>
             <h1>{{ (page as WikiPage).title }}</h1>
+            <div class="wiki-traffic" :class="{ 'is-loading': umamiPending }">
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.pageviews }}</span>
+                <span class="traffic-label">浏览次数</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.visits }}</span>
+                <span class="traffic-label">访问次数</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.visitors }}</span>
+                <span class="traffic-label">访客人数</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.bounceRate }}</span>
+                <span class="traffic-label">跳出率</span>
+              </span>
+              <span class="traffic-chip">
+                <span class="traffic-value">{{ trafficDisplay.avgVisitDuration }}</span>
+                <span class="traffic-label">平均停留</span>
+              </span>
+            </div>
           </header>
 
           <div class="wiki-content-body">
@@ -838,6 +912,38 @@ function normalizePath(path: string) {
   color: var(--text-main, #1f1f1f);
   font-size: clamp(2rem, 4vw, 2.7rem);
   line-height: 1.18;
+}
+
+.wiki-traffic {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 16px;
+}
+
+.wiki-traffic.is-loading {
+  opacity: 0.75;
+}
+
+.traffic-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 999px;
+  background: var(--bg-secondary, #f7fafc);
+}
+
+.traffic-value {
+  color: var(--text-main, #1f1f1f);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.traffic-label {
+  color: var(--text-secondary, #666);
+  font-size: 0.78rem;
 }
 
 .wiki-content-body {

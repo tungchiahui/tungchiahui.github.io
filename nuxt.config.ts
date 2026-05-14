@@ -111,6 +111,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       url: 'www.tungchiahui.cn',
+      umami: {
+        baseUrl: process.env.NUXT_PUBLIC_UMAMI_BASE_URL || 'https://umami.tungchiahui.cn',
+        shareId: process.env.NUXT_PUBLIC_UMAMI_SHARE_ID || 'rCG6EZoHmlCmNnWn',
+        startAt: process.env.NUXT_PUBLIC_UMAMI_START_AT || '2024-01-01T00:00:00.000Z',
+        pathLimit: Number(process.env.NUXT_PUBLIC_UMAMI_PATH_LIMIT || 5000)
+      },
 
       record:{
         icp: '鲁ICP备2025185601号-2',
