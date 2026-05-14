@@ -92,6 +92,12 @@ useHead({
           <div class="card-sub">LOGO介绍</div>
         </NuxtLink>
 
+        <!-- CHAT -->
+        <a class="more-card" href="https://chat.tungchiahui.cn" target="_blank" rel="noopener noreferrer">
+          <div class="card-title">🗣 CHAT</div>
+          <div class="card-sub"> 自建的类ChatGPT网站 </div>
+        </a>
+
       </div>
     </div>
 
