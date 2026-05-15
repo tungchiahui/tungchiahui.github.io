@@ -1,5 +1,5 @@
-export type LocaleSlug = 'zh-cn' | 'zh-hant' | 'zh-hk' | 'zh-tw'
-export type LocaleConverter = 'none' | 's2t' | 's2hk' | 's2tw'
+export type LocaleSlug = 'zh-cn' | 'zh-hant' | 'zh-hk' | 'zh-tw' | 'en-us'
+export type LocaleConverter = 'none' | 's2t' | 's2hk' | 's2tw' | 'en'
 export type ContentSection = 'blog' | 'wiki'
 
 export interface I18nLocale {
@@ -67,6 +67,16 @@ export const I18N_LOCALES = [
     converter: 's2tw',
     flags: [
       'peoples-republic-of-china-flag-png-large.webp'
+    ]
+  },
+  {
+    code: 'en-US',
+    slug: 'en-us',
+    label: 'English',
+    fullLabel: 'English (US)',
+    converter: 'en',
+    flags: [
+      'united-states-of-america-flag-png-large.webp'
     ]
   }
 ] as const satisfies readonly I18nLocale[]

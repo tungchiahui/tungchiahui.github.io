@@ -6,9 +6,12 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "i18n:generate": "node scripts/generate-traditional-content.mjs",
-    "prebuild": "npm run i18n:generate",
-    "pregenerate": "npm run i18n:generate",
+    "i18n:gen": "tsx scripts/i18n-generate.ts",
+    "i18n:translate": "tsx scripts/i18n-generate.ts --translate",
+    "i18n:check": "tsx scripts/i18n-check.ts",
+    "i18n:generate": "npm run i18n:gen",
+    "prebuild": "npm run i18n:gen",
+    "pregenerate": "npm run i18n:gen",
     "preview": "nuxt preview"
   },
   "dependencies": {
@@ -22,6 +25,7 @@
     "pinyin-pro": "^3.28.1"
   },
   "devDependencies": {
-    "sass-embedded": "^1.97.1"
+    "sass-embedded": "^1.97.1",
+    "tsx": "^4.22.0"
   }
 }

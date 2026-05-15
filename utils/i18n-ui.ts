@@ -121,8 +121,73 @@ const traditional: UiText = {
   wikiMetaDescription: '按教程和章節組織的技術文件與學習筆記。'
 }
 
+const english: UiText = {
+  ...simplified,
+  language: 'Language',
+  languageMenu: 'Language switcher',
+  flagSuffix: 'flag',
+  home: 'Home',
+  blog: 'Blog',
+  blogList: 'Blog list',
+  wiki: 'Wiki',
+  wikiHome: 'Wiki knowledge base',
+  about: 'About',
+  morePages: 'More',
+  siteSearch: 'Site search',
+  search: 'Search',
+  searchSiteContent: 'Search site content',
+  toggleLight: 'Switch to light mode',
+  toggleDark: 'Switch to dark mode',
+  siteInfo: 'Site information',
+  backHome: 'Back home',
+  siteName: "Dongche's Tinkering Notes",
+  footerDescription: 'Notes on learning, development, and daily tinkering, organized into reusable engineering references.',
+  visitNuxt: 'Visit Nuxt',
+  footerNav: 'Footer navigation',
+  siteNav: 'Site navigation',
+  languageSettings: 'Language settings',
+  footerTools: 'Footer tools',
+  contact: 'Contact',
+  stats: 'Stats',
+  friends: 'Friends',
+  aboutSite: 'About this site',
+  searchPostTitle: 'Search post titles...',
+  scanningFiles: 'Scanning files...',
+  untitled: 'Untitled',
+  noDate: 'No date',
+  noPostMatch: 'No posts found for "{query}"',
+  noPosts: 'No posts yet...',
+  pageviewsLoading: 'Total views loading...',
+  visitsLoading: 'Total visits loading...',
+  totalPageviews: 'Total views {value}',
+  totalVisits: 'Total visits {value}',
+  searchWiki: 'Search Wiki or chapters...',
+  scanningWiki: 'Scanning Wiki...',
+  chapterCount: '{count} chapters',
+  expand: 'Expand',
+  collapse: 'Collapse',
+  wikiDoc: 'Wiki document',
+  noWikiMatch: 'No matching Wiki pages',
+  noWiki: 'No Wiki content yet',
+  loading: 'Loading...',
+  trafficInline: '{pageviews} views · {visits} visits',
+  loadingDefault: 'Loading',
+  loadingReaderWiki: 'Preparing Wiki reader',
+  loadingReaderBlog: 'Preparing blog reader',
+  loadingHome: 'Opening home',
+  loadingWiki: 'Opening Wiki',
+  loadingBlog: 'Opening blog',
+  loadingSearch: 'Searching content',
+  loadingPage: 'Switching pages',
+  blogDescription: "Dongche's blog posts about learning, development, and tinkering.",
+  wikiDescription: 'Technical documents organized by tutorials and chapters.',
+  wikiMetaDescription: 'Technical documentation and study notes organized by tutorials and chapters.'
+}
+
 export function getUiText(localeSlug: LocaleSlug | string): UiText {
-  return localeSlug === 'zh-cn' ? simplified : traditional
+  if (localeSlug === 'zh-cn') return simplified
+  if (localeSlug === 'en-us') return english
+  return traditional
 }
 
 export function getUiTextForPath(path: unknown): UiText {
