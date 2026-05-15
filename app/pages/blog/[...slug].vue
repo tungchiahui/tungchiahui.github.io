@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import mediumZoom from 'medium-zoom'
+import {
+  getContentPathCandidates,
+  getCurrentLocaleSlug,
+  getLocaleSectionPath
+} from '~~/utils/i18n-locales'
 
 // =====================================================
 // 文章详情页实现（[...slug].vue）
@@ -27,11 +32,14 @@ interface TocDisplayLink {
 
 interface BlogPost {
   _id: string
-  _path: string
+  _path?: string
+  path?: string
   stem?: string
   title: string
   description?: string
   date?: string
+  localeSlug?: string
+  i18nKey?: string
   body?: {
     toc?: {
       links?: TocLink[]
@@ -41,6 +49,8 @@ interface BlogPost {
 }
 
 const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const blogHomePath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'blog'))
 
 function normalizePath(path: string) {
   return path.replace(/\/$/, '') || '/'
@@ -72,11 +82,18 @@ const MAX_TOC_DEPTH = ref(6) // 修改这个数字来控制目录显示的层级
 const { data: page, pending } = await useAsyncData(
   `page-${route.path}`,
   async () => {
-    const cleanPath = route.path.replace(/\/$/, '') || '/'
-    const result = await queryCollection('content')
-      .path(cleanPath)
-      .first()
-    return result as BlogPost | null
+    for (const path of getContentPathCandidates(route.path, 'blog')) {
+      const normalizedPath = normalizePath(path)
+      const result = await queryCollection('content')
+        .where('path', '=', normalizedPath)
+        .first()
+
+      if (result) {
+        return result as BlogPost
+      }
+    }
+
+    return null
   }
 )
 
@@ -87,11 +104,13 @@ const { data: surroundingPosts } = await useAsyncData(
     
     try {
       const allPosts = await queryCollection('content')
-        .where('stem', 'LIKE', 'posts/%')
+        .where('sourceStem', 'LIKE', 'posts/%')
+        .where('localeSlug', '=', page.value.localeSlug || currentLocaleSlug.value)
+        .select('path', 'title', 'date', 'localeSlug', 'i18nKey')
         .all()
       
       const markdownPosts = allPosts.filter((p: any) => 
-        p._path && p._path.includes('/')
+        p.path && p.path.includes('/')
       ) as unknown as BlogPost[]
       
       if (!markdownPosts || markdownPosts.length === 0) {
@@ -105,7 +124,7 @@ const { data: surroundingPosts } = await useAsyncData(
       })
       
       const currentIndex = sortedPosts.findIndex(p => 
-        p._path === route.path
+        normalizePath(p.path || p._path || '') === normalizePath(page.value?.path || route.path)
       )
       
       if (currentIndex === -1) {
@@ -167,11 +186,35 @@ const formattedDate = computed(() => {
   })
 })
 
-const pagePath = computed(() => normalizePath(route.path))
+const pagePath = computed(() => normalizePath((page.value as BlogPost)?.path || route.path))
+
+const { data: i18nVariantPaths } = await useAsyncData(
+  `blog-i18n-paths-${route.path}`,
+  async () => {
+    const i18nKey = (page.value as BlogPost | null)?.i18nKey
+
+    if (!i18nKey) {
+      return [pagePath.value]
+    }
+
+    const variants = await queryCollection('content')
+      .where('i18nKey', '=', i18nKey)
+      .select('path')
+      .all() as Array<{ path?: string }>
+
+    return variants
+      .map(variant => variant.path)
+      .filter((path): path is string => Boolean(path))
+  }
+)
+
+const trafficPaths = computed(() =>
+  (i18nVariantPaths.value?.length ? i18nVariantPaths.value : [pagePath.value]).map(normalizePath)
+)
 
 const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = await useAsyncData(
   `blog-umami-${route.path}`,
-  () => fetchUmamiPathStats(pagePath.value, resolveUmamiRange()),
+  () => fetchUmamiPathsStats(trafficPaths.value, resolveUmamiRange()),
   {
     server: false,
     default: () => null
@@ -666,7 +709,7 @@ const scrollToHeading = (id: string) => {
     <div class="reading-progress-bar" :style="{ width: `${readingProgress}%` }" />
 
     <nav class="top-navigation">
-      <NuxtLink to="/blog" class="nav-back-link">
+      <NuxtLink :to="blogHomePath" class="nav-back-link">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
@@ -767,7 +810,7 @@ const scrollToHeading = (id: string) => {
             <nav class="article-navigation">
               <NuxtLink 
                 v-if="surroundingPosts[0]" 
-                :to="surroundingPosts[0]._path" 
+                :to="surroundingPosts[0].path || surroundingPosts[0]._path" 
                 class="nav-item nav-prev"
               >
                 <div class="nav-icon">←</div>
@@ -779,7 +822,7 @@ const scrollToHeading = (id: string) => {
 
               <NuxtLink 
                 v-if="surroundingPosts[1]" 
-                :to="surroundingPosts[1]._path" 
+                :to="surroundingPosts[1].path || surroundingPosts[1]._path" 
                 class="nav-item nav-next"
               >
                 <div class="nav-content">

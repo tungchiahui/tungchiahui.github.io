@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import mediumZoom from 'medium-zoom'
+import {
+  getContentPathCandidates,
+  getCurrentLocaleSlug,
+  getLocaleSectionPath
+} from '~~/utils/i18n-locales'
 
 interface TocDisplayLink {
   id: string
@@ -15,9 +20,12 @@ interface WikiPage {
   stem?: string
   title: string
   date?: string
+  localeSlug?: string
+  i18nKey?: string
   chapter?: string
   chapterSort?: number
   docKey?: string
+  docI18nKey?: string
   docRoot?: string
   docTitle?: string
   isWikiDoc?: boolean
@@ -27,7 +35,8 @@ interface WikiPage {
 }
 
 const route = useRoute()
-const cleanPath = computed(() => route.path.replace(/\/$/, '') || '/')
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const wikiHomePath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'wiki'))
 
 function formatNumber(value: number | undefined) {
   return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
@@ -49,7 +58,20 @@ function formatDuration(totalSeconds: number, visits: number) {
 
 const { data: page, pending } = await useAsyncData(
   `wiki-page-${route.path}`,
-  () => queryCollection('content').path(cleanPath.value).first() as Promise<WikiPage | null>
+  async () => {
+    for (const path of getContentPathCandidates(route.path, 'wiki')) {
+      const normalizedPath = normalizePath(path)
+      const result = await queryCollection('content')
+        .where('path', '=', normalizedPath)
+        .first()
+
+      if (result) {
+        return result as WikiPage
+      }
+    }
+
+    return null
+  }
 )
 
 if (!pending.value && !page.value) {
@@ -99,8 +121,10 @@ const docNavigationItems = computed(() => [
   ...chapterItems.value
 ])
 
+const pagePath = computed(() => normalizePath(page.value?.path || route.path))
+
 const currentNavIndex = computed(() =>
-  docNavigationItems.value.findIndex(item => normalizePath(item.path) === normalizePath(cleanPath.value))
+  docNavigationItems.value.findIndex(item => normalizePath(item.path) === pagePath.value)
 )
 
 const previousPage = computed(() => {
@@ -124,11 +148,33 @@ const pageTitle = computed(() => {
   return page.value.chapter ? `${page.value.chapter} ${page.value.title}` : page.value.title
 })
 
-const pagePath = computed(() => normalizePath(route.path))
+const { data: i18nVariantPaths } = await useAsyncData(
+  `wiki-i18n-paths-${route.path}`,
+  async () => {
+    const i18nKey = page.value?.i18nKey
+
+    if (!i18nKey) {
+      return [pagePath.value]
+    }
+
+    const variants = await queryCollection('content')
+      .where('i18nKey', '=', i18nKey)
+      .select('path')
+      .all() as Array<{ path?: string }>
+
+    return variants
+      .map(variant => variant.path)
+      .filter((path): path is string => Boolean(path))
+  }
+)
+
+const trafficPaths = computed(() =>
+  (i18nVariantPaths.value?.length ? i18nVariantPaths.value : [pagePath.value]).map(normalizePath)
+)
 
 const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = await useAsyncData(
   `wiki-umami-${route.path}`,
-  () => fetchUmamiPathStats(pagePath.value, resolveUmamiRange()),
+  () => fetchUmamiPathsStats(trafficPaths.value, resolveUmamiRange()),
   {
     server: false,
     default: () => null
@@ -528,7 +574,7 @@ const closeDrawers = () => {
   showToc.value = false
 }
 
-const isCurrentPath = (path: string) => normalizePath(path) === normalizePath(cleanPath.value)
+const isCurrentPath = (path: string) => normalizePath(path) === pagePath.value
 const isTocActive = (id: string) => activeHeadingId.value === id
 
 watch(hasMobileDrawer, (isOpen) => {
@@ -616,11 +662,11 @@ function normalizePath(path: string) {
         :class="{ 'is-open': showDocNav }"
       >
         <div class="sidebar-header">
-          <NuxtLink to="/wiki" class="sidebar-back">Wiki</NuxtLink>
+          <NuxtLink :to="wikiHomePath" class="sidebar-back">Wiki</NuxtLink>
           <button class="sidebar-close" type="button" @click="closeDrawers">关闭</button>
         </div>
 
-        <NuxtLink :to="docIndex?.path || (page as WikiPage).docRoot || '/wiki'" class="doc-title-link">
+        <NuxtLink :to="docIndex?.path || (page as WikiPage).docRoot || wikiHomePath" class="doc-title-link">
           {{ docTitle }}
         </NuxtLink>
 
@@ -647,7 +693,7 @@ function normalizePath(path: string) {
         </div>
 
         <nav class="wiki-breadcrumb">
-          <NuxtLink to="/wiki">Wiki</NuxtLink>
+          <NuxtLink :to="wikiHomePath">Wiki</NuxtLink>
           <span>/</span>
           <NuxtLink v-if="docIndex" :to="docIndex.path">{{ docTitle }}</NuxtLink>
           <span v-else>{{ docTitle }}</span>

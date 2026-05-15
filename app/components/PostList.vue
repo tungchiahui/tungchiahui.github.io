@@ -18,8 +18,8 @@
         </NuxtLink>
         <div class="post-meta">
           {{ post.date || '未标注日期' }}
-          <span v-if="showTraffic">{{ getPostTrafficLabel(post.path).pageviews }}</span>
-          <span v-if="showTraffic">{{ getPostTrafficLabel(post.path).visits }}</span>
+          <span v-if="showTraffic">{{ getPostTrafficLabel(post).pageviews }}</span>
+          <span v-if="showTraffic">{{ getPostTrafficLabel(post).visits }}</span>
         </div>
       </li>
     </ul>
@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
 
 const props = defineProps({
   limit: {
@@ -49,10 +50,13 @@ const props = defineProps({
   }
 })
 
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+
 const { data: posts, pending } = await useAsyncData('posts-list', () => {
   return queryCollection('content')
-    .where('stem', 'LIKE', 'posts/%')
-    .select('path', 'title', 'date')
+    .where('sourceStem', 'LIKE', 'posts/%')
+    .select('path', 'title', 'date', 'localeSlug', 'i18nKey')
     .all()
 })
 
@@ -69,11 +73,27 @@ const emptyStats = Object.freeze({
 const sortedPosts = computed(() => {
   if (!posts.value?.length) return []
 
-  return [...posts.value].sort((a, b) => {
+  return posts.value
+    .filter(post => post.localeSlug === currentLocaleSlug.value)
+    .sort((a, b) => {
     const da = a.date ? new Date(a.date) : new Date(0)
     const db = b.date ? new Date(b.date) : new Date(0)
     return db - da
   })
+})
+
+const postPathsByI18nKey = computed(() => {
+  const map = new Map()
+
+  ;(posts.value || []).forEach((post) => {
+    if (!post.i18nKey || !post.path) return
+
+    const paths = map.get(post.i18nKey) || []
+    paths.push(normalizePath(post.path))
+    map.set(post.i18nKey, paths)
+  })
+
+  return map
 })
 
 const trackedPaths = computed(() => {
@@ -81,7 +101,8 @@ const trackedPaths = computed(() => {
 
   const paths = new Set()
   sortedPosts.value.forEach((post) => {
-    if (post.path) paths.add(normalizePath(post.path))
+    const variantPaths = postPathsByI18nKey.value.get(post.i18nKey) || [post.path]
+    variantPaths.forEach(path => paths.add(normalizePath(path)))
   })
   return Array.from(paths)
 })
@@ -114,6 +135,17 @@ const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
 
 const statsByPath = computed(() => umamiPathsData.value?.statsByPath || {})
 
+const statsByPostKey = computed(() => {
+  const result = {}
+
+  sortedPosts.value.forEach((post) => {
+    const paths = postPathsByI18nKey.value.get(post.i18nKey) || [post.path]
+    result[post.i18nKey] = sumUmamiRows(paths.map(path => statsByPath.value[normalizePath(path)] || emptyStats))
+  })
+
+  return result
+})
+
 const filteredPosts = computed(() => {
   const list = sortedPosts.value
   if (!list.length) return []
@@ -133,8 +165,8 @@ function formatNumber(value) {
   return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
 }
 
-function getPostTrafficLabel(path) {
-  const stats = statsByPath.value[normalizePath(path)] || emptyStats
+function getPostTrafficLabel(post) {
+  const stats = statsByPostKey.value[post.i18nKey] || emptyStats
   const isLoading = umamiPending.value
   return {
     pageviews: isLoading && !stats.pageviews ? '总浏览 加载中...' : `总浏览 ${formatNumber(stats.pageviews)}`,

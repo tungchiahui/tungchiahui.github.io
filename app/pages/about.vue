@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import { useHead } from '#app'
+import { computed } from 'vue'
+import {
+  getCurrentLocaleSlug,
+  getLocaleSectionPath,
+  replaceLocaleInPath
+} from '~~/utils/i18n-locales'
+
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const cvPath = computed(() => replaceLocaleInPath('/cv', currentLocaleSlug.value))
+const techFootprintPath = computed(() => replaceLocaleInPath('/tech-footprint', currentLocaleSlug.value))
 
 useHead({
   title: '关于 - Tung Chia-hui',
@@ -68,26 +79,26 @@ const projectRoadmap = [
   }
 ] as const
 
-const contentChannels = [
+const contentChannels = computed(() => [
   {
     title: '博客',
     description: '记录项目复盘、折腾日志、工具经验和阶段性想法。',
-    to: '/blog',
+    to: getLocaleSectionPath(currentLocaleSlug.value, 'blog'),
     label: '进入博客'
   },
   {
     title: 'Wiki',
     description: '沉淀 ROS2、Linux、STM32、FreeRTOS、C/C++、OpenCV、YOLO 等系统化笔记。',
-    to: '/wiki',
+    to: getLocaleSectionPath(currentLocaleSlug.value, 'wiki'),
     label: '进入 Wiki'
   },
   {
     title: '技术足迹',
     description: '整理个人机器人技术路线、长期任务清单和项目沉淀。',
-    to: '/tech-footprint',
+    to: techFootprintPath.value,
     label: '查看足迹'
   }
-] as const
+])
 
 const siteServices = [
   {
@@ -137,8 +148,8 @@ const contacts = [
         </p>
 
         <div class="hero-actions">
-          <NuxtLink class="about-button primary" to="/cv">查看简历</NuxtLink>
-          <NuxtLink class="about-button secondary" to="/tech-footprint">技术足迹</NuxtLink>
+          <NuxtLink class="about-button primary" :to="cvPath">查看简历</NuxtLink>
+          <NuxtLink class="about-button secondary" :to="techFootprintPath">技术足迹</NuxtLink>
         </div>
       </div>
     </section>

@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useHead } from '#app'
+import {
+  getCurrentLocaleSlug,
+  getLocalizedSearchPath,
+  replaceLocaleInPath,
+  splitLocalePath
+} from '~~/utils/i18n-locales'
 
 type SearchType = 'all' | 'blog' | 'wiki' | 'page'
 
@@ -12,6 +18,8 @@ interface ContentDoc {
   title?: string
   description?: string
   date?: string
+  localeSlug?: string
+  sourceStem?: string
   chapter?: string
   docTitle?: string
   isWikiDoc?: boolean
@@ -127,6 +135,7 @@ const STATIC_PAGES = [
 
 const route = useRoute()
 const router = useRouter()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
 
 useHead({
   title: '全站搜索',
@@ -165,23 +174,27 @@ const searchDocuments = computed<SearchDoc[]>(() => {
     .map(toSearchDoc)
     .filter((doc): doc is SearchDoc => Boolean(doc))
 
-  const staticDocs = STATIC_PAGES.map((page): SearchDoc => ({
-    id: `static:${page.path}`,
-    path: page.path,
-    title: page.title,
-    type: 'page',
-    typeLabel: TYPE_LABELS.page,
-    section: page.section,
-    date: '',
-    summary: page.summary,
-    searchText: normalizeWhitespace([
-      page.title,
-      page.section,
-      page.summary,
-      page.keywords,
-      page.path
-    ].join(' '))
-  }))
+  const staticDocs = STATIC_PAGES.map((page): SearchDoc => {
+    const path = getLocalizedStaticPath(page.path)
+
+    return {
+      id: `static:${path}`,
+      path,
+      title: page.title,
+      type: 'page',
+      typeLabel: TYPE_LABELS.page,
+      section: page.section,
+      date: '',
+      summary: page.summary,
+      searchText: normalizeWhitespace([
+        page.title,
+        page.section,
+        page.summary,
+        page.keywords,
+        path
+      ].join(' '))
+    }
+  })
 
   return dedupeByPath([...contentDocs, ...staticDocs])
 })
@@ -294,7 +307,7 @@ watch([searchQuery, selectedType], () => {
     }
 
     router.replace({
-      path: '/search',
+      path: getLocalizedSearchPath(currentLocaleSlug.value),
       query: nextQuery
     })
   }, 180)
@@ -315,6 +328,10 @@ function clearSearch() {
 }
 
 function toSearchDoc(doc: ContentDoc): SearchDoc | null {
+  if (doc.localeSlug !== currentLocaleSlug.value) {
+    return null
+  }
+
   const path = normalizePath(doc.path || doc._path)
   const title = String(doc.title || '').trim()
 
@@ -322,7 +339,7 @@ function toSearchDoc(doc: ContentDoc): SearchDoc | null {
     return null
   }
 
-  const stem = String(doc.stem || '')
+  const stem = String(doc.sourceStem || doc.stem || '')
   const bodyText = normalizeWhitespace(extractText(doc.body))
   const type = getContentType(doc, stem)
   const typeLabel = TYPE_LABELS[type]
@@ -355,11 +372,13 @@ function toSearchDoc(doc: ContentDoc): SearchDoc | null {
 }
 
 function getContentType(doc: ContentDoc, stem: string): SearchDoc['type'] {
-  if (stem.startsWith('posts/') || normalizePath(doc.path || doc._path).startsWith('/blog')) {
+  const { pathWithoutLocale } = splitLocalePath(doc.path || doc._path)
+
+  if (stem.startsWith('posts/') || pathWithoutLocale.startsWith('/blog')) {
     return 'blog'
   }
 
-  if (doc.isWikiDoc || stem.startsWith('wiki/') || normalizePath(doc.path || doc._path).startsWith('/wiki')) {
+  if (doc.isWikiDoc || stem.startsWith('wiki/') || pathWithoutLocale.startsWith('/wiki')) {
     return 'wiki'
   }
 
@@ -533,6 +552,10 @@ function dedupeByPath(items: SearchDoc[]) {
   })
 
   return Array.from(map.values())
+}
+
+function getLocalizedStaticPath(path: string) {
+  return replaceLocaleInPath(path, currentLocaleSlug.value)
 }
 
 function normalizePath(value: unknown) {

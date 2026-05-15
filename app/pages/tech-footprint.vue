@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '#app'
 import { computed, ref } from 'vue'
+import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
 import {
   featuredTools,
   knowledgeTags,
@@ -27,7 +28,9 @@ useHead({
 
 type ViewKey = 'tasks' | 'stages' | 'archive'
 
+const route = useRoute()
 const activeView = ref<ViewKey>('tasks')
+const homePath = computed(() => replaceLocaleInPath('/', getCurrentLocaleSlug(route.path)))
 
 const viewTabs: Array<{ key: ViewKey; label: string; eyebrow: string }> = [
   { key: 'tasks', label: '路线待办', eyebrow: `${routeTasks.length} 个任务` },
@@ -65,7 +68,7 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
 <template>
   <div class="tech-footprint-page">
     <nav class="route-nav" aria-label="页面导航">
-      <NuxtLink to="/" class="back-link">返回首页</NuxtLink>
+      <NuxtLink :to="homePath" class="back-link">返回首页</NuxtLink>
       <span class="nav-divider"></span>
       <span class="nav-current">技术足迹</span>
     </nav>

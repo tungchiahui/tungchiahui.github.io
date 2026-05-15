@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useHead } from '#app'
+import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
+
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const localizePath = (path: string) => replaceLocaleInPath(path, currentLocaleSlug.value)
 
 useHead({
   title: '更多页面',
@@ -23,7 +29,7 @@ useHead({
       <div class="more-grid">
 
         <!-- 数据统计 -->
-        <NuxtLink class="more-card" to="/stats">
+        <NuxtLink class="more-card" :to="localizePath('/stats')">
           <div class="card-title">
             <i class="fas fa-chart-bar" aria-hidden="true"></i>
             <span>数据统计</span>
@@ -75,7 +81,7 @@ useHead({
       <div class="more-grid">
 
         <!-- 友情链接 -->
-        <NuxtLink class="more-card" to="/friend">
+        <NuxtLink class="more-card" :to="localizePath('/friend')">
           <div class="card-title">
             <i class="fas fa-handshake" aria-hidden="true"></i>
             <span>友情链接</span>
@@ -84,7 +90,7 @@ useHead({
         </NuxtLink>
         
         <!-- 技术路线 -->
-        <NuxtLink class="more-card" to="/tech-footprint">
+        <NuxtLink class="more-card" :to="localizePath('/tech-footprint')">
           <div class="card-title">
             <i class="fas fa-tools" aria-hidden="true"></i>
             <span>技术足迹</span>
@@ -93,7 +99,7 @@ useHead({
         </NuxtLink>
 
         <!-- 简历 -->
-        <NuxtLink class="more-card" to="/cv">
+        <NuxtLink class="more-card" :to="localizePath('/cv')">
           <div class="card-title">
             <i class="fas fa-file-alt" aria-hidden="true"></i>
             <span>简历</span>
@@ -102,7 +108,7 @@ useHead({
         </NuxtLink>
 
         <!-- 导航页 -->
-        <NuxtLink class="more-card" to="/start">
+        <NuxtLink class="more-card" :to="localizePath('/start')">
           <div class="card-title">
             <i class="fas fa-compass" aria-hidden="true"></i>
             <span>导航页</span>
@@ -111,7 +117,7 @@ useHead({
         </NuxtLink>
 
         <!-- LOGO介绍 -->
-        <NuxtLink class="more-card" to="/mylogo">
+        <NuxtLink class="more-card" :to="localizePath('/mylogo')">
           <div class="card-title">
             <i class="fas fa-shapes" aria-hidden="true"></i>
             <span>个人 LOGO</span>

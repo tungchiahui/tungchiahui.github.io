@@ -30,17 +30,21 @@ const nuxtApp = useNuxtApp()
 
 type LoadingMode = 'screen' | 'reader'
 
-const isReaderRoute = (path: string) => /^\/(?:blog|wiki)\/.+/.test(path)
+const getContentRoutePath = (path: string) => path.replace(/^\/(?:zh-cn|zh-hant|zh-hk|zh-tw)(?=\/)/, '')
+
+const isReaderRoute = (path: string) => /^\/(?:blog|wiki)\/.+/.test(getContentRoutePath(path))
 
 const getLoadingLabel = (path: string, mode: LoadingMode) => {
+  const contentPath = getContentRoutePath(path)
+
   if (mode === 'reader') {
-    return path.startsWith('/wiki/') ? '正在整理 Wiki 阅读视图' : '正在整理博文阅读视图'
+    return contentPath.startsWith('/wiki/') ? '正在整理 Wiki 阅读视图' : '正在整理博文阅读视图'
   }
 
-  if (path === '/') return '正在进入首页'
-  if (path.startsWith('/wiki')) return '正在打开 Wiki 知识库'
-  if (path.startsWith('/blog')) return '正在打开博客列表'
-  if (path.startsWith('/search')) return '正在检索内容'
+  if (contentPath === '/') return '正在进入首页'
+  if (contentPath.startsWith('/wiki')) return '正在打开 Wiki 知识库'
+  if (contentPath.startsWith('/blog')) return '正在打开博客列表'
+  if (contentPath.startsWith('/search')) return '正在检索内容'
   return '正在切换页面'
 }
 

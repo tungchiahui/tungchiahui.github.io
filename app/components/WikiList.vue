@@ -48,7 +48,7 @@
               <NuxtLink :to="chapter.path" class="wiki-chapter-link">
                 <span v-if="chapter.chapter" class="wiki-chapter-number">{{ chapter.chapter }}</span>
                 <span class="wiki-chapter-title">{{ chapter.title || '无标题' }}</span>
-                <span v-if="showTraffic" class="wiki-chapter-stats">{{ getChapterTrafficLabel(chapter.path) }}</span>
+                <span v-if="showTraffic" class="wiki-chapter-stats">{{ getChapterTrafficLabel(chapter) }}</span>
               </NuxtLink>
             </li>
           </ol>
@@ -65,6 +65,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
 
 const props = defineProps({
   limit: {
@@ -89,17 +90,23 @@ const props = defineProps({
   }
 })
 
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+
 const { data: wikis, pending } = await useAsyncData('wiki-list', () => {
   return queryCollection('content')
-    .where('stem', 'LIKE', 'wiki/%')
+    .where('sourceStem', 'LIKE', 'wiki/%')
     .select(
       'path',
       'stem',
       'title',
       'date',
+      'localeSlug',
+      'i18nKey',
       'chapter',
       'chapterSort',
       'docKey',
+      'docI18nKey',
       'docRoot',
       'docTitle',
       'isWikiDoc',
@@ -123,7 +130,38 @@ const emptyStats = Object.freeze({
   totaltime: 0
 })
 
-const wikiPages = computed(() => wikis.value || [])
+const allWikiPages = computed(() => wikis.value || [])
+const wikiPages = computed(() =>
+  allWikiPages.value.filter(wiki => wiki.localeSlug === currentLocaleSlug.value)
+)
+
+const pathsByI18nKey = computed(() => {
+  const map = new Map()
+
+  allWikiPages.value.forEach((wiki) => {
+    if (!wiki.i18nKey || !wiki.path) return
+
+    const paths = map.get(wiki.i18nKey) || []
+    paths.push(normalizePath(wiki.path))
+    map.set(wiki.i18nKey, paths)
+  })
+
+  return map
+})
+
+const pathsByDocI18nKey = computed(() => {
+  const map = new Map()
+
+  allWikiPages.value
+    .filter(wiki => wiki.isWikiDoc && wiki.docI18nKey && wiki.path)
+    .forEach((wiki) => {
+      const paths = map.get(wiki.docI18nKey) || []
+      paths.push(normalizePath(wiki.path))
+      map.set(wiki.docI18nKey, paths)
+    })
+
+  return map
+})
 
 const trackedPaths = computed(() => {
   if (!props.showTraffic) return []
@@ -133,7 +171,8 @@ const trackedPaths = computed(() => {
   wikiPages.value
     .filter(wiki => wiki.isWikiDoc && wiki.path)
     .forEach((wiki) => {
-      paths.add(normalizePath(wiki.path))
+      const variants = pathsByI18nKey.value.get(wiki.i18nKey) || [wiki.path]
+      variants.forEach(path => paths.add(normalizePath(path)))
     })
 
   return Array.from(paths)
@@ -175,6 +214,7 @@ const docGroups = computed(() => {
       if (!groups.has(key)) {
         groups.set(key, {
           key,
+          docI18nKey: wiki.docI18nKey,
           title: wiki.docTitle || 'Wiki 文档',
           path: wiki.docRoot || wiki.path,
           date: wiki.date,
@@ -217,22 +257,10 @@ const docTrafficByKey = computed(() => {
 
   docGroups.value.forEach((doc) => {
     const uniquePaths = new Set([
-      normalizePath(doc.path),
-      ...doc.chapters.map(chapter => normalizePath(chapter.path))
-    ])
+      ...(pathsByDocI18nKey.value.get(doc.docI18nKey) || [doc.path, ...doc.chapters.map(chapter => chapter.path)])
+    ].map(normalizePath))
 
-    const total = {
-      pageviews: 0,
-      visits: 0
-    }
-
-    uniquePaths.forEach((path) => {
-      const stats = getPathStats(path)
-      total.pageviews += stats.pageviews
-      total.visits += stats.visits
-    })
-
-    result[doc.key] = total
+    result[doc.key] = sumUmamiRows(Array.from(uniquePaths).map(path => getPathStats(path)))
   })
 
   return result
@@ -280,8 +308,9 @@ function getPathStats(path) {
   return statsByPath.value[normalizePath(path)] || emptyStats
 }
 
-function getChapterTrafficLabel(path) {
-  const stats = getPathStats(path)
+function getChapterTrafficLabel(chapter) {
+  const paths = pathsByI18nKey.value.get(chapter.i18nKey) || [chapter.path]
+  const stats = sumUmamiRows(paths.map(path => getPathStats(path)))
   const isLoading = umamiPending.value
   if (isLoading && !stats.pageviews && !stats.visits) {
     return '加载中...'

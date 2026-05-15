@@ -4,7 +4,7 @@
     <div class="photo-layer" aria-hidden="true"></div>
 
     <header class="start-topbar">
-      <NuxtLink class="brand-mark" to="/" aria-label="返回首页">
+      <NuxtLink class="brand-mark" :to="homePath" aria-label="返回首页">
         <img
           class="brand-logo"
           src="/favicon.ico"
@@ -336,6 +336,8 @@
 </template>
 
 <script setup lang="ts">
+import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
+
 interface BookmarkItem {
   id: string
   name: string
@@ -456,6 +458,8 @@ let backgroundTimer: ReturnType<typeof setInterval> | undefined
 let suggestionTimer: ReturnType<typeof setTimeout> | undefined
 let suggestionRequestId = 0
 
+const route = useRoute()
+const homePath = computed(() => replaceLocaleInPath('/', getCurrentLocaleSlug(route.path)))
 const currentEngine = computed(() => engines[engineIdx.value] || engines[0])
 
 const currentBackground = computed(() => backgroundPhotos[backgroundIdx.value % backgroundPhotos.length])

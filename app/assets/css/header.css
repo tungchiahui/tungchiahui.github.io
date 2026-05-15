@@ -177,9 +177,10 @@
   }
 
   .nav-tools {
-    width: min(460px, 100%);
-    flex: 0 1 min(460px, 100%);
+    width: min(286px, 100%);
+    flex: 0 1 min(286px, 100%);
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   .theme-toggle {

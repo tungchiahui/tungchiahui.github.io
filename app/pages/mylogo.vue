@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useHead } from '#app'
+import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
 
 const logoUrl = 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/logo.png'
+const route = useRoute()
+const morePath = computed(() => replaceLocaleInPath('/more', getCurrentLocaleSlug(route.path)))
 
 useHead({
   title: '个人 LOGO - Tung Chia-hui',
@@ -17,7 +21,7 @@ useHead({
 <template>
   <div class="mylogo-page">
     <nav class="logo-top-nav" aria-label="页面导航">
-      <NuxtLink to="/more" class="logo-back-link">← 返回更多页面</NuxtLink>
+      <NuxtLink :to="morePath" class="logo-back-link">← 返回更多页面</NuxtLink>
     </nav>
 
     <header class="logo-hero">

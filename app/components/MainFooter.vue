@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import LanguageSwitcher from './LanguageSwitcher.vue'
+import {
+  getCurrentLocaleSlug,
+  getLocaleSectionPath,
+  replaceLocaleInPath
+} from '~~/utils/i18n-locales'
 
 const config = useRuntimeConfig()
+const route = useRoute()
 
 const currentYear = new Date().getFullYear()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const homePath = computed(() => replaceLocaleInPath('/', currentLocaleSlug.value))
 
 const variableFooterLinks = [
   { to: '/blog', label: '博客', icon: 'fas fa-newspaper' },
@@ -15,6 +24,10 @@ const variableFooterLinks = [
 
 const moreFooterLink = { to: '/more', label: '更多页面', icon: 'fas fa-table-cells-large' }
 const footerLinks = ref([...variableFooterLinks, moreFooterLink])
+const localizedFooterLinks = computed(() => footerLinks.value.map(link => ({
+  ...link,
+  to: getLocalizedFooterPath(link.to)
+})))
 
 onMounted(() => {
   footerLinks.value = [...shuffleLinks(variableFooterLinks), moreFooterLink]
@@ -73,13 +86,25 @@ function shuffleLinks<T>(links: T[]) {
 
   return shuffled
 }
+
+function getLocalizedFooterPath(path: string) {
+  if (path === '/blog') {
+    return getLocaleSectionPath(currentLocaleSlug.value, 'blog')
+  }
+
+  if (path === '/wiki') {
+    return getLocaleSectionPath(currentLocaleSlug.value, 'wiki')
+  }
+
+  return replaceLocaleInPath(path, currentLocaleSlug.value)
+}
 </script>
 
 <template>
   <footer class="main-footer">
     <div class="footer-shell">
       <section class="footer-intro" aria-label="站点信息">
-        <NuxtLink to="/" class="footer-mark" aria-label="返回首页">
+        <NuxtLink :to="homePath" class="footer-mark" aria-label="返回首页">
           <span class="footer-mark-icon" aria-hidden="true">
             <i class="fas fa-compass"></i>
           </span>
@@ -114,14 +139,19 @@ function shuffleLinks<T>(links: T[]) {
       <nav class="footer-nav" aria-label="页脚导航">
         <h2>站内导航</h2>
         <div class="footer-link-grid">
-          <NuxtLink v-for="link in footerLinks" :key="link.to" :to="link.to" class="footer-link">
+          <NuxtLink v-for="link in localizedFooterLinks" :key="link.to" :to="link.to" class="footer-link">
             <i :class="link.icon" aria-hidden="true"></i>
             <span>{{ link.label }}</span>
           </NuxtLink>
         </div>
       </nav>
 
-      <section class="footer-connect" aria-label="社交链接">
+      <section class="footer-language" aria-label="语言设置">
+        <h2>语言</h2>
+        <LanguageSwitcher class="footer-language-switcher" />
+      </section>
+
+      <section class="footer-connect" aria-label="页脚工具">
         <h2>联系方式</h2>
         <div class="footer-social">
           <a

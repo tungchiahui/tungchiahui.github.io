@@ -1,20 +1,20 @@
 import { defineTransformer } from '@nuxt/content'
-import { getWikiContentMeta } from '../utils/wiki-content-meta'
+import { getLocalizedContentMeta } from '../utils/wiki-content-meta'
 
 export default defineTransformer({
-  name: 'wiki-pinyin-path',
+  name: 'content-i18n-path',
   extensions: ['.md', '.mdc'],
   transform(content) {
-    const stem = getStem(content.id)
-    const wikiMeta = getWikiContentMeta(stem)
+    const stem = content.stem || getStem(content.id)
+    const contentMeta = getLocalizedContentMeta(stem, content as Record<string, unknown>)
 
-    if (!wikiMeta) {
+    if (!contentMeta) {
       return content
     }
 
     return {
       ...content,
-      ...wikiMeta,
+      ...contentMeta,
     }
   }
 })

@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { useHead } from '#app'
+import { computed } from 'vue'
 import PostList from '~/components/PostList.vue'
 import WikiList from '~/components/WikiList.vue'
+import {
+  getCurrentLocaleSlug,
+  getLocaleSectionPath,
+  replaceLocaleInPath
+} from '~~/utils/i18n-locales'
 
 interface FocusArea {
   icon: string
@@ -22,11 +28,17 @@ const heroTags = [
   '生活随想'
 ]
 
-const homeActions: HomeAction[] = [
-  { to: '/blog', icon: 'fas fa-newspaper', label: '浏览博客文章' },
-  { to: '/wiki', icon: 'fas fa-book-open', label: '进入 Wiki 知识库' },
-  { to: '/more', icon: 'fas fa-table-cells-large', label: '查看更多页面' }
-]
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const blogPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'blog'))
+const wikiPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'wiki'))
+const morePath = computed(() => replaceLocaleInPath('/more', currentLocaleSlug.value))
+
+const homeActions = computed<HomeAction[]>(() => [
+  { to: blogPath.value, icon: 'fas fa-newspaper', label: '浏览博客文章' },
+  { to: wikiPath.value, icon: 'fas fa-book-open', label: '进入 Wiki 知识库' },
+  { to: morePath.value, icon: 'fas fa-table-cells-large', label: '查看更多页面' }
+])
 
 const focusAreas: FocusArea[] = [
   {
@@ -122,7 +134,7 @@ useHead({
               <i class="fas fa-newspaper" aria-hidden="true"></i>
               <span>最新博客</span>
             </h2>
-            <NuxtLink to="/blog" class="panel-link">查看全部</NuxtLink>
+            <NuxtLink :to="blogPath" class="panel-link">查看全部</NuxtLink>
           </header>
           <PostList :limit="5" :show-search="false" />
         </article>
@@ -133,7 +145,7 @@ useHead({
               <i class="fas fa-book-open" aria-hidden="true"></i>
               <span>最新 Wiki</span>
             </h2>
-            <NuxtLink to="/wiki" class="panel-link">查看全部</NuxtLink>
+            <NuxtLink :to="wikiPath" class="panel-link">查看全部</NuxtLink>
           </header>
           <WikiList
             :limit="5"

@@ -252,6 +252,48 @@ export async function fetchUmamiPathStats(path: string, range: UmamiRange): Prom
   }
 }
 
+export function sumUmamiRows(rows: Array<Partial<UmamiMetricRow> | null | undefined>): UmamiMetricRow {
+  return rows.reduce<UmamiMetricRow>((total, row) => {
+    if (!row) return total
+
+    total.pageviews += asNumber(row.pageviews)
+    total.visitors += asNumber(row.visitors)
+    total.visits += asNumber(row.visits)
+    total.bounces += asNumber(row.bounces)
+    total.totaltime += asNumber(row.totaltime)
+
+    return total
+  }, {
+    name: '',
+    pageviews: 0,
+    visitors: 0,
+    visits: 0,
+    bounces: 0,
+    totaltime: 0
+  })
+}
+
+export async function fetchUmamiPathsStats(paths: string[], range: UmamiRange): Promise<UmamiMetricRow> {
+  const uniquePaths = Array.from(new Set(paths.map(normalizePath).filter(Boolean)))
+
+  if (!uniquePaths.length) {
+    return {
+      name: '',
+      pageviews: 0,
+      visitors: 0,
+      visits: 0,
+      bounces: 0,
+      totaltime: 0
+    }
+  }
+
+  const pathMap = await fetchUmamiPathMetricsMap(range)
+  const total = sumUmamiRows(uniquePaths.map(path => pathMap.get(path)))
+  total.name = uniquePaths.join(',')
+
+  return total
+}
+
 export async function fetchUmamiPathMetricsMap(range: UmamiRange): Promise<Map<string, UmamiMetricRow>> {
   const config = getUmamiConfig()
   const rows = await fetchUmamiExpandedMetrics('path', range, {

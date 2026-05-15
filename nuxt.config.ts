@@ -1,4 +1,4 @@
-import { getWikiContentMeta } from './utils/wiki-content-meta'
+import { getLocalizedContentMeta } from './utils/wiki-content-meta'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -31,10 +31,10 @@ export default defineNuxtConfig({
 
   hooks: {
     'content:file:afterParse'({ content }) {
-      const wikiMeta = getWikiContentMeta(content.stem)
+      const contentMeta = getLocalizedContentMeta(content.stem, content)
 
-      if (wikiMeta) {
-        Object.assign(content, wikiMeta)
+      if (contentMeta) {
+        Object.assign(content, contentMeta)
       }
     }
   },

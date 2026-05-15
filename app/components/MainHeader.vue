@@ -1,9 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+import {
+  getCurrentLocaleSlug,
+  getLocalizedSearchPath,
+  getLocaleSectionPath,
+  replaceLocaleInPath
+} from '~~/utils/i18n-locales'
 
 const isDark = ref(false)
 const headerSearchQuery = ref('')
+const route = useRoute()
 const router = useRouter()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const homePath = computed(() => replaceLocaleInPath('/', currentLocaleSlug.value))
+const blogPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'blog'))
+const wikiPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'wiki'))
+const searchPath = computed(() => getLocalizedSearchPath(currentLocaleSlug.value))
+const aboutPath = computed(() => replaceLocaleInPath('/about', currentLocaleSlug.value))
+const morePath = computed(() => replaceLocaleInPath('/more', currentLocaleSlug.value))
 
 const toggleDarkMode = () => {
   isDark.value = !isDark.value
@@ -12,7 +26,7 @@ const toggleDarkMode = () => {
 
 const submitHeaderSearch = () => {
   const q = headerSearchQuery.value.trim()
-  router.push(q ? { path: '/search', query: { q } } : '/search')
+  router.push(q ? { path: searchPath.value, query: { q } } : searchPath.value)
 }
 
 const updateTheme = () => {
@@ -41,11 +55,11 @@ onMounted(() => {
   <header class="main-header">
     <nav class="nav-container">
       <div class="nav-links">
-        <NuxtLink to="/" class="nav-item">首页</NuxtLink>
-        <NuxtLink to="/blog" class="nav-item">博客</NuxtLink>
-        <NuxtLink to="/wiki" class="nav-item">Wiki</NuxtLink>
-        <NuxtLink to="/about" class="nav-item">关于</NuxtLink>
-        <NuxtLink to="/more" class="nav-item">更多页面</NuxtLink>
+        <NuxtLink :to="homePath" class="nav-item">首页</NuxtLink>
+        <NuxtLink :to="blogPath" class="nav-item">博客</NuxtLink>
+        <NuxtLink :to="wikiPath" class="nav-item">Wiki</NuxtLink>
+        <NuxtLink :to="aboutPath" class="nav-item">关于</NuxtLink>
+        <NuxtLink :to="morePath" class="nav-item">更多页面</NuxtLink>
       </div>
 
       <div class="nav-tools">
