@@ -12,7 +12,7 @@ defineProps({
   },
   label: {
     type: String,
-    default: '正在加载'
+    default: '正在載入'
   }
 })
 </script>

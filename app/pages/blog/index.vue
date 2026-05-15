@@ -17,7 +17,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: '东澈的博客文章列表，记录学习、开发与折腾过程。'
+      content: '東澈的博客文章列表，記錄學習、開發與折騰過程。'
     }
   ]
 })

@@ -17,12 +17,12 @@ const homePath = computed(() => replaceLocaleInPath('/', currentLocaleSlug.value
 const variableFooterLinks = [
   { to: '/blog', label: '博客', icon: 'fas fa-newspaper' },
   { to: '/wiki', label: 'Wiki', icon: 'fas fa-book-open' },
-  { to: '/stats', label: '数据统计', icon: 'fas fa-chart-line' },
-  { to: '/friend', label: '友情链接', icon: 'fas fa-handshake' },
-  { to: '/about', label: '关于本站', icon: 'fas fa-circle-info' }
+  { to: '/stats', label: '資料統計', icon: 'fas fa-chart-line' },
+  { to: '/friend', label: '友情連結', icon: 'fas fa-handshake' },
+  { to: '/about', label: '關於本站', icon: 'fas fa-circle-info' }
 ]
 
-const moreFooterLink = { to: '/more', label: '更多页面', icon: 'fas fa-table-cells-large' }
+const moreFooterLink = { to: '/more', label: '更多頁面', icon: 'fas fa-table-cells-large' }
 const footerLinks = ref([...variableFooterLinks, moreFooterLink])
 const localizedFooterLinks = computed(() => footerLinks.value.map(link => ({
   ...link,
@@ -103,8 +103,8 @@ function getLocalizedFooterPath(path: string) {
 <template>
   <footer class="main-footer">
     <div class="footer-shell">
-      <section class="footer-intro" aria-label="站点信息">
-        <NuxtLink :to="homePath" class="footer-mark" aria-label="返回首页">
+      <section class="footer-intro" aria-label="站點資訊">
+        <NuxtLink :to="homePath" class="footer-mark" aria-label="返回首頁">
           <span class="footer-mark-icon" aria-hidden="true">
             <i class="fas fa-compass"></i>
           </span>
@@ -115,7 +115,7 @@ function getLocalizedFooterPath(path: string) {
         </NuxtLink>
 
         <p class="footer-description">
-          记录学习、开发和生活里的折腾过程，把工程实践和踩坑经验整理成可以反复查阅的笔记。
+          記錄學習、開發和生活裡的折騰過程，把工程實踐和踩坑經驗整理成可以反覆查閱的筆記。
         </p>
 
         <a
@@ -123,7 +123,7 @@ function getLocalizedFooterPath(path: string) {
           href="https://nuxt.com"
           target="_blank"
           rel="noopener noreferrer"
-          title="访问 Nuxt 官网"
+          title="造訪 Nuxt 官網"
         >
           <img
             class="nuxt-favicon"
@@ -136,8 +136,8 @@ function getLocalizedFooterPath(path: string) {
         </a>
       </section>
 
-      <nav class="footer-nav" aria-label="页脚导航">
-        <h2>站内导航</h2>
+      <nav class="footer-nav" aria-label="頁腳導覽">
+        <h2>站內導覽</h2>
         <div class="footer-link-grid">
           <NuxtLink v-for="link in localizedFooterLinks" :key="link.to" :to="link.to" class="footer-link">
             <i :class="link.icon" aria-hidden="true"></i>
@@ -146,13 +146,13 @@ function getLocalizedFooterPath(path: string) {
         </div>
       </nav>
 
-      <section class="footer-language" aria-label="语言设置">
-        <h2>语言</h2>
+      <section class="footer-language" aria-label="語言設定">
+        <h2>語言</h2>
         <LanguageSwitcher class="footer-language-switcher" />
       </section>
 
-      <section class="footer-connect" aria-label="页脚工具">
-        <h2>联系方式</h2>
+      <section class="footer-connect" aria-label="頁腳工具">
+        <h2>聯絡方式</h2>
         <div class="footer-social">
           <a
             v-for="link in socialLinks"

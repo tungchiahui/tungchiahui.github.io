@@ -4,20 +4,20 @@
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="搜索文章标题..."
+        placeholder="搜尋文章標題..."
         class="search-input"
       />
     </div>
 
-    <div v-if="pending" class="loading">正在扫描文件...</div>
+    <div v-if="pending" class="loading">正在掃描檔案...</div>
 
     <ul v-else-if="filteredPosts.length" class="post-items">
       <li v-for="post in filteredPosts" :key="post.path" class="post-item">
         <NuxtLink :to="post.path" class="post-link">
-          {{ post.title || '无标题' }}
+          {{ post.title || '無標題' }}
         </NuxtLink>
         <div class="post-meta">
-          {{ post.date || '未标注日期' }}
+          {{ post.date || '未標註日期' }}
           <span v-if="showTraffic">{{ getPostTrafficLabel(post).pageviews }}</span>
           <span v-if="showTraffic">{{ getPostTrafficLabel(post).visits }}</span>
         </div>
@@ -25,8 +25,8 @@
     </ul>
 
     <div v-else class="empty-state">
-      <p v-if="searchQuery">没有找到包含 "{{ searchQuery }}" 的文章</p>
-      <p v-else>仓库中似乎还没有文章...</p>
+      <p v-if="searchQuery">沒有找到包含 "{{ searchQuery }}" 的文章</p>
+      <p v-else>倉庫中似乎還沒有文章...</p>
     </div>
   </section>
 </template>
@@ -113,7 +113,7 @@ const trackedPaths = computed(() => {
 
 const umamiDataKey = props.showTraffic ? 'posts-umami-paths-with-traffic' : 'posts-umami-paths-no-traffic'
 
-const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
+const { data: umamiPathsData, pending: umamiPending } = useAsyncData(
   umamiDataKey,
   async () => {
     if (!props.showTraffic || !trackedPaths.value.length) {
@@ -173,8 +173,8 @@ function getPostTrafficLabel(post) {
   const stats = statsByPostKey.value[post.i18nKey] || emptyStats
   const isLoading = umamiPending.value
   return {
-    pageviews: isLoading && !stats.pageviews ? '总浏览 加载中...' : `总浏览 ${formatNumber(stats.pageviews)}`,
-    visits: isLoading && !stats.visits ? '总访问 加载中...' : `总访问 ${formatNumber(stats.visits)}`
+    pageviews: isLoading && !stats.pageviews ? '總瀏覽 載入中...' : `總瀏覽 ${formatNumber(stats.pageviews)}`,
+    visits: isLoading && !stats.visits ? '總訪問 載入中...' : `總訪問 ${formatNumber(stats.visits)}`
   }
 }
 

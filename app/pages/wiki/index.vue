@@ -5,7 +5,7 @@
         <i class="fas fa-book-open" aria-hidden="true"></i>
         <span>Wiki 知识库</span>
       </h1>
-      <p>按教程和章节组织的技术文档。</p>
+      <p>按教程和章節組織的技術文件。</p>
     </header>
     <WikiList />
   </div>
@@ -20,7 +20,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: '按教程和章节组织的技术文档与学习笔记。'
+      content: '按教程和章節組織的技術文件與學習筆記。'
     }
   ]
 })

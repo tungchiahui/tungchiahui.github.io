@@ -92,7 +92,7 @@ const { data: page, pending } = await useAsyncData(
 if (!pending.value && !page.value) {
   throw createError({
     statusCode: 404,
-    statusMessage: 'Wiki 页面不存在',
+    statusMessage: 'Wiki 頁面不存在',
     fatal: true
   })
 }
@@ -159,7 +159,7 @@ const docTitle = computed(() =>
 )
 
 const pageTitle = computed(() => {
-  if (!page.value) return '加载中...'
+  if (!page.value) return '載入中...'
   return page.value.chapter ? `${page.value.chapter} ${page.value.title}` : page.value.title
 })
 
@@ -185,7 +185,7 @@ const trafficPaths = computed(() =>
   (i18nVariantPaths.value?.length ? i18nVariantPaths.value : collectTrafficPaths(page.value, pagePath.value))
 )
 
-const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = await useAsyncData(
+const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = useAsyncData(
   `wiki-umami-${route.path}`,
   () => fetchUmamiPathsStats(trafficPaths.value, resolveUmamiRange()),
   {
@@ -656,14 +656,14 @@ function normalizePath(path: string) {
       <button
         v-if="hasMobileDrawer"
         class="wiki-drawer-backdrop"
-        aria-label="关闭导航"
+        aria-label="關閉導覽"
         @click="closeDrawers"
       />
     </Transition>
 
     <div v-if="pending" class="loading-state">
       <div class="loading-spinner" />
-      <p>加载中...</p>
+      <p>載入中...</p>
     </div>
 
     <div v-else-if="page" class="wiki-shell">
@@ -674,7 +674,7 @@ function normalizePath(path: string) {
       >
         <div class="sidebar-header">
           <NuxtLink :to="wikiHomePath" class="sidebar-back">Wiki</NuxtLink>
-          <button class="sidebar-close" type="button" @click="closeDrawers">关闭</button>
+          <button class="sidebar-close" type="button" @click="closeDrawers">關閉</button>
         </div>
 
         <NuxtLink :to="docIndex?.path || (page as WikiPage).docRoot || wikiHomePath" class="doc-title-link">
@@ -692,15 +692,15 @@ function normalizePath(path: string) {
             @click="closeDrawers"
           >
             <span v-if="item.chapter" class="doc-nav-number">{{ item.chapter }}</span>
-            <span>{{ item.isWikiIndex ? '首页' : item.title }}</span>
+            <span>{{ item.isWikiIndex ? '首頁' : item.title }}</span>
           </NuxtLink>
         </nav>
       </aside>
 
       <main class="wiki-main">
         <div class="mobile-actions">
-          <button v-if="docNavigationItems.length" type="button" @click="showDocNav = true">文档</button>
-          <button v-if="tocLinks.length" type="button" @click="showToc = true">目录</button>
+          <button v-if="docNavigationItems.length" type="button" @click="showDocNav = true">文件</button>
+          <button v-if="tocLinks.length" type="button" @click="showToc = true">目錄</button>
         </div>
 
         <nav class="wiki-breadcrumb">
@@ -713,17 +713,17 @@ function normalizePath(path: string) {
         <article class="wiki-article">
           <header class="wiki-article-header">
             <div v-if="(page as WikiPage).chapter" class="chapter-kicker">
-              第 {{ (page as WikiPage).chapter }} 节
+              第 {{ (page as WikiPage).chapter }} 節
             </div>
             <h1>{{ (page as WikiPage).title }}</h1>
             <div class="wiki-traffic" :class="{ 'is-loading': umamiPending }">
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.pageviews }}</span>
-                <span class="traffic-label">浏览次数</span>
+                <span class="traffic-label">瀏覽次數</span>
               </span>
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.visits }}</span>
-                <span class="traffic-label">访问次数</span>
+                <span class="traffic-label">訪問次數</span>
               </span>
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.bounceRate }}</span>
@@ -742,14 +742,14 @@ function normalizePath(path: string) {
 
           <footer v-if="previousPage || nextPage" class="wiki-page-navigation">
             <NuxtLink v-if="previousPage" :to="previousPage.path" class="page-nav-link page-nav-prev">
-              <span class="page-nav-label">上一节</span>
+              <span class="page-nav-label">上一節</span>
               <span class="page-nav-title">
                 {{ previousPage.chapter ? `${previousPage.chapter} ` : '' }}{{ previousPage.title }}
               </span>
             </NuxtLink>
 
             <NuxtLink v-if="nextPage" :to="nextPage.path" class="page-nav-link page-nav-next">
-              <span class="page-nav-label">下一节</span>
+              <span class="page-nav-label">下一節</span>
               <span class="page-nav-title">
                 {{ nextPage.chapter ? `${nextPage.chapter} ` : '' }}{{ nextPage.title }}
               </span>
@@ -764,8 +764,8 @@ function normalizePath(path: string) {
         :class="{ 'is-open': showToc }"
       >
         <div class="sidebar-header">
-          <span class="toc-heading">本页目录</span>
-          <button class="sidebar-close" type="button" @click="closeDrawers">关闭</button>
+          <span class="toc-heading">本頁目錄</span>
+          <button class="sidebar-close" type="button" @click="closeDrawers">關閉</button>
         </div>
 
         <nav class="toc-nav">

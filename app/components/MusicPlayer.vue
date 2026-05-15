@@ -19,8 +19,8 @@
     :class="{ open: !hidden }"
     @click="toggle"
     :aria-pressed="!hidden"
-    :aria-label="hidden ? '展开音乐播放器' : '收起音乐播放器'"
-    :title="hidden ? '展开音乐播放器' : '收起音乐播放器'"
+    :aria-label="hidden ? '展開音樂播放器' : '收起音樂播放器'"
+    :title="hidden ? '展開音樂播放器' : '收起音樂播放器'"
   >
     <span class="toggle-player-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24">
@@ -29,7 +29,7 @@
         <path d="M20 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z" />
       </svg>
     </span>
-    <span class="toggle-player-text">{{ hidden ? '展开' : '收起' }}</span>
+    <span class="toggle-player-text">{{ hidden ? '展開' : '收起' }}</span>
     <svg class="toggle-player-chevron" viewBox="0 0 24 24" aria-hidden="true">
       <path d="m6 9 6 6 6-6" />
     </svg>

@@ -19,7 +19,7 @@
         >
       </span>
       <span class="language-trigger-copy">
-        <span class="language-label">语言</span>
+        <span class="language-label">語言</span>
         <small>{{ currentLocale.fullLabel }}</small>
       </span>
       <i class="fas fa-chevron-up language-chevron" aria-hidden="true"></i>
@@ -30,7 +30,7 @@
         v-show="isOpen"
         id="language-menu"
         class="language-menu"
-        aria-label="语言切换"
+        aria-label="語言切換"
       >
         <NuxtLink
           v-for="locale in I18N_LOCALES"

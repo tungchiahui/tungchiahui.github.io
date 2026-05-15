@@ -38,14 +38,14 @@ const getLoadingLabel = (path: string, mode: LoadingMode) => {
   const contentPath = getContentRoutePath(path)
 
   if (mode === 'reader') {
-    return contentPath.startsWith('/wiki/') ? '正在整理 Wiki 阅读视图' : '正在整理博文阅读视图'
+    return contentPath.startsWith('/wiki/') ? '正在整理 Wiki 閱讀視圖' : '正在整理博文閱讀視圖'
   }
 
-  if (contentPath === '/') return '正在进入首页'
-  if (contentPath.startsWith('/wiki')) return '正在打开 Wiki 知识库'
-  if (contentPath.startsWith('/blog')) return '正在打开博客列表'
-  if (contentPath.startsWith('/search')) return '正在检索内容'
-  return '正在切换页面'
+  if (contentPath === '/') return '正在進入首頁'
+  if (contentPath.startsWith('/wiki')) return '正在開啟 Wiki 知識庫'
+  if (contentPath.startsWith('/blog')) return '正在開啟博客列表'
+  if (contentPath.startsWith('/search')) return '正在檢索內容'
+  return '正在切換頁面'
 }
 
 const isHashOnlyNavigation = (to: { path: string; hash: string; query: unknown }, from: { path: string; hash: string; query: unknown }) => {
@@ -103,7 +103,7 @@ onMounted(() => {
   })
 
   removeAfterEach = router.afterEach(() => {
-    setTimeout(() => finishLoading(), 1200)
+    finishLoading()
   })
 
   removeRouterError = router.onError(() => finishLoading(true))

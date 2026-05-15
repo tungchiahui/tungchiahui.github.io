@@ -160,13 +160,13 @@ const { data: surroundingPosts } = await useAsyncData(
 if (!pending.value && !page.value) {
   throw createError({ 
     statusCode: 404, 
-    statusMessage: '页面不存在',
+    statusMessage: '頁面不存在',
     fatal: true 
   })
 }
 
 // ==================== SEO 元信息实现 ====================
-const title = computed(() => (page.value as BlogPost)?.title || '加载中...')
+const title = computed(() => (page.value as BlogPost)?.title || '載入中...')
 const description = computed(() => 
   (page.value as BlogPost)?.description || (page.value as BlogPost)?.title || ''
 )
@@ -225,7 +225,7 @@ const trafficPaths = computed(() =>
   (i18nVariantPaths.value?.length ? i18nVariantPaths.value : collectTrafficPaths(page.value, pagePath.value))
 )
 
-const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = await useAsyncData(
+const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = useAsyncData(
   `blog-umami-${route.path}`,
   () => fetchUmamiPathsStats(trafficPaths.value, resolveUmamiRange()),
   {
@@ -733,19 +733,19 @@ const scrollToHeading = (id: string) => {
       v-if="filteredTocLinks.length" 
       class="mobile-toc-button" 
       @click="showToc = true"
-      aria-label="打开目录"
+      aria-label="開啟目錄"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <line x1="3" y1="6" x2="21" y2="6"></line>
         <line x1="3" y1="12" x2="15" y2="12"></line>
         <line x1="3" y1="18" x2="18" y2="18"></line>
       </svg>
-      <span>目录</span>
+      <span>目錄</span>
     </button>
 
     <div v-if="pending" class="loading-state">
       <div class="loading-spinner"></div>
-      <p>加载中...</p>
+      <p>載入中...</p>
     </div>
 
     <div v-else-if="page" class="content-container">
@@ -778,18 +778,18 @@ const scrollToHeading = (id: string) => {
                   <circle cx="12" cy="12" r="10"></circle>
                   <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
-                {{ readingTime }} 分钟阅读
+                {{ readingTime }} 分鐘閱讀
               </span>
             </div>
 
             <div class="article-traffic" :class="{ 'is-loading': umamiPending }">
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.pageviews }}</span>
-                <span class="traffic-label">浏览次数</span>
+                <span class="traffic-label">瀏覽次數</span>
               </span>
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.visits }}</span>
-                <span class="traffic-label">访问次数</span>
+                <span class="traffic-label">訪問次數</span>
               </span>
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.bounceRate }}</span>
@@ -810,7 +810,7 @@ const scrollToHeading = (id: string) => {
             <div class="footer-divider">
               <span>
                 <i class="fas fa-book-open" aria-hidden="true"></i>
-                <span>继续阅读</span>
+                <span>繼續閱讀</span>
               </span>
             </div>
             
@@ -851,7 +851,7 @@ const scrollToHeading = (id: string) => {
           <div class="toc-header">
             <h2 class="toc-title">
               <i class="fas fa-list-ul" aria-hidden="true"></i>
-              <span>目录</span>
+              <span>目錄</span>
             </h2>
             <button class="toc-close-btn" @click="closeToc">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
