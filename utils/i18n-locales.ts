@@ -52,8 +52,8 @@ export const I18N_LOCALES = [
   {
     code: 'zh-HK',
     slug: 'zh-hk',
-    label: '繁體中文',
-    fullLabel: '繁體中文',
+    label: '香港繁體',
+    fullLabel: '繁體中文（香港）',
     converter: 's2hk',
     flags: [
       'hong-kong-sar-china-flag-png-large.webp'
@@ -62,8 +62,8 @@ export const I18N_LOCALES = [
   {
     code: 'zh-TW',
     slug: 'zh-tw',
-    label: '繁體中文',
-    fullLabel: '繁體中文',
+    label: '台灣正體',
+    fullLabel: '正體中文（台灣）',
     converter: 's2tw',
     flags: [
       'peoples-republic-of-china-flag-png-large.webp'

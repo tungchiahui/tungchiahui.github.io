@@ -23,6 +23,7 @@ import AppLoadingOverlay from './components/AppLoadingOverlay.vue'
 import MainHeader from './components/MainHeader.vue'
 import MainFooter from './components/MainFooter.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
+import { getUiTextForPath } from '~~/utils/i18n-ui'
 
 const route = useRoute()
 const router = useRouter()
@@ -36,16 +37,17 @@ const isReaderRoute = (path: string) => /^\/(?:blog|wiki)\/.+/.test(getContentRo
 
 const getLoadingLabel = (path: string, mode: LoadingMode) => {
   const contentPath = getContentRoutePath(path)
+  const ui = getUiTextForPath(path)
 
   if (mode === 'reader') {
-    return contentPath.startsWith('/wiki/') ? '正在整理 Wiki 閱讀視圖' : '正在整理博文閱讀視圖'
+    return contentPath.startsWith('/wiki/') ? ui.loadingReaderWiki : ui.loadingReaderBlog
   }
 
-  if (contentPath === '/') return '正在進入首頁'
-  if (contentPath.startsWith('/wiki')) return '正在開啟 Wiki 知識庫'
-  if (contentPath.startsWith('/blog')) return '正在開啟博客列表'
-  if (contentPath.startsWith('/search')) return '正在檢索內容'
-  return '正在切換頁面'
+  if (contentPath === '/') return ui.loadingHome
+  if (contentPath.startsWith('/wiki')) return ui.loadingWiki
+  if (contentPath.startsWith('/blog')) return ui.loadingBlog
+  if (contentPath.startsWith('/search')) return ui.loadingSearch
+  return ui.loadingPage
 }
 
 const isHashOnlyNavigation = (to: { path: string; hash: string; query: unknown }, from: { path: string; hash: string; query: unknown }) => {
