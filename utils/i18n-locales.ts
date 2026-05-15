@@ -43,7 +43,7 @@ export const I18N_LOCALES = [
     code: 'zh-Hant',
     slug: 'zh-hant',
     label: '繁體中文',
-    fullLabel: '繁体中文（通用）',
+    fullLabel: '繁體中文',
     converter: 's2t',
     flags: [
       'peoples-republic-of-china-flag-png-large.webp'
@@ -53,18 +53,17 @@ export const I18N_LOCALES = [
     code: 'zh-HK',
     slug: 'zh-hk',
     label: '繁體中文',
-    fullLabel: '繁体中文（香港）',
+    fullLabel: '繁體中文',
     converter: 's2hk',
     flags: [
-      'hong-kong-sar-china-flag-png-large.webp',
-      'macao-sar-china-flag-png-large.webp'
+      'hong-kong-sar-china-flag-png-large.webp'
     ]
   },
   {
     code: 'zh-TW',
     slug: 'zh-tw',
     label: '繁體中文',
-    fullLabel: '繁体中文（台湾）',
+    fullLabel: '繁體中文',
     converter: 's2tw',
     flags: [
       'peoples-republic-of-china-flag-png-large.webp'

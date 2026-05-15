@@ -103,6 +103,8 @@ const { data: wikis, pending } = await useAsyncData('wiki-list', () => {
       'date',
       'localeSlug',
       'i18nKey',
+      'sourcePath',
+      'legacyPath',
       'chapter',
       'chapterSort',
       'docKey',
@@ -139,10 +141,14 @@ const pathsByI18nKey = computed(() => {
   const map = new Map()
 
   allWikiPages.value.forEach((wiki) => {
-    if (!wiki.i18nKey || !wiki.path) return
+    if (!wiki.i18nKey) return
 
     const paths = map.get(wiki.i18nKey) || []
-    paths.push(normalizePath(wiki.path))
+    collectTrafficPaths(wiki).forEach((path) => {
+      if (!paths.includes(path)) {
+        paths.push(path)
+      }
+    })
     map.set(wiki.i18nKey, paths)
   })
 
@@ -153,10 +159,14 @@ const pathsByDocI18nKey = computed(() => {
   const map = new Map()
 
   allWikiPages.value
-    .filter(wiki => wiki.isWikiDoc && wiki.docI18nKey && wiki.path)
+    .filter(wiki => wiki.isWikiDoc && wiki.docI18nKey)
     .forEach((wiki) => {
       const paths = map.get(wiki.docI18nKey) || []
-      paths.push(normalizePath(wiki.path))
+      collectTrafficPaths(wiki).forEach((path) => {
+        if (!paths.includes(path)) {
+          paths.push(path)
+        }
+      })
       map.set(wiki.docI18nKey, paths)
     })
 
@@ -171,7 +181,7 @@ const trackedPaths = computed(() => {
   wikiPages.value
     .filter(wiki => wiki.isWikiDoc && wiki.path)
     .forEach((wiki) => {
-      const variants = pathsByI18nKey.value.get(wiki.i18nKey) || [wiki.path]
+      const variants = pathsByI18nKey.value.get(wiki.i18nKey) || collectTrafficPaths(wiki)
       variants.forEach(path => paths.add(normalizePath(path)))
     })
 
@@ -185,7 +195,7 @@ const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
       return { statsByPath: {} }
     }
 
-    const pathMap = await fetchUmamiPathMetricsMap(resolveUmamiRange())
+    const pathMap = await fetchUmamiPathMetricsMapForPaths(trackedPaths.value, resolveUmamiRange())
     const statsByPath = Object.fromEntries(
       trackedPaths.value.map((path) => {
         const stats = pathMap.get(path) || emptyStats
@@ -309,7 +319,7 @@ function getPathStats(path) {
 }
 
 function getChapterTrafficLabel(chapter) {
-  const paths = pathsByI18nKey.value.get(chapter.i18nKey) || [chapter.path]
+  const paths = pathsByI18nKey.value.get(chapter.i18nKey) || collectTrafficPaths(chapter)
   const stats = sumUmamiRows(paths.map(path => getPathStats(path)))
   const isLoading = umamiPending.value
   if (isLoading && !stats.pageviews && !stats.visits) {
@@ -352,6 +362,18 @@ function matchesQuery(wiki, query) {
     wiki.date,
     wiki.path
   ].some(value => String(value || '').toLowerCase().includes(query))
+}
+
+function collectTrafficPaths(item) {
+  return Array.from(
+    new Set([
+      item.path,
+      item.sourcePath,
+      item.legacyPath
+    ]
+      .filter(Boolean)
+      .map(normalizePath))
+  )
 }
 </script>
 

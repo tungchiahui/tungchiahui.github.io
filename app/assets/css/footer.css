@@ -166,13 +166,22 @@
   height: 36px;
   border: 1px solid color-mix(in srgb, var(--nav-border) 86%, transparent);
   border-radius: 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-grid;
+  place-items: center;
   background: color-mix(in srgb, var(--bg-color) 92%, #ecfeff);
   color: var(--text-main);
   text-decoration: none;
   transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-social a i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1em;
+  height: 1.1em;
+  line-height: 1;
+  text-align: center;
 }
 
 .footer-social a:hover {

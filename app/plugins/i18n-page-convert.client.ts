@@ -66,6 +66,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     convertElementAttributes(document.body, converter)
   }
 
+  scheduleConvert()
+
+  nuxtApp.hook('app:beforeMount', scheduleConvert)
+
   nuxtApp.hook('app:mounted', () => {
     scheduleConvert()
 

@@ -85,6 +85,7 @@ export function getWikiContentMeta(stem?: string): WikiContentMeta | null {
     canonicalPath: localizedPath,
     sourcePath,
     sourceStem: parsedStem.sourceStem,
+    legacyPath: localeSlug === DEFAULT_LOCALE_SLUG ? sourcePath : undefined,
     chapter,
     chapterSort: chapter ? chapterToSort(chapter) : 0,
     date: parseDate(rawDocKey),

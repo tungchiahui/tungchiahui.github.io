@@ -22,6 +22,8 @@ interface WikiPage {
   date?: string
   localeSlug?: string
   i18nKey?: string
+  sourcePath?: string
+  legacyPath?: string
   chapter?: string
   chapterSort?: number
   docKey?: string
@@ -37,6 +39,19 @@ interface WikiPage {
 const route = useRoute()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
 const wikiHomePath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'wiki'))
+
+function collectTrafficPaths(entry: { path?: string; sourcePath?: string; legacyPath?: string } | null | undefined, fallbackPath?: string) {
+  return Array.from(
+    new Set([
+      entry?.path,
+      entry?.sourcePath,
+      entry?.legacyPath,
+      fallbackPath
+    ]
+      .filter(Boolean)
+      .map(path => normalizePath(String(path))))
+  )
+}
 
 function formatNumber(value: number | undefined) {
   return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
@@ -154,22 +169,20 @@ const { data: i18nVariantPaths } = await useAsyncData(
     const i18nKey = page.value?.i18nKey
 
     if (!i18nKey) {
-      return [pagePath.value]
+      return collectTrafficPaths(page.value, pagePath.value)
     }
 
     const variants = await queryCollection('content')
       .where('i18nKey', '=', i18nKey)
-      .select('path')
-      .all() as Array<{ path?: string }>
+      .select('path', 'sourcePath', 'legacyPath')
+      .all() as Array<{ path?: string; sourcePath?: string; legacyPath?: string }>
 
-    return variants
-      .map(variant => variant.path)
-      .filter((path): path is string => Boolean(path))
+    return variants.flatMap(variant => collectTrafficPaths(variant))
   }
 )
 
 const trafficPaths = computed(() =>
-  (i18nVariantPaths.value?.length ? i18nVariantPaths.value : [pagePath.value]).map(normalizePath)
+  (i18nVariantPaths.value?.length ? i18nVariantPaths.value : collectTrafficPaths(page.value, pagePath.value))
 )
 
 const { data: umamiPathData, pending: umamiPending, refresh: refreshUmamiPathData } = await useAsyncData(
@@ -187,14 +200,12 @@ const trafficDisplay = computed(() => {
   const stats = trafficStats.value
   const pageviews = stats?.pageviews || 0
   const visits = stats?.visits || 0
-  const visitors = stats?.visitors || 0
   const bounces = stats?.bounces || 0
   const totaltime = stats?.totaltime || 0
 
   return {
     pageviews: formatNumber(pageviews),
     visits: formatNumber(visits),
-    visitors: formatNumber(visitors),
     bounceRate: formatPercent(bounces, visits),
     avgVisitDuration: formatDuration(totaltime, visits)
   }
@@ -713,10 +724,6 @@ function normalizePath(path: string) {
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.visits }}</span>
                 <span class="traffic-label">访问次数</span>
-              </span>
-              <span class="traffic-chip">
-                <span class="traffic-value">{{ trafficDisplay.visitors }}</span>
-                <span class="traffic-label">访客人数</span>
               </span>
               <span class="traffic-chip">
                 <span class="traffic-value">{{ trafficDisplay.bounceRate }}</span>

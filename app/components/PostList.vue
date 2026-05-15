@@ -56,7 +56,7 @@ const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
 const { data: posts, pending } = await useAsyncData('posts-list', () => {
   return queryCollection('content')
     .where('sourceStem', 'LIKE', 'posts/%')
-    .select('path', 'title', 'date', 'localeSlug', 'i18nKey')
+    .select('path', 'title', 'date', 'localeSlug', 'i18nKey', 'sourcePath', 'legacyPath')
     .all()
 })
 
@@ -76,20 +76,24 @@ const sortedPosts = computed(() => {
   return posts.value
     .filter(post => post.localeSlug === currentLocaleSlug.value)
     .sort((a, b) => {
-    const da = a.date ? new Date(a.date) : new Date(0)
-    const db = b.date ? new Date(b.date) : new Date(0)
-    return db - da
-  })
+      const da = a.date ? new Date(a.date) : new Date(0)
+      const db = b.date ? new Date(b.date) : new Date(0)
+      return db - da
+    })
 })
 
 const postPathsByI18nKey = computed(() => {
   const map = new Map()
 
   ;(posts.value || []).forEach((post) => {
-    if (!post.i18nKey || !post.path) return
+    if (!post.i18nKey) return
 
     const paths = map.get(post.i18nKey) || []
-    paths.push(normalizePath(post.path))
+    collectTrafficPaths(post).forEach((path) => {
+      if (!paths.includes(path)) {
+        paths.push(path)
+      }
+    })
     map.set(post.i18nKey, paths)
   })
 
@@ -101,7 +105,7 @@ const trackedPaths = computed(() => {
 
   const paths = new Set()
   sortedPosts.value.forEach((post) => {
-    const variantPaths = postPathsByI18nKey.value.get(post.i18nKey) || [post.path]
+    const variantPaths = postPathsByI18nKey.value.get(post.i18nKey) || collectTrafficPaths(post)
     variantPaths.forEach(path => paths.add(normalizePath(path)))
   })
   return Array.from(paths)
@@ -116,7 +120,7 @@ const { data: umamiPathsData, pending: umamiPending } = await useAsyncData(
       return { statsByPath: {} }
     }
 
-    const pathMap = await fetchUmamiPathMetricsMap(resolveUmamiRange())
+    const pathMap = await fetchUmamiPathMetricsMapForPaths(trackedPaths.value, resolveUmamiRange())
     const statsByPath = Object.fromEntries(
       trackedPaths.value.map((path) => {
         const stats = pathMap.get(path) || emptyStats
@@ -139,7 +143,7 @@ const statsByPostKey = computed(() => {
   const result = {}
 
   sortedPosts.value.forEach((post) => {
-    const paths = postPathsByI18nKey.value.get(post.i18nKey) || [post.path]
+    const paths = postPathsByI18nKey.value.get(post.i18nKey) || collectTrafficPaths(post)
     result[post.i18nKey] = sumUmamiRows(paths.map(path => statsByPath.value[normalizePath(path)] || emptyStats))
   })
 
@@ -172,6 +176,18 @@ function getPostTrafficLabel(post) {
     pageviews: isLoading && !stats.pageviews ? '总浏览 加载中...' : `总浏览 ${formatNumber(stats.pageviews)}`,
     visits: isLoading && !stats.visits ? '总访问 加载中...' : `总访问 ${formatNumber(stats.visits)}`
   }
+}
+
+function collectTrafficPaths(post) {
+  return Array.from(
+    new Set([
+      post.path,
+      post.sourcePath,
+      post.legacyPath
+    ]
+      .filter(Boolean)
+      .map(normalizePath))
+  )
 }
 </script>
 

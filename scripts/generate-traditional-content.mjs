@@ -21,6 +21,12 @@ const targets = [
   }
 ]
 
+const generatedLocaleSlugs = [
+  'zh-hant',
+  'zh-hk',
+  'zh-tw'
+]
+
 const sourceRoots = [
   path.join(contentDir, 'posts'),
   path.join(contentDir, 'wiki')
@@ -48,7 +54,7 @@ await main()
 
 async function main() {
   await Promise.all(
-    targets.map(target => fs.rm(path.join(i18nDir, target.slug), { recursive: true, force: true }))
+    generatedLocaleSlugs.map(slug => fs.rm(path.join(i18nDir, slug), { recursive: true, force: true }))
   )
 
   const files = (await Promise.all(sourceRoots.map(root => collectMarkdownFiles(root)))).flat()
@@ -205,7 +211,7 @@ function convertOutsideFencedCode(markdown, converter) {
     const fenceMatch = line.match(/^\s*(```+|~~~+)/)
     const shouldConvert = !inFence
 
-    output.push(shouldConvert ? converter(line) : line, lineBreak)
+    output.push(shouldConvert ? convertMarkdownLine(line, converter) : line, lineBreak)
 
     if (fenceMatch) {
       const marker = fenceMatch[1][0]
@@ -220,4 +226,39 @@ function convertOutsideFencedCode(markdown, converter) {
   }
 
   return output.join('')
+}
+
+function convertMarkdownLine(line, converter) {
+  const protectedValues = []
+
+  const protect = (value) => {
+    const token = `@@I18N_PROTECTED_${protectedValues.length}@@`
+    protectedValues.push([token, value])
+    return token
+  }
+
+  let protectedLine = line
+
+  protectedLine = protectedLine.replace(/(`+)(.*?)(\1)/g, (_match, open, content, close) => {
+    return protect(`${open}${content}${close}`)
+  })
+
+  protectedLine = protectedLine.replace(/^(\s*\[[^\]]+]:\s*)(\S.*)$/g, (_match, prefix, target) => {
+    return `${prefix}${protect(target)}`
+  })
+
+  protectedLine = protectedLine.replace(/(\[[^\]]*]\()([^)]+)(\))/g, (_match, open, target, close) => {
+    return `${open}${protect(target)}${close}`
+  })
+
+  protectedLine = protectedLine.replace(/\bhttps?:\/\/[^\s<>)]+/g, value => protect(value))
+
+  let converted = converter(protectedLine)
+
+  for (let index = protectedValues.length - 1; index >= 0; index -= 1) {
+    const [token, value] = protectedValues[index]
+    converted = converted.split(token).join(value)
+  }
+
+  return converted
 }

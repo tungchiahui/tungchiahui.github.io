@@ -287,7 +287,7 @@ export async function fetchUmamiPathsStats(paths: string[], range: UmamiRange): 
     }
   }
 
-  const pathMap = await fetchUmamiPathMetricsMap(range)
+  const pathMap = await fetchUmamiPathMetricsMapForPaths(uniquePaths, range)
   const total = sumUmamiRows(uniquePaths.map(path => pathMap.get(path)))
   total.name = uniquePaths.join(',')
 
@@ -304,5 +304,40 @@ export async function fetchUmamiPathMetricsMap(range: UmamiRange): Promise<Map<s
   rows.forEach((row) => {
     map.set(normalizePath(row.name), row)
   })
+  return map
+}
+
+export async function fetchUmamiPathMetricsMapForPaths(paths: string[], range: UmamiRange): Promise<Map<string, UmamiMetricRow>> {
+  const uniquePaths = Array.from(new Set(paths.map(normalizePath).filter(Boolean)))
+  const map = new Map<string, UmamiMetricRow>()
+
+  if (!uniquePaths.length) {
+    return map
+  }
+
+  const baseMap = await fetchUmamiPathMetricsMap(range)
+  uniquePaths.forEach((path) => {
+    const row = baseMap.get(path)
+    if (row) {
+      map.set(path, row)
+    }
+  })
+
+  const missingPaths = uniquePaths.filter(path => !map.has(path))
+  if (!missingPaths.length) {
+    return map
+  }
+
+  const missingRows = await Promise.all(
+    missingPaths.map(async (path) => {
+      const row = await fetchUmamiPathStats(path, range)
+      return [path, row] as const
+    })
+  )
+
+  missingRows.forEach(([path, row]) => {
+    map.set(path, row)
+  })
+
   return map
 }
