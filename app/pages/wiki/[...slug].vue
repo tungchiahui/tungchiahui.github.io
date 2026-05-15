@@ -6,6 +6,7 @@ import {
   getCurrentLocaleSlug,
   getLocaleSectionPath
 } from '~~/utils/i18n-locales'
+import { getWikiLegacyPathAliases } from '~~/utils/wiki-legacy-paths'
 
 interface TocDisplayLink {
   id: string
@@ -40,13 +41,14 @@ const route = useRoute()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
 const wikiHomePath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'wiki'))
 
-function collectTrafficPaths(entry: { path?: string; sourcePath?: string; legacyPath?: string } | null | undefined, fallbackPath?: string) {
+function collectTrafficPaths(entry: Partial<WikiPage> | null | undefined, fallbackPath?: string) {
   return Array.from(
     new Set([
       entry?.path,
       entry?.sourcePath,
       entry?.legacyPath,
-      fallbackPath
+      fallbackPath,
+      ...getWikiLegacyPathAliases((entry as WikiPage | null | undefined)?.docI18nKey, (entry as WikiPage | null | undefined)?.isWikiIndex)
     ]
       .filter(Boolean)
       .map(path => normalizePath(String(path))))
@@ -174,8 +176,8 @@ const { data: i18nVariantPaths } = await useAsyncData(
 
     const variants = await queryCollection('content')
       .where('i18nKey', '=', i18nKey)
-      .select('path', 'sourcePath', 'legacyPath')
-      .all() as Array<{ path?: string; sourcePath?: string; legacyPath?: string }>
+      .select('path', 'sourcePath', 'legacyPath', 'docI18nKey', 'isWikiIndex')
+      .all() as Array<Partial<WikiPage>>
 
     return variants.flatMap(variant => collectTrafficPaths(variant))
   }

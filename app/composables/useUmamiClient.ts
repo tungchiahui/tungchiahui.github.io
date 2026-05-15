@@ -330,7 +330,14 @@ export async function fetchUmamiPathMetricsMapForPaths(paths: string[], range: U
 
   const missingRows = await Promise.all(
     missingPaths.map(async (path) => {
-      const row = await fetchUmamiPathStats(path, range)
+      const row = await fetchUmamiPathStats(path, range).catch(() => ({
+        name: path,
+        pageviews: 0,
+        visitors: 0,
+        visits: 0,
+        bounces: 0,
+        totaltime: 0
+      }))
       return [path, row] as const
     })
   )

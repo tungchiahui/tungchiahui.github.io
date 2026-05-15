@@ -3,9 +3,9 @@
     <header class="wiki-home-header">
       <h1>
         <i class="fas fa-book-open" aria-hidden="true"></i>
-        <span>Wiki 知识库</span>
+        <span>{{ ui.wikiHome }}</span>
       </h1>
-      <p>按教程和章節組織的技術文件。</p>
+      <p>{{ ui.wikiDescription }}</p>
     </header>
     <WikiList />
   </div>
@@ -14,13 +14,18 @@
 <script setup lang="ts">
 import { useHead } from '#app'
 import WikiList from '../../components/WikiList.vue'
+import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
+import { getUiText } from '~~/utils/i18n-ui'
+
+const route = useRoute()
+const ui = computed(() => getUiText(getCurrentLocaleSlug(route.path)))
 
 useHead({
-  title: 'Wiki 知识库',
+  title: () => ui.value.wikiHome,
   meta: [
     {
       name: 'description',
-      content: '按教程和章節組織的技術文件與學習筆記。'
+      content: () => ui.value.wikiMetaDescription
     }
   ]
 })

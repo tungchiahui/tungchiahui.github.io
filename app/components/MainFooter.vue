@@ -1,36 +1,42 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import {
   getCurrentLocaleSlug,
   getLocaleSectionPath,
   replaceLocaleInPath
 } from '~~/utils/i18n-locales'
+import { getUiText } from '~~/utils/i18n-ui'
 
 const config = useRuntimeConfig()
 const route = useRoute()
 
 const currentYear = new Date().getFullYear()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const ui = computed(() => getUiText(currentLocaleSlug.value))
 const homePath = computed(() => replaceLocaleInPath('/', currentLocaleSlug.value))
 
-const variableFooterLinks = [
-  { to: '/blog', label: '博客', icon: 'fas fa-newspaper' },
-  { to: '/wiki', label: 'Wiki', icon: 'fas fa-book-open' },
-  { to: '/stats', label: '資料統計', icon: 'fas fa-chart-line' },
-  { to: '/friend', label: '友情連結', icon: 'fas fa-handshake' },
-  { to: '/about', label: '關於本站', icon: 'fas fa-circle-info' }
-]
+const variableFooterLinks = computed(() => [
+  { to: '/blog', label: ui.value.blog, icon: 'fas fa-newspaper' },
+  { to: '/wiki', label: ui.value.wiki, icon: 'fas fa-book-open' },
+  { to: '/stats', label: ui.value.stats, icon: 'fas fa-chart-line' },
+  { to: '/friend', label: ui.value.friends, icon: 'fas fa-handshake' },
+  { to: '/about', label: ui.value.aboutSite, icon: 'fas fa-circle-info' }
+])
 
-const moreFooterLink = { to: '/more', label: '更多頁面', icon: 'fas fa-table-cells-large' }
-const footerLinks = ref([...variableFooterLinks, moreFooterLink])
+const moreFooterLink = computed(() => ({ to: '/more', label: ui.value.morePages, icon: 'fas fa-table-cells-large' }))
+const footerLinks = ref([...variableFooterLinks.value, moreFooterLink.value])
 const localizedFooterLinks = computed(() => footerLinks.value.map(link => ({
   ...link,
   to: getLocalizedFooterPath(link.to)
 })))
 
 onMounted(() => {
-  footerLinks.value = [...shuffleLinks(variableFooterLinks), moreFooterLink]
+  footerLinks.value = [...shuffleLinks(variableFooterLinks.value), moreFooterLink.value]
+})
+
+watch(currentLocaleSlug, () => {
+  footerLinks.value = [...shuffleLinks(variableFooterLinks.value), moreFooterLink.value]
 })
 
 const socialLinks = computed(() => {
@@ -103,19 +109,19 @@ function getLocalizedFooterPath(path: string) {
 <template>
   <footer class="main-footer">
     <div class="footer-shell">
-      <section class="footer-intro" aria-label="站點資訊">
-        <NuxtLink :to="homePath" class="footer-mark" aria-label="返回首頁">
+      <section class="footer-intro" :aria-label="ui.siteInfo">
+        <NuxtLink :to="homePath" class="footer-mark" :aria-label="ui.backHome">
           <span class="footer-mark-icon" aria-hidden="true">
             <i class="fas fa-compass"></i>
           </span>
           <span class="footer-mark-copy">
-            <strong>东澈的折腾天地</strong>
+            <strong>{{ ui.siteName }}</strong>
             <small>Tung Chia-hui Lab Notes</small>
           </span>
         </NuxtLink>
 
         <p class="footer-description">
-          記錄學習、開發和生活裡的折騰過程，把工程實踐和踩坑經驗整理成可以反覆查閱的筆記。
+          {{ ui.footerDescription }}
         </p>
 
         <a
@@ -123,7 +129,7 @@ function getLocalizedFooterPath(path: string) {
           href="https://nuxt.com"
           target="_blank"
           rel="noopener noreferrer"
-          title="造訪 Nuxt 官網"
+          :title="ui.visitNuxt"
         >
           <img
             class="nuxt-favicon"
@@ -136,8 +142,8 @@ function getLocalizedFooterPath(path: string) {
         </a>
       </section>
 
-      <nav class="footer-nav" aria-label="頁腳導覽">
-        <h2>站內導覽</h2>
+      <nav class="footer-nav" :aria-label="ui.footerNav">
+        <h2>{{ ui.siteNav }}</h2>
         <div class="footer-link-grid">
           <NuxtLink v-for="link in localizedFooterLinks" :key="link.to" :to="link.to" class="footer-link">
             <i :class="link.icon" aria-hidden="true"></i>
@@ -146,13 +152,13 @@ function getLocalizedFooterPath(path: string) {
         </div>
       </nav>
 
-      <section class="footer-language" aria-label="語言設定">
-        <h2>語言</h2>
+      <section class="footer-language" :aria-label="ui.languageSettings">
+        <h2>{{ ui.language }}</h2>
         <LanguageSwitcher class="footer-language-switcher" />
       </section>
 
-      <section class="footer-connect" aria-label="頁腳工具">
-        <h2>聯絡方式</h2>
+      <section class="footer-connect" :aria-label="ui.footerTools">
+        <h2>{{ ui.contact }}</h2>
         <div class="footer-social">
           <a
             v-for="link in socialLinks"

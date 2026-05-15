@@ -2,7 +2,7 @@
   <div class="blog-page">
     <h1>
       <i class="fas fa-newspaper" aria-hidden="true"></i>
-      <span>博客列表</span>
+      <span>{{ ui.blogList }}</span>
     </h1>
     <PostList />
   </div>
@@ -11,13 +11,18 @@
 <script setup lang="ts">
 import { useHead } from '#app'
 import PostList from '~/components/PostList.vue'
+import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
+import { getUiText } from '~~/utils/i18n-ui'
+
+const route = useRoute()
+const ui = computed(() => getUiText(getCurrentLocaleSlug(route.path)))
 
 useHead({
-  title: '博客列表',
+  title: () => ui.value.blogList,
   meta: [
     {
       name: 'description',
-      content: '東澈的博客文章列表，記錄學習、開發與折騰過程。'
+      content: () => ui.value.blogDescription
     }
   ]
 })

@@ -6,12 +6,14 @@ import {
   getLocaleSectionPath,
   replaceLocaleInPath
 } from '~~/utils/i18n-locales'
+import { getUiText } from '~~/utils/i18n-ui'
 
 const isDark = ref(false)
 const headerSearchQuery = ref('')
 const route = useRoute()
 const router = useRouter()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const ui = computed(() => getUiText(currentLocaleSlug.value))
 const homePath = computed(() => replaceLocaleInPath('/', currentLocaleSlug.value))
 const blogPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'blog'))
 const wikiPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'wiki'))
@@ -55,24 +57,24 @@ onMounted(() => {
   <header class="main-header">
     <nav class="nav-container">
       <div class="nav-links">
-        <NuxtLink :to="homePath" class="nav-item">首頁</NuxtLink>
-        <NuxtLink :to="blogPath" class="nav-item">博客</NuxtLink>
+        <NuxtLink :to="homePath" class="nav-item">{{ ui.home }}</NuxtLink>
+        <NuxtLink :to="blogPath" class="nav-item">{{ ui.blog }}</NuxtLink>
         <NuxtLink :to="wikiPath" class="nav-item">Wiki</NuxtLink>
-        <NuxtLink :to="aboutPath" class="nav-item">關於</NuxtLink>
-        <NuxtLink :to="morePath" class="nav-item">更多頁面</NuxtLink>
+        <NuxtLink :to="aboutPath" class="nav-item">{{ ui.about }}</NuxtLink>
+        <NuxtLink :to="morePath" class="nav-item">{{ ui.morePages }}</NuxtLink>
       </div>
 
       <div class="nav-tools">
-        <form class="header-search" role="search" aria-label="全站搜尋" @submit.prevent="submitHeaderSearch">
+        <form class="header-search" role="search" :aria-label="ui.siteSearch" @submit.prevent="submitHeaderSearch">
           <input
             v-model="headerSearchQuery"
             type="search"
             name="q"
             autocomplete="off"
-            placeholder="搜尋"
-            aria-label="搜尋全站內容"
+            :placeholder="ui.search"
+            :aria-label="ui.searchSiteContent"
           >
-          <button type="submit" aria-label="搜尋">
+          <button type="submit" :aria-label="ui.search">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" />
               <path d="m16.3 16.3 4.2 4.2" />
@@ -83,8 +85,8 @@ onMounted(() => {
         <button
           @click="toggleDarkMode"
           class="theme-toggle"
-          :title="isDark ? '切換到白天模式' : '切換到黑暗模式'"
-          :aria-label="isDark ? '切換到白天模式' : '切換到黑暗模式'"
+          :title="isDark ? ui.toggleLight : ui.toggleDark"
+          :aria-label="isDark ? ui.toggleLight : ui.toggleDark"
         >
           <i :class="isDark ? 'fa-solid fa-moon theme-toggle-icon' : 'fa-solid fa-sun theme-toggle-icon'" aria-hidden="true"></i>
         </button>

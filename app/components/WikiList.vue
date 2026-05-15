@@ -4,12 +4,12 @@
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="搜尋 Wiki 或章節..."
+        :placeholder="ui.searchWiki"
         class="search-input"
       />
     </div>
 
-    <div v-if="pending" class="loading">正在掃描 Wiki...</div>
+    <div v-if="pending" class="loading">{{ ui.scanningWiki }}</div>
 
     <div v-else-if="filteredDocGroups.length" class="wiki-content">
       <div class="wiki-doc-list">
@@ -20,8 +20,8 @@
                 {{ doc.title }}
               </NuxtLink>
               <div class="wiki-doc-meta">
-                <span>{{ doc.date || '未標註日期' }}</span>
-                <span>{{ doc.chapters.length }} 個章節</span>
+                <span>{{ doc.date || ui.noDate }}</span>
+                <span>{{ formatUiText(ui.chapterCount, { count: doc.chapters.length }) }}</span>
                 <span v-if="showTraffic">{{ getDocTrafficLabel(doc).pageviews }}</span>
                 <span v-if="showTraffic">{{ getDocTrafficLabel(doc).visits }}</span>
               </div>
@@ -34,7 +34,7 @@
               :aria-expanded="isDocExpanded(doc)"
               @click="toggleDoc(doc.key)"
             >
-              {{ isDocExpanded(doc) ? '收起' : '展開' }}
+              {{ isDocExpanded(doc) ? ui.collapse : ui.expand }}
             </button>
           </header>
 
@@ -47,7 +47,7 @@
             >
               <NuxtLink :to="chapter.path" class="wiki-chapter-link">
                 <span v-if="chapter.chapter" class="wiki-chapter-number">{{ chapter.chapter }}</span>
-                <span class="wiki-chapter-title">{{ chapter.title || '無標題' }}</span>
+                <span class="wiki-chapter-title">{{ chapter.title || ui.untitled }}</span>
                 <span v-if="showTraffic" class="wiki-chapter-stats">{{ getChapterTrafficLabel(chapter) }}</span>
               </NuxtLink>
             </li>
@@ -57,8 +57,8 @@
     </div>
 
     <div v-else class="empty-state">
-      <p v-if="normalizedQuery">沒有找到相關 Wiki</p>
-      <p v-else>Wiki 還沒有內容</p>
+      <p v-if="normalizedQuery">{{ ui.noWikiMatch }}</p>
+      <p v-else>{{ ui.noWiki }}</p>
     </div>
   </section>
 </template>
@@ -66,6 +66,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
+import { formatUiText, getUiText } from '~~/utils/i18n-ui'
+import { getWikiLegacyPathAliases } from '~~/utils/wiki-legacy-paths'
 
 const props = defineProps({
   limit: {
@@ -92,6 +94,7 @@ const props = defineProps({
 
 const route = useRoute()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const ui = computed(() => getUiText(currentLocaleSlug.value))
 
 const { data: wikis, pending } = await useAsyncData('wiki-list', () => {
   return queryCollection('content')
@@ -195,7 +198,7 @@ const { data: umamiPathsData, pending: umamiPending } = useAsyncData(
       return { statsByPath: {} }
     }
 
-    const pathMap = await fetchUmamiPathMetricsMapForPaths(trackedPaths.value, resolveUmamiRange())
+    const pathMap = await fetchUmamiPathMetricsMap(resolveUmamiRange())
     const statsByPath = Object.fromEntries(
       trackedPaths.value.map((path) => {
         const stats = pathMap.get(path) || emptyStats
@@ -225,7 +228,7 @@ const docGroups = computed(() => {
         groups.set(key, {
           key,
           docI18nKey: wiki.docI18nKey,
-          title: wiki.docTitle || 'Wiki 文件',
+          title: wiki.docTitle || ui.value.wikiDoc,
           path: wiki.docRoot || wiki.path,
           date: wiki.date,
           index: null,
@@ -323,10 +326,13 @@ function getChapterTrafficLabel(chapter) {
   const stats = sumUmamiRows(paths.map(path => getPathStats(path)))
   const isLoading = umamiPending.value
   if (isLoading && !stats.pageviews && !stats.visits) {
-    return '載入中...'
+    return ui.value.loading
   }
 
-  return `${formatNumber(stats.pageviews)} 瀏覽 · ${formatNumber(stats.visits)} 訪問`
+  return formatUiText(ui.value.trafficInline, {
+    pageviews: formatNumber(stats.pageviews),
+    visits: formatNumber(stats.visits)
+  })
 }
 
 function getDocTrafficLabel(doc) {
@@ -334,8 +340,8 @@ function getDocTrafficLabel(doc) {
   const isLoading = umamiPending.value
 
   return {
-    pageviews: isLoading && !total.pageviews ? '總瀏覽 載入中...' : `總瀏覽 ${formatNumber(total.pageviews)}`,
-    visits: isLoading && !total.visits ? '總訪問 載入中...' : `總訪問 ${formatNumber(total.visits)}`
+    pageviews: isLoading && !total.pageviews ? ui.value.pageviewsLoading : formatUiText(ui.value.totalPageviews, { value: formatNumber(total.pageviews) }),
+    visits: isLoading && !total.visits ? ui.value.visitsLoading : formatUiText(ui.value.totalVisits, { value: formatNumber(total.visits) })
   }
 }
 
@@ -369,7 +375,8 @@ function collectTrafficPaths(item) {
     new Set([
       item.path,
       item.sourcePath,
-      item.legacyPath
+      item.legacyPath,
+      ...getWikiLegacyPathAliases(item.docI18nKey, item.isWikiIndex)
     ]
       .filter(Boolean)
       .map(normalizePath))

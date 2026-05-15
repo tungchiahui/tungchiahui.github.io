@@ -13,13 +13,13 @@
       <span class="flag-frame" aria-hidden="true">
         <img
           :src="getLocaleFlagUrl(currentLocale.slug, route.path)"
-          :alt="`${currentLocale.fullLabel} 旗帜`"
+          :alt="`${currentLocale.fullLabel} ${ui.flagSuffix}`"
           loading="lazy"
           decoding="async"
         >
       </span>
       <span class="language-trigger-copy">
-        <span class="language-label">語言</span>
+        <span class="language-label">{{ ui.language }}</span>
         <small>{{ currentLocale.fullLabel }}</small>
       </span>
       <i class="fas fa-chevron-up language-chevron" aria-hidden="true"></i>
@@ -30,7 +30,7 @@
         v-show="isOpen"
         id="language-menu"
         class="language-menu"
-        aria-label="語言切換"
+        :aria-label="ui.languageMenu"
       >
         <NuxtLink
           v-for="locale in I18N_LOCALES"
@@ -44,7 +44,7 @@
           <span class="flag-frame" aria-hidden="true">
             <img
               :src="getLocaleFlagUrl(locale.slug, route.path)"
-              :alt="`${locale.fullLabel} 旗帜`"
+              :alt="`${locale.fullLabel} ${ui.flagSuffix}`"
               loading="lazy"
               decoding="async"
             >
@@ -80,6 +80,7 @@ import {
   type ContentSection,
   type LocaleSlug
 } from '~~/utils/i18n-locales'
+import { getUiText } from '~~/utils/i18n-ui'
 
 interface ContentVariant {
   path?: string
@@ -92,6 +93,7 @@ const switcherRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
 const currentLocale = computed(() => getLocaleBySlug(currentLocaleSlug.value))
+const ui = computed(() => getUiText(currentLocaleSlug.value))
 const switcherDataKey = computed(() => `language-switcher-data-${route.path}`)
 
 const { data: switcherData } = await useAsyncData(

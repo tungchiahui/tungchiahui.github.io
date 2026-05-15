@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { getUiTextForPath } from '~~/utils/i18n-ui'
+
 const logoUrl = 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/logo.png'
+const route = useRoute()
+const ui = computed(() => getUiTextForPath(route.path))
 
 defineProps({
   active: {
@@ -12,7 +16,7 @@ defineProps({
   },
   label: {
     type: String,
-    default: '正在載入'
+    default: ''
   }
 })
 </script>
@@ -39,7 +43,7 @@ defineProps({
 
         <div class="app-loading-copy">
           <strong>东澈的折腾天地</strong>
-          <span>{{ label }}</span>
+          <span>{{ label || ui.loadingDefault }}</span>
         </div>
 
         <div class="app-loading-dots" aria-hidden="true">
@@ -51,7 +55,7 @@ defineProps({
 
       <div v-else class="app-loading-reader">
         <span class="app-loading-reader-mark" aria-hidden="true"></span>
-        <span>{{ label }}</span>
+        <span>{{ label || ui.loadingDefault }}</span>
       </div>
     </div>
   </Transition>

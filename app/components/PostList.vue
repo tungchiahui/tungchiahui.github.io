@@ -4,20 +4,20 @@
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="搜尋文章標題..."
+        :placeholder="ui.searchPostTitle"
         class="search-input"
       />
     </div>
 
-    <div v-if="pending" class="loading">正在掃描檔案...</div>
+    <div v-if="pending" class="loading">{{ ui.scanningFiles }}</div>
 
     <ul v-else-if="filteredPosts.length" class="post-items">
       <li v-for="post in filteredPosts" :key="post.path" class="post-item">
         <NuxtLink :to="post.path" class="post-link">
-          {{ post.title || '無標題' }}
+          {{ post.title || ui.untitled }}
         </NuxtLink>
         <div class="post-meta">
-          {{ post.date || '未標註日期' }}
+          {{ post.date || ui.noDate }}
           <span v-if="showTraffic">{{ getPostTrafficLabel(post).pageviews }}</span>
           <span v-if="showTraffic">{{ getPostTrafficLabel(post).visits }}</span>
         </div>
@@ -25,8 +25,8 @@
     </ul>
 
     <div v-else class="empty-state">
-      <p v-if="searchQuery">沒有找到包含 "{{ searchQuery }}" 的文章</p>
-      <p v-else>倉庫中似乎還沒有文章...</p>
+      <p v-if="searchQuery">{{ formatUiText(ui.noPostMatch, { query: searchQuery }) }}</p>
+      <p v-else>{{ ui.noPosts }}</p>
     </div>
   </section>
 </template>
@@ -34,6 +34,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
+import { formatUiText, getUiText } from '~~/utils/i18n-ui'
 
 const props = defineProps({
   limit: {
@@ -52,6 +53,7 @@ const props = defineProps({
 
 const route = useRoute()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const ui = computed(() => getUiText(currentLocaleSlug.value))
 
 const { data: posts, pending } = await useAsyncData('posts-list', () => {
   return queryCollection('content')
@@ -173,8 +175,8 @@ function getPostTrafficLabel(post) {
   const stats = statsByPostKey.value[post.i18nKey] || emptyStats
   const isLoading = umamiPending.value
   return {
-    pageviews: isLoading && !stats.pageviews ? '總瀏覽 載入中...' : `總瀏覽 ${formatNumber(stats.pageviews)}`,
-    visits: isLoading && !stats.visits ? '總訪問 載入中...' : `總訪問 ${formatNumber(stats.visits)}`
+    pageviews: isLoading && !stats.pageviews ? ui.value.pageviewsLoading : formatUiText(ui.value.totalPageviews, { value: formatNumber(stats.pageviews) }),
+    visits: isLoading && !stats.visits ? ui.value.visitsLoading : formatUiText(ui.value.totalVisits, { value: formatNumber(stats.visits) })
   }
 }
 
