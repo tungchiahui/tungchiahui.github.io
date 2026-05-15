@@ -38,13 +38,21 @@ npm run i18n:translate
 npm run i18n:check
 ```
 
-静态部署建议使用不依赖 API 的流程：
+静态部署建议使用不依赖 API 的流程。Pages 如果构建命令是 `npm run build`，可以直接使用，不需要改成手写的组合命令：
 
 ```bash
-npm run i18n:gen && npm run generate
+npm run build
 ```
 
-`prebuild` 和 `pregenerate` 已经会自动运行 `npm run i18n:gen`，所以 Pages 正式构建默认不会依赖翻译 API。
+原因是 `prebuild` 已经会自动运行 `npm run i18n:gen`。也就是说 Pages 执行 `npm run build` 时，实际会先生成 i18n 内容，再执行 `nuxt build`。
+
+如果你本地要生成静态产物，可以用：
+
+```bash
+npm run generate
+```
+
+`pregenerate` 也会自动运行 `npm run i18n:gen`，所以 `npm run generate` 前同样会先生成 i18n 内容。Pages 正式构建默认不会依赖翻译 API。
 
 ## 英文翻译记忆库
 
@@ -174,6 +182,46 @@ npm run i18n:translate
 
 脚本按 OpenAI-compatible `/chat/completions` 接口调用。小米 MiMo 的 OpenAI-compatible base URL 是 `https://api.xiaomimimo.com/v1`，完整请求地址会拼成 `https://api.xiaomimimo.com/v1/chat/completions`。
 
+### 运行时反馈
+
+`npm run i18n:gen` 和 `npm run i18n:translate` 会输出进度，避免长时间运行时看起来像卡死。
+
+启动时会输出任务摘要：
+
+```text
+i18n: source files 127
+i18n: target locales zh-hant, zh-hk, zh-tw, en-us
+i18n: translate mode on
+i18n: memory entries 3521
+i18n: provider deepseek / deepseek-v4-flash
+```
+
+处理文件时会周期性输出：
+
+```text
+i18n: files 40/127, blocks 820, memory hits 760, api translated 60, missing 0, elapsed 01:25
+```
+
+API 翻译时会按请求数量或时间间隔输出：
+
+```text
+i18n: api 120/120, failed 0, elapsed 03:42
+```
+
+结束时会输出总结：
+
+```text
+i18n: done
+i18n: files 127/127
+i18n: blocks 2384
+i18n: memory hits 2200
+i18n: api translated 184
+i18n: fallback missing 0
+i18n: memory saved i18n/memory/en-us.json
+```
+
+如果 `fallback missing` 大于 0，说明仍有英文 block 没翻译成功，可以再检查 API 配置或运行 `npm run i18n:check` 看具体文件。
+
 ### 常用模型示例
 
 `TRANSLATE_MODEL` 可以按实际 provider 支持情况替换。下面只是常见示例，最终以各平台控制台和官方文档为准。
@@ -209,7 +257,7 @@ mimo-v2-pro
 
 ```bash
 npm run i18n:gen
-npm run generate
+npm run build
 ```
 
 本地批量更新英文翻译：
@@ -228,5 +276,7 @@ i18n/overrides/en-us/
 ```
 
 `content/_i18n/` 是生成目录，目前在这个仓库里被 `.gitignore` 忽略。Pages 构建时应该运行 `npm run i18n:gen`，用已提交的中文源内容和翻译记忆库重新生成它。
+
+如果 Pages 的构建命令是 `npm run build`，保持这个命令即可。`prebuild` 会自动生成 `content/_i18n/`，不需要在 Pages 上配置翻译 API Key。
 
 不要把 Pages 构建机当成翻译缓存。稳定缓存应该是提交到 Git 的 `i18n/memory/en-us.json`。

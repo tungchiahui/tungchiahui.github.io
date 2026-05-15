@@ -22,17 +22,34 @@ type TranslationContext = {
   glossary: Glossary
   overrides: OverrideStore
   provider: TranslationProvider | null
+  stats: TranslationStats
 }
 
 type TranslationProvider = {
   name: string
   model: string
+  baseUrl: string
   translate(input: string, glossary: Glossary): Promise<string>
 }
 
 type ProtectedText = {
   text: string
   restore(text: string): string
+}
+
+type TranslationStats = {
+  startedAt: number
+  sourceFiles: number
+  processedFiles: number
+  blocks: number
+  memoryHits: number
+  overrideHits: number
+  apiRequests: number
+  apiTranslated: number
+  apiFailed: number
+  fallbackMissing: number
+  skipped: number
+  lastProgressAt: number
 }
 
 const rootDir = process.cwd()
@@ -94,6 +111,9 @@ async function main() {
 
   const files = (await Promise.all(sourceRoots.map(root => collectMarkdownFiles(root)))).flat()
   const englishContext = await createEnglishContext()
+  englishContext.stats.sourceFiles = files.length
+
+  logStart(englishContext)
 
   for (const sourceFile of files) {
     const relativePath = path.relative(contentDir, sourceFile)
@@ -106,12 +126,18 @@ async function main() {
 
     const englishMarkdown = await transformEnglishMarkdown(sourceMarkdown, englishContext)
     await writeGeneratedMarkdown(enLocale, relativePath, englishMarkdown)
+
+    englishContext.stats.processedFiles += 1
+    if (englishContext.stats.processedFiles % 10 === 0 || englishContext.stats.processedFiles === files.length) {
+      logFileProgress(englishContext)
+    }
   }
 
   await saveEnglishMemory(englishContext.memory)
 
   const mode = shouldTranslate ? 'with API translation enabled' : 'without API translation'
   console.log(`Generated ${files.length} source files for ${generatedLocaleSlugs.join(', ')} ${mode}.`)
+  logSummary(englishContext)
 }
 
 async function writeGeneratedMarkdown(locale: string, relativePath: string, markdown: string) {
@@ -505,24 +531,29 @@ function splitTableRow(line: string) {
 
 async function translateBlock(source: string, context: TranslationContext): Promise<{ text: string; missing: boolean }> {
   if (!source.trim() || !containsChinese(source)) {
+    context.stats.skipped += 1
     return { text: source, missing: false }
   }
 
+  context.stats.blocks += 1
   const protectedSource = protectMarkdownInline(source)
   const key = hashText(protectedSource.text)
   const override = readOverride(context.overrides, key, source)
 
   if (override) {
+    context.stats.overrideHits += 1
     return { text: protectedSource.restore(override), missing: false }
   }
 
   const cached = context.memory[key]
   if (cached?.target) {
+    context.stats.memoryHits += 1
     return { text: protectedSource.restore(cached.target), missing: false }
   }
 
   if (context.translate && context.provider) {
     try {
+      context.stats.apiRequests += 1
       const target = await context.provider.translate(protectedSource.text, context.glossary)
       context.memory[key] = {
         source: protectedSource.text,
@@ -531,12 +562,17 @@ async function translateBlock(source: string, context: TranslationContext): Prom
         model: context.provider.model,
         updatedAt: new Date().toISOString()
       }
+      context.stats.apiTranslated += 1
+      logApiProgress(context)
       return { text: protectedSource.restore(target), missing: false }
     } catch (error) {
-      console.warn(`Translation failed for ${key}; using fallback source text.`)
+      context.stats.apiFailed += 1
+      console.warn(`i18n: api failed for ${key}: ${formatError(error)}; using fallback source text.`)
+      logApiProgress(context, true)
     }
   }
 
+  context.stats.fallbackMissing += 1
   return {
     text: source,
     missing: true
@@ -603,7 +639,8 @@ async function createEnglishContext(): Promise<TranslationContext> {
     memory,
     glossary,
     overrides,
-    provider
+    provider,
+    stats: createStats()
   }
 }
 
@@ -658,6 +695,7 @@ function createProvider(): TranslationProvider | null {
   return {
     name: providerName,
     model,
+    baseUrl,
     async translate(input: string, glossary: Glossary) {
       const response = await fetch(`${baseUrl}/chat/completions`, {
         method: 'POST',
@@ -742,4 +780,82 @@ function yamlMissingMarker(locale: string) {
 
 function sortObject<T extends Record<string, unknown>>(object: T): T {
   return Object.fromEntries(Object.entries(object).sort(([a], [b]) => a.localeCompare(b))) as T
+}
+
+function createStats(): TranslationStats {
+  const now = Date.now()
+  return {
+    startedAt: now,
+    sourceFiles: 0,
+    processedFiles: 0,
+    blocks: 0,
+    memoryHits: 0,
+    overrideHits: 0,
+    apiRequests: 0,
+    apiTranslated: 0,
+    apiFailed: 0,
+    fallbackMissing: 0,
+    skipped: 0,
+    lastProgressAt: now
+  }
+}
+
+function logStart(context: TranslationContext) {
+  console.log(`i18n: source files ${context.stats.sourceFiles}`)
+  console.log(`i18n: target locales ${generatedLocaleSlugs.join(', ')}`)
+  console.log(`i18n: translate mode ${context.translate ? 'on' : 'off'}`)
+  console.log(`i18n: memory entries ${Object.keys(context.memory).length}`)
+  console.log(`i18n: glossary terms ${Object.keys(context.glossary).length}`)
+  console.log(`i18n: override entries ${Object.keys(context.overrides).length}`)
+
+  if (context.provider) {
+    console.log(`i18n: provider ${context.provider.name} / ${context.provider.model}`)
+    console.log(`i18n: provider base ${context.provider.baseUrl}`)
+  }
+}
+
+function logFileProgress(context: TranslationContext) {
+  const { stats } = context
+  console.log(`i18n: files ${stats.processedFiles}/${stats.sourceFiles}, blocks ${stats.blocks}, memory hits ${stats.memoryHits}, api translated ${stats.apiTranslated}, missing ${stats.fallbackMissing}, elapsed ${formatDuration(Date.now() - stats.startedAt)}`)
+}
+
+function logApiProgress(context: TranslationContext, force = false) {
+  const { stats } = context
+  const now = Date.now()
+
+  if (!force && stats.apiRequests % 10 !== 0 && now - stats.lastProgressAt < 5000) {
+    return
+  }
+
+  stats.lastProgressAt = now
+  console.log(`i18n: api ${stats.apiTranslated}/${stats.apiRequests}, failed ${stats.apiFailed}, elapsed ${formatDuration(now - stats.startedAt)}`)
+}
+
+function logSummary(context: TranslationContext) {
+  const { stats } = context
+  console.log('i18n: done')
+  console.log(`i18n: files ${stats.processedFiles}/${stats.sourceFiles}`)
+  console.log(`i18n: blocks ${stats.blocks}`)
+  console.log(`i18n: memory hits ${stats.memoryHits}`)
+  console.log(`i18n: override hits ${stats.overrideHits}`)
+  console.log(`i18n: api requests ${stats.apiRequests}`)
+  console.log(`i18n: api translated ${stats.apiTranslated}`)
+  console.log(`i18n: api failed ${stats.apiFailed}`)
+  console.log(`i18n: fallback missing ${stats.fallbackMissing}`)
+  console.log(`i18n: memory saved i18n/memory/${enLocale}.json`)
+}
+
+function formatDuration(ms: number) {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000))
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+}
+
+function formatError(error: unknown) {
+  if (error instanceof Error) {
+    return error.message.replace(/\s+/g, ' ').slice(0, 300)
+  }
+
+  return String(error).replace(/\s+/g, ' ').slice(0, 300)
 }
