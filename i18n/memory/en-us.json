@@ -20,6 +20,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:34:55.501Z"
   },
+  "0013e1e408af0130eb93efd772d103019be5734ad51e8e53c3e09246b830901f": {
+    "source": "导航功能集成(ROS2 Humble及之前)",
+    "target": "Navigation Function Integration (ROS2 Humble and earlier)",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:23.626Z"
+  },
   "001b915225d98d9d8a461a2f7f228bc83938ee60ee304dac5ae9cebe8353c903": {
     "source": "kill是杀乌龟",
     "target": "kill is to kill the turtle",
@@ -173,6 +180,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:52:31.366Z"
+  },
+  "00ce3ad5cec8e97cdca83f1d79f3a64fecfec41cce50309568dd7084d1e9e330": {
+    "source": "在功能包mycar_navigation2的launch目录下新建名为__I18N_PROTECTED_0__的launch文件，并输入如下内容：",
+    "target": "In the `launch` directory of the `mycar_navigation2` package, create a new launch file named `__I18N_PROTECTED_0__` and enter the following content:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:31.311Z"
   },
   "00d292749e0011dc5f5055dbb37fa010ea72163a607d4b536b7a963fdc578fb0": {
     "source": "__I18N_PROTECTED_0__**/**__I18N_PROTECTED_1__: 增加/减少 **角速度** （__I18N_PROTECTED_2__ 的增量步长）",
@@ -447,6 +461,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:45:47.233Z"
   },
+  "0245d6b738bcc9d50d7533ce11bdb15bf7becaa92ec5c901ac65a09ea9441caa": {
+    "source": "参考的官方 Jazzy 示例",
+    "target": "Refer to the official Jazzy example",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:36.657Z"
+  },
   "0248628ae1332dd42c10dfbad2aa62e01045324f9866e86b6db6655df1a544f4": {
     "source": "定义 RPM 包发行号",
     "target": "Define the RPM package release number",
@@ -713,6 +734,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:29:39.796Z"
   },
+  "0368e92a769b6d597406fad88b6b5179ec7346a0bf5a7e1064eb410c2c75279f": {
+    "source": "__I18N_PROTECTED_0__: Nav2 Jazzy 官方示例说明该参数用于添加自定义 BT 插件；Nav2 内置 BT 插件会自动加载，所以没有自定义 BT 插件时不要配置空列表。",
+    "target": "__I18N_PROTECTED_0__: The official Nav2 Jazzy example explains that this parameter is used to add custom BT plugins; Nav2's built-in BT plugins are loaded automatically, so do not configure an empty list when there are no custom BT plugins.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:33.250Z"
+  },
   "036dce3f8bae5ef137df6331723210ec0c2bf1be9e7ef24d3f27ff9589668fdb": {
     "source": "配置OpenCV环境变量ENV",
     "target": "Configure OpenCV environment variable ENV",
@@ -761,6 +789,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:48:49.198Z"
+  },
+  "038a00c1bc8d9c616abc1a0773ecf564df170f89e2ed35bd1fb9f14628c8f141": {
+    "source": "在 **地图保存基本操作**  一节中，地图保存后后生成两个文件，这两个文件就是用来存储序列化后的地图数据的。其中，my_map.pgm是一张图片资源，使用图片查看程序打开即可，而my_map.yaml保存的是地图的元数据信息，用于描述图片，内容格式如下：",
+    "target": "In the **Basic Map Saving Operations** section, after the map is saved, two files are generated. These two files are used to store the serialized map data. Among them, `my_map.pgm` is an image resource that can be opened with an image viewer, while `my_map.yaml` stores the metadata information of the map, used to describe the image. The content format is as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:01.302Z"
   },
   "03944108be1edb9a348450b76556cfcb2838746f4b8497a50e76f1810ff2bb12": {
     "source": "Fixed name一般是根坐标系的名称",
@@ -972,6 +1007,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:27:25.692Z"
   },
+  "047ff86fadeb2a454bdd9827853584928eb5b14f32705765ecbec6a87de7e39e": {
+    "source": "该launch文件主要是加载了slam_toolbox下的sync_slam_toolbox_node节点，并且会从当前功能包的params下读取一个名为__I18N_PROTECTED_0__的配置文件。这个配置文件还不存在，接下来需要在params目录下新建__I18N_PROTECTED_1__文件，并输入如下内容：",
+    "target": "This launch file primarily loads the `sync_slam_toolbox_node` node from the `slam_toolbox` package and reads a configuration file named `__I18N_PROTECTED_0__` from the current package's `params` directory. This configuration file does not exist yet, so you need to create a new file named `__I18N_PROTECTED_1__` in the `params` directory and enter the following content:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:45.613Z"
+  },
   "0481531175e7a1cc48817cb27096a9a7152376edf4a376fe77c6781879893a3a": {
     "source": "最后一行的1X4的矩阵，是0001是固定数不动的。",
     "target": "The 1x4 matrix in the last row, which is 0001, is a fixed number and does not move.",
@@ -1091,6 +1133,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:31:03.399Z"
   },
+  "04ef1aa127a3c8b8b5b6f5446f61513690fb90b9d197be1ff0bbaf3e6502a67b": {
+    "source": "cartographer_occupancy_grid_node参数",
+    "target": "cartographer_occupancy_grid_node parameters",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:54.570Z"
+  },
   "04f1169581907e7d444c3723753d425bef318be9f7c0cdeaa960dd1ac7f6d948": {
     "source": "由于ROS2参考文档太少，所以很多教程还是需要看ROS2官网：",
     "target": "Since there are too few ROS2 reference documents, many tutorials still need to be viewed on the official ROS2 website:",
@@ -1202,6 +1251,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:32:51.493Z"
+  },
+  "057440d9dbba3d82449b6d2a993cf079a9fbdf60a5a8aaa17884814f49de955c": {
+    "source": "本节 Jazzy 版本的配置依据来自 Jazzy 官方安装路径里的示例文件和 Nav2 官方配置文档：__I18N_PROTECTED_0__、__I18N_PROTECTED_1__、__I18N_PROTECTED_2__，以及 Nav2 的配置说明页面。下面的工程参数使用当前工作空间中已经跑通的 __I18N_PROTECTED_3__ 配置。",
+    "target": "The configuration for this Jazzy version is based on the example files from the Jazzy official installation path and the Nav2 official configuration documentation: __I18N_PROTECTED_0__, __I18N_PROTECTED_1__, __I18N_PROTECTED_2__, as well as the Nav2 configuration explanation page. The project parameters below use the __I18N_PROTECTED_3__ configuration that has already been successfully run in the current workspace.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:35.196Z"
   },
   "0585b5d8f2a8a3d0d4bc0de47979e2bd4b70a6712885400c7f843ed5f79cae68": {
     "source": "接着禁用C/C++插件的代码提示功能(如果没这个界面，请往下看)",
@@ -2260,6 +2316,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:16:59.665Z"
   },
+  "0a1b6f1b57f5198eac45f94fbb2dde96dd319815111b7f61b4ad32212732b285": {
+    "source": "已验证",
+    "target": "Verified",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:57.010Z"
+  },
   "0a34c4f906f61de58166dd83402675063edd46c0e86c2ecb770786554cce2b77": {
     "source": "在ros2\\_stm32\\_bridge功能包的params目录下新建文件ekf.yaml，并输入以下内容：",
     "target": "In the `params` directory of the `ros2_stm32_bridge` package, create a new file named `ekf.yaml` and enter the following content:",
@@ -2603,6 +2666,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:26:34.879Z"
   },
+  "0c0c101a236c9f1de6e32c100e4f5a15494bc32c9b1e3ea0b51f53e9c3da780b": {
+    "source": "__I18N_PROTECTED_0__、__I18N_PROTECTED_1__、__I18N_PROTECTED_2__ 添加 __I18N_PROTECTED_3__。",
+    "target": "__I18N_PROTECTED_0__, __I18N_PROTECTED_1__, and __I18N_PROTECTED_2__ added __I18N_PROTECTED_3__.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:48.918Z"
+  },
   "0c0ea5b75438208ce8758658c5d4c91903fa895f064ae848d8000dbf6786c4d6": {
     "source": "using 指令",
     "target": "using the command",
@@ -2728,6 +2798,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:24:56.203Z"
+  },
+  "0c8e8daddf1c0f8e1f5a4cd373d1f7254ffb6f73eb31992cccfce9c8663801d5": {
+    "source": "**（6）velocity_smoother相关配置文件**",
+    "target": "**(6) velocity_smoother related configuration files**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:29.023Z"
   },
   "0c91b6ffca6d54b365db8890e6a57469252a0f3f329d2ceff53d9c13a3b5fff6": {
     "source": "坐标 **系** 变换监听\\_C++",
@@ -3646,6 +3723,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:07:50.118Z"
   },
+  "111ba6e03d22bef50254207eedd108a5b5a2b2b98b560e22536176a28b73eebd": {
+    "source": "**4./local_costmap/local_costmap订阅的话题**",
+    "target": "**4. Topics subscribed to by /local_costmap/local_costmap**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:21.377Z"
+  },
   "111e168e5f5d28c3c6557d3d5e69848a4e634e1b8499d3a912bc3c0a83557692": {
     "source": "上面下载key的时候如果卡住了，那就是github又抽风了，很正常的问题，可以选择科学\\*上网([科学机场教程](__I18N_PROTECTED_0__))解决，如果还解决不了，可以通过下方教程修改hosts。",
     "target": "If the key download above gets stuck, it's likely due to GitHub being unreliable again — a very common issue. You can try using a proxy or VPN ([proxy tutorial](__I18N_PROTECTED_0__)) to resolve it. If that still doesn't work, you can modify the hosts file by following the tutorial below.",
@@ -3785,6 +3869,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:25:13.276Z"
+  },
+  "11cd080c4957a43af4eddaa34069a50f21a61c9796869d80de03495012f55652": {
+    "source": "**odom_frame**  里程计坐标系",
+    "target": "**odom_frame** odometry coordinate frame",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:06.622Z"
   },
   "11ce59eec9851d6a5e0b446e231433872f4207d4ab0c22f617482af4659451ee": {
     "source": "Z的高度就是1/2的底盘高度+1/2的摄像头高度",
@@ -4423,6 +4514,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:44:11.586Z"
   },
+  "1436bef69066dfeb80d98c07c17b71fc7b906092876dc11c7c45e4d5ee085b4a": {
+    "source": "对照 Jazzy 官方 __I18N_PROTECTED_0__ 示例更新 __I18N_PROTECTED_1__。",
+    "target": "Updated __I18N_PROTECTED_1__ to align with the official Jazzy __I18N_PROTECTED_0__ example.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:39.817Z"
+  },
   "14374edfa485398e180adcd354fb82ae214c1e330b98d37622de3d95bbe1959b": {
     "source": "参考文档",
     "target": "Reference documentation",
@@ -4548,6 +4646,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:59:25.787Z"
+  },
+  "14b2da2d58f38a436b5fa5046fe20b76fa8990f205c1e47b364dc4170354be7d": {
+    "source": "使用方式",
+    "target": "Usage Instructions",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:55.267Z"
   },
   "14be0c6f7248f0666061260de8f1d02c34bee8fd0bc4a8f019323480e7e069fa": {
     "source": "下方被划掉的是在OpenCV4.11.0中已经不复存在的参数，但是可能在其他版本的OpenCV中仍有效，请自行用__I18N_PROTECTED_0__(不推荐)命令或者__I18N_PROTECTED_1__(推荐)查看。",
@@ -5081,6 +5186,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:14:02.716Z"
   },
+  "173f25287c130c67b34b160ba9d4465c9c6c6df43dada37d24fedcdb18fa54f2": {
+    "source": "cartographer_node发布的话题",
+    "target": "The topics published by cartographer_node",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:50.577Z"
+  },
   "1743d438c31edafac37e51acd7066ecf1612a1b7507272f0a0eb137d506d8228": {
     "source": "硬件平台相当于机器人的躯体，提供了对机器人的物理支持，通常由驱动系统和执行机构两部分组成。",
     "target": "The hardware platform serves as the robot's body, providing physical support for the robot. It typically consists of two parts: the drive system and the actuation mechanism.",
@@ -5136,6 +5248,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:31:32.892Z"
+  },
+  "17726bed9c42ac60cf073a2766a691fe5a8775b91f5c21ab5f50db5e60ca03b8": {
+    "source": "将功能包名保持为 __I18N_PROTECTED_0__，并在相关位置补充修改边界注释。",
+    "target": "Keep the package name as __I18N_PROTECTED_0__, and add or modify boundary comments in the relevant locations.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:37.516Z"
   },
   "177301dd87f08d44f5544152b82dc0419c219a1d34f0ff7178bf2a90d1d022fa": {
     "source": "类似C++的__I18N_PROTECTED_0__",
@@ -5809,6 +5928,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:18:47.085Z"
   },
+  "1a60edcc0e4d0d474cd4b60992582a68ab60e97de9fdffca8e3a382830d4ca24": {
+    "source": "**correlation_search_space_resolution**  搜索网格分辨率以进行扫描相关性",
+    "target": "**correlation_search_space_resolution**  The search grid resolution for scan correlation.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:33.755Z"
+  },
   "1a612a9069a3c9e3c52eb78fe3075259bbac0361cd3143b7d3061df8448e5c17": {
     "source": "这个配置会做几件事：",
     "target": "This configuration will do several things:",
@@ -5829,6 +5955,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:47:59.488Z"
+  },
+  "1a7de94858bfeafb51ebbe8ad0a8ee24072bd2443e5aa1c5446d73a82835057a": {
+    "source": "**solver_plugin**  用于 karto 扫描解算器的非线性解算器类型。选项：solver_plugins::CeresSolver, - solver_plugins::SpaSolver, solver_plugins::G2oSolver. Default: solver_plugins::CeresSolver.",
+    "target": "**solver_plugin** The nonlinear solver type used for the Karto scan solver. Options: solver_plugins::CeresSolver, solver_plugins::SpaSolver, solver_plugins::G2oSolver. Default: solver_plugins::CeresSolver.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:01.397Z"
   },
   "1a86f1e1a09837f1941542cae9314ab1e8b1e24216f422533ac0e7eb9e77073f": {
     "source": "在对图像进行卷积运算时，需要两个矩阵进行乘法运算，OpenCV不但提供了两个Mat类矩阵的乘法运算，而且定义了两个矩阵的内积和对应位的乘法运算。代码清单2-18中给出了两个Mat类矩阵的乘法的代码实现。",
@@ -7398,6 +7531,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:24:52.601Z"
   },
+  "21cb5fecaf408a28bc21082e5335ede5a0ca95c04362e542ab0ea3ece362b95e": {
+    "source": "**tf_buffer_duration**  存储 TF 消息以供查询的时间。如果在同步模式下以倍速脱机运行，则设置高一些。",
+    "target": "**tf_buffer_duration** The duration for which TF messages are stored for querying. If running offline at a multiple speed in synchronous mode, set this higher.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:21.253Z"
+  },
   "21cfb82d824708fb6f08fb16026b97ffa102319b6e903540fdc021af0a8716fa": {
     "source": "大疆开发板C板开发教程：[大疆开发板C型嵌入式软件教程文档.pdf](__I18N_PROTECTED_0__)",
     "target": "DJI Development Board C Board Tutorial: [DJI Development Board C Type Embedded Software Tutorial Document.pdf](__I18N_PROTECTED_0__)",
@@ -8896,6 +9036,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:05:20.714Z"
   },
+  "2745e1bd5eac3a269351c3de6ea9b334defdcfa9f48296ebbcb56ace880041ca": {
+    "source": "启动 Jazzy 版本：",
+    "target": "Launching the Jazzy version:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:56.373Z"
+  },
   "27467228ea59118cdd99b89114f12c08ae0367fec751ba2c2d3a7fb5633901d4": {
     "source": "docker容器里的程序的图形界面弹不出来",
     "target": "The graphical interface of the program inside the Docker container cannot be displayed.",
@@ -8993,6 +9140,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:37:53.473Z"
+  },
+  "27bfb6625eae694dff98cba22f8b1782172c84b8d0068c8860362d3cfa1b6549": {
+    "source": "**loop_search_space_dimension**  循环闭合算法的搜索网格的大小",
+    "target": "The size of the search grid for the loop closure algorithm.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:35.190Z"
   },
   "27c599c57d7e9e9f51b84356c3d1ebdc99cc6411a43b536cb0cc6a2f9759e82d": {
     "source": "FreeRTOS内存管理API函数",
@@ -9281,6 +9435,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:22:11.172Z"
   },
+  "2909fc838c799a0b147d892ae82e52d2a859eac1624bfb6b9599dbe79152877e": {
+    "source": "**transform_timeout**  查找转换 TF 超时时间限制",
+    "target": "**transform_timeout** Lookup transform TF timeout limit",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:20.443Z"
+  },
   "291e9ee98d64be6bfbc4be8c23389d27aedfff85ee81f7e39f64dbff5b4db10a": {
     "source": "复制到这里__I18N_PROTECTED_0__",
     "target": "Copy here __I18N_PROTECTED_0__",
@@ -9343,6 +9504,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:06:14.270Z"
+  },
+  "295e397ad8898ceb3024696e2fc3a096cebccf2a788140752ec9a18b41341a6a": {
+    "source": "planner_server 参数",
+    "target": "planner_server parameters",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:06.320Z"
   },
   "29619bc94b881b58dd1c5e7e74ce4e05fa22ca14f4a789d7c24e45971b99d588": {
     "source": "⑤Y轴",
@@ -9595,6 +9763,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:50:05.238Z"
+  },
+  "2a634097b05e0d88a397d0be64a1b20681591afad08728ec467af8aba19932c3": {
+    "source": "**map_subscribe_transient_local**  节点重启后消息不保留，默认为 true。",
+    "target": "**map_subscribe_transient_local** Messages are not retained after node restart, default is true.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:58.312Z"
   },
   "2a6a78d65fac4270dd9b3fd46c214e5fceca790e3aaa3b81ab7647b6a717b370": {
     "source": "再配置rviz2，将__I18N_PROTECTED_0__设置为__I18N_PROTECTED_1__，添加TF插件，添加Odometry插件并将话题设置为__I18N_PROTECTED_2__，当通过键盘控制发送速度指令时，仿真环境的机器人开始运动，并且在rviz2中可以回显坐标变换以及里程计等消息。",
@@ -9911,6 +10086,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:16:13.607Z"
   },
+  "2bb5b0775605c9277b9d34cfee009cb0866440dd3f336ba33bbfec56d46d6329": {
+    "source": "__I18N_PROTECTED_0__ 成功加载 __I18N_PROTECTED_1__。",
+    "target": "__I18N_PROTECTED_0__ successfully loaded __I18N_PROTECTED_1__.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T19:00:00.696Z"
+  },
   "2bcc1548786b95803a5c54a8f661fe85392963b0f01087aa4d6d8918143b4055": {
     "source": "**damping** （可选）：关节的物理阻尼值，默认为0。",
     "target": "**damping** (optional): The physical damping value of the joint, defaults to 0.",
@@ -10086,6 +10268,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:10:41.188Z"
   },
+  "2c91571948a99fd334a2fd103aef53ef23ac968de2d4eba7fb3d3eb3ea722a3a": {
+    "source": "**minimum_angle_penalty**  确保尺寸不会膨胀的最小惩罚角度",
+    "target": "**minimum_angle_penalty** The minimum penalty angle that ensures dimensions do not expand.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:42.050Z"
+  },
   "2c9283c6640e9cb04ddab1d03cb1f7fcc32d17cdf54e8157dd66b5962e20c45e": {
     "source": "配置以太网",
     "target": "Configure Ethernet",
@@ -10212,6 +10401,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:34:02.294Z"
   },
+  "2cfd2c30deddcd3eaa52cfc2ac9158563ed7d1b33c79e590f46bb213281dee30": {
+    "source": "导航功能集成",
+    "target": "Navigation Function Integration",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:34.006Z"
+  },
   "2d16dffd4b1a1acf94b7ea26062ab07043eaae3ed26b31a19a275187ab6ce5ba": {
     "source": "传感器部分是 Jazzy 迁移时最容易留下 warning 的地方。",
     "target": "The sensor section is the most likely place to leave warnings when migrating to Jazzy.",
@@ -10267,6 +10463,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:46:24.971Z"
+  },
+  "2d5c60a191827538edee7baf36570761a473a118583c5d6642d952d1135fcb0a": {
+    "source": "debug_trajectory_details: 指示是否发布轨迹的详细调试信息。",
+    "target": "debug_trajectory_details: Indicates whether to publish detailed debugging information for the trajectory.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:12.157Z"
   },
   "2d5f73d1ce9a1bd5e5bac214966eacd375714b5b2573a2b2a0dacc9c0432292b": {
     "source": "较之于以往该文件缺少了joint\\_state\\_publisher节点，该节点作用是发布活动关节状态，这一功能后续由ignition实现。",
@@ -10365,6 +10568,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:59:20.466Z"
+  },
+  "2dc61b29c694213b4653de58e08c5b187a9ea2e9280748b638ab33fbfe7b939b": {
+    "source": "**occupied_thresh_default**  栅格单元被认为占用的概率阈值。",
+    "target": "**occupied_thresh_default** The probability threshold at which a grid cell is considered occupied.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:57.616Z"
   },
   "2dd03b19983290f5a4e294d690f6a2ad516bd014590c0c9f19c235a7b44bf6c2": {
     "source": "[ARM Keil MDK6使用教程](__I18N_PROTECTED_0__)",
@@ -10498,6 +10708,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:40:45.509Z"
+  },
+  "2e52df15c1f1b2ab112e385fc87ab4029b8d65b54d6b82fb1d11f4a20fca5660": {
+    "source": "原因是 Humble 配置在 __I18N_PROTECTED_0__ 中手动列出了 Nav2 内置 BT 插件，而 Jazzy 已经自动加载这些内置插件，导致 __I18N_PROTECTED_1__ 被重复注册。",
+    "target": "The reason is that the Humble configuration manually listed the built-in Nav2 BT plugins in __I18N_PROTECTED_0__, while Jazzy automatically loads these built-in plugins, causing __I18N_PROTECTED_1__ to be registered twice.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:54.654Z"
   },
   "2e87d5a0211c2dc9af4466501242dc7e7f105d58369837cd35421fd3875397ef": {
     "source": "__I18N_PROTECTED_0__: 足迹的填充量，用于在计算成本图时给机器人足迹添加额外的空间。",
@@ -10807,6 +11024,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:18:31.802Z"
   },
+  "2fd75dc0fce078f0bcd22ec8fe02af945caab065e6eb89a10f00b547205e95cb": {
+    "source": "这样的设计，可以让整条坐标树是一个链式结构，避免base_link或者base_foot_print出现两个父类，这样计算量会变大。",
+    "target": "This design allows the entire coordinate tree to be a chain structure, preventing base_link or base_footprint from having two parent classes, which would increase computational load.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:49.506Z"
+  },
   "2fd885d08706e143284156d05c5f512438922037a7b04186b62c646fc5c6306b": {
     "source": "把上图除了**efi和刚才创建的那俩分区** 的其他分区全部点change更改为do not use the partition.",
     "target": "Change all partitions in the image except for **efi and the two partitions just created** by clicking \"change\" and setting them to \"do not use the partition.\"",
@@ -11009,6 +11233,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:57:10.616Z"
+  },
+  "3097680070cdc5c72d5c579145893526bc315173ac03e5e55b8b4d1a11620387": {
+    "source": "在功能包mycar_navigation2_jazzy的launch目录下新建名为__I18N_PROTECTED_0__的launch文件，并输入如下内容：",
+    "target": "In the `launch` directory of the `mycar_navigation2_jazzy` package, create a new launch file named `__I18N_PROTECTED_0__` and enter the following content:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:36.025Z"
   },
   "309ac1ffcfdc69fc05fd87450acee2128c5b0fd2651e890e23435919b61cb7f4": {
     "source": "**备注：** 命令中的 \\[ROS\\_DISTRO\\] 指代ROS2版本。",
@@ -11325,6 +11556,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:16:44.101Z"
   },
+  "31cbca921ed1b37a9aeba294a8a49e64bc8fc671ef575e5593b08952748fd5f7": {
+    "source": "**2.controller_server发布的话题**",
+    "target": "**Topics published by controller_server**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:09.505Z"
+  },
   "31d66556d2c39367bfa596d4e4da3fd17fb92b59c2a4e3521d4809a9cb3521e4": {
     "source": "显示相机图像，必须需要使用消息：CameraInfo。",
     "target": "To display the camera image, you must use the message: CameraInfo.",
@@ -11366,6 +11604,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:18:43.091Z"
+  },
+  "31f07ffc34d25b2a1d1348631e188093815bc309c14713f2b88c5942a65164bf": {
+    "source": "删除 Humble 时代列出的 Nav2 内置 BT 插件列表。",
+    "target": "Delete the list of Nav2 built-in BT plugins listed in the Humble era.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:40.522Z"
   },
   "3201a7121d9633ac53211958ef670262fc5f28b5fe19e3a0e08b7b008169c834": {
     "source": "保证“无论在哪都能跑”",
@@ -11458,6 +11703,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:55:39.684Z"
   },
+  "326c9eb2cf19b979c86deb016a2d8ec3b6fc6b1b50ff432d27c546dd5290b406": {
+    "source": "**map_start_pose**  启动建图/定位时的位姿（如果可用）",
+    "target": "**map_start_pose** The pose when starting mapping/localization (if available)",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:11.739Z"
+  },
   "326e0f89a8a99ba66ba0e4c5f290831d8595f31645b7aeab973ad296dca194d6": {
     "source": "配置colcon build参数",
     "target": "Configure colcon build parameters",
@@ -11492,6 +11744,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:21:00.106Z"
+  },
+  "329484160925cb938a0f6d18e1a42851725d2275ba757f1d716a3e346fa3a5e3": {
+    "source": "Humble导航仿真",
+    "target": "Humble Navigation Simulation",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:57:55.411Z"
   },
   "32969723d4dcb6f38f404a004c3ed15a5d91e13788807f2c04d53d77386fbe23": {
     "source": "__I18N_PROTECTED_0__: 定义了机器人的初始位姿（x, y, yaw, z），但在实际使用中，如果__I18N_PROTECTED_1__被设置为__I18N_PROTECTED_2__，则这个初始位姿可能会被通过服务请求设置的初始位姿所覆盖。",
@@ -11660,6 +11919,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:47:01.956Z"
+  },
+  "334f148b3d0c5bd65abbd978cc27869528f689cc963e01474643bc98474b96ea": {
+    "source": "新增 __I18N_PROTECTED_0__，用于配合 Jazzy 官方行为树里的 error code blackboard 变量。",
+    "target": "Added __I18N_PROTECTED_0__ to work with the error code blackboard variable in the official Jazzy behavior tree.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:44.131Z"
   },
   "334fa867f888a45c1bdc1c15d9ca3ce4669c8b142cc33682ec5abf2abcc106c0": {
     "source": "__I18N_PROTECTED_0__：控制机器人逆时针/顺时针旋转。",
@@ -12046,6 +12312,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:18:06.219Z"
   },
+  "34d204630233d6bc2601485ab9c1034da11603c9a96c439e1e187ab566638695": {
+    "source": "对照 Jazzy 官方 controller 参数名更新进度检查器参数。",
+    "target": "Updated the progress checker parameters to match the Jazzy official controller parameter names.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:49.841Z"
+  },
   "34de4fe537c010b2242748df549e63150cce97f37ce8c17878d08e1e04ad5e3e": {
     "source": "华硕天选",
     "target": "ASUS TUF Gaming",
@@ -12213,6 +12486,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:11:37.756Z"
+  },
+  "356d191caa3f6da1a2958b45c363eb6212d088043b483540ba2ad249af704bb4": {
+    "source": "**scan_buffer_size**  缓冲到链中的扫描次数，也用作定位模式循环缓冲区中的扫描次数",
+    "target": "**scan_buffer_size** The number of scans buffered into the chain, also used as the number of scans in the loop buffer for localization mode.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:25.564Z"
   },
   "356f9de9e08d750f9059e97e6f4d4327acf720cd1ab725f5abacd9d6db373015": {
     "source": "先查看显卡驱动所支持的最高CUDA版本",
@@ -13103,6 +13383,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:43:49.115Z"
   },
+  "399bc137fa1f5cee46d79b47e2a4ddc2aead385c1a17ed664cf75cfef03e17ab": {
+    "source": "**loop_search_space_resolution**  搜索网格分辨率以进行循环闭合",
+    "target": "**loop_search_space_resolution** Search grid resolution for loop closure",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:36.316Z"
+  },
   "39a4c3d74853974793030c700b79e69ab21ac10fa3f8b4da012368fb5b3a9ad3": {
     "source": "方法二（直接当普通软件运行即可）",
     "target": "Method 2 (just run it as a regular software)",
@@ -13669,6 +13956,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:10:21.672Z"
+  },
+  "3c9665f9452792b3f18308ed02f60c04ddcbfaf604dea6dd52d1f3a4848df71c": {
+    "source": "**5./local_costmap/local_costmap发布的话题**",
+    "target": "**5. Topics published by /local_costmap/local_costmap**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:22.281Z"
   },
   "3ca0d601def8b2ec23d3e6e786fbbefb4c2c24ba98c7d8d89322555d76a3b2ce": {
     "source": "**3.提供的Action服务器**",
@@ -14468,6 +14762,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:23:22.168Z"
   },
+  "4057404ea6b05d67bd2db34424f9d59167e8f6f1bb8848b6da8d73daaf40caa8": {
+    "source": "**（1）bt_navigator相关配置文件**",
+    "target": "**(1) bt_navigator related configuration files**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:24.547Z"
+  },
   "405c21e54fae73f97b8ff8e7a29edeb8a012570e2ec03bb8c8ff9026262adc0a": {
     "source": "访问控制策略",
     "target": "Access control policy",
@@ -14881,6 +15182,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:23:52.694Z"
   },
+  "4278a2f3b33b86145f9af5fff64b9c79d3df51fa4b50d15a4787996990831f2f": {
+    "source": "在没有 Gazebo/robot_state_publisher/TF 的短启动环境里，最后停在等待 __I18N_PROTECTED_0__ TF，这是预期的运行环境缺失，不是配置 fatal。",
+    "target": "In a short startup environment without Gazebo/robot_state_publisher/TF, it eventually stops waiting for __I18N_PROTECTED_0__ TF. This is an expected missing runtime environment, not a configuration fatal error.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T19:00:12.464Z"
+  },
   "42818f785e62968a7d5a0e6017d7a80e8e494d356b903a48abc05949710348f4": {
     "source": "算鸟算鸟，肝部东啦",
     "target": "Forget it, forget it, I'm done with this.",
@@ -15154,6 +15462,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:31:42.780Z"
   },
+  "4378ec8049d1af5f4e3a9714bca70ffa6b23fd9d701560609335f2b17ebdd49f": {
+    "source": "**enable_interactive_mode**  是否允许启用交互模式。交互模式将保留映射到其 ID 的激光扫描缓存，以便在交互模式下进行可视化。结果，该进程的内存将会增加。在定位和长期建图模式下可以手动禁用此功能，因为它们会随着时间的推移增加内存利用率。对于建图或连续建图模式均有效。",
+    "target": "**enable_interactive_mode** controls whether interactive mode is enabled. Interactive mode retains a cache of laser scans mapped to their IDs for visualization during interactive sessions. As a result, the process's memory usage will increase. This feature can be manually disabled in localization and long-term mapping modes, as they increase memory utilization over time. It is effective for both mapping and continuous mapping modes.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:16.450Z"
+  },
   "4382732c3d90c8a5f1c0f9ab5c06db95a20d1831f8212be576c00a9dbb53cc0c": {
     "source": "然后就可以进入Debug界面",
     "target": "Then you can enter the Debug interface.",
@@ -15300,6 +15615,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:08:41.378Z"
+  },
+  "44214e8b6121dca8e0ca0370fdd9fb03cd1299762b5fd2975f28644572cc170c": {
+    "source": "__I18N_PROTECTED_0__ 成功加载 DWB 和所有 critics。",
+    "target": "__I18N_PROTECTED_0__ successfully loaded DWB and all critics.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T19:00:01.414Z"
   },
   "44394bfd6da595ff05179193e7c41e429a3be94c1e414534a50c12c9f89e23be": {
     "source": "手动安装方式一：",
@@ -15461,6 +15783,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:47:48.781Z"
+  },
+  "450bb4e4f3adc3c69b365ac0ffaffcaf820b7326a3e5d793144d032ab9d82bc6": {
+    "source": "借助于Advanced Packaging Tools([APT](__I18N_PROTECTED_0__))包资源管理器，可以使用二进制的方式安装slam_toolbox，安装指令如下：",
+    "target": "Using the Advanced Packaging Tool ([APT](__I18N_PROTECTED_0__)) package manager, you can install slam_toolbox in binary form with the following command:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:57:57.404Z"
   },
   "450c76b9f7d6b118b313cfef28f1e914158bb251f92caf69ddcc1817723b2c46": {
     "source": "系统：Windows 11 LSTC",
@@ -16092,6 +16421,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:31:47.082Z"
   },
+  "47bdf1e260ad9369f4b95e8c2a07c2d3da0e5fceba2fe733a159ff29eae1e610": {
+    "source": "主要修复的问题",
+    "target": "Main issues fixed",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:52.809Z"
+  },
   "47c2660c2b54ad2633820caa8703422065fcd15d3935cffd23862e3e1e38b339": {
     "source": "我们烧录会用到JLinkExe的命令，而JLinkExe会用到libreadline库，所以要安装libreadline库，执行如下命令安装：",
     "target": "We will use the JLinkExe command for flashing, which requires the libreadline library. Therefore, install the libreadline library by executing the following command:",
@@ -16169,6 +16505,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:22:31.082Z"
   },
+  "483658a5cd9d2d265627f92c9c8997196fa2b0ca9019954e75a6e838e1aa8f4d": {
+    "source": "**rough_search_angle_offset**  用于测试粗略扫描匹配的角度范围",
+    "target": "**rough_search_angle_offset** is used to test the angular range for coarse scan matching.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:40.310Z"
+  },
   "48490f7ecae17b6316bdc17600990502b83e25febb9456eb085ce2c575d9f2f5": {
     "source": "显示以参考坐标系原点为中心的网格。",
     "target": "Display a grid centered on the origin of the reference coordinate system.",
@@ -16196,6 +16539,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:41:39.576Z"
+  },
+  "48867da7f4dff88ac7b59d7f812b366011f43506a7a7a12ba9774d21178b7132": {
+    "source": "cartographer_occupancy_grid_node发布的话题",
+    "target": "The topic published by cartographer_occupancy_grid_node",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:53.417Z"
   },
   "488bc03bc6b31823adbe8f013af6c985e70fd913fc2e9f4c075027fdd9733764": {
     "source": "创建窗口的时候会支持OpenGL",
@@ -16512,6 +16862,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:58:17.270Z"
   },
+  "49dcfdec3ec6d8aa3ec3a0f2df6ed06ab6a9c09e7101ba0900d3ac6f6bb186ba": {
+    "source": "**（3）controller_server相关配置文件**",
+    "target": "**(3) Controller server related configuration files**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:26.804Z"
+  },
   "49e30e5112c3083c7e480ca8cfa553c84696610899cc097535e3efaa15704f38": {
     "source": "边沿触发：上升沿和下降沿触发，这类型的中断一旦触发，CPU 即可响应。<br>",
     "target": "Edge-triggered: rising edge and falling edge triggering. Once this type of interrupt is triggered, the CPU can respond immediately.<br>",
@@ -16799,6 +17156,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:30:47.731Z"
   },
+  "4b29de167db41662c2075af3d81a0604de92e42991d7eefb124c593173aa9494": {
+    "source": "controller_frequency: 指定了控制器（可能是FollowPath或其他控制器）的运行频率，以赫兹为单位。",
+    "target": "controller_frequency: Specifies the operating frequency of the controller (which may be FollowPath or another controller), in Hertz.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:12.889Z"
+  },
   "4b3514032c12eaa7058b127ed30dce30d8a8592511e283604127ac6f6170f995": {
     "source": "多线程在STM32和ROS2中是非常常用的东西，虽然STM32和ROS2中不会直接用到thread这个类，但是理解起来是差不多的，甚至ROS2里有些东西就是二次封装了C++多线程，所以我们这里直接介绍C++11的多线程。",
     "target": "Multithreading is very commonly used in STM32 and ROS2. Although the `thread` class is not directly used in STM32 and ROS2, the concept is similar. In fact, some components in ROS2 are just wrappers around C++ multithreading. So here we will directly introduce C++11 multithreading.",
@@ -17022,6 +17386,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:32:10.427Z"
+  },
+  "4c39478e271f4770e92720818a4bb74a8361f6aa07a64c583a16cf720261637e": {
+    "source": "planner_server发布的话题",
+    "target": "planner_server published topics",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:05.734Z"
   },
   "4c491b9436fadb3106b69d172f431a73f53517a98f8c20214ef1528d15311d63": {
     "source": "Path路径",
@@ -17611,6 +17982,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:35:49.714Z"
   },
+  "4f5cb21f1a9651156f35c6ae4eaa520cfe13069334304efd362c12ae30bfb045": {
+    "source": "cartographer_node订阅的话题",
+    "target": "Topics subscribed to by cartographer_node",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:50.039Z"
+  },
   "4f619016c1528474153d0f649175f975826da272331147b469d4280c084b05de": {
     "source": "接着配置clangd：",
     "target": "Next, configure clangd:",
@@ -17715,6 +18093,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:33:28.869Z"
+  },
+  "4fd0575511bf3ae2f5a0bf97b30a94dbde02703979dac522be6b8b72aac15747": {
+    "source": "**max_laser_range**  用于 2D 占用地图光栅化的最大激光范围",
+    "target": "**max_laser_range** Maximum laser range used for 2D occupancy map rasterization",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:19.113Z"
   },
   "4fe2bc09ec2d68c3836e9fb589c794622ec38c2cc27228b6c1c8e448874c3289": {
     "source": "该launch文件中，启动了机器人底盘驱动，启动了robot\\_localization包中__I18N_PROTECTED_0__节点，并且还发布了base\\_footprint与imu\\_link的坐标变换。",
@@ -17897,6 +18282,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:34:35.415Z"
+  },
+  "505b13d031ff61c448fa8712f9e9af5dea595393c6b3d4ac6ab3bda4a89484c5": {
+    "source": "在slam_toolbox中常用的节点有两个：sync_slam_toolbox_node和async_slam_toolbox_node。",
+    "target": "In slam_toolbox, two commonly used nodes are: sync_slam_toolbox_node and async_slam_toolbox_node.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:57:58.651Z"
   },
   "5062c1b0a567bc686d0d9e25fdbd6e1f81fcb979d996795e65347440f5cedc66": {
     "source": "SDFormat Sensor 规范：__I18N_PROTECTED_0__",
@@ -18241,6 +18633,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:42:26.726Z"
   },
+  "524a44ff9c3e0ab4fb710a730babcfe43749cbd5bac68081dcc92a72ca90fd82": {
+    "source": "bt_navigator相关配置文件有两个，分别是描述行为树的xml文件，以及yaml格式的参数文件，前者存储在bts目录下，后者存储在params目录下。",
+    "target": "There are two configuration files related to `bt_navigator`: an XML file describing the behavior tree, stored in the `bts` directory, and a YAML format parameter file, stored in the `params` directory.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:25.474Z"
+  },
   "524a68a5637cb61e5308c9c63eb0fb0ef18d2f8e39453e6c8bd6a226ee1b3cd2": {
     "source": "优先级，此类中断已经触发，CPU 必须处理。",
     "target": "Priority: Once this type of interrupt is triggered, the CPU must handle it.",
@@ -18373,6 +18772,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:17:55.071Z"
+  },
+  "531737f4ecb92f19156626fc409e65e55ca54aa8a6909579ea986d2eba4a37f8": {
+    "source": "**minimum_travel_distance**  处理新扫描之前的最小行进距离",
+    "target": "**minimum_travel_distance** Minimum travel distance before processing a new scan",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:23.004Z"
   },
   "531b4bc47fe1986dbb1b1f9e8970e438c8159021d342b3dc98cf7ee8894f2565": {
     "source": "Launch\\_XML\\_YAML\\_执行命令",
@@ -19305,6 +19711,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:11:08.469Z"
   },
+  "56aea9955d32847ed7921e1c96f18d2761433125bb183e086897dd3232cdcf32": {
+    "source": "Jazzy导航仿真",
+    "target": "Jazzy Navigation Simulation",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:32.124Z"
+  },
   "56af46bd673cd00a9bb2d9ff0ab0668d4f967283ee7b2ac2ad32bfc25e0ebde2": {
     "source": "定时器是用来控制发送频率的，定时器里还会执行一个回调函数timer\\_callback。",
     "target": "The timer is used to control the sending frequency, and a callback function `timer_callback` is executed within the timer.",
@@ -19753,6 +20166,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:05:26.037Z"
   },
+  "582e01912ef2f144b45e0d7a077bdd7a816732738692dff765b677fd5586fbd1": {
+    "source": "**frame_id**  地图坐标系名称。",
+    "target": "**frame_id** The name of the map coordinate system.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:03.452Z"
+  },
   "5833c9ca64504469a9d599ec9b96e75cbb6206d5d8e79cf2793a3c3e360c843c": {
     "source": "语法2： __I18N_PROTECTED_0__",
     "target": "Grammar 2: __I18N_PROTECTED_0__",
@@ -19976,6 +20396,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:29:42.911Z"
+  },
+  "58fd1dec0b7652bb82c1013c5e9a7808b8529fa74e21a5d0ed3d9cde4b63ede5": {
+    "source": "**6./local_costmap/local_costmap参数**",
+    "target": "**6. /local_costmap/local_costmap parameters**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:23.011Z"
   },
   "5900eb7d6bcec9cfebbb5867fc880b9e1a2188dcd7d5b9e0449af9a400d56709": {
     "source": "嵌套递归 lambda",
@@ -20445,6 +20872,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:14:38.291Z"
+  },
+  "5b1929894bde3b143edb6d13b14a04b31677747e6319c5fd02c56d8bd3b2ef4b": {
+    "source": "**coarse_angle_resolution**  在扫描匹配中测试的偏移范围内的角度分辨率",
+    "target": "**coarse_angle_resolution** The angular resolution within the offset range tested during scan matching.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:41.334Z"
   },
   "5b212c50d32a953c423d4097fe4c3d6c18235bd802533f7a48b21d7b23305777": {
     "source": "2.实现分析",
@@ -21013,6 +21447,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:51:29.515Z"
   },
+  "5dc9bbec84ce5e125d9bef6f9e75422b6ec27a0190e4aba02a67752028686064": {
+    "source": "cartographer_occupancy_grid_node请求的服务",
+    "target": "The service requested by cartographer_occupancy_grid_node",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:54.031Z"
+  },
   "5dea7f9b1703607ab389b9db3e69c648dcf99cee5e6ff6a65bb438a62278a53c": {
     "source": "然后打开正点原子的工程，在main函数中找到sys\\_stm32\\_clock\\_init(RCC\\_PLL\\_MUL9)函数，右键该函数，并go to definition of \"sys\\_stm32\\_clock\\_init\"找到这个函数的定义。",
     "target": "Then open the Zhengdian Atom project, locate the `sys_stm32_clock_init(RCC_PLL_MUL9)` function in the `main` function, right-click on the function, and go to definition of \"sys_stm32_clock_init\" to find the definition of this function.",
@@ -21117,6 +21558,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:32:05.512Z"
+  },
+  "5e41333f2a15c102d54ce75e910092efea3db23750edb42f4019b037780f7c8d": {
+    "source": "**Loop_search_maximum_distance**  循环闭合时考虑的扫描距离的最大阈值",
+    "target": "**Loop_search_maximum_distance** Maximum threshold for scan distance considered during loop closure",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:28.640Z"
   },
   "5e44231f070f61cd908019fdaa3c653a4c95b24541761f8814794f268020ba16": {
     "source": "保存后,先敲下面的命令",
@@ -21279,6 +21727,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:11:15.697Z"
   },
+  "5eb0aaefbbc4a83b71cc73b2226788a8b0425be52de78df5d6ce2c22ccbe862c": {
+    "source": "odom_topic: 指定了里程计信息的ROS主题。",
+    "target": "odom_topic: Specifies the ROS topic for odometry information.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:17.567Z"
+  },
   "5eb2a78ab153ae8d19a62c4a46f59da6d8a4a5f00605354b1c8108e235ca95dd": {
     "source": "应用：政府单位采购、军工采购、个人电脑等",
     "target": "Applications: government procurement, military procurement, personal computers, etc.",
@@ -21334,6 +21789,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:29:50.586Z"
+  },
+  "5ef7a724c7701324dc69d298d2f1e9550da7c1f74160be8cf2b2bf40a63bfb9f": {
+    "source": "slam_toolbox概述",
+    "target": "Overview of slam_toolbox",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:57:56.029Z"
   },
   "5f023548f67b0d5046b7401856015ab57b3485552d94696ea2bc6426dca3968e": {
     "source": "可以在运行时初始化",
@@ -22364,6 +22826,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:41:09.573Z"
   },
+  "644bdd6ec44c71fad6314b4adf752344206833e38ed58c24b821475c2f237795": {
+    "source": "**angle_variance_penalty**  应用于匹配扫描的惩罚，因为它与里程姿势不同",
+    "target": "**angle_variance_penalty** A penalty applied to matching scans when they deviate from the odometry pose.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:38.726Z"
+  },
   "6451c1fb6e1ad4f6394cf56ba324c945a1d47a595431913e648f096ea5a47b00": {
     "source": "旧写法可能是：",
     "target": "The old way of writing might be:",
@@ -22413,12 +22882,26 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:35:17.764Z"
   },
+  "64cf00bfd2805483f33b2681f33f1851556161b23cac3a5f456d54759c24b0a0": {
+    "source": "对照 Jazzy 官方 pluginlib 类名更新 planner 和 behavior 插件。",
+    "target": "Update the planner and behavior plugins to match the Jazzy official pluginlib class names.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:45.234Z"
+  },
   "64d0f602d27fe0af90494f36e7756f43a9a3a2798d8dd8176f0024195aad9610": {
     "source": "**建议都用****官方法****进行安装。**",
     "target": "**It is recommended to use the official method for installation.**",
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:37:00.576Z"
+  },
+  "64d92b19c9f1d4c870ce86712d724e58d2213f38c6556a1a3927602b55ded84f": {
+    "source": "**ceres_dogleg_type**  如果信任策略是 DOGLEG，则使用dogleg策略。选项：TRADITIONAL_DOGLEG、SUBSPACE_DOGLEG。默认值：TRADITIONAL_DOGLEG",
+    "target": "**ceres_dogleg_type** If the trust strategy is DOGLEG, use the dogleg strategy. Options: TRADITIONAL_DOGLEG, SUBSPACE_DOGLEG. Default: TRADITIONAL_DOGLEG.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:05.084Z"
   },
   "64d9ad1a731d635d7a4a9b5725404d0c6922385c2a12d27e8492ddcf5c1d5ce5": {
     "source": "设备类型",
@@ -22475,6 +22958,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:52:04.335Z"
+  },
+  "650bdad40754e5830c02e7ea79c0a35333cd5fd6811ecb1be7b4d88a3f4fddbe": {
+    "source": "新增 __I18N_PROTECTED_0__、__I18N_PROTECTED_1__、__I18N_PROTECTED_2__。",
+    "target": "Added __I18N_PROTECTED_0__, __I18N_PROTECTED_1__, __I18N_PROTECTED_2__.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:43.390Z"
   },
   "650dee18c111c502a3ad39518c807ea446130101fa28502480c3ae590c25d149": {
     "source": "还没修复好",
@@ -22622,6 +23112,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:45:14.361Z"
+  },
+  "66168f9c3b49ccc09382f38450b23dbcc4118689a1228f81bbb1b83ef9583b3c": {
+    "source": "min_theta_velocity_threshold, min_x_velocity_threshold, min_y_velocity_threshold: 这些定义了机器人在不同方向上的最小速度阈值，低于这些阈值可能被视为停止或静止。",
+    "target": "min_theta_velocity_threshold, min_x_velocity_threshold, min_y_velocity_threshold: These define the minimum velocity thresholds for the robot in different directions; values below these thresholds may be considered as stopped or stationary.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:16.969Z"
   },
   "661a4125f8350d88435ef184dc14e50f4ddce685ea6ddf8e1e1d3cb2d81686ce": {
     "source": "运行以下命令启动一个简单的HTTP服务器：",
@@ -23400,6 +23897,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:45:03.299Z"
   },
+  "69afe32e10979a5ff53b7e51bf9c94378539b2ba32d86f4175ee513dd20b4451": {
+    "source": "**map_frame**  地图坐标系",
+    "target": "**map_frame** Map coordinate system",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:07.234Z"
+  },
   "69b1dd25fedb83fa2d810d1bf7514810db62be9257e064a24e3091bc2379a426": {
     "source": "先删掉该选项。",
     "target": "First, delete that option.",
@@ -23652,6 +24156,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:48:32.916Z"
   },
+  "6ac22847c3e5160f6efded36cbbc10e482a774f09ef04655dd115760a906ff86": {
+    "source": "**scan_topic**  扫描主题名， 注意是/scan 不是scan",
+    "target": "**scan_topic** Scans the topic name. Note that it is `/scan`, not `scan`.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:08.565Z"
+  },
   "6ac3b3bb7c88c51756168e5355b4399ddaa0937619f633ed7b2198a86b3de753": {
     "source": "OpenCV教程",
     "target": "OpenCV tutorial",
@@ -23679,6 +24190,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:01:14.231Z"
+  },
+  "6adea1ed9c7a5575c50f62f73f9d957d0e98aa76d7200ff3d57e7bf0916f8c2a": {
+    "source": "**free_thresh** 占用率小于此阈值的像素被视为完全空闲。",
+    "target": "**free_thresh** Pixels with occupancy below this threshold are considered completely free.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:02.741Z"
   },
   "6ae00de796e087bad5605e9027ce13f27cb04b75af745a8dcfdfdc2891177e36": {
     "source": "参考视频",
@@ -23868,6 +24386,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:15:34.407Z"
+  },
+  "6bc99cfeae94b05c26a6675a8eb29345e046ee0d48fdc0b7e56079aa3170c537": {
+    "source": "添加 __I18N_PROTECTED_0__。",
+    "target": "Add __I18N_PROTECTED_0__.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:47.182Z"
   },
   "6bc9f8719dcefa3a1d5195896bdb3eae3c6e382c19594e75ae401bdc4127a1d5": {
     "source": "VScode远程开发",
@@ -24078,6 +24603,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:22:36.613Z"
+  },
+  "6cc3e3bf9542ec2f7671a528eb423a722cd040017383534646572f8590881411": {
+    "source": "/global_costmap/global_costmap参数",
+    "target": "/global_costmap/global_costmap parameters",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:08.165Z"
   },
   "6cc6e15f7a5f53a9229e4f4a63ae5af618574da926969a3ff5157c69d3d64a22": {
     "source": "传统部署",
@@ -24982,6 +25514,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:35:39.738Z"
   },
+  "71388c3987a76b60f581af0d5f1aad503a3c8899b2097a2a5051dd3d8aaf33c1": {
+    "source": "**3.controller_server参数**",
+    "target": "**3. controller_server parameters**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:10.105Z"
+  },
   "714532d13ed5791e6d06538c1ed32a015429c0762180c9d6098565e8449640c6": {
     "source": "上面这条指令是将本地公钥上传到远程主机的ssh目录下，该目录下有文件authorized\\_keys保存了公钥内容。",
     "target": "The instruction above is to upload the local public key to the ssh directory on the remote host. This directory contains the file authorized_keys, which stores the public key content.",
@@ -25037,6 +25576,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:47:06.284Z"
+  },
+  "71805c9412f46c7a649304dff9760b11a975bbdf618a83223f17c3402ec31ff7": {
+    "source": "**Loop_match_maximum_variance_coarse**  粗略搜索中传递给细化的阈值方差",
+    "target": "**Loop_match_maximum_variance_coarse** The threshold variance passed to refinement during the coarse search.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:30.991Z"
   },
   "718f92318f163db77bf4ee4be251cbc863c905c5ee8ed7a5f1f3c376eef93fbc": {
     "source": "RustDesk无人值守远程控制",
@@ -25254,6 +25800,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:48:00.147Z"
+  },
+  "7260a0ff0b1f02a4b808cbf55d14724b27c390a1cbb3567e80eae9896083fbf1": {
+    "source": "**（7）smoother_server相关配置文件**",
+    "target": "**(7) Configuration files related to smoother_server**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:29.666Z"
   },
   "72707382ab53df7cff69741b1ad67205fcf159677ce3afd0a4acf7db20c55520": {
     "source": "本章非赵虚左教程，是自己的实现思路，仅供参考，可能赵老师有更好的办法，不过他还没出实体篇教程。",
@@ -25745,6 +26298,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:14:01.938Z"
   },
+  "74d6d6dbb7529b538e74f372b6ec37ad63f9af80a56a2ec66e5dc77be4c5a4e1": {
+    "source": "acc_lim_theta, acc_lim_x, acc_lim_y: 这些参数定义了机器人在不同方向上的加速度限制。",
+    "target": "acc_lim_theta, acc_lim_x, acc_lim_y: These parameters define the acceleration limits of the robot in different directions.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:11.630Z"
+  },
   "74e0826300d1557b2f768da439fcdb588f681b26482bcf3b374b2661331419db": {
     "source": "然后检查 KVM 模块是否加载：",
     "target": "Then check whether the KVM module is loaded:",
@@ -26150,6 +26710,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:10:43.410Z"
+  },
+  "76a9e53984b8c62a43fe6da4671ed832c1a0d1c2547794dc94a64065471b98b0": {
+    "source": "**use_scan_barycenter**  是否使用重心或扫描位姿",
+    "target": "**use_scan_barycenter** Whether to use the center of gravity or scan pose",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:24.233Z"
   },
   "76b1e3e7fdf97850b07639f1373ac3c66b7a59022d20d92374e0d56d927d452c": {
     "source": "本地生成密钥对；",
@@ -27110,6 +27677,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:08:31.386Z"
   },
+  "7b31b05455b9bb90340b7ee595ef60beadc2f547f5ace22590c6a68dd696cd55": {
+    "source": "**position_covariance_scale**  从扫描匹配发布姿势时缩放位置协方差的量。这可用于调整下游定位滤波器中位姿的影响。协方差表示测量的不确定性，因此扩大协方差将减小位姿对下游滤波器的影响。默认值：1.0",
+    "target": "**position_covariance_scale** The amount by which to scale the position covariance when publishing a pose from scan matching. This can be used to adjust the influence of the pose in downstream localization filters. The covariance represents the uncertainty of the measurement, so increasing the covariance will reduce the impact of the pose on the downstream filter. Default value: 1.0",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:17.372Z"
+  },
   "7b383ab6a4dfa719371630893317c3871c1b1f79552ab4574a0deeba5dad243f": {
     "source": "添加快捷键以便于更好切换中英文",
     "target": "Added keyboard shortcuts for easier switching between Chinese and English.",
@@ -27656,6 +28230,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:21:22.838Z"
   },
+  "7d95e6409603adfe9adfe443da77542fecf438278f614b14a7ed09814d2acc35": {
+    "source": "**occupied_thresh** 占用概率大于此阈值的像素被视为完全占用。",
+    "target": "**occupied_thresh** Pixels with an occupancy probability greater than this threshold are considered fully occupied.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:02.121Z"
+  },
   "7d971470899e6a552bddb101380d3e5c8cdf8eb858358af68819a42ac610841d": {
     "source": "**<parent>** （必填）：指定父级link。",
     "target": "**<parent>** (required): Specifies the parent link.",
@@ -27936,6 +28517,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:34:54.785Z"
   },
+  "7ee877bc56b8d7ecb9796a9bd82abec5f45af16e46e1d5c098a333d06bbed73d": {
+    "source": "**1.controller_server订阅的话题**",
+    "target": "**Topics subscribed to by controller_server**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:08.704Z"
+  },
   "7f003c91621692f64cfabaa876e9cd50263f4d68579f1800c79ea7de891e72f5": {
     "source": "__I18N_PROTECTED_0__: 定义机器人在各个方向上的最大减速度限制，包括X轴、Y轴和偏航角速度（theta）。注意，减速度值以负数表示。",
     "target": "__I18N_PROTECTED_0__: Defines the maximum deceleration limits for the robot in each direction, including the X-axis, Y-axis, and yaw angular velocity (theta). Note that deceleration values are expressed as negative numbers.",
@@ -28118,6 +28706,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:42:29.696Z"
   },
+  "7fdd6835876817f0ab14f8cfd367d81594c4ba3a27cb209fe3dd76900c618db5": {
+    "source": "**transform_publish_period**  里程计odom变换发布周期。 0 不会发布变换。",
+    "target": "**transform_publish_period** The publishing period for odometry (odom) transforms. A value of 0 will not publish transforms.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:14.602Z"
+  },
   "7fdf6d47843b1a3ed5f57c223d45fd0a43ac0c36da27112fd6422361f6a55e01": {
     "source": "② 两块硬盘，第二块硬盘末尾装 Linux，前面存放 Windows 数据，比如E盘",
     "target": "② Two hard drives: install Linux at the end of the second drive, and store Windows data (such as the E: drive) at the beginning.",
@@ -28243,6 +28838,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:02:13.521Z"
+  },
+  "806d30bb357ba02353ed52e97c4b655f734cb1af9c93b7c73e72aada34bb19fb": {
+    "source": "**map_start_at_dock**  在dock（第一个节点）处启动姿势图加载（如果可用）。如果同时设置了pose和dock，优先使用pose",
+    "target": "**map_start_at_dock** Loads the pose graph at the dock (first node) on startup (if available). If both pose and dock are set, pose takes precedence.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:12.457Z"
   },
   "8071d9eb10b67e7f59fb418ed3c96eebaac653dde18db9faaf2af7e6d30942cf": {
     "source": "本节代码学长也发到仓库了，有需要的学弟学妹请看:__I18N_PROTECTED_0__",
@@ -28474,6 +29076,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:27:58.526Z"
+  },
+  "81b1e37b8e36099b504d32818b2795588c6837ba56c9e45fdb1d736f8264ea64": {
+    "source": "**use_map_saver**  实例化地图服务程序并自行订阅map主题",
+    "target": "**use_map_saver** instantiates the map service program and subscribes to the map topic on its own.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:10.410Z"
   },
   "81b6c0a270a1b3fe3e5d0e6f127db5aabeb936fb5a062298683777298e4832b7": {
     "source": "使用gdal驱动程序加载图像",
@@ -29083,6 +29692,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:48:33.998Z"
+  },
+  "83e3985b81923eb04b20f81416c1fbb36e60d6de7067e42286e4ac8e61193fb0": {
+    "source": "先使用",
+    "target": "First use",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:30.384Z"
   },
   "83fac32baaa7127a13eb005c19542d846eb8871479f0a41b2aaec22864ce2f2b": {
     "source": "DSP加速是指CMSIS-DSP库进行三角函数算法优化，使计算速度加快，但是误差会变大一些，不过对于99%的应用场景误差够用了，大概是1e-6单位的误差。",
@@ -31604,6 +32220,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:12:17.849Z"
   },
+  "8f1e4dfdfe82fa1dc9e8c8c279902a5b3bfe41450c3f524d0d12ae9218a6730c": {
+    "source": "**nav_msgs/msg/MapMetaData** 地图元数据，包括地图的宽度、高度、分辨率等。",
+    "target": "**nav_msgs/msg/MapMetaData** Map metadata, including the map's width, height, resolution, and other properties.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:59.257Z"
+  },
   "8f242a12b0fb9ece0260b1d174ddef3608e75ec06af6898ab7d0808508613265": {
     "source": "安装各种环境",
     "target": "Setting up various environments",
@@ -32149,6 +32772,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:04:42.006Z"
+  },
+  "917b128c1bec3bb03324224360f5bebb4d0b563351ff7a115537f7746e0b7758": {
+    "source": "**ceres_preconditioner**  与该求解器一起使用的预处理器。选项：JACOBI、IDENTITY（none）、SCHUR_JACOBI。默认为JACOBI。",
+    "target": "**ceres_preconditioner** The preconditioner used with this solver. Options: JACOBI, IDENTITY (none), SCHUR_JACOBI. Default is JACOBI.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:03.445Z"
   },
   "917efebaadc233911eb74c07ac99a56828619b74f3989ca28a1d9738c8dcdc7b": {
     "source": "通过at方法读取矩阵元素分为针对单通道的读取方法和针对多通道的读取方法，在代码清单2-19中给出了通过at方法读取单通道矩阵元素的代码。",
@@ -32983,6 +33613,20 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:13:58.415Z"
   },
+  "952dbd657bb6a2deb165669beaff2ab82707f5d1c094010ecf0c4e358309d868": {
+    "source": "**free_thresh_default**  栅格单元被认为未被占用的概率阈值。",
+    "target": "**free_thresh_default** The probability threshold below which a grid cell is considered unoccupied.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:56.899Z"
+  },
+  "9533df3b9bdf372f29bf88e2db0f9bb96678333799a2e9257bf8535433cb49f7": {
+    "source": "speed_limit_topic: 指定了速度限制信息的ROS主题。",
+    "target": "speed_limit_topic: Specifies the ROS topic for speed limit information.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:20.043Z"
+  },
   "953d527b473c9de4781fd826bd21ca507e20296f900bd37072561c241b2a7cc7": {
     "source": "__I18N_PROTECTED_0__命令可以检查复杂的 urdf 文件是否存在语法问题；",
     "target": "The __I18N_PROTECTED_0__ command can check complex URDF files for syntax issues.",
@@ -33599,6 +34243,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:23:42.766Z"
   },
+  "97cf9a0f896d562c7addc3e5547d29ab966d6889f2f601000dc97d3294d9e6ce": {
+    "source": "**Loop_match_minimum_response_coarse**  粗略搜索中环路闭合算法的阈值响应要传递给细化",
+    "target": "**Loop_match_minimum_response_coarse** The threshold response of the loop closure algorithm in the coarse search to be passed to the refinement.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:31.810Z"
+  },
   "97da81bfbbbc2db557ad43f4a49abd1955c870b1e4ddc02fd1e2b84a0ee483dd": {
     "source": "声明定义：ST公司编写的HAL库声明为弱函数，需要用户自己去定义",
     "target": "Declaration: The HAL library written by ST is declared as a weak function, requiring the user to define it themselves.",
@@ -34159,6 +34810,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:35:34.514Z"
   },
+  "9a0c8d38af2fa9a9143a03a305d794310397775e02d9b070adc8d665dbc00f42": {
+    "source": "slam_toolbox安装",
+    "target": "slam_toolbox installation",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:57:56.599Z"
+  },
   "9a12678afab7e644651f1a225f3e6d63a9f6eea86d8dbbf47a8970755b928d63": {
     "source": "咱们把base\\_link连接的关节叫joint1，把joint1连接的更上面的刚体叫做link1,",
     "target": "Let's call the joint connecting base_link joint1, and the rigid body above joint1 link1.",
@@ -34551,6 +35209,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:39:54.868Z"
   },
+  "9bc27bb2ffb0cbb25538c5ee1ec6964916a212cc15449e617500e10123fdab7a": {
+    "source": "**throttle_scans**  在同步模式下限制的扫描次数",
+    "target": "**throttle_scans** The number of scans limited in synchronous mode",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:13.890Z"
+  },
   "9bca6c854e61f9deb26179c781482712d58aca7cbcbc75d7876b8b95821e3252": {
     "source": "我们不仅可以修改值，也可以创建新的参数，但是要保证服务端那边调用过undeclared......",
     "target": "We can not only modify values, but also create new parameters, provided that the server has called `undeclared`...",
@@ -34697,6 +35362,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:34:33.527Z"
+  },
+  "9c4a127253d0c879690aeb4402ef1f777aad4fb2b030308066c842c750e9a060": {
+    "source": "sum_scores: 指示是否累加多个障碍物的分数，false可能表示使用最大值或其他逻辑。",
+    "target": "sum_scores: Indicates whether to accumulate scores from multiple obstacles; false may mean using the maximum value or other logic.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:10.923Z"
   },
   "9c56292854492d07df5c17b62290d8ac25c3d2ddeae60dddbe3eeb240b8d97bd": {
     "source": "Webots仿真平台",
@@ -34928,6 +35600,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:16:52.502Z"
+  },
+  "9d779409ccc4d599c3174e18344d72653d7236095383ba6b04bcb33fde85eaab": {
+    "source": "**minimum_travel_heading**  合理更新的最小航向变化",
+    "target": "**minimum_travel_heading** Minimum reasonable heading change for an update",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:24.711Z"
   },
   "9d796e53d1146a2702eeda0cdf44fa4ec03fa0cbf568b62d29fb1a968223e17a": {
     "source": "                  1个阿拉伯数字 = 1个字符",
@@ -35278,6 +35957,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:57:19.731Z"
+  },
+  "9ed57a56a1895f761d79abd16fc801dc6d94e85c39902c86b9e95ed9a4672fbb": {
+    "source": "/global_costmap/global_costmap订阅的话题",
+    "target": "The topic subscribed to by /global_costmap/global_costmap",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:06.921Z"
   },
   "9ed9548c764ec35ecc656296671cee21aa95eeeb45a14bd5a4c94f194d101836": {
     "source": "**occupied\\_thresh\\_default**  栅格单元被认为占用的概率阈值。",
@@ -35657,6 +36343,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:11:52.195Z"
   },
+  "a0c9946c56a00b6ac9274ff40d8c79e3e8988aa3c2d7150510605448ef98f4f7": {
+    "source": "**base_frame**  基坐标系",
+    "target": "**base_frame** Base coordinate system",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:07.849Z"
+  },
   "a0e28439948f25eceb2b1bc0996c07e2aee00c1f5b46061d371948379848610d": {
     "source": "Run（运行程序）和Debug（调试程序）？",
     "target": "Run (running a program) and Debug (debugging a program)?",
@@ -35705,6 +36398,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:56:57.918Z"
+  },
+  "a1173569cd72415bd4b5bd4f3ddf7cf66ed5c70d7929b08a98ec0fecd2bf408d": {
+    "source": "**use_scan_matching**  是否使用扫描匹配来优化里程位姿",
+    "target": "**use_scan_matching** – whether to use scan matching to optimize odometry poses.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:23.618Z"
   },
   "a1195419074fb387b2a20fb0afe4fe67f6fe5ab20a8a61b2e5ab0222b0e2b34f": {
     "source": "该函数第一个参数以字符串形式给出待读取图像的地址，第二个参数是设置读取图像的形式，默认的参数是以彩色图的形式读取，针对不同需求可以更改参数，在OpenCV 4.1中给出了13种模式读取图像的形式，总结起来分别是以原样式读取、灰度图读取、彩色图读取、多位数读取、在读取时将图像缩小一定尺寸等形式，具体可选择的参数及作用见表2-3。这里需要指出的是，将彩色图像转成灰度图通过编解码器内部转换，可能会与OpenCV程序中将彩色图像转成灰度图的结果存在差异。这些标志参数在功能不冲突的前提下可以同时声明多个，不同参数之间用\"",
@@ -35979,6 +36679,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:20:01.327Z"
   },
+  "a21511c065a630ac58ab79df4dfcbdf62eca32f8f044cefbffbd121acda92fe6": {
+    "source": "**use_response_expansion**  如果没有找到可行的匹配，是否自动增加搜索网格大小",
+    "target": "**use_response_expansion** If no feasible match is found, whether to automatically increase the search grid size.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:43.590Z"
+  },
   "a219d92519eb78d53c8217ff42a31a99b884bded648ecfe32e33cddf38cf06d2": {
     "source": "硬盘1：前半部分是Win的C盘，D盘等，在末尾新建分区给 Linux",
     "target": "Hard drive 1: The first part contains Windows C drive, D drive, etc. Create a new partition at the end for Linux.",
@@ -36238,6 +36945,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:17:09.907Z"
   },
+  "a32746e47404632c6557c7a90f28506ee6ccc55ad9c5e44ebeac0cae20103f37": {
+    "source": "**ceres_linear_solver**  Ceres 使用的线性求解器。选项：SPARSE_NORMAL_CHOLESKY、SPARSE_SCHUR、ITERATIVE_SCHUR、CGNR。默认为 SPARSE_NORMAL_CHOLESKY。",
+    "target": "**ceres_linear_solver** The linear solver used by Ceres. Options: SPARSE_NORMAL_CHOLESKY, SPARSE_SCHUR, ITERATIVE_SCHUR, CGNR. Default is SPARSE_NORMAL_CHOLESKY.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:02.319Z"
+  },
   "a3378c25acb921b14779836a13b8ad1c07370edc06a0a61e6dd68e46c9a1a063": {
     "source": "编辑car.urdf.xacro文件，输入如下内容：",
     "target": "Edit the `car.urdf.xacro` file and enter the following content:",
@@ -36356,6 +37070,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:21:31.483Z"
+  },
+  "a3cf87421854fc8163ff1094695406819a514dbb9ed81b2f533b4ceb9f15cadf": {
+    "source": "general_goal_checker: 定义了一个通用的目标检查器，用于确定机器人是否已达到其目标位置和方向。",
+    "target": "general_goal_checker: Defines a general goal checker used to determine whether the robot has reached its target position and orientation.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:15.438Z"
   },
   "a3d4033d44ffcd12a482b063275021e927283bc9d8061922aac1fb9b3d9c270d": {
     "source": "缺点：需要同时开着VScode和MDK5，各司其职，不统一。C/C++插件的代码提示虽比mdk5好，但也是过于拉胯。(远不如MDK6+Clangd)",
@@ -37316,6 +38037,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:13:07.209Z"
   },
+  "a829bd6b3273d6ffbaa4177b471f884072f8f894f0aceff917babb624270cc45": {
+    "source": "**Loop_match_minimum_response_fine**  精细搜索中循环闭合算法的阈值响应传递给细化",
+    "target": "**Loop_match_minimum_response_fine** The threshold response of the loop closure algorithm during fine search is passed to the refinement.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:32.537Z"
+  },
   "a82ac4cb9503a48e7c16b61926807c0003eaaeb8a981385d5810f26bbf00b175": {
     "source": "然后使能DSP库",
     "target": "Then enable the DSP library.",
@@ -38001,6 +38729,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:39:07.408Z"
+  },
+  "ab278fc3794be3d064262f506bbaafed49bf1f9c5e432a3079fa85024bce3e5a": {
+    "source": "**ceres_loss_function**  拒绝异常值的损失函数类型。没有一个等于损失平方。选项：None、HuberLoss、CauchyLoss。默认值：None。",
+    "target": "**ceres_loss_function** Loss function type for rejecting outliers. None is equivalent to squared loss. Options: None, HuberLoss, CauchyLoss. Default: None.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:05.788Z"
   },
   "ab34c20d09545e7c806718b7a9277755b50f07ad6b23f98cd48a88ad93cadde7": {
     "source": "**低成本:** 当前机器人成本居高不下，动辄几十万，仿真可以大大降低成本，减小风险",
@@ -38709,6 +39444,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:49:27.704Z"
   },
+  "ae430efa8cdfe290970d5fc71956fb0b833910f712c6d9a9681e4671c067dee6": {
+    "source": "slam_toolbox基本使用",
+    "target": "Basic usage of slam_toolbox",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:44.508Z"
+  },
   "ae4bb05bc03c708a841ba7279d9bcc6095d73389e0decfc94dbb4cd8239d8424": {
     "source": "mkdir -p 新建文件夹",
     "target": "mkdir -p create a new folder",
@@ -39129,6 +39871,20 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:29:32.319Z"
   },
+  "b028bfc9357e7702c291e5a368c4a5939bd4315f9860e5955e68ea66ef5b4499": {
+    "source": "**correlation_search_space_smear_deviation**  用于平滑响应的多模态涂抹量",
+    "target": "**correlation_search_space_smear_deviation**   The multimodal smear amount used to smooth the response.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:34.473Z"
+  },
+  "b0319307b020a96e0956681e2324526c0ebca85630545d32fcf9081a6b7ea924": {
+    "source": "已执行：",
+    "target": "Executed",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:57.725Z"
+  },
   "b04562388ef2096f09d0f878140bd02359a116e3c460fdcd0383ee6244db4b71": {
     "source": "1.安装",
     "target": "1. Installation",
@@ -39500,6 +40256,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:08:27.063Z"
   },
+  "b1d5ca4438e32fd46e0c87af6f2a7f79bd12d5b30a7e715374ed583062adb29a": {
+    "source": "**Loop_match_minimum_chain_size**  寻找循环闭合的扫描的最小链长度",
+    "target": "**Loop_match_minimum_chain_size** Minimum chain length for finding closed-loop scans",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:29.999Z"
+  },
   "b1f3fe1bd5d7c8ab752cdcf21293342ce62fa3e2dc0f332b18cc98344a0b7c64": {
     "source": "如果SSH客户端需要自行安装，那么调用如下命令:",
     "target": "If the SSH client needs to be installed manually, run the following command:",
@@ -39598,6 +40361,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:59:50.774Z"
   },
+  "b26bda37bb68aae0cca928007c9138e74b65cba21c2dd280db9843611eccb0fe": {
+    "source": "**nav_msgs/msg/OccupancyGrid** 地图栅格数据，一般会在rviz中以图形化的方式显示。",
+    "target": "**nav_msgs/msg/OccupancyGrid** map grid data, typically displayed graphically in RViz.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:00.074Z"
+  },
   "b273f2a8d3619099e5289ceb964673acb0aee8a7768c0a26d8a02ee6f566ae49": {
     "source": "基于LLVM/Clang的现代编译器",
     "target": "A modern compiler based on LLVM/Clang",
@@ -39640,6 +40410,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:21:34.865Z"
   },
+  "b29a6f9879222fe7f2efbe54365350bff08e1dbef5f7aac0649bcfa47ee2dbc1": {
+    "source": "在选择使用sync_slam_toolbox_node还是async_slam_toolbox_node时，需根据应用需求和环境权衡。若实时性关键且能接受一定定位或建图误差，选择async_slam_toolbox_node。若对数据一致性和准确性要求较高，且实时性非首要考虑，则选择sync_slam_toolbox_node。另外二者的主要区别在于数据处理的方式，而两个节点发布的话题、订阅的话题、发布的服务以及使用的参数等都是一样的。",
+    "target": "When choosing between `sync_slam_toolbox_node` and `async_slam_toolbox_node`, you need to weigh the application requirements and environment. If real-time performance is critical and some localization or mapping error is acceptable, choose `async_slam_toolbox_node`. If data consistency and accuracy are more important, and real-time performance is not the primary concern, then choose `sync_slam_toolbox_node`. Additionally, the main difference between the two lies in the data processing method, while the topics published, topics subscribed to, services offered, and parameters used by both nodes are the same.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:00.271Z"
+  },
   "b2a1900bf6e55ba0a41f2707c54ee593d3510ed18e636e51d4650b675f0c20c1": {
     "source": "找到U盘，比如我的U盘是爱国者aigo的，所以应该选aigo。",
     "target": "Find the USB drive. For example, my USB drive is an aigo, so I should select aigo.",
@@ -39667,6 +40444,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:20:28.608Z"
+  },
+  "b2b4d8b6ed4a44380bd23300817d2101079c3bee2295d44a86424c6ebaf3f59f": {
+    "source": "**map_file_name**  启动时加载的位姿图文件的名称（如果可用）",
+    "target": "**map_file_name** The name of the pose graph file loaded at startup (if available).",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:11.125Z"
   },
   "b2c6918c1a752c65c6817cc122a9b2deac6356f845f92b786cff3c5becd1e98a": {
     "source": "从轴的逆方向去看和顺着方向去看转向，是完全相反的方向，但是在平面上容易产生视觉错觉，难以理解。可以拿支笔或者电机，转动一下试试。",
@@ -39934,6 +40718,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:24:10.675Z"
   },
+  "b3d53a8588d388c2a0b87c21a868700bdf4f775fa7280c70e5096f6ff2780252": {
+    "source": "**topic_name**  话题名称。",
+    "target": "**topic_name** Topic name.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:04.067Z"
+  },
   "b3e24d5f71ff7269623b131024501fa9a647935f127b0bc42b342183d885ee91": {
     "source": "如果你用的不是KDE，那么也可以直接修改__I18N_PROTECTED_0__：在exec的末尾加上__I18N_PROTECTED_1__",
     "target": "If you are not using KDE, you can also directly modify __I18N_PROTECTED_0__: add __I18N_PROTECTED_1__ at the end of exec.",
@@ -39982,6 +40773,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:28:05.687Z"
+  },
+  "b41179861505c5b737f36c04d747b14e3f09126d428f1c774fac38b463e1238c": {
+    "source": "Jazzy 会自动加载 Nav2 内置 BT 插件，__I18N_PROTECTED_0__ 只保留自定义 BT 插件。",
+    "target": "Jazzy will automatically load Nav2's built-in BT plugins, __I18N_PROTECTED_0__ only keep custom BT plugins.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:41.548Z"
   },
   "b41c348d3d0da676ce41add6bf56244786b4e0fcf1ff1a68e1d35f7c9d76b1c1": {
     "source": "scale: 定义了该障碍物评估在整体评估中的权重或影响程度。",
@@ -40627,6 +41425,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:30:44.149Z"
   },
+  "b6803daf10f65920e30417b9a271d9edccbac48dd7f0623fcca09f53ddfbae88": {
+    "source": "添加 __I18N_PROTECTED_0__ 和 __I18N_PROTECTED_1__。",
+    "target": "Add __I18N_PROTECTED_0__ and __I18N_PROTECTED_1__.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:47.997Z"
+  },
   "b69079d111d3968b329d445938df27b3011523ece77514a6350c7eb89c5d5692": {
     "source": "在下面框中加上：(加完后可能还会误报错，但是已经可以正常go to definition了)",
     "target": "Add the following inside the box below: (After adding, there may still be false error reports, but go to definition should work normally.)",
@@ -40935,6 +41740,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:08:39.579Z"
   },
+  "b808312fe6a4197ea1ddb8c192f0b02400a7d8797e01762ec5d2922767829c32": {
+    "source": "cartographer_node参数",
+    "target": "cartographer_node parameters",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:52.017Z"
+  },
   "b80ad6aebf4667c496ec4d696f8d232043676692a630475a6eadd96569765cb2": {
     "source": "Windows就更简单了，根本不用多下其他东西，只要你在MDK5上能用，基本在MDK6上也能用。",
     "target": "Windows is even simpler—there's no need to download anything extra. As long as it works on MDK5, it will basically work on MDK6 as well.",
@@ -41131,6 +41943,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:12:08.743Z"
   },
+  "b8bab5f8a293bc41afc9dc820d4ff7f1855bb75fbdf18ad2c6c1fb8eaedfc8b3": {
+    "source": "slam_toolbox节点说明",
+    "target": "slam_toolbox node description",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:57:58.120Z"
+  },
   "b8c111abb1b1503558c4ce92bb214d22bb516b474ba03d554806d265145054b2": {
     "source": "重启后，查询nouveau是否还开着，如果什么都不出现，说明禁用成功。",
     "target": "After rebooting, check whether nouveau is still active. If nothing appears, it means the disable was successful.",
@@ -41278,6 +42097,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:00:39.112Z"
   },
+  "b981f662cf716cb2f3b8431dc76a1e35b2ae107fbf1f4f8c1be7b79de30ee9a9": {
+    "source": "这一节Humble和Jazzy之间有点区别,所以分开讲.",
+    "target": "This section has some differences between Humble and Jazzy, so they are covered separately.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T19:00:13.803Z"
+  },
   "b99fe725d3f0b08c9d12254e682e31c3f4a2a0e501c326d7996f54ef345dcacf": {
     "source": "终端下输入如下指令`ll /dev",
     "target": "In the terminal, enter the following command: `ll /dev`",
@@ -41361,6 +42187,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:24:43.871Z"
+  },
+  "ba40703cda7d8f6b01dcc75a87c1f21e301e1dd829deb2f0e7398f22732eeab0": {
+    "source": "goal_checker_plugins: 指定了将要使用的目标检查器插件列表。",
+    "target": "goal_checker_plugins: Specifies the list of goal checker plugins to be used.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:16.043Z"
   },
   "ba493bd99500b2c160618c0a7d294ebd469429afeb99cfedc8aeefae44029959": {
     "source": "如果你之前安装过 docker，请先删掉",
@@ -41557,6 +42390,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:14:53.710Z"
+  },
+  "bb8c2389fce664552f7b05dd993e243cc65a2e49cbac79381662b744f0d3d171": {
+    "source": "**minimum_time_interval**  在同步模式下处理的扫描之间的最短持续时间",
+    "target": "The minimum time interval between scans processed in synchronous mode.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:19.832Z"
   },
   "bb8d7a8e48386f11b1afe0b374cf6c43c5e1e35f8d9174df775be1277fbff365": {
     "source": "允许客户端请求planner_server按照一系列路点进行导航",
@@ -42321,6 +43161,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:26:55.245Z"
   },
+  "bf41cb3f2f67d7b6725c4de2676d9ef260bc1ebf46c2c8d57b7d10b0dfc07233": {
+    "source": "启动时报错：",
+    "target": "Startup error:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:53.628Z"
+  },
   "bf42fb4a074e67b8c4d58c4929767845d5c5dd2354e5c8a83ec2f1e1f67c27b5": {
     "source": "建议用这个来获取路径。",
     "target": "It is recommended to use this to obtain the path.",
@@ -42418,6 +43265,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:29:24.683Z"
+  },
+  "bf858c1ffac92cd0605a12bbfe86627a0f68a7787084975e20400bd3ea3744a6": {
+    "source": "**loop_search_space_smear_deviation**  用于平滑响应的多模态涂抹量",
+    "target": "**loop_search_space_smear_deviation** — multimodal smear amount for smoothing responses",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:37.112Z"
   },
   "bf8e708828d3359e1e54d946d38397eada762b6ec70f9cb90d7846414bcd22ef": {
     "source": "其所对应的话题名称是这个。",
@@ -42572,6 +43426,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:39:15.951Z"
+  },
+  "c0833809d21e964065bc0b74cf4330d9f1d37f5b39d73ab72c7deb1e35ea8ff2": {
+    "source": "progress_checker: 定义了一个进度检查器，用于评估机器人是否在向目标移动。",
+    "target": "progress_checker: Defines a progress checker used to evaluate whether the robot is moving toward the target.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:18.507Z"
   },
   "c095403fa6877d5c1d19df447e516aa88ac810f57c42ca04090d770b9762cb74": {
     "source": "仓库:__I18N_PROTECTED_0__",
@@ -42810,6 +43671,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:09:19.175Z"
+  },
+  "c1c72290e1c4ce083671093ddc1bd44ea75b0255ed85a90a0ca750888a51928e": {
+    "source": "controller_plugins: 指定了将要使用的控制器插件列表，这里只包含了FollowPath。",
+    "target": "controller_plugins: Specifies the list of controller plugins to be used; here, it only includes FollowPath.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:13.795Z"
   },
   "c1cee83e275460e5edf151c406de486960afa5c1cf3a60c6726035c3cc143e23": {
     "source": "内核名称示例",
@@ -43084,6 +43952,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:14:59.386Z"
   },
+  "c327d317f6f383f82a87d73ebc0fd116e485d67472275d0dac30e212e5f2dcf6": {
+    "source": "Nuxt.js网站框架",
+    "target": "Nuxt.js website framework",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T19:00:15.236Z"
+  },
   "c33cdc5e82d4b119095aa6a8c62e29fa9c0ed5cf5573ee13b40813d098737f94": {
     "source": "先从kde store下载一个心仪的主题，然后解压出来。",
     "target": "First, download a theme you like from the KDE Store, then extract it.",
@@ -43293,6 +44168,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:10:41.997Z"
+  },
+  "c3e535ee01f434c0890e5c609e0b9419d5d2e4091b99cfce41a39721c1b0fa09": {
+    "source": "将 __I18N_PROTECTED_0__ 包内 launch 文件的包路径查询保持为 __I18N_PROTECTED_1__，并补充修改边界注释。",
+    "target": "Keep the package path query for the launch file inside the __I18N_PROTECTED_0__ package as __I18N_PROTECTED_1__, and add boundary comments for the modifications.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:38.793Z"
   },
   "c3fe68cb38d461a9b90b7b023d45f1e620183d495a7e03f816ce99191e96cbd8": {
     "source": "__I18N_PROTECTED_0__: 向前左转（组合运动：__I18N_PROTECTED_1__ + __I18N_PROTECTED_2__）",
@@ -44449,6 +45331,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:24:47.370Z"
   },
+  "c94e52540763446bfb9277bb15a15bbece979a78d0c8be1182c6ff2318b07884": {
+    "source": "/global_costmap/global_costmap发布的话题",
+    "target": "The topic published by /global_costmap/global_costmap",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:07.548Z"
+  },
   "c95134639fd1f1ed7fcc1095f28f5f67acd7fe647e8acc74046e2539faa776e6": {
     "source": "系统：Fedora 43 KDE Edition Linux",
     "target": "System: Fedora 43 KDE Edition Linux",
@@ -44553,6 +45442,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:14:46.240Z"
+  },
+  "c9c0396d7a9d63b945f9b2860b9c24b55886dddcd8e9b9d1b4c5fcc1620627f3": {
+    "source": "**yaw_covariance_scale**  从扫描匹配发布位姿时缩放偏航协方差的量。请参阅position_covariance_scale 的描述。默认值：1.0",
+    "target": "**yaw_covariance_scale**  The amount by which to scale the yaw covariance when publishing poses from scan matching. See the description of position_covariance_scale. Default value: 1.0",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:18.295Z"
   },
   "c9c39a6f9f479c3bb1bb80973617495d84518cad7ce127b1ee471d7dbc0159ee": {
     "source": "配置环境(不是红帽系的发行版不用弄)",
@@ -45219,6 +46115,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:46:26.450Z"
   },
+  "ccd88f5b3cb66ff2f85b3a5d007de22a0807011cdd54d25d8f2ff6339cc1706d": {
+    "source": "**correlation_search_space_dimension** 搜索网格大小以进行扫描相关性",
+    "target": "**correlation_search_space_dimension** Search grid size for scan correlation",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:33.212Z"
+  },
   "cce1bb87b7276e647b1091cfd6f78cff3ff34c13be30ea4124835a61b9e7f63d": {
     "source": "代码清单2-22 通过迭代器读取Mat类矩阵元素",
     "target": "Code Listing 2-22 Reading Mat Class Matrix Elements via Iterator",
@@ -45751,6 +46654,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:27:34.018Z"
   },
+  "cfd2d5345eec8778ddd8ec191d3043aa7664715b5e3c2221db986dfc41f3382a": {
+    "source": "failure_tolerance: 定义了容忍失败的时间或距离，用于在评估控制器是否失败时提供一定的缓冲。",
+    "target": "failure_tolerance: Defines the time or distance allowed for tolerating failure, providing a buffer when evaluating whether the controller has failed.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:14.694Z"
+  },
   "cfdc1ce5a19c654256415a47207bdf0da4f7419036334096f8ca5b348938bac5": {
     "source": "数据的存放",
     "target": "Data storage",
@@ -46031,6 +46941,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:38:17.333Z"
   },
+  "d0db16769b6e426b8b56722df6621cead1ee95ef597e5abc7fd0a1a964e59267": {
+    "source": "另外用 __I18N_PROTECTED_0__ 做过短启动检查：",
+    "target": "Additionally, a short startup check was performed using __I18N_PROTECTED_0__.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:58.449Z"
+  },
   "d0e060dc451aba217875cdbd1acb78e70bdc0ec97b6ffc5295f2451410131aba": {
     "source": "但回调函数是需要事件触发的，并不是自己在main里调用的。",
     "target": "But callback functions require an event to trigger them; they are not called directly from within `main`.",
@@ -46086,6 +47003,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:08:31.240Z"
+  },
+  "d104f60044d2a10cab0ee12c7185213b46df658322517ae7e03ac65070acb3da": {
+    "source": "结果：",
+    "target": "Result:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:59.056Z"
   },
   "d10848505a97aaa66775b422e8c53c07143468d16fb6739c05af52b4b228fa90": {
     "source": "RP类型",
@@ -46310,6 +47234,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:38:19.016Z"
+  },
+  "d1dc5901ffd99ec1e1fbfe6ffadc6564e38a01fe0f97dd946361584d0ee01bfd": {
+    "source": "**do_loop_close**  是否进行循环闭合（如果不确定，答案是“true”）",
+    "target": "**do_loop_close** Whether to perform loop closure (if unsure, the answer is \"true\")",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:29.250Z"
   },
   "d1fc037429f77af1bd3e0d6a19abe4a91c619a53ed14735998e83b3204c71244": {
     "source": "__I18N_PROTECTED_0__是修改selinux的策略，__I18N_PROTECTED_1__ 策略是 SELinux 的 默认策略，主要对 高风险的网络服务（如 Apache、MySQL、SSH）进行强制访问控制，其他非关键进程沿用传统的 Linux 用户/组权限（DAC）。这种设计在安全性和易用性之间取得了平衡,所以无需修改。",
@@ -46583,6 +47514,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:30:07.750Z"
+  },
+  "d3468f009c903048a31d1253d6d8479751fedb9d7608a5f183ae4d767de083f9": {
+    "source": "**fine_search_angle_offset**  用于测试精细扫描匹配的角度范围",
+    "target": "**fine_search_angle_offset** Used to test the angular range for fine scan matching.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:39.388Z"
   },
   "d3606d78006ef49df02689dccf97275e8644507380746c506f8bb22c64da3738": {
     "source": "注意我们使用PID需要在一个闭环系统里面。什么叫闭环系统，就是有输入有反馈，输入就是能输入一个量去影响和控制我们的系统，反馈就是我们要能知道我们最终控制的东西的状态。在这个漏水的水缸系统中，输入就是这个水桶，我们能通过水桶往水缸里面加水或者从水缸里面舀水出来来影响我们水缸的水平面，反馈的话也就是说我们要能测量水平面，知道水平面是多少。",
@@ -46990,6 +47928,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:26:41.308Z"
   },
+  "d4fe4bd37c7040bd31b503bc8ffdb597bd5c2e9505e7eedfd86bc9231e30039f": {
+    "source": "将重复的 __I18N_PROTECTED_0__ 顶层键合并成一个。",
+    "target": "Merge the duplicate __I18N_PROTECTED_0__ top-level keys into one.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:51.171Z"
+  },
   "d505706dbdcc48c35551fdb94f16cf4111d8c981d123aa2020cc68d654b541d5": {
     "source": "**（仅红帽系，即Ubuntu等Debian系的不用弄）**",
     "target": "**(For Red Hat-based systems only; Ubuntu and other Debian-based systems do not need this.)**",
@@ -47360,6 +48305,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:51:56.757Z"
+  },
+  "d69b31fd748dbe9f7c55ca2dec9f0ae133680767ed9ef2d95f3da4e41da3b350": {
+    "source": "qos_overrides: 定义了ROS服务或主题的QoS（服务质量）覆盖设置，用于调整消息传递的可靠性和性能。",
+    "target": "qos_overrides: Defines QoS (Quality of Service) override settings for ROS services or topics, used to adjust the reliability and performance of message delivery.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:19.325Z"
   },
   "d69c84dda591582074d894294e37c7de18237302a5cf1b3908ecab279eb97ef5": {
     "source": "比较推荐的配置",
@@ -47851,6 +48803,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:12:14.541Z"
   },
+  "d8917f8cf75b6109466845a2a1953e969e27d80fc57e4b0f7516076ffbec900b": {
+    "source": "**debug_logging**  更改日志以进行调试",
+    "target": "**debug_logging** Change logs for debugging",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:13.157Z"
+  },
   "d899e99f6674eb1eb3fb47245ba44f82abba8b4d759699c714cda291e4475c88": {
     "source": "乌龟作为ROS老测试项目了，必须拉出来溜溜！",
     "target": "Turtle is a classic ROS test project, so it's a must to take it for a spin!",
@@ -47934,6 +48893,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:21:41.621Z"
+  },
+  "d9034bf0cb7dab55848f244ff2079928045f005a869fb13d53c54f7f7197ff03": {
+    "source": "__I18N_PROTECTED_0__ 成功加载 __I18N_PROTECTED_1__ 插件。",
+    "target": "__I18N_PROTECTED_0__ successfully loaded the __I18N_PROTECTED_1__ plugin.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T19:00:02.565Z"
   },
   "d90673efbee8920adfdd245e18eee5db250a86a4720c3ec6000e3b732f8c7f0b": {
     "source": "####### get\\_moto\\_offset 处理CAN通信接收到的大疆电机编码器数据，并处理得到 **电机刚开始上电的角度初始值** 函数",
@@ -48256,6 +49222,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:22:29.033Z"
+  },
+  "daaa60f8a72af5afabc5f983f508c836ba6edca00e55a593034e4af7b136f207": {
+    "source": "**link_match_minimum_response_fine**  精细分辨率通过的阈值链接匹配算法响应",
+    "target": "**link_match_minimum_response_fine** Threshold for fine-resolution link matching algorithm response",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:27.268Z"
   },
   "daabd13562697f2e9d192b3c95dbb81670b32c061572a835f8be157ed8ecfe66": {
     "source": "比如我的U盘是H盘。",
@@ -48614,6 +49587,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:41:18.219Z"
   },
+  "dc64cef0f46d62e4cdd566bdbc6f224939f448f052a27abd90f6452dea3dfef9": {
+    "source": "cartographer_occupancy_grid_node订阅的话题",
+    "target": "The topic subscribed to by `cartographer_occupancy_grid_node`.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:52.638Z"
+  },
   "dc700cd7a87f1b154806ed5095a47fd9925a812da625cc1007f8c20bf3ccdeab": {
     "source": "最后一个元素(属性)-__I18N_PROTECTED_0__",
     "target": "The last element (attribute) - __I18N_PROTECTED_0__",
@@ -48670,6 +49650,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:44:54.800Z"
   },
+  "dc958d2c1c5786b2a1f3e012e8ddfad20e67d21798a877499c4f6c9e56c6f5d6": {
+    "source": "**map_update_interval**  更新 2D 占用地图的时间间隔",
+    "target": "**map_update_interval** The time interval for updating the 2D occupancy map.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:15.325Z"
+  },
   "dcab7362e362e6933b32763b0f4f85c25fc47b136cd5dfce490303f4492494e6": {
     "source": "记得文件名首字母要大写！",
     "target": "Remember the first letter of the filename should be capitalized!",
@@ -48683,6 +49670,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:10:32.629Z"
+  },
+  "dcb728ae01bffea2bd01ca67e8af86bc201bfc1d47c0fec98d6508db67dd4b2f": {
+    "source": "__I18N_PROTECTED_0__ 等改为 __I18N_PROTECTED_1__ 等",
+    "target": "Change __I18N_PROTECTED_0__ etc. to __I18N_PROTECTED_1__ etc.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:45.948Z"
   },
   "dcb7ea8d308314a6fe33bb0dcdd8b600e2a3bbd9d42a17bb0984fe3d3fb2df0f": {
     "source": "以下是转角位移标定的主要步骤：",
@@ -49531,6 +50525,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:09:55.927Z"
   },
+  "e0322372b92309f16cbd8b4cf62d4a3893fbff9d9366bb79c33b058891cb0d23": {
+    "source": "**（5）waypoint_follower相关配置文件**",
+    "target": "**(5) Waypoint Follower Related Configuration Files**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:28.233Z"
+  },
   "e04ecf2869fcbb8f458546f3c4373854e607255893f6166d5c7d6f9df0f8207f": {
     "source": "执行该launch文件后，将生成一个窗口，该窗口中并无任何内容，下一步我们就可以着手创建具体的仿真内容了。",
     "target": "After executing this launch file, a window will appear with no content inside. Next, we can proceed to create the specific simulation content.",
@@ -50105,6 +51106,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:41:48.634Z"
   },
+  "e2e0957989a59419afdc7b98c5f43290319ce4f43701cd8aa90bc952be7ca07f": {
+    "source": "这个/tf发布的具体是map到odom的坐标变换，所以需要你自己去处理odom和base_link之间的坐标关系。",
+    "target": "This `/tf` specifically publishes the coordinate transform from `map` to `odom`, so you need to handle the coordinate relationship between `odom` and `base_link` yourself.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:48.297Z"
+  },
   "e2e6cf379c811754839c0b0a1bd13915f099e25aa6f747186f20147818d03d83": {
     "source": "    因为它本质上是 C++ 标准把 {fmt} 库（fmtlib）正式吸收进来。",
     "target": "Because it essentially means the C++ standard has officially absorbed the {fmt} library (fmtlib).",
@@ -50126,6 +51134,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:15:57.157Z"
   },
+  "e2fe6725079de0a0d6537a684be9bd5e1316ca7ea9468227cc2464cb9498c200": {
+    "source": "__I18N_PROTECTED_0__ 成功创建 __I18N_PROTECTED_1__ 和 __I18N_PROTECTED_2__。",
+    "target": "__I18N_PROTECTED_0__ successfully created __I18N_PROTECTED_1__ and __I18N_PROTECTED_2__.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T19:00:00.055Z"
+  },
   "e3029af554a6773183665130b829498f97afbbc1c1f82fc998f6b281f8e38f3d": {
     "source": "类型安全性",
     "target": "Type safety",
@@ -50139,6 +51154,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:49:09.883Z"
+  },
+  "e311a5e883aee2c3f80a1fe6ded04e17ab17f439b06563ddf1c457fc5a4c94cb": {
+    "source": "use_sim_time: 指示是否使用模拟时间，这在ROS仿真环境中非常有用。",
+    "target": "use_sim_time: Indicates whether to use simulated time, which is very useful in the ROS simulation environment.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:20.655Z"
   },
   "e31d7f8e5dd3d66ed5de53daae92b38d1cb6e3e9b70a65973eec74a4f6c74fc5": {
     "source": "你可以根据你的需要，按照之前的说明来自行增减或修改这些选项。如果 cmake 命令出错，往往是缺少依赖项或配置的生成选项不正确所致，可根据提示信息来检查。如果执行成功，就可以进行编译(进行Makefiles编译)了：",
@@ -50294,6 +51316,20 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:46:54.903Z"
   },
+  "e3ce5aef4015f767a8143ce07594f814b97a67764f71a80d84bfeb21d2aeba1d": {
+    "source": "该launch文件主要是加载了cartographer_ros下的cartographer_node与cartographer_occupancy_grid_node节点，并且会从当前功能包的params下读取一个名为mycar.lua的配置文件。这个配置文件还不存在，接下来需要在params目录下新建mycar.lua文件，并输入如下内容：",
+    "target": "This launch file primarily loads the `cartographer_node` and `cartographer_occupancy_grid_node` nodes from `cartographer_ros`, and reads a configuration file named `mycar.lua` from the `params` directory of the current package. This configuration file does not exist yet, so you need to create a new `mycar.lua` file in the `params` directory and enter the following content:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:55.629Z"
+  },
+  "e3d2f95a89cdfb735d4e6cfd952baa2336d3b6a61218b924f8bef6f4501aaa4e": {
+    "source": "整理 planner/controller 参数文件的 YAML 结构。",
+    "target": "Organize the YAML structure of the planner/controller parameter file.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:50.454Z"
+  },
   "e3d488e82b70394f770c1fdd69b4ddc3a28e40e640be6bb2bb1a1fed330eb429": {
     "source": "**运行nvidia cuda 容器进行测试** ：",
     "target": "**Run an NVIDIA CUDA container for testing**:",
@@ -50405,6 +51441,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:33:04.055Z"
+  },
+  "e44f3e05de1d86c1d9e5eb851109c0bfadd7acaafeb6f50012d2db84ccf93d3a": {
+    "source": "没有自定义 BT 插件时不传 __I18N_PROTECTED_0__，避免空列表被解析成无类型参数。",
+    "target": "Do not pass __I18N_PROTECTED_0__ when there is no custom BT plugin, to prevent an empty list from being parsed as an untyped parameter.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:42.364Z"
   },
   "e465976dc627bf219e55abc5f1e84a3937002cf1b84296add089337b858d115c": {
     "source": "创建文件&&查看当前文件夹内的所有文件",
@@ -50727,6 +51770,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:00:44.944Z"
+  },
+  "e632a1a2a963ba6b50c16cd230a02f3bff9e767e44e8c0bf586029cbdc49e4ea": {
+    "source": "**ceres_trust_strategy**  信任区域策略。行搜索策略没有公开，因为它们对于这种用途表现不佳。选项：LEVENBERG_MARQUARDT、DOGLEG。默认值：LEVENBERG_MARQUARDT。",
+    "target": "**ceres_trust_strategy** Trust region strategy. Line search strategies are not exposed because they perform poorly for this use case. Options: LEVENBERG_MARQUARDT, DOGLEG. Default: LEVENBERG_MARQUARDT.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:04.138Z"
   },
   "e63663cfeb802da25b23089f66a2318e55eaf780adac69e708c7ab94320ad210": {
     "source": "允许容器访问宿主机所有GPU资源，需NVIDIA驱动支持",
@@ -51078,6 +52128,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:24:33.968Z"
   },
+  "e7911eeeb9728b659c6215a1a9747d949f55390f92bbc3ba2ebdbff2ceeda6b1": {
+    "source": "**distance_variance_penalty**  应用于匹配扫描的惩罚，因为它与里程姿势不同",
+    "target": "**distance_variance_penalty** A penalty applied to matching scans, as it differs from the odometry pose.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:38.057Z"
+  },
   "e793150a38c66f42530fb33335cef37d72e6b5698b5d8376bb8154f814a4fe4d": {
     "source": "此时，刚刚安装的工具尚未添加至 PATH 环境变量，无法通过“命令窗口”使用这些工具。因此，必须设置一些环境变量。这可以通过 ESP-IDF 提供的另一个脚本进行设置。",
     "target": "At this point, the newly installed tools have not yet been added to the PATH environment variable, so they cannot be used from the command window. Therefore, some environment variables must be set. This can be done using another script provided by ESP-IDF.",
@@ -51245,6 +52302,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:36:52.955Z"
+  },
+  "e862bfaee895785eba0714e1c468e920b61d7e27d4276a5e1ae8b09027405f8e": {
+    "source": "**minimum_distance_penalty**  扫描可以确保大小不会爆炸的最小惩罚",
+    "target": "The **minimum_distance_penalty** scan ensures the minimum penalty that prevents sizes from exploding.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:42.757Z"
   },
   "e86948b011a5f209727fca786dd76b4afa85359d42133ed6c3dc65692d7c9684": {
     "source": "记得要把model放在最前面，放在后面是不可以的，现在已经把路径封装完毕了。",
@@ -51518,6 +52582,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:22:49.001Z"
+  },
+  "e971cfca9c6ae7f41f9fc71c0fa230d975c3afede1a8173bdc687fe3f3367985": {
+    "source": "**link_scan_maximum_distance**  有效链接扫描之间的最大距离",
+    "target": "**link_scan_maximum_distance** Maximum distance between valid link scans",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:27.919Z"
   },
   "e97b7ea58c5c4d89176428857d785f96cf8e87e5f4cc03b73737318d2bd21963": {
     "source": "__I18N_PROTECTED_0__ 采用引用计数的智能指针。 如果你想要将一个原始指针分配给多个所有者（例如，从容器返回了指针副本又想保留原始指针时），请使用该指针。 直至所有 __I18N_PROTECTED_1__ 所有者超出了范围或放弃所有权，才会删除原始指针。 大小为两个指针；一个用于对象，另一个用于包含引用计数的共享控制块。 头文件：__I18N_PROTECTED_2__。 有关详细信息，请参阅[如何：创建和使用 shared\\_ptr 实例](__I18N_PROTECTED_3__)和 [shared\\_ptr 类](__I18N_PROTECTED_4__)。",
@@ -52023,6 +53094,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:44:09.746Z"
   },
+  "eb6f750e0593bcad57053a904caa8b4ec9a482b16c03ac5e0d0a389ac1a036cc": {
+    "source": "**scan_queue_size**  扫描消息对队列长度。在异步模式下应始终设置为 1",
+    "target": "**scan_queue_size** The queue length for scan messages. In asynchronous mode, this should always be set to 1.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:09.391Z"
+  },
   "eb72554ddc6ec4d600762ed62d3a819a3831b8c100a7d1383db54355f50ca61b": {
     "source": "在尾部添加-__I18N_PROTECTED_0__",
     "target": "Add -__I18N_PROTECTED_0__ at the end.",
@@ -52043,6 +53121,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:23:15.831Z"
+  },
+  "eb9093fe801391a8e28f70d75fdd244da41d53239f3273278605c634582f4437": {
+    "source": "**save_map_timeout**  保存地图操作的最大等待时间。",
+    "target": "**save_map_timeout** The maximum wait time for the save map operation.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:56.284Z"
   },
   "eba108422f357ac202f8f8b2ba070d7bc1a314cb85da18de448a6591f2280a5a": {
     "source": "eye(): 构建一个单位矩阵，前两个参数为矩阵的行数和列数，第三个参数为矩阵存放的数据类型与通道数。如果行和列不相等，则在矩阵的(1,1)、(2,2)、(3,3)等主对角位置处为1。",
@@ -52303,6 +53388,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:35:20.531Z"
   },
+  "ec79c7f388b83f27168de395521d7b987a9077817cd1ed965635c07c6c8dc4c1": {
+    "source": "**（2）planner_server相关配置文件**",
+    "target": "**(2) Configuration files related to planner_server**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:26.185Z"
+  },
   "ec8132618fcc82ea0c020780affd20e4a6b7e07bbe1cc7dbebffb486aa60e9d5": {
     "source": "声明定义：ST公司编写的HAL库声明和定义",
     "target": "Declaration and Definition: HAL library declarations and definitions written by STMicroelectronics",
@@ -52365,6 +53457,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:40:32.403Z"
+  },
+  "ece0ca4822dd003ceb87be46a403aab42a4e367a5633f056ee554e5c7df466bf": {
+    "source": "__I18N_PROTECTED_0__ 和 __I18N_PROTECTED_1__ 挂在同一个 __I18N_PROTECTED_2__ 根键下，避免参数解析时覆盖 server 参数。",
+    "target": "__I18N_PROTECTED_0__ and __I18N_PROTECTED_1__ are placed under the same __I18N_PROTECTED_2__ root key to avoid overwriting the server parameters during parameter parsing.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:52.200Z"
   },
   "ece1299a8b98817f35f12d87d5f6672b4363798f09525f8f6d1231579e131556": {
     "source": "类似C/C++的__I18N_PROTECTED_0__.",
@@ -52919,6 +54018,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:26:05.613Z"
   },
+  "ef10ce097242c085f26a4958201c4254e18a4a749d1dbc07de8360008d6412b8": {
+    "source": "对照 Jazzy 官方行为树更新自定义 BT XML。",
+    "target": "Update custom BT XML according to the official Jazzy behavior tree.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:46.595Z"
+  },
   "ef20263c80bed98c21112bbf3871d3f40b454e47dd5895086f298b01e3894413": {
     "source": "多个广播发布的消息组成一个坐标树，要从坐标树中获取不同坐标帧的变换。",
     "target": "Multiple broadcast messages form a coordinate tree, from which transformations between different coordinate frames are obtained.",
@@ -52995,6 +54101,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:17:39.933Z"
+  },
+  "ef7fbeed2ee4b6175493c4bf4f9be427448be640382c416e0ae4e917cf848576": {
+    "source": "**scan_buffer_maximum_scan_distance**  从缓冲区中删除之前扫描，距离之前位姿的最大距离",
+    "target": "**scan_buffer_maximum_scan_distance** The maximum distance from a previous pose at which to remove previous scans from the buffer.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:26.588Z"
   },
   "ef82dca268fe58b1569a43fb84462b3574375964c97b98fa17de8539ef7b2b2e": {
     "source": "    和 cout 不同，它默认不做同步。",
@@ -53108,6 +54221,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:10:34.881Z"
   },
+  "efe7132f68bda2f8323901205f4cc65b956a7cc97f6941a5f95689bf57c699b3": {
+    "source": "cartographer_node发布的服务",
+    "target": "The service published by cartographer_node",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:51.369Z"
+  },
   "efeaf60d2d60d85c3f2ba626a227031b7f13815e75a78ccf2f72c574ce26ccda": {
     "source": "这个旋转矩阵里，有3个长度条件，3个互相垂直条件，所以9个数字里，就剩3个自由度。（也就是向量长度为1限制3个，向量两两垂直限制3个，所以是平移矩阵，3个自由度）",
     "target": "In this rotation matrix, there are 3 length constraints and 3 perpendicularity constraints, so out of the 9 numbers, only 3 degrees of freedom remain. (That is, 3 constraints from unit vector lengths, and 3 from pairwise perpendicularity, so it's a translation matrix with 3 degrees of freedom.)",
@@ -53184,6 +54304,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:31:32.027Z"
+  },
+  "f04bdb520ae706557805d24d1359ac4d158f4b963495f34044a5127e263800c1": {
+    "source": "use_sim_time:=True参数表示使用仿真的时间。",
+    "target": "The `use_sim_time:=True` parameter indicates that simulation time is used.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:47.479Z"
   },
   "f05a424779cc38ffd3e7e66a5512c465fbe167a8aad0f6cfece420c9bf5e5ce6": {
     "source": "数据在内存中的二进制表示方式",
@@ -53458,6 +54585,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:24:56.858Z"
   },
+  "f1af42f67ec45d96b8c256476689d1df6d7e07b05dc1ded17b10e3e784055c10": {
+    "source": "**（4）behavior_server相关配置文件**",
+    "target": "**(4) Configuration files related to behavior_server**",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:27.415Z"
+  },
   "f1b3da33154375b787dd1aa1e5bfa901fe7abceb4e3351ea0173f9095bae0c50": {
     "source": "1.生成多个机器人",
     "target": "1. Generate multiple robots",
@@ -53681,6 +54815,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:56:38.977Z"
+  },
+  "f27a92d5cecb8dbdb978db28c214da31cd680b90172d5a277f59e21f6585c9fb": {
+    "source": "**yaml_filename**  地图数据源。",
+    "target": "**yaml_filename** Map data source.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:04.588Z"
   },
   "f281a577effb8536fecc2b54fb7c521c0442502779f7a1126cff92ee459892b7": {
     "source": "数据处理目标: 比如获取路程（短整型，2个字节，16位2进制)",
@@ -53996,6 +55137,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:21:40.246Z"
+  },
+  "f3bf23a850164840495c24da272c1e0f323a5c85b56ac46d57143134a87b2149": {
+    "source": "重新构建并 source：",
+    "target": "Rebuild and source:",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:59:55.881Z"
   },
   "f3d5655d554b48ab3b2838c7980f45e2030d6e30e565d9a0dc3d0cbe29678efc": {
     "source": "动态广播器\\_C++实现",
@@ -54984,6 +56132,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:09:22.381Z"
   },
+  "f8b701cd43800c4006fa03fa292a3c1d3863012d4813303df82d2fae3a3d7eea": {
+    "source": "启动rviz2，将Fixed Frame设置为map，添加map插件并将话题设置为/map，即可显示slam_toolbox创建的地图了，当机器人运动时，地图也会随之更新。",
+    "target": "Start rviz2, set the Fixed Frame to map, add the map plugin and set the topic to /map, and the map created by slam_toolbox will be displayed. As the robot moves, the map will update accordingly.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:46.760Z"
+  },
   "f8bbd73eb863a98f24b62aa7e8366cbdc7e46066b30543eff61cd2b15dfae6b5": {
     "source": "blob\\_return <int> 如果为1，则该模型可以在blob\\_finder中被检测到（取决于其颜色）。",
     "target": "blob\\_return <int> If set to 1, the model can be detected in blob\\_finder (depending on its color).",
@@ -55263,6 +56418,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:30:27.514Z"
+  },
+  "f9fb3aff782af69b6966cbc9b6ea583bd14e6ca9daae15ea4bc1ee24ebd3ba96": {
+    "source": "**stack_size_to_use**  将堆栈大小重置为的字节数，以启用文件的序列化/反序列化。自由默认值为 40000000，但越少越好。",
+    "target": "**stack_size_to_use** The number of bytes to reset the stack size to, in order to enable file serialization/deserialization. The free default value is 40,000,000, but less is better.",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "updatedAt": "2026-05-16T18:58:22.287Z"
   },
   "f9fd53659fa8262259ac97adc5da8398b7e52348fed2679ec9d6258e024f220a": {
     "source": "      等同于在cmake文件里写上（一般不建议改cmakelists）",
