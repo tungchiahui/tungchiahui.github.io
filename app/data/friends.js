@@ -41,6 +41,14 @@ export const friends = [
     tags: ["讨论"]
   },
   {
+    name: "RoboMaster开源论坛",
+    url: "https://bbs.robomaster.com/",
+    desc: "开源机器人与 RC 社区",
+    icon: "https://www.robomaster.com/favicon.ico",
+    category: "社区",
+    tags: ["讨论"]
+  },
+  {
     name: "Cherish个人博客",
     url: "https://cherish.wang/",
     desc: "记录生活，分享知识，定格美好",
