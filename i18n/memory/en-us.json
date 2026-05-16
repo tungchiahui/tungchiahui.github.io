@@ -12564,6 +12564,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:35:32.672Z"
   },
+  "373750e17fb05664e01befc6f57d6c8052be1f781dbb524b15610a2fa9fad643": {
+    "source": "    因为它本质上是 C++ 标准把 __I18N_PROTECTED_0__ 库（fmtlib）正式吸收进来。",
+    "target": "Because it essentially means the C++ standard has officially absorbed the __I18N_PROTECTED_0__ library (fmtlib).",
+    "provider": "manual",
+    "model": "manual",
+    "updatedAt": "2026-05-16T00:14:22.776Z"
+  },
   "37444f510bb29ec09035fbf69560947e20faa682ac88e9dac70617234b15b47b": {
     "source": "设置区域",
     "target": "Set the area",

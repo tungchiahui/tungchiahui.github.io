@@ -38,21 +38,23 @@ npm run i18n:translate
 npm run i18n:check
 ```
 
-静态部署建议使用不依赖 API 的流程。Pages 如果构建命令是 `npm run build`，可以直接使用，不需要改成手写的组合命令：
+Pages 构建不需要手写 `npm run i18n:gen && ...`，因为 npm 生命周期脚本已经接好了。
+
+如果 Pages 模板或平台默认构建命令是：
 
 ```bash
 npm run build
 ```
 
-原因是 `prebuild` 已经会自动运行 `npm run i18n:gen`。也就是说 Pages 执行 `npm run build` 时，实际会先生成 i18n 内容，再执行 `nuxt build`。
+可以直接使用。原因是 `prebuild` 已经会自动运行 `npm run i18n:gen`。也就是说 Pages 执行 `npm run build` 时，实际会先生成 i18n 内容，再执行 `nuxt build`。
 
-如果你本地要生成静态产物，可以用：
+如果是纯静态 Pages，并且你自己控制构建命令，仍然更推荐：
 
 ```bash
 npm run generate
 ```
 
-`pregenerate` 也会自动运行 `npm run i18n:gen`，所以 `npm run generate` 前同样会先生成 i18n 内容。Pages 正式构建默认不会依赖翻译 API。
+`pregenerate` 也会自动运行 `npm run i18n:gen`，所以 `npm run generate` 前同样会先生成 i18n 内容。两种命令都不会在 Pages 正式构建时依赖翻译 API。
 
 ## 英文翻译记忆库
 
@@ -92,6 +94,59 @@ Frontmatter 里会使用 YAML 注释形式：
 ```yaml
 # i18n-missing: en-us
 ```
+
+## Vue 页面 UI 文案
+
+`i18n:gen` 只处理 Markdown 内容：
+
+```text
+content/posts
+content/wiki
+```
+
+它不会自动翻译 `.vue` 页面里的硬编码文案。原因是 Vue 文件是程序代码，里面混有 template、script、style、路径、配置、SEO 字段、数组数据和注释。直接用脚本扫描 `.vue` 并替换中文，容易把代码、链接、key 或配置改坏。
+
+所以本项目采用两套策略：
+
+```text
+Markdown 正文：构建期脚本自动生成 content/_i18n
+Vue 页面 UI：构建期脚本生成 locale-aware 文案字典
+```
+
+页面 UI 文案应该根据当前路由 locale 渲染，例如 `/en-us/about` 直接输出英文 HTML，而不是访问时再做 DOM 转换。
+
+Vue UI 文案的生成链路是：
+
+```text
+utils/i18n-page-copy-source.ts
+  -> npm run i18n:ui
+  -> utils/generated/i18n-page-copy.ts
+  -> 页面通过 getPageCopy(page, locale) 读取
+```
+
+其中 `zh-cn` 和 `en-us` 在源文件里人工维护，`zh-hant`、`zh-hk`、`zh-tw` 由 OpenCC 在构建期生成。这样不会在浏览器访问期扫描 DOM，也不会在路由切换时做大范围转换。
+
+`npm run build` 和 `npm run generate` 已经通过 `prebuild` / `pregenerate` 自动执行 `npm run i18n:ui`，Pages 默认使用 `npm run build` 时不需要额外配置。
+
+目前已接入路由语言的页面包括：
+
+```text
+/
+/about
+/more
+/stats
+/cv
+```
+
+CV 页面不再维护独立的“中文 / English”状态，而是跟随全站语言：
+
+```text
+/cv 或 /zh-cn/cv -> 中文简历
+/en-us/cv -> 英文简历
+/zh-hant/cv、/zh-hk/cv、/zh-tw/cv -> 中文简历内容，外层页面跟随全站 locale
+```
+
+新增 Vue 页面时，不建议直接写死大量中文。推荐把页面文案放进 `utils/i18n-page-copy-source.ts`，再运行 `npm run i18n:ui` 生成静态文案。只有接入这个源文件的 Vue UI 文案才会自动生成繁体；没有接入的硬编码中文不会被脚本改动。
 
 ## 术语表
 
@@ -253,11 +308,17 @@ mimo-v2-pro
 
 ## 推荐工作流
 
-平时写文章或改中文内容：
+平时写文章或改中文内容，本地检查可以用：
 
 ```bash
 npm run i18n:gen
 npm run build
+```
+
+纯静态预览或部署前也可以用：
+
+```bash
+npm run generate
 ```
 
 本地批量更新英文翻译：
@@ -277,6 +338,6 @@ i18n/overrides/en-us/
 
 `content/_i18n/` 是生成目录，目前在这个仓库里被 `.gitignore` 忽略。Pages 构建时应该运行 `npm run i18n:gen`，用已提交的中文源内容和翻译记忆库重新生成它。
 
-如果 Pages 的构建命令是 `npm run build`，保持这个命令即可。`prebuild` 会自动生成 `content/_i18n/`，不需要在 Pages 上配置翻译 API Key。
+如果 Pages 的构建命令是 `npm run build`，保持这个命令即可，`prebuild` 会自动生成 `content/_i18n/`。如果你能选择命令且目标是纯静态产物，优先用 `npm run generate`。两者都不需要在 Pages 上配置翻译 API Key。
 
 不要把 Pages 构建机当成翻译缓存。稳定缓存应该是提交到 Git 的 `i18n/memory/en-us.json`。

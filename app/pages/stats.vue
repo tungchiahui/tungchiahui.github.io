@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useHead } from '#app'
+import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
+import { getPageCopy } from '~~/utils/i18n-page-copy'
 
 interface MetricRow {
   name: string
@@ -36,18 +38,25 @@ interface OverviewResponse {
   }
 }
 
-useHead({
-  title: '数据统计',
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const isEnglish = computed(() => currentLocaleSlug.value === 'en-us')
+const numberLocale = computed(() => isEnglish.value ? 'en-US' : 'zh-CN')
+
+const copy = computed(() => getPageCopy('stats', currentLocaleSlug.value))
+
+useHead(() => ({
+  title: copy.value.title,
   meta: [
     {
       name: 'description',
-      content: '网站访问数据统计'
+      content: copy.value.metaDescription
     }
   ]
-})
+}))
 
 function formatNumber(value: number | undefined) {
-  return Math.max(0, Number(value || 0)).toLocaleString('zh-CN')
+  return Math.max(0, Number(value || 0)).toLocaleString(numberLocale.value)
 }
 
 function formatPercent(value: number | undefined) {
@@ -61,9 +70,15 @@ function formatDuration(seconds: number | undefined) {
   const m = Math.floor((total % 3600) / 60)
   const s = total % 60
 
-  if (h > 0) return `${h}小时 ${m}分 ${s}秒`
-  if (m > 0) return `${m}分 ${s}秒`
-  return `${s}秒`
+  if (isEnglish.value) {
+    if (h > 0) return `${h}${copy.value.units.hours} ${m}${copy.value.units.minutes} ${s}${copy.value.units.seconds}`
+    if (m > 0) return `${m}${copy.value.units.minutes} ${s}${copy.value.units.seconds}`
+    return `${s}${copy.value.units.seconds}`
+  }
+
+  if (h > 0) return `${h}${copy.value.units.hours} ${m}${copy.value.units.minutes} ${s}${copy.value.units.seconds}`
+  if (m > 0) return `${m}${copy.value.units.minutes} ${s}${copy.value.units.seconds}`
+  return `${s}${copy.value.units.seconds}`
 }
 
 const topLimit = 12
@@ -140,14 +155,14 @@ const summaryCards = computed(() => {
   if (!summary) return []
 
   return [
-    { label: '访客人数', value: formatNumber(summary.visitors) },
-    { label: '访问次数', value: formatNumber(summary.visits) },
-    { label: '浏览次数', value: formatNumber(summary.pageviews) },
-    { label: '跳出次数', value: formatNumber(summary.bounces) },
-    { label: '跳出率', value: formatPercent(summary.bounceRate) },
-    { label: '平均停留', value: formatDuration(summary.avgVisitDuration) },
-    { label: '平均每次浏览', value: `${summary.pagesPerVisit.toFixed(2)} 页` },
-    { label: '累计停留', value: formatDuration(summary.totaltime) }
+    { label: copy.value.summary.visitors, value: formatNumber(summary.visitors) },
+    { label: copy.value.summary.visits, value: formatNumber(summary.visits) },
+    { label: copy.value.summary.pageviews, value: formatNumber(summary.pageviews) },
+    { label: copy.value.summary.bounces, value: formatNumber(summary.bounces) },
+    { label: copy.value.summary.bounceRate, value: formatPercent(summary.bounceRate) },
+    { label: copy.value.summary.avgVisitDuration, value: formatDuration(summary.avgVisitDuration) },
+    { label: copy.value.summary.pagesPerVisit, value: `${summary.pagesPerVisit.toFixed(2)} ${copy.value.units.page}` },
+    { label: copy.value.summary.totaltime, value: formatDuration(summary.totaltime) }
   ]
 })
 
@@ -157,54 +172,54 @@ const sections = computed(() => {
 
   return [
     {
-      title: '热门页面',
+      title: copy.value.sections.paths,
       rows: top.paths,
-      value: (row: MetricRow) => `${formatNumber(row.pageviews)} 浏览 / ${formatNumber(row.visits)} 访问`
+      value: (row: MetricRow) => `${formatNumber(row.pageviews)} ${copy.value.units.pageviews} / ${formatNumber(row.visits)} ${copy.value.units.visits}`
     },
     {
-      title: '来源网站',
+      title: copy.value.sections.referrers,
       rows: top.referrers,
-      value: (row: MetricRow) => `${formatNumber(row.visits)} 访问`
+      value: (row: MetricRow) => `${formatNumber(row.visits)} ${copy.value.units.visits}`
     },
     {
-      title: '渠道',
+      title: copy.value.sections.channels,
       rows: top.channels,
-      value: (row: MetricRow) => `${formatNumber(row.visits)} 访问`
+      value: (row: MetricRow) => `${formatNumber(row.visits)} ${copy.value.units.visits}`
     },
     {
-      title: '国家',
+      title: copy.value.sections.countries,
       rows: top.countries,
-      value: (row: MetricRow) => `${formatNumber(row.visitors)} 访客`
+      value: (row: MetricRow) => `${formatNumber(row.visitors)} ${copy.value.units.visitors}`
     },
     {
-      title: '地区',
+      title: copy.value.sections.regions,
       rows: top.regions,
-      value: (row: MetricRow) => `${formatNumber(row.visitors)} 访客`
+      value: (row: MetricRow) => `${formatNumber(row.visitors)} ${copy.value.units.visitors}`
     },
     {
-      title: '城市',
+      title: copy.value.sections.cities,
       rows: top.cities,
-      value: (row: MetricRow) => `${formatNumber(row.visitors)} 访客`
+      value: (row: MetricRow) => `${formatNumber(row.visitors)} ${copy.value.units.visitors}`
     },
     {
-      title: '浏览器',
+      title: copy.value.sections.browsers,
       rows: top.browsers,
-      value: (row: MetricRow) => `${formatNumber(row.visits)} 访问`
+      value: (row: MetricRow) => `${formatNumber(row.visits)} ${copy.value.units.visits}`
     },
     {
-      title: '操作系统',
+      title: copy.value.sections.os,
       rows: top.os,
-      value: (row: MetricRow) => `${formatNumber(row.visits)} 访问`
+      value: (row: MetricRow) => `${formatNumber(row.visits)} ${copy.value.units.visits}`
     },
     {
-      title: '设备',
+      title: copy.value.sections.devices,
       rows: top.devices,
-      value: (row: MetricRow) => `${formatNumber(row.visits)} 访问`
+      value: (row: MetricRow) => `${formatNumber(row.visits)} ${copy.value.units.visits}`
     },
     {
-      title: '事件',
+      title: copy.value.sections.events,
       rows: top.events,
-      value: (row: MetricRow) => `${formatNumber(row.pageviews)} 次`
+      value: (row: MetricRow) => `${formatNumber(row.pageviews)} ${copy.value.units.times}`
     }
   ]
 })
@@ -216,19 +231,19 @@ const sections = computed(() => {
       <p class="stats-kicker">Analytics</p>
       <h1>
         <i class="fas fa-chart-bar" aria-hidden="true"></i>
-        <span>数据统计</span>
+        <span>{{ copy.title }}</span>
       </h1>
-      <p class="stats-note">以下数据来自 Umami API，支持实时刷新。</p>
+      <p class="stats-note">{{ copy.note }}</p>
       <button class="refresh-btn" type="button" :disabled="pending" @click="handleRefresh">
-        {{ pending ? '刷新中...' : '刷新数据' }}
+        {{ pending ? copy.refreshing : copy.refresh }}
       </button>
     </header>
 
     <section v-if="error" class="error-box">
-      <p>统计数据暂时不可用，请稍后再试。</p>
+      <p>{{ copy.unavailable }}</p>
     </section>
 
-    <section v-else-if="summaryCards.length" class="summary-grid" aria-label="全站指标">
+    <section v-else-if="summaryCards.length" class="summary-grid" :aria-label="copy.overviewLabel">
       <article v-for="card in summaryCards" :key="card.label" class="summary-card">
         <p class="summary-label">{{ card.label }}</p>
         <p class="summary-value">{{ card.value }}</p>
@@ -236,7 +251,7 @@ const sections = computed(() => {
     </section>
 
     <section v-else-if="pending" class="loading-box">
-      <p>正在加载统计数据...</p>
+      <p>{{ copy.loading }}</p>
     </section>
 
     <section v-if="sections.length" class="panel-grid">
@@ -245,19 +260,19 @@ const sections = computed(() => {
         <ol v-if="section.rows.length" class="stats-list">
           <li v-for="(row, index) in section.rows" :key="`${section.title}-${row.name}-${index}`" class="stats-item">
             <span class="stats-rank">{{ index + 1 }}</span>
-            <span class="stats-name">{{ row.name || '直接访问' }}</span>
+            <span class="stats-name">{{ row.name || copy.direct }}</span>
             <span class="stats-value">{{ section.value(row) }}</span>
           </li>
         </ol>
-        <p v-else class="empty-row">暂无数据</p>
+        <p v-else class="empty-row">{{ copy.empty }}</p>
       </article>
     </section>
 
-    <section class="stats-frame-wrap" aria-label="Umami 共享面板">
+    <section class="stats-frame-wrap" :aria-label="copy.frameLabel">
       <iframe
         class="stats-frame"
         src="https://umami.tungchiahui.cn/share/rCG6EZoHmlCmNnWn"
-        title="网站访问数据统计"
+        :title="copy.frameTitle"
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
       />

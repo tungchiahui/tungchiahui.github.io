@@ -6,12 +6,13 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "i18n:ui": "tsx scripts/i18n-generate-ui.ts",
     "i18n:gen": "tsx scripts/i18n-generate.ts",
     "i18n:translate": "tsx scripts/i18n-generate.ts --translate",
     "i18n:check": "tsx scripts/i18n-check.ts",
     "i18n:generate": "npm run i18n:gen",
-    "prebuild": "npm run i18n:gen",
-    "pregenerate": "npm run i18n:gen",
+    "prebuild": "npm run i18n:ui && npm run i18n:gen",
+    "pregenerate": "npm run i18n:ui && npm run i18n:gen",
     "preview": "nuxt preview"
   },
   "dependencies": {

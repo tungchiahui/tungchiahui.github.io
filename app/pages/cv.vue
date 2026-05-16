@@ -1,17 +1,26 @@
 <script setup lang="ts">
 import { useHead } from '#app'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
+import { getCurrentLocaleSlug, replaceLocaleInPath, type LocaleSlug } from '~~/utils/i18n-locales'
 
 type Locale = 'zh' | 'en'
 
-const locale = ref<Locale>('zh')
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const resumeLocale = computed<Locale>(() => currentLocaleSlug.value === 'en-us' ? 'en' : 'zh')
 const photoUrl = 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/tungchiahui.webp'
+const cvLanguageOptions: Array<{ slug: LocaleSlug, label: string }> = [
+  { slug: 'zh-cn', label: '简体中文' },
+  { slug: 'zh-hant', label: '繁體中文' },
+  { slug: 'en-us', label: 'English' }
+]
+
+const getCvLocalePath = (localeSlug: LocaleSlug) => replaceLocaleInPath(route.path, localeSlug)
 
 const resumeCopies = {
   zh: {
     metaTitle: '个人简历 - 董佳辉',
     metaDescription: '董佳辉的个人简历，聚焦 SLAM、三维建图、ROS2 自主导航与机器人智能感知。',
-    languageLabel: '简历语言',
     kicker: 'Personal Resume',
     name: '董佳辉',
     headline: 'SLAM 与机器人自主导航方向',
@@ -129,7 +138,6 @@ const resumeCopies = {
     metaTitle: 'Resume - Tung Chia-hui',
     metaDescription:
       'Resume of Tung Chia-hui, focused on SLAM, 3D mapping, ROS2 autonomous navigation, and robotic perception.',
-    languageLabel: 'Resume language',
     kicker: 'Personal Resume',
     name: 'Tung Chia-hui',
     headline: 'SLAM and Robot Autonomous Navigation',
@@ -245,7 +253,7 @@ const resumeCopies = {
   }
 } as const
 
-const currentResume = computed(() => resumeCopies[locale.value])
+const currentResume = computed(() => resumeCopies[resumeLocale.value])
 
 useHead(() => ({
   title: currentResume.value.metaTitle,
@@ -257,33 +265,24 @@ useHead(() => ({
   ]
 }))
 
-const setLocale = (nextLocale: Locale) => {
-  locale.value = nextLocale
-}
 </script>
 
 <template>
   <main class="cv-page">
     <section class="cv-hero" aria-labelledby="resume-name">
       <div class="hero-main">
-        <div class="language-switch print-hidden" role="group" :aria-label="currentResume.languageLabel">
-          <button
-            type="button"
-            :class="{ active: locale === 'zh' }"
-            :aria-pressed="locale === 'zh'"
-            @click="setLocale('zh')"
+        <nav class="language-switch" aria-label="简历语言切换">
+          <NuxtLink
+            v-for="option in cvLanguageOptions"
+            :key="option.slug"
+            :to="getCvLocalePath(option.slug)"
+            :class="{ active: option.slug === currentLocaleSlug }"
+            active-class=""
+            exact-active-class=""
           >
-            中文
-          </button>
-          <button
-            type="button"
-            :class="{ active: locale === 'en' }"
-            :aria-pressed="locale === 'en'"
-            @click="setLocale('en')"
-          >
-            English
-          </button>
-        </div>
+            {{ option.label }}
+          </NuxtLink>
+        </nav>
 
         <p class="hero-kicker">{{ currentResume.kicker }}</p>
         <h1 id="resume-name">{{ currentResume.name }}</h1>
@@ -424,7 +423,7 @@ const setLocale = (nextLocale: Locale) => {
 
 .language-switch {
   display: inline-grid;
-  grid-template-columns: repeat(2, minmax(88px, 1fr));
+  grid-template-columns: repeat(3, minmax(88px, 1fr));
   align-self: flex-start;
   padding: 0.25rem;
   margin-bottom: 2.1rem;
@@ -433,7 +432,10 @@ const setLocale = (nextLocale: Locale) => {
   background: var(--bg-color);
 }
 
-.language-switch button {
+.language-switch a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 2.25rem;
   padding: 0 0.9rem;
   border: 0;
@@ -442,11 +444,13 @@ const setLocale = (nextLocale: Locale) => {
   color: var(--text-secondary);
   font: inherit;
   font-weight: 800;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
   transition: background-color 0.18s ease, color 0.18s ease;
 }
 
-.language-switch button.active {
+.language-switch a.active {
   background: #0f766e;
   color: #fff;
 }

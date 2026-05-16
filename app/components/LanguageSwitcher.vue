@@ -37,6 +37,8 @@
           :key="locale.slug"
           :to="getTargetPath(locale.slug)"
           class="language-option"
+          active-class=""
+          exact-active-class=""
           :class="{ 'is-active': locale.slug === currentLocaleSlug }"
           :title="locale.fullLabel"
           @click="selectLocale(locale.slug)"
@@ -53,11 +55,12 @@
             <span class="language-option-name">{{ locale.fullLabel }}</span>
             <small>{{ locale.code }}</small>
           </span>
-          <span class="language-check-slot" aria-hidden="true">
-            <i
+          <span class="language-check-slot">
+            <span
               v-if="locale.slug === currentLocaleSlug"
-              class="fas fa-check language-check"
-            ></i>
+              class="language-check"
+              aria-hidden="true"
+            >✓</span>
           </span>
         </NuxtLink>
       </nav>
@@ -414,6 +417,8 @@ function getContentSection(path: unknown): ContentSection | null {
 
 .language-check {
   font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1;
 }
 
 html.dark .language-trigger,

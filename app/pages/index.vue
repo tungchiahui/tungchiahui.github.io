@@ -8,6 +8,7 @@ import {
   getLocaleSectionPath,
   replaceLocaleInPath
 } from '~~/utils/i18n-locales'
+import { getPageCopy } from '~~/utils/i18n-page-copy'
 
 interface FocusArea {
   icon: string
@@ -21,64 +22,28 @@ interface HomeAction {
   label: string
 }
 
-const heroTags = [
-  '技术折腾',
-  '项目记录',
-  '学习笔记',
-  '生活随想'
-]
-
 const route = useRoute()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
 const blogPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'blog'))
 const wikiPath = computed(() => getLocaleSectionPath(currentLocaleSlug.value, 'wiki'))
 const morePath = computed(() => replaceLocaleInPath('/more', currentLocaleSlug.value))
 
+const homeCopy = computed(() => getPageCopy('home', currentLocaleSlug.value))
+
 const homeActions = computed<HomeAction[]>(() => [
-  { to: blogPath.value, icon: 'fas fa-newspaper', label: '浏览博客文章' },
-  { to: wikiPath.value, icon: 'fas fa-book-open', label: '进入 Wiki 知识库' },
-  { to: morePath.value, icon: 'fas fa-table-cells-large', label: '查看更多页面' }
+  { to: blogPath.value, icon: 'fas fa-newspaper', label: homeCopy.value.actions.blog },
+  { to: wikiPath.value, icon: 'fas fa-book-open', label: homeCopy.value.actions.wiki },
+  { to: morePath.value, icon: 'fas fa-table-cells-large', label: homeCopy.value.actions.more }
 ])
 
-const focusAreas: FocusArea[] = [
-  {
-    icon: 'fas fa-microchip',
-    title: '编程与嵌入式开发',
-    summary: '围绕 C/C++、Python 与 Linux 环境，沉淀 STM32、ESP32、FreeRTOS 与驱动开发实践。'
-  },
-  {
-    icon: 'fas fa-robot',
-    title: '机器人与自动化',
-    summary: '持续实践 ROS1 / ROS2 的运动控制、导航建图与传感器融合，并结合 OpenCV 做环境感知。'
-  },
-  {
-    icon: 'fas fa-display',
-    title: '图形界面与工具开发',
-    summary: '使用 Qt6 构建上位机与可视化调试工具，提升机器人项目的开发效率与可维护性。'
-  },
-  {
-    icon: 'fas fa-globe',
-    title: 'Web 与博客工程',
-    summary: '基于 Nuxt 打造内容系统，持续优化内容组织、检索体验与前端性能。'
-  },
-  {
-    icon: 'fas fa-mobile-screen-button',
-    title: '移动端工具实践',
-    summary: '在 Android 平台开发控制与监控工具，实现设备联动、状态可视化与流程提效。'
-  },
-  {
-    icon: 'fas fa-pen-ruler',
-    title: '学习笔记与思考复盘',
-    summary: '以可复用的方式记录踩坑、设计取舍与项目反思，方便后续快速回顾与迭代。'
-  }
-]
+const focusAreas = computed<FocusArea[]>(() => homeCopy.value.focusAreas)
 
-useHead({
-  title: '东澈的折腾天地',
+useHead(() => ({
+  title: homeCopy.value.metaTitle,
   meta: [
-    { name: 'description', content: '探索、学习与创造的记录' }
+    { name: 'description', content: homeCopy.value.metaDescription }
   ]
-})
+}))
 </script>
 
 
@@ -89,10 +54,9 @@ useHead({
         <i class="fas fa-compass" aria-hidden="true"></i>
         Tung Chia-hui Lab Notes
       </p>
-      <h1 id="home-title">欢迎来到东澈的折腾天地</h1>
+      <h1 id="home-title">{{ homeCopy.title }}</h1>
       <p class="hero-summary">
-        这里是我的个人主页，记录学习、开发和生活里的折腾过程:
-        从机器人与嵌入式，到 Web、工具和一些日常思考。
+        {{ homeCopy.description }}
       </p>
 
       <div class="hero-actions">
@@ -102,7 +66,7 @@ useHead({
         </NuxtLink>
       </div>
       <ul class="hero-tags">
-        <li v-for="tag in heroTags" :key="tag">
+        <li v-for="tag in homeCopy.tags" :key="tag">
           <i class="fas fa-check-circle" aria-hidden="true"></i>
           <span>{{ tag }}</span>
         </li>
@@ -111,8 +75,8 @@ useHead({
 
     <section class="focus-section" aria-labelledby="focus-title">
       <div class="section-head">
-        <h2 id="focus-title">本站内容方向</h2>
-        <p>聚焦工程实践与可落地经验，而不是只停留在概念。</p>
+        <h2 id="focus-title">{{ homeCopy.focusTitle }}</h2>
+        <p>{{ homeCopy.focusDescription }}</p>
       </div>
 
       <div class="focus-grid">
@@ -126,15 +90,15 @@ useHead({
       </div>
     </section>
 
-    <section class="latest-section" aria-label="最新内容">
+    <section class="latest-section" :aria-label="homeCopy.latestLabel">
       <div class="latest-grid">
         <article class="latest-panel">
           <header class="panel-head">
             <h2>
               <i class="fas fa-newspaper" aria-hidden="true"></i>
-              <span>最新博客</span>
+              <span>{{ homeCopy.latestBlog }}</span>
             </h2>
-            <NuxtLink :to="blogPath" class="panel-link">查看全部</NuxtLink>
+            <NuxtLink :to="blogPath" class="panel-link">{{ homeCopy.viewAll }}</NuxtLink>
           </header>
           <PostList :limit="5" :show-search="false" />
         </article>
@@ -143,9 +107,9 @@ useHead({
           <header class="panel-head">
             <h2>
               <i class="fas fa-book-open" aria-hidden="true"></i>
-              <span>最新 Wiki</span>
+              <span>{{ homeCopy.latestWiki }}</span>
             </h2>
-            <NuxtLink :to="wikiPath" class="panel-link">查看全部</NuxtLink>
+            <NuxtLink :to="wikiPath" class="panel-link">{{ homeCopy.viewAll }}</NuxtLink>
           </header>
           <WikiList
             :limit="5"

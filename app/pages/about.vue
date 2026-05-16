@@ -9,25 +9,83 @@ import {
 
 const route = useRoute()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const isEnglish = computed(() => currentLocaleSlug.value === 'en-us')
 const cvPath = computed(() => replaceLocaleInPath('/cv', currentLocaleSlug.value))
 const techFootprintPath = computed(() => replaceLocaleInPath('/tech-footprint', currentLocaleSlug.value))
 
-useHead({
-  title: '关于 - Tung Chia-hui',
+const copy = computed(() => isEnglish.value ? {
+  metaTitle: 'About - Tung Chia-hui',
+  metaDescription: 'About Tung Chia-hui, robotics learning, personal website content, and deployment services.',
+  kicker: 'About Tung Chia-hui',
+  title: 'About Me and This Site',
+  lead: 'I am Tung Chia-hui. I currently focus on SLAM, ROS2 autonomous navigation, 3D mapping, robotic perception, and mobile manipulation systems, while continuing to keep close-to-hardware skills such as STM32, RTOS, CAN, and chassis control.',
+  cv: 'View Resume',
+  footprint: 'Tech Footprint',
+  highlights: [
+    { value: 'SLAM', label: 'Main research and project direction' },
+    { value: 'ROS2', label: 'Robotics system platform' },
+    { value: 'STM32', label: 'Embedded control foundation' },
+    { value: 'Nuxt', label: 'Site framework' }
+  ],
+  focusKicker: 'Focus',
+  focusTitle: 'Current Focus Areas',
+  focusLead: 'I want to use runnable robot systems as the main thread: not isolated modules, but mapping, navigation, recognition, control, and hardware debugging connected together.',
+  roadmapKicker: 'Project Line',
+  roadmapTitle: 'Robotics Projects I Want to Build Next',
+  contentKicker: 'Content',
+  contentTitle: 'What This Website Contains',
+  contentLead: 'This is both a technical notebook and a project journal. The content leans toward engineering practice, with pitfalls, configuration, retrospectives, and roadmaps written clearly.',
+  siteKicker: 'Site',
+  siteTitle: 'Site Services and Access Routes',
+  siteLead: 'This site is a fully static Nuxt site. The goal is to deploy cleanly to Pages platforms, with content and pages mostly prerendered to reduce server dependency.',
+  contactKicker: 'Contact',
+  contactTitle: 'Contact',
+  tableStorage: 'Object Storage',
+  tableCdn: 'CDN',
+  tableHost: 'Domain'
+} : {
+  metaTitle: '关于 - Tung Chia-hui',
+  metaDescription: '关于董佳辉、机器人学习方向、个人网站内容与部署服务说明。',
+  kicker: 'About Tung Chia-hui',
+  title: '关于我和这个站点',
+  lead: '我是董佳辉(Tung Chia-hui) 。现在主要关注 SLAM、ROS2 自主导航、三维建图、机器人感知与移动操作系统，也持续保留 STM32、RTOS、CAN 与底盘控制这些贴近硬件的能力。',
+  cv: '查看简历',
+  footprint: '技术足迹',
+  highlights: [
+    { value: 'SLAM', label: '主要研究与项目方向' },
+    { value: 'ROS2', label: '机器人系统平台' },
+    { value: 'STM32', label: '嵌入式控制基础' },
+    { value: 'Nuxt', label: '本站构建框架' }
+  ],
+  focusKicker: 'Focus',
+  focusTitle: '现在重点关注的方向',
+  focusLead: '我希望把“能跑的机器人系统”作为主线：不是只做某个孤立模块，而是让建图、导航、识别、控制和硬件调试真正连起来。',
+  roadmapKicker: 'Project Line',
+  roadmapTitle: '接下来想做成的机器人项目',
+  contentKicker: 'Content',
+  contentTitle: '这个网站会放什么',
+  contentLead: '这里既是技术笔记库，也是项目日志和个人成长记录。内容会偏工程实践，尽量把踩坑、配置、复盘和路线都写清楚。',
+  siteKicker: 'Site',
+  siteTitle: '站点服务与访问线路',
+  siteLead: '本站是纯静态 Nuxt 站点，目标是能部署到 Pages 类平台，内容和页面尽量靠预渲染完成，减少服务器依赖。',
+  contactKicker: 'Contact',
+  contactTitle: '联系与交流',
+  tableStorage: '对象存储',
+  tableCdn: 'CDN',
+  tableHost: '访问域名'
+})
+
+useHead(() => ({
+  title: copy.value.metaTitle,
   meta: [
     {
       name: 'description',
-      content: '关于董佳辉、机器人学习方向、个人网站内容与部署服务说明。'
+      content: copy.value.metaDescription
     }
   ]
-})
+}))
 
-const highlights = [
-  { value: 'SLAM', label: '主要研究与项目方向' },
-  { value: 'ROS2', label: '机器人系统平台' },
-  { value: 'STM32', label: '嵌入式控制基础' },
-  { value: 'Nuxt', label: '本站构建框架' }
-] as const
+const highlights = computed(() => copy.value.highlights)
 
 const focusAreas = [
   {
@@ -56,6 +114,31 @@ const focusAreas = [
   }
 ] as const
 
+const englishFocusAreas = [
+  {
+    title: 'Mobile Robots',
+    description: 'Working around a four-wheel mecanum AMR: chassis control, odometry fusion, SLAM mapping, AMCL localization, and NAV2 path planning.',
+    tags: ['AMR', 'Mecanum', 'NAV2', 'AMCL']
+  },
+  {
+    title: '3D Mapping and Perception',
+    description: 'Connecting 3D mapping, 2D navigation, LiDAR, IMU, cameras, and YOLO recognition into a debuggable robotics system.',
+    tags: ['3D Mapping', 'LiDAR', 'YOLO', 'OpenCV']
+  },
+  {
+    title: 'Manipulators and Operation',
+    description: 'Continuing with MoveIt2, robot kinematics, and ROS2 control so mobile bases, manipulators, and vision tasks can work together.',
+    tags: ['MoveIt2', 'Kinematics', 'ROS2 Control']
+  },
+  {
+    title: 'Embedded and Real-Time Control',
+    description: 'Deepening STM32, FreeRTOS, CAN, PID, motor control, and sensor debugging so upper-layer algorithms can connect to real hardware.',
+    tags: ['STM32', 'FreeRTOS', 'CAN', 'PID']
+  }
+] as const
+
+const localizedFocusAreas = computed(() => isEnglish.value ? englishFocusAreas : focusAreas)
+
 const projectRoadmap = [
   {
     step: '01',
@@ -79,24 +162,49 @@ const projectRoadmap = [
   }
 ] as const
 
+const englishProjectRoadmap = [
+  {
+    step: '01',
+    title: 'Four-Wheel Mecanum AMR Chassis',
+    description: 'Complete omnidirectional motion solving, closed-loop chassis control, wheel odometry, IMU, and LiDAR integration.'
+  },
+  {
+    step: '02',
+    title: 'ROS2 Navigation and Mapping System',
+    description: 'Build a reusable navigation workflow around SLAM, AMCL, NAV2, TF transforms, and RViz2 debugging.'
+  },
+  {
+    step: '03',
+    title: '3D Mapping and Visual Recognition',
+    description: 'Introduce 3D point-cloud mapping and YOLO object recognition so the robot can understand objects in its environment.'
+  },
+  {
+    step: '04',
+    title: 'MoveIt2 Manipulator Integration',
+    description: 'Combine the mobile platform, manipulator planning, and visual perception into a task-oriented mobile manipulation system.'
+  }
+] as const
+
+const localizedProjectRoadmap = computed(() => isEnglish.value ? englishProjectRoadmap : projectRoadmap)
+
 const contentChannels = computed(() => [
   {
-    title: '博客',
-    description: '记录项目复盘、折腾日志、工具经验和阶段性想法。',
+    title: isEnglish.value ? 'Blog' : '博客',
+    description: isEnglish.value ? 'Project retrospectives, tinkering logs, tool notes, and staged thoughts.' : '记录项目复盘、折腾日志、工具经验和阶段性想法。',
     to: getLocaleSectionPath(currentLocaleSlug.value, 'blog'),
-    label: '进入博客'
+    label: isEnglish.value ? 'Open Blog' : '进入博客'
   },
   {
     title: 'Wiki',
-    description: '沉淀 ROS2、Linux、STM32、FreeRTOS、C/C++、OpenCV、YOLO 等系统化笔记。',
+    description: isEnglish.value ? 'Systematic notes on ROS2, Linux, STM32, FreeRTOS, C/C++, OpenCV, YOLO, and more.' : '沉淀 ROS2、Linux、STM32、FreeRTOS、C/C++、OpenCV、YOLO 等系统化笔记。',
     to: getLocaleSectionPath(currentLocaleSlug.value, 'wiki'),
-    label: '进入 Wiki'
+    label: isEnglish.value ? 'Open Wiki' : '进入 Wiki'
   },
   {
-    title: '技术足迹',
-    description: '整理个人机器人技术路线、长期任务清单和项目沉淀。',
+    title: isEnglish.value ? 'Tech Footprint' : '技术足迹',
+    description: isEnglish.value ? 'Personal robotics roadmap, long-term task list, and project notes.' : '整理个人机器人技术路线、长期任务清单和项目沉淀。',
     to: techFootprintPath.value,
-    label: '查看足迹'
+    label: isEnglish.value ? 'View Footprint' : '查看足迹'
   }
 ])
 
@@ -112,6 +220,21 @@ const siteServices = [
     description: '使用 Cloudflare 的静态托管与全球 CDN，让海外访问保持稳定。'
   }
 ] as const
+
+const englishSiteServices = [
+  {
+    region: 'Mainland China',
+    stack: 'Tencent Cloud EO Pages / EdgeOne CDN / DNSPod',
+    description: 'Route and accelerate static pages for mainland access to reduce cross-region waiting time.'
+  },
+  {
+    region: 'Hong Kong, Macao, Taiwan, and International',
+    stack: 'Cloudflare Pages / Cloudflare CDN / DNSPod',
+    description: 'Use Cloudflare static hosting and global CDN to keep overseas access stable.'
+  }
+] as const
+
+const localizedSiteServices = computed(() => isEnglish.value ? englishSiteServices : siteServices)
 
 const cdnNodes = [
   {
@@ -140,16 +263,15 @@ const contacts = [
   <main class="about-page">
     <section class="about-hero" aria-labelledby="about-title">
       <div class="hero-copy">
-        <p class="about-kicker">About Tung Chia-hui</p>
-        <h1 id="about-title">关于我和这个站点</h1>
+        <p class="about-kicker">{{ copy.kicker }}</p>
+        <h1 id="about-title">{{ copy.title }}</h1>
         <p class="hero-lead">
-          我是董佳辉(Tung Chia-hui) 。
-          现在主要关注 SLAM、ROS2 自主导航、三维建图、机器人感知与移动操作系统，也持续保留 STM32、RTOS、CAN 与底盘控制这些贴近硬件的能力。
+          {{ copy.lead }}
         </p>
 
         <div class="hero-actions">
-          <NuxtLink class="about-button primary" :to="cvPath">查看简历</NuxtLink>
-          <NuxtLink class="about-button secondary" :to="techFootprintPath">技术足迹</NuxtLink>
+          <NuxtLink class="about-button primary" :to="cvPath">{{ copy.cv }}</NuxtLink>
+          <NuxtLink class="about-button secondary" :to="techFootprintPath">{{ copy.footprint }}</NuxtLink>
         </div>
       </div>
     </section>
@@ -163,15 +285,13 @@ const contacts = [
 
     <section class="about-section">
       <div class="section-head">
-        <p class="section-kicker">Focus</p>
-        <h2>现在重点关注的方向</h2>
-        <p>
-          我希望把“能跑的机器人系统”作为主线：不是只做某个孤立模块，而是让建图、导航、识别、控制和硬件调试真正连起来。
-        </p>
+        <p class="section-kicker">{{ copy.focusKicker }}</p>
+        <h2>{{ copy.focusTitle }}</h2>
+        <p>{{ copy.focusLead }}</p>
       </div>
 
       <div class="focus-grid">
-        <article v-for="area in focusAreas" :key="area.title" class="focus-card">
+        <article v-for="area in localizedFocusAreas" :key="area.title" class="focus-card">
           <h3>{{ area.title }}</h3>
           <p>{{ area.description }}</p>
           <div class="tag-list">
@@ -183,12 +303,12 @@ const contacts = [
 
     <section class="about-section roadmap-section">
       <div class="section-head compact">
-        <p class="section-kicker">Project Line</p>
-        <h2>接下来想做成的机器人项目</h2>
+        <p class="section-kicker">{{ copy.roadmapKicker }}</p>
+        <h2>{{ copy.roadmapTitle }}</h2>
       </div>
 
       <div class="roadmap-list">
-        <article v-for="item in projectRoadmap" :key="item.step" class="roadmap-item">
+        <article v-for="item in localizedProjectRoadmap" :key="item.step" class="roadmap-item">
           <span class="roadmap-step">{{ item.step }}</span>
           <div>
             <h3>{{ item.title }}</h3>
@@ -200,11 +320,9 @@ const contacts = [
 
     <section class="about-section content-section">
       <div class="section-head">
-        <p class="section-kicker">Content</p>
-        <h2>这个网站会放什么</h2>
-        <p>
-          这里既是技术笔记库，也是项目日志和个人成长记录。内容会偏工程实践，尽量把踩坑、配置、复盘和路线都写清楚。
-        </p>
+        <p class="section-kicker">{{ copy.contentKicker }}</p>
+        <h2>{{ copy.contentTitle }}</h2>
+        <p>{{ copy.contentLead }}</p>
       </div>
 
       <div class="channel-grid">
@@ -218,15 +336,13 @@ const contacts = [
 
     <section class="about-section site-section">
       <div class="section-head">
-        <p class="section-kicker">Site</p>
-        <h2>站点服务与访问线路</h2>
-        <p>
-          本站是纯静态 Nuxt 站点，目标是能部署到 Pages 类平台，内容和页面尽量靠预渲染完成，减少服务器依赖。
-        </p>
+        <p class="section-kicker">{{ copy.siteKicker }}</p>
+        <h2>{{ copy.siteTitle }}</h2>
+        <p>{{ copy.siteLead }}</p>
       </div>
 
       <div class="service-grid">
-        <article v-for="service in siteServices" :key="service.region" class="service-card">
+        <article v-for="service in localizedSiteServices" :key="service.region" class="service-card">
           <h3>{{ service.region }}</h3>
           <strong>{{ service.stack }}</strong>
           <p>{{ service.description }}</p>
@@ -237,9 +353,9 @@ const contacts = [
         <table class="cdn-table">
           <thead>
             <tr>
-              <th>对象存储</th>
-              <th>CDN</th>
-              <th>访问域名</th>
+              <th>{{ copy.tableStorage }}</th>
+              <th>{{ copy.tableCdn }}</th>
+              <th>{{ copy.tableHost }}</th>
             </tr>
           </thead>
           <tbody>
@@ -259,8 +375,8 @@ const contacts = [
 
     <section class="about-section contact-section">
       <div class="section-head compact">
-        <p class="section-kicker">Contact</p>
-        <h2>联系与交流</h2>
+        <p class="section-kicker">{{ copy.contactKicker }}</p>
+        <h2>{{ copy.contactTitle }}</h2>
       </div>
 
       <div class="contact-grid">
