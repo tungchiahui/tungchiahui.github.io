@@ -41,11 +41,19 @@ export const friends = [
     tags: ["讨论"]
   },
   {
+    name: "Cherish个人博客",
+    url: "https://cherish.wang/",
+    desc: "记录生活，分享知识，定格美好",
+    icon: "https://www.cherish.wang/favicon.ico",
+    category: "博主",
+    tags: ["个人"]
+  },
+  {
     name: "时光驿站",
     url: "https://blog.ksah.cn/",
     desc: "记录生活，分享知识，定格美好",
     icon: "https://blog.ksah.cn/img/logo.svg",
     category: "博主",
     tags: ["个人"]
-  }
+  },
 ]
