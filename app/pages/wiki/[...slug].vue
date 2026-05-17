@@ -661,6 +661,7 @@ const isTocActive = (id: string) => activeHeadingId.value === id
 watch(hasMobileDrawer, (isOpen) => {
   if (import.meta.client) {
     document.body.style.overflow = isOpen ? 'hidden' : ''
+    document.body.classList.toggle('wiki-drawer-open', isOpen)
   }
 })
 
@@ -705,6 +706,7 @@ onUnmounted(() => {
   contentResizeObserver?.disconnect()
   contentResizeObserver = null
   document.body.style.overflow = ''
+  document.body.classList.remove('wiki-drawer-open')
 
   if (zoomInstance) {
     zoomInstance.detach()
@@ -1215,7 +1217,7 @@ function normalizePath(path: string) {
   position: relative;
   overflow-x: auto;
   margin: 1.6rem 0;
-  padding: 3rem 1rem 1rem;
+  padding: 0;
   border: 1px solid var(--nav-border, #e5e7eb);
   border-radius: 8px;
 }
@@ -1228,18 +1230,23 @@ function normalizePath(path: string) {
 }
 
 :deep(.wiki-content-body pre code) {
-  padding: 0;
+  display: block;
+  min-width: max-content;
+  padding: 1rem;
   background: transparent;
 }
 
 :deep(.code-toolbar) {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
-  right: 0;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
   padding: 8px 10px;
   border-bottom: 1px solid var(--nav-border, #e5e7eb);
   background: var(--bg-secondary, #f7f7f8);
@@ -1407,7 +1414,7 @@ function normalizePath(path: string) {
   .wiki-toc-sidebar {
     position: fixed;
     inset: 0 auto 0 0;
-    z-index: 1000;
+    z-index: 1510;
     display: block;
     width: min(86vw, 340px);
     max-height: none;
@@ -1435,10 +1442,14 @@ function normalizePath(path: string) {
   .wiki-drawer-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 999;
+    z-index: 1500;
     display: block;
     border: 0;
-    background: rgba(15, 23, 42, 0.45);
+    background: rgba(15, 23, 42, 0.36);
+  }
+
+  :global(body.wiki-drawer-open .main-header) {
+    z-index: 900;
   }
 
   .wiki-page-navigation {

@@ -260,6 +260,7 @@ const scrollRetryTimers: ReturnType<typeof setTimeout>[] = []
 const imageLoadCleanupFns: Array<() => void> = []
 const tocLinks = ref<TocDisplayLink[]>([])
 const anchorSettleDelays = [820, 1300, 2100]
+let contentResizeObserver: ResizeObserver | null = null
 
 const filteredTocLinks = computed(() =>
   tocLinks.value.filter(link => link.depth <= MAX_TOC_DEPTH.value)
@@ -280,7 +281,7 @@ const updateActiveHeading = () => {
   if (!tocLinks.value.length) return
 
   const headings = document.querySelectorAll('.content-body h2, .content-body h3, .content-body h4, .content-body h5, .content-body h6')
-  const scrollPosition = window.scrollY + headingScrollOffset + 12
+  const scrollPosition = window.scrollY + getHeadingScrollOffset() + 12
 
   let active = ''
   headings.forEach((heading) => {
@@ -309,7 +310,15 @@ const getHeadingTargetTop = (id: string) => {
   const element = document.getElementById(id)
   if (!element) return null
 
-  return Math.max(0, element.getBoundingClientRect().top + window.scrollY - headingScrollOffset)
+  return Math.max(0, element.getBoundingClientRect().top + window.scrollY - getHeadingScrollOffset())
+}
+
+const getHeadingScrollOffset = () => {
+  if (!import.meta.client) return headingScrollOffset
+
+  const header = document.querySelector('.main-header') as HTMLElement | null
+  const headerHeight = header?.getBoundingClientRect().height || 0
+  return Math.max(headingScrollOffset, Math.ceil(headerHeight + 18))
 }
 
 const animateWindowScrollTo = (top: number, behavior: ScrollBehavior = 'smooth') => {
@@ -368,6 +377,35 @@ const scrollHeadingToOffset = (id: string, behavior: ScrollBehavior = 'smooth') 
   return true
 }
 
+const warmImagesBeforeHeading = async (id: string) => {
+  const headingTop = getHeadingTargetTop(id)
+  if (headingTop === null) return
+
+  const images = Array.from(document.querySelectorAll('.content-body img')) as HTMLImageElement[]
+  const pendingImages = images.filter((image) => {
+    const imageTop = image.getBoundingClientRect().top + window.scrollY
+    return imageTop < headingTop && !image.complete
+  })
+
+  if (!pendingImages.length) return
+
+  await Promise.race([
+    Promise.allSettled(pendingImages.map((image) => {
+      image.loading = 'eager'
+
+      if (image.decode) {
+        return image.decode().catch(() => undefined)
+      }
+
+      return new Promise<void>((resolve) => {
+        image.addEventListener('load', () => resolve(), { once: true })
+        image.addEventListener('error', () => resolve(), { once: true })
+      })
+    })),
+    new Promise(resolve => setTimeout(resolve, 900))
+  ])
+}
+
 const correctHeadingPosition = (id: string, behavior: ScrollBehavior = 'smooth') => {
   const top = getHeadingTargetTop(id)
   if (top === null) return false
@@ -378,6 +416,23 @@ const correctHeadingPosition = (id: string, behavior: ScrollBehavior = 'smooth')
   updateActiveHeading()
   updateReadingProgress()
   return true
+}
+
+const scheduleAnchorSettle = (id: string) => {
+  anchorSettleDelays.forEach((delay) => {
+    const timer = setTimeout(() => {
+      if (pendingAnchorId.value !== id) return
+      correctHeadingPosition(id, 'smooth')
+    }, delay)
+    scrollRetryTimers.push(timer)
+  })
+
+  const doneTimer = setTimeout(() => {
+    if (pendingAnchorId.value === id) {
+      pendingAnchorId.value = ''
+    }
+  }, anchorSettleDelays[anchorSettleDelays.length - 1] + 500)
+  scrollRetryTimers.push(doneTimer)
 }
 
 const decodeAnchorHash = (hash: string) => {
@@ -410,8 +465,7 @@ const settleScrollToHeading = (
   clearScrollRetryTimers()
   pendingAnchorId.value = id
 
-  const hasScrolled = scrollHeadingToOffset(id, behavior)
-  if (!hasScrolled) {
+  if (getHeadingTargetTop(id) === null) {
     pendingAnchorId.value = ''
     return false
   }
@@ -420,20 +474,11 @@ const settleScrollToHeading = (
     updateUrlHash(id)
   }
 
-  anchorSettleDelays.forEach((delay) => {
-    const timer = setTimeout(() => {
-      if (pendingAnchorId.value !== id) return
-      correctHeadingPosition(id, 'smooth')
-    }, delay)
-    scrollRetryTimers.push(timer)
+  warmImagesBeforeHeading(id).finally(() => {
+    if (pendingAnchorId.value !== id) return
+    scrollHeadingToOffset(id, behavior)
+    scheduleAnchorSettle(id)
   })
-
-  const doneTimer = setTimeout(() => {
-    if (pendingAnchorId.value === id) {
-      pendingAnchorId.value = ''
-    }
-  }, anchorSettleDelays[anchorSettleDelays.length - 1] + 500)
-  scrollRetryTimers.push(doneTimer)
 
   return true
 }
@@ -580,6 +625,19 @@ const enhanceCodeBlocks = () => {
   })
 }
 
+const enhanceTables = () => {
+  const tables = document.querySelectorAll('.content-body table') as NodeListOf<HTMLTableElement>
+
+  tables.forEach((table) => {
+    if (table.parentElement?.classList.contains('table-scroll')) return
+
+    const wrapper = document.createElement('div')
+    wrapper.className = 'table-scroll'
+    table.parentNode?.insertBefore(wrapper, table)
+    wrapper.appendChild(table)
+  })
+}
+
 // 标题增强：正文标题前添加层级编号
 const applyHeadingDecorations = () => {
   const headingMap = new Map(tocLinks.value.map(item => [item.id, item.number]))
@@ -624,14 +682,33 @@ const setupImageLoadReflowSync = () => {
   })
 }
 
+const setupContentResizeSync = () => {
+  contentResizeObserver?.disconnect()
+  contentResizeObserver = null
+
+  const content = document.querySelector('.content-body')
+  if (!content) return
+
+  contentResizeObserver = new ResizeObserver(() => {
+    updateActiveHeading()
+    if (pendingAnchorId.value) {
+      correctHeadingPosition(pendingAnchorId.value, 'smooth')
+    }
+  })
+  contentResizeObserver.observe(content)
+}
+
 // 正文增强总入口
 const enhanceContent = async () => {
   await nextTick()
   buildTocFromDom()
   enhanceCodeBlocks()
+  enhanceTables()
   initImageZoom()
   applyHeadingDecorations()
   setupImageLoadReflowSync()
+  setupContentResizeSync()
+  updateActiveHeading()
 }
 
 // ==================== 生命周期与联动实现 ====================
@@ -657,7 +734,10 @@ onUnmounted(() => {
   window.removeEventListener('keydown', cancelPendingAnchorScroll)
   clearScrollRetryTimers()
   clearImageLoadListeners()
+  contentResizeObserver?.disconnect()
+  contentResizeObserver = null
   document.body.style.overflow = ''
+  document.body.classList.remove('blog-toc-open')
   if (zoomInstance) {
     zoomInstance.detach()
   }
@@ -690,6 +770,7 @@ const closeToc = () => {
 watch(showToc, (newVal) => {
   if (import.meta.client) {
     document.body.style.overflow = newVal ? 'hidden' : ''
+    document.body.classList.toggle('blog-toc-open', newVal)
   }
 })
 
@@ -754,6 +835,8 @@ const scrollToHeading = (id: string) => {
       </Transition>
 
       <div class="content-wrapper">
+        <div class="blog-layout-spacer" aria-hidden="true" />
+
         <article class="article-main">
           <header class="article-header">
             <h1 class="article-title">{{ (page as BlogPost).title }}</h1>
@@ -1765,6 +1848,721 @@ html.dark {
 
   .mobile-toc-button {
     font-size: 0.8rem;
+  }
+}
+
+/* Wiki reader style parity overrides */
+.blog-page {
+  --blog-accent: #00c58e;
+  --blog-accent-strong: #0a8f68;
+  --blog-accent-soft: rgba(0, 197, 142, 0.12);
+  padding: 0 8px 60px;
+}
+
+.reading-progress-bar {
+  z-index: 1001;
+  background: var(--blog-accent);
+}
+
+.top-navigation,
+.content-container {
+  width: min(1152px, 100%);
+  max-width: none;
+  margin: 0 auto;
+}
+
+.top-navigation {
+  padding: 18px 0 8px;
+  margin-bottom: 0;
+}
+
+.nav-back-link {
+  padding: 7px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary, #666);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.nav-back-link:hover {
+  background: var(--blog-accent-soft);
+  color: var(--blog-accent-strong);
+  border-color: transparent;
+  transform: none;
+}
+
+.nav-back-link:hover span,
+.nav-back-link:hover svg {
+  color: var(--blog-accent-strong);
+  stroke: var(--blog-accent-strong);
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 860px) minmax(210px, 260px);
+  gap: 32px;
+  align-items: start;
+  justify-content: center;
+}
+
+.article-main {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+.article-header {
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--nav-border, #e5e7eb);
+}
+
+.article-title {
+  margin: 0 0 18px;
+  color: var(--text-main, #1f1f1f);
+  font-size: clamp(2rem, 4vw, 2.7rem);
+  line-height: 1.18;
+}
+
+.article-meta {
+  gap: 14px;
+  color: var(--text-secondary, #666);
+  font-size: 0.9rem;
+}
+
+.article-traffic {
+  gap: 8px 10px;
+  margin-top: 16px;
+}
+
+.traffic-chip {
+  padding: 6px 10px;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 999px;
+  background: var(--bg-secondary, #f7fafc);
+}
+
+.traffic-value {
+  color: var(--text-main, #1f1f1f);
+}
+
+.traffic-label {
+  color: var(--text-secondary, #666);
+}
+
+.article-content {
+  color: var(--text-main, #1f1f1f);
+  font-size: 1.04rem;
+  line-height: 1.82;
+}
+
+:deep(.article-content h2),
+:deep(.article-content h3),
+:deep(.article-content h4),
+:deep(.article-content h5),
+:deep(.article-content h6) {
+  scroll-margin-top: 88px;
+  color: var(--text-main, #1f1f1f);
+}
+
+:deep(.article-content .heading-number) {
+  color: var(--blog-accent);
+  font-weight: 800;
+  margin-right: 0.35em;
+}
+
+:deep(.article-content h2) {
+  margin: 3rem 0 1.2rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--nav-border, #e5e7eb);
+  font-size: 1.65rem;
+  line-height: 1.32;
+}
+
+:deep(.article-content h3) {
+  margin: 2.35rem 0 1rem;
+  font-size: 1.35rem;
+  line-height: 1.35;
+}
+
+:deep(.article-content h4) {
+  margin: 2rem 0 0.8rem;
+  font-size: 1.15rem;
+}
+
+:deep(.article-content h5) {
+  margin: 1.8rem 0 0.9rem;
+  font-size: 1.1rem;
+}
+
+:deep(.article-content h6) {
+  margin: 1.5rem 0 0.8rem;
+  font-size: 1.05rem;
+}
+
+:deep(.article-content p) {
+  margin: 1.1rem 0;
+}
+
+:deep(.article-content ul),
+:deep(.article-content ol) {
+  padding-left: 1.5rem;
+  margin: 1.2rem 0;
+}
+
+:deep(.article-content li) {
+  margin: 0.55rem 0;
+}
+
+:deep(.article-content a) {
+  color: var(--blog-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+:deep(.article-content a:hover) {
+  border-bottom-color: var(--blog-accent);
+}
+
+:deep(.article-content blockquote) {
+  margin: 1.5rem 0;
+  padding: 0.9rem 1rem;
+  border-left: 4px solid var(--blog-accent);
+  border-radius: 0;
+  background: var(--bg-secondary, #f7f7f8);
+  color: var(--text-secondary, #666);
+  font-style: normal;
+}
+
+:deep(.article-content img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+:deep(.article-content code) {
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background: var(--bg-secondary, #f7f7f8);
+  color: var(--text-main, #1f1f1f);
+  font-size: 0.92em;
+}
+
+:deep(.article-content pre) {
+  position: relative;
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 1.6rem 0;
+  padding: 0;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 8px;
+  background: var(--color-code-bg) !important;
+  box-shadow: none;
+}
+
+:deep(.article-content pre code) {
+  display: block;
+  min-width: max-content;
+  padding: 1rem;
+  background: transparent;
+  color: inherit;
+}
+
+:deep(.code-toolbar) {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  height: auto;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 0;
+  background: var(--bg-secondary, #f7f7f8);
+}
+
+:deep(.code-language) {
+  color: var(--text-secondary, #666);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+:deep(.code-copy-btn) {
+  padding: 4px 9px;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 6px;
+  background: var(--bg-color, #fff);
+  color: var(--text-main, #1f1f1f);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+:deep(.code-copy-btn:hover),
+:deep(.code-copy-btn.copied) {
+  border-color: var(--blog-accent);
+  background: var(--bg-color, #fff);
+  color: var(--blog-accent);
+  transform: none;
+}
+
+:deep(.article-content table) {
+  width: max-content;
+  min-width: 100%;
+  margin: 1.6rem 0;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-collapse: collapse;
+  border-radius: 8px;
+  background: var(--bg-color, #fff);
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+:deep(.article-content th),
+:deep(.article-content td) {
+  padding: 10px 12px;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  color: var(--text-main, #1f1f1f);
+  text-align: left;
+}
+
+:deep(.article-content th) {
+  background: var(--bg-secondary, #f7f7f8);
+  color: var(--text-main, #1f1f1f);
+}
+
+.toc-sidebar {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 8px;
+  background: var(--bg-color, #fff);
+  box-shadow: none;
+}
+
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.toc-title {
+  color: var(--text-secondary, #666);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.toc-title i {
+  color: var(--blog-accent);
+}
+
+.toc-nav {
+  display: grid;
+  gap: 2px;
+}
+
+.toc-list {
+  display: grid;
+  gap: 2px;
+}
+
+.toc-item {
+  margin: 0;
+  padding: 0;
+}
+
+.toc-link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: baseline;
+  margin: 0;
+  margin-left: calc((var(--toc-level, 1) - 1) * 12px);
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary, #666);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.toc-link:hover,
+.toc-link.is-active {
+  background: var(--blog-accent-soft);
+  color: var(--blog-accent-strong);
+  box-shadow: none;
+}
+
+.toc-link.is-active {
+  font-weight: 800;
+}
+
+.toc-number {
+  color: var(--blog-accent);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.article-footer {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--nav-border, #e5e7eb);
+}
+
+.footer-divider {
+  display: none;
+}
+
+.article-navigation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.nav-item {
+  min-height: 78px;
+  padding: 14px;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 8px;
+  background: var(--bg-color, #fff);
+  color: var(--text-main, #1f1f1f);
+}
+
+.nav-item:hover {
+  border-color: var(--blog-accent);
+  box-shadow: none;
+  transform: none;
+}
+
+.nav-icon {
+  color: var(--blog-accent);
+  font-size: 1.35rem;
+}
+
+.nav-label {
+  color: var(--text-secondary, #666);
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.nav-title {
+  color: var(--text-main, #1f1f1f);
+  font-weight: 800;
+}
+
+.toc-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  width: auto;
+  height: auto;
+  border: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: none;
+}
+
+@media (max-width: 1180px) {
+  .content-wrapper {
+    display: block;
+  }
+
+  .toc-sidebar {
+    position: fixed;
+    inset: 0 0 0 auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    z-index: 1000;
+    display: block;
+    width: min(86vw, 340px);
+    max-width: none;
+    max-height: none;
+    padding: 18px;
+    border: 1px solid var(--nav-border, #e5e7eb);
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 1;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.2s ease;
+  }
+
+  .toc-sidebar.is-open {
+    position: fixed;
+    inset: 0 0 0 auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: min(86vw, 340px);
+    max-width: none;
+    max-height: none;
+    border: 1px solid var(--nav-border, #e5e7eb);
+    border-radius: 0;
+    box-shadow: none;
+    overflow-y: auto;
+    transform: translateX(0);
+  }
+
+  html.dark .toc-sidebar.is-open {
+    border-color: var(--nav-border, #334155);
+    background: var(--bg-color, #0f172a);
+  }
+
+  .toc-close-btn {
+    display: inline-flex;
+  }
+
+  .article-navigation {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-page {
+    padding: 12px 10px 50px;
+  }
+
+  .article-title {
+    font-size: 1.5rem;
+  }
+
+  .article-header {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+  }
+}
+
+/* Blog article Wiki parity final pass */
+.blog-page {
+  --blog-accent: #00c58e;
+  --blog-accent-strong: #0a8f68;
+  --blog-accent-soft: rgba(0, 197, 142, 0.12);
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;
+}
+
+.content-container {
+  width: min(1480px, 100%);
+  max-width: none;
+  margin: 0 auto;
+}
+
+.top-navigation {
+  width: min(1480px, 100%);
+  max-width: none;
+  margin: 0 auto;
+  padding: 18px 8px 8px;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 860px) minmax(210px, 260px);
+  gap: 32px;
+  align-items: start;
+  justify-content: stretch;
+  padding: 0 8px 64px;
+}
+
+.blog-layout-spacer {
+  min-width: 0;
+}
+
+.article-main {
+  min-width: 0;
+  width: 100%;
+}
+
+.article-title {
+  display: block;
+}
+
+.toc-sidebar {
+  width: auto;
+}
+
+:deep(.article-content h2),
+:deep(.article-content h3),
+:deep(.article-content h4),
+:deep(.article-content h5),
+:deep(.article-content h6) {
+  scroll-margin-top: 128px;
+}
+
+:deep(.article-content .table-scroll) {
+  overflow-x: auto;
+  margin: 1.6rem 0;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 8px;
+  background: var(--bg-color, #fff);
+  -webkit-overflow-scrolling: touch;
+}
+
+:deep(.article-content .table-scroll table) {
+  display: table;
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  border: 0;
+  border-collapse: collapse;
+  border-radius: 0;
+  box-shadow: none;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+:deep(.article-content .table-scroll th:first-child),
+:deep(.article-content .table-scroll td:first-child) {
+  border-left: 0;
+}
+
+:deep(.article-content .table-scroll th:last-child),
+:deep(.article-content .table-scroll td:last-child) {
+  border-right: 0;
+}
+
+:deep(.article-content .table-scroll tr:first-child th),
+:deep(.article-content .table-scroll tr:first-child td) {
+  border-top: 0;
+}
+
+:deep(.article-content .table-scroll tr:last-child th),
+:deep(.article-content .table-scroll tr:last-child td) {
+  border-bottom: 0;
+}
+
+.toc-backdrop {
+  z-index: 1500;
+  background: rgba(15, 23, 42, 0.36);
+}
+
+:global(body.blog-toc-open .main-header) {
+  z-index: 900;
+}
+
+@media (max-width: 1180px) {
+  .content-container {
+    width: min(860px, 100%);
+    overflow-x: visible;
+  }
+
+  .content-wrapper {
+    display: block;
+    padding: 0 8px 56px;
+    overflow-x: visible;
+  }
+
+  .blog-layout-spacer {
+    display: none;
+  }
+
+  .article-main {
+    width: 100%;
+    max-width: none;
+    overflow-x: visible;
+  }
+
+  .toc-sidebar {
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 1510;
+    display: block;
+    width: min(86vw, 340px);
+    max-width: none;
+    max-height: none;
+    padding: 18px;
+    border: 1px solid var(--nav-border, #e5e7eb);
+    border-radius: 0;
+    background: var(--bg-color, #fff);
+    box-shadow: none;
+    opacity: 1;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.2s ease;
+  }
+
+  .toc-sidebar.is-open {
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 1510;
+    width: min(86vw, 340px);
+    max-width: none;
+    max-height: none;
+    border: 1px solid var(--nav-border, #e5e7eb);
+    border-radius: 0;
+    background: var(--bg-color, #fff);
+    box-shadow: none;
+    overflow-y: auto;
+    transform: translateX(0);
+  }
+
+  .toc-backdrop {
+    z-index: 1500;
+  }
+
+  .mobile-toc-button {
+    display: inline-flex !important;
+  }
+
+  .toc-close-btn {
+    display: inline-flex;
+  }
+
+  :deep(.article-content table) {
+    display: table;
+  }
+
+  :deep(.article-content thead) {
+    display: table-header-group;
+  }
+
+  :deep(.article-content tbody) {
+    display: table-row-group;
+  }
+
+  :deep(.article-content tr) {
+    display: table-row;
+  }
+
+  :deep(.article-content th),
+  :deep(.article-content td) {
+    display: table-cell;
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-page {
+    padding: 0;
+  }
+
+  .top-navigation {
+    padding: 10px 10px 6px;
+  }
+
+  .content-wrapper {
+    padding: 0 10px 52px;
   }
 }
 </style>
