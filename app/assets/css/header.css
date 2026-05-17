@@ -162,6 +162,7 @@
   }
 
   .nav-links {
+    width: 100%;
     gap: 8px;
   }
 
@@ -177,10 +178,11 @@
   }
 
   .nav-tools {
-    width: min(286px, 100%);
-    flex: 0 1 min(286px, 100%);
+    width: 100%;
+    max-width: 420px;
+    flex: 0 1 100%;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .theme-toggle {

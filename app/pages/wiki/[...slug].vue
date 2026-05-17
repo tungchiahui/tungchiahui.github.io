@@ -771,8 +771,19 @@ function normalizePath(path: string) {
 
       <main class="wiki-main">
         <div class="mobile-actions">
-          <button v-if="docNavigationItems.length" type="button" @click="showDocNav = true">文件</button>
-          <button v-if="tocLinks.length" type="button" @click="showToc = true">目錄</button>
+          <button v-if="docNavigationItems.length" type="button" aria-label="開啟章節目錄" @click="showDocNav = true">
+            <span class="mobile-action-icon" aria-hidden="true">§</span>
+            <span>章節</span>
+          </button>
+          <button
+            type="button"
+            aria-label="開啟頁內目錄"
+            :disabled="!tocLinks.length"
+            @click="showToc = true"
+          >
+            <span class="mobile-action-icon" aria-hidden="true">#</span>
+            <span>頁內</span>
+          </button>
         </div>
 
         <nav class="wiki-breadcrumb">
@@ -1334,14 +1345,62 @@ function normalizePath(path: string) {
   }
 
   .mobile-actions button {
-    min-width: 72px;
-    padding: 8px 12px;
-    border: 2px solid var(--wiki-accent-strong);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 66px;
+    height: 34px;
+    padding: 0 10px 0 7px;
+    border: 1px solid color-mix(in srgb, #14b8a6 34%, var(--nav-border, #e5e7eb));
     border-radius: 999px;
-    background: var(--wiki-accent);
-    color: #fff;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, #14b8a6 12%, transparent), transparent 58%),
+      color-mix(in srgb, var(--bg-color, #ffffff) 88%, transparent);
+    color: #0f766e;
+    box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14), 0 4px 14px rgba(20, 184, 166, 0.12);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.82rem;
     font-weight: 800;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+    line-height: 1;
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  .mobile-actions button:hover,
+  .mobile-actions button:active {
+    border-color: #14b8a6;
+    box-shadow: 0 16px 32px rgba(20, 184, 166, 0.18), 0 8px 20px rgba(15, 23, 42, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .mobile-actions button:focus-visible {
+    outline: 3px solid color-mix(in srgb, #14b8a6 34%, transparent);
+    outline-offset: 3px;
+  }
+
+  .mobile-actions button:disabled {
+    cursor: default;
+    opacity: 0.48;
+    transform: none;
+  }
+
+  .mobile-action-icon {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #14b8a6, #0ea5a4);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 900;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 5px 12px rgba(20, 184, 166, 0.22);
   }
 
   .wiki-doc-sidebar,

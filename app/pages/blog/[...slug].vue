@@ -735,11 +735,7 @@ const scrollToHeading = (id: string) => {
       @click="showToc = true"
       aria-label="開啟目錄"
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="12" x2="15" y2="12"></line>
-        <line x1="3" y1="18" x2="18" y2="18"></line>
-      </svg>
+      <span class="mobile-toc-icon" aria-hidden="true">#</span>
       <span>目錄</span>
     </button>
 
@@ -971,28 +967,57 @@ html.dark {
 .mobile-toc-button {
   display: none;
   position: fixed;
-  top: 76px;
-  right: 16px;
+  left: 14px;
+  bottom: max(16px, env(safe-area-inset-bottom));
   z-index: 998;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: #00c58e;
-  color: #fff;
-  border: 2px solid #0a8f68;
-  border-radius: 20px;
-  font-weight: 700;
+  gap: 5px;
+  min-width: 66px;
+  height: 34px;
+  padding: 0 10px 0 7px;
+  border: 1px solid color-mix(in srgb, #14b8a6 34%, var(--color-border));
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #14b8a6 12%, transparent), transparent 58%),
+    color-mix(in srgb, var(--color-bg) 88%, transparent);
+  color: #0f766e;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14), 0 4px 14px rgba(20, 184, 166, 0.12);
   font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.25s ease;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .mobile-toc-button:hover,
 .mobile-toc-button:active {
-  transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  background: #00a577;
+  border-color: #14b8a6;
+  box-shadow: 0 16px 32px rgba(20, 184, 166, 0.18), 0 8px 20px rgba(15, 23, 42, 0.12);
+  transform: translateY(-1px);
+}
+
+.mobile-toc-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, #14b8a6 34%, transparent);
+  outline-offset: 3px;
+}
+
+.mobile-toc-icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #14b8a6, #0ea5a4);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 5px 12px rgba(20, 184, 166, 0.22);
 }
 
 .loading-state {
@@ -1024,16 +1049,16 @@ html.dark {
 }
 
 .content-wrapper {
-  display: flex;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 860px) minmax(210px, 260px);
+  gap: 32px;
   align-items: flex-start;
   justify-content: center;
 }
 
 .article-main {
-  flex: 1;
   min-width: 0;
-  max-width: 850px;
+  width: 100%;
 }
 
 .article-header {
@@ -1418,17 +1443,14 @@ html.dark {
 
 /* D. 目录侧栏实现（桌面） */
 .toc-sidebar {
-  width: 320px;
   position: sticky;
-  top: 20px;
-  max-height: calc(100vh - 40px);
+  top: 24px;
+  max-height: calc(100vh - 48px);
   overflow-y: auto;
-  padding: 24px;
+  padding: 14px;
   background: var(--color-bg);
-  border: 3px solid var(--color-frame-border);
-  border-radius: 16px;
-  flex-shrink: 0;
-  box-shadow: 0 4px 20px rgba(0, 197, 142, 0.15), 0 2px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
 }
 
 .toc-sidebar::-webkit-scrollbar {
@@ -1453,8 +1475,8 @@ html.dark {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid var(--color-frame-border);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .toc-title {
@@ -1512,8 +1534,6 @@ html.dark {
   transition: all 0.2s;
   font-size: 0.9rem;
   line-height: 1.4;
-  border: 1.5px solid var(--color-frame-border);
-  background: var(--color-bg);
   margin-bottom: 2px;
 }
 
@@ -1567,7 +1587,7 @@ html.dark {
 }
 
 /* E. 手机端适配实现 */
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
 .blog-page {
   min-height: 100vh;
   padding: 0 20px 60px;
@@ -1581,7 +1601,7 @@ html.dark {
   }
 
   .content-wrapper {
-    gap: 0;
+    display: block;
     max-width: 100%;
     overflow-x: hidden;
   }
@@ -1596,7 +1616,6 @@ html.dark {
     display: none;
   }
 
-  /* 手机端目录按钮 - 右上角 */
   .mobile-toc-button {
     display: flex !important;
   }
@@ -1745,9 +1764,6 @@ html.dark {
   }
 
   .mobile-toc-button {
-    top: 86px;
-    right: 10px;
-    padding: 6px 12px;
     font-size: 0.8rem;
   }
 }
