@@ -31,7 +31,7 @@ const nuxtApp = useNuxtApp()
 
 type LoadingMode = 'screen' | 'reader'
 
-const getContentRoutePath = (path: string) => path.replace(/^\/(?:zh-cn|zh-hant|zh-hk|zh-tw)(?=\/)/, '')
+const getContentRoutePath = (path: string) => path.replace(/^\/(?:zh-cn|zh-hant|zh-hk|zh-tw|en-us)(?=\/)/, '')
 
 const isReaderRoute = (path: string) => /^\/(?:blog|wiki)\/.+/.test(getContentRoutePath(path))
 

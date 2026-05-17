@@ -161,12 +161,18 @@ function getLocalizedCurrentPath(localeSlug: LocaleSlug) {
 
   if (
     pathWithoutLocale === '/blog' ||
-    pathWithoutLocale.startsWith('/blog/') ||
     pathWithoutLocale === '/wiki' ||
-    pathWithoutLocale.startsWith('/wiki/') ||
     pathWithoutLocale === '/search'
   ) {
     return replaceLocaleInPath(route.path, localeSlug)
+  }
+
+  if (pathWithoutLocale.startsWith('/blog/')) {
+    return getFallbackLocaleSectionPath(route.path, localeSlug)
+  }
+
+  if (pathWithoutLocale.startsWith('/wiki/')) {
+    return getFallbackLocaleSectionPath(route.path, localeSlug)
   }
 
   return replaceLocaleInPath(route.path, localeSlug) || getFallbackLocaleSectionPath(route.path, localeSlug)

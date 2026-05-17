@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 
   // ✅ 纯静态输出（nuxi generate）
   nitro: {
-    // preset: 'static'
+    preset: 'static'
   },
 
   modules: ['@nuxt/content', '@nuxt/image'],
