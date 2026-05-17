@@ -15,7 +15,7 @@
 }
 
 /* APlayer 自适应高度 */
-:deep(.aplayer) {
+#music-player .aplayer {
   height: auto !important;
 }
 

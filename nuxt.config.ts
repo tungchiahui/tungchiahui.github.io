@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     '~/assets/css/blog.css',
     '~/assets/css/wiki.css',
     '~/assets/css/musicplayer.css',
-    '~/assets/css/aplayer_dark.css',
+    '~/assets/css/aplayer.css',
     '~/assets/css/friend.css',
     '~/assets/css/more.css',
   ],
