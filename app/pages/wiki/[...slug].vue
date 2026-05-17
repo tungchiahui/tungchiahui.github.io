@@ -233,6 +233,7 @@ const imageLoadCleanupFns: Array<() => void> = []
 const anchorSettleDelays = [820, 1300, 2100]
 let zoomInstance: ReturnType<typeof mediumZoom> | null = null
 let anchorAnimationFrame: number | null = null
+let contentResizeObserver: ResizeObserver | null = null
 
 const hasMobileDrawer = computed(() => showDocNav.value || showToc.value)
 
@@ -373,6 +374,19 @@ const enhanceCodeBlocks = () => {
   })
 }
 
+const enhanceTables = () => {
+  const tables = document.querySelectorAll('.wiki-content-body table') as NodeListOf<HTMLTableElement>
+
+  tables.forEach((table) => {
+    if (table.parentElement?.classList.contains('table-scroll')) return
+
+    const wrapper = document.createElement('div')
+    wrapper.className = 'table-scroll'
+    table.parentNode?.insertBefore(wrapper, table)
+    wrapper.appendChild(table)
+  })
+}
+
 const initImageZoom = () => {
   if (zoomInstance) {
     zoomInstance.detach()
@@ -454,6 +468,35 @@ const scrollHeadingToOffset = (id: string, behavior: ScrollBehavior = 'smooth') 
   return true
 }
 
+const warmImagesBeforeHeading = async (id: string) => {
+  const headingTop = getHeadingTargetTop(id)
+  if (headingTop === null) return
+
+  const images = Array.from(document.querySelectorAll('.wiki-content-body img')) as HTMLImageElement[]
+  const pendingImages = images.filter((image) => {
+    const imageTop = image.getBoundingClientRect().top + window.scrollY
+    return imageTop < headingTop && !image.complete
+  })
+
+  if (!pendingImages.length) return
+
+  await Promise.race([
+    Promise.allSettled(pendingImages.map((image) => {
+      image.loading = 'eager'
+
+      if (image.decode) {
+        return image.decode().catch(() => undefined)
+      }
+
+      return new Promise<void>((resolve) => {
+        image.addEventListener('load', () => resolve(), { once: true })
+        image.addEventListener('error', () => resolve(), { once: true })
+      })
+    })),
+    new Promise(resolve => setTimeout(resolve, 900))
+  ])
+}
+
 const correctHeadingPosition = (id: string, behavior: ScrollBehavior = 'smooth') => {
   const top = getHeadingTargetTop(id)
   if (top === null) return false
@@ -464,6 +507,23 @@ const correctHeadingPosition = (id: string, behavior: ScrollBehavior = 'smooth')
   updateActiveHeading()
   updateReadingProgress()
   return true
+}
+
+const scheduleAnchorSettle = (id: string) => {
+  anchorSettleDelays.forEach((delay) => {
+    const timer = setTimeout(() => {
+      if (pendingAnchorId.value !== id) return
+      correctHeadingPosition(id, 'smooth')
+    }, delay)
+    scrollRetryTimers.push(timer)
+  })
+
+  const doneTimer = setTimeout(() => {
+    if (pendingAnchorId.value === id) {
+      pendingAnchorId.value = ''
+    }
+  }, anchorSettleDelays[anchorSettleDelays.length - 1] + 500)
+  scrollRetryTimers.push(doneTimer)
 }
 
 const decodeAnchorHash = (hash: string) => {
@@ -496,8 +556,7 @@ const settleScrollToHeading = (
   clearScrollRetryTimers()
   pendingAnchorId.value = id
 
-  const hasScrolled = scrollHeadingToOffset(id, behavior)
-  if (!hasScrolled) {
+  if (getHeadingTargetTop(id) === null) {
     pendingAnchorId.value = ''
     return false
   }
@@ -506,20 +565,11 @@ const settleScrollToHeading = (
     updateUrlHash(id)
   }
 
-  anchorSettleDelays.forEach((delay) => {
-    const timer = setTimeout(() => {
-      if (pendingAnchorId.value !== id) return
-      correctHeadingPosition(id, 'smooth')
-    }, delay)
-    scrollRetryTimers.push(timer)
+  warmImagesBeforeHeading(id).finally(() => {
+    if (pendingAnchorId.value !== id) return
+    scrollHeadingToOffset(id, behavior)
+    scheduleAnchorSettle(id)
   })
-
-  const doneTimer = setTimeout(() => {
-    if (pendingAnchorId.value === id) {
-      pendingAnchorId.value = ''
-    }
-  }, anchorSettleDelays[anchorSettleDelays.length - 1] + 500)
-  scrollRetryTimers.push(doneTimer)
 
   return true
 }
@@ -562,13 +612,31 @@ const setupImageLoadReflowSync = () => {
   })
 }
 
+const setupContentResizeSync = () => {
+  contentResizeObserver?.disconnect()
+  contentResizeObserver = null
+
+  const content = document.querySelector('.wiki-content-body')
+  if (!content) return
+
+  contentResizeObserver = new ResizeObserver(() => {
+    updateActiveHeading()
+    if (pendingAnchorId.value) {
+      correctHeadingPosition(pendingAnchorId.value, 'smooth')
+    }
+  })
+  contentResizeObserver.observe(content)
+}
+
 const enhanceContent = async () => {
   await nextTick()
   buildTocFromDom()
   enhanceCodeBlocks()
+  enhanceTables()
   initImageZoom()
   applyHeadingDecorations()
   setupImageLoadReflowSync()
+  setupContentResizeSync()
   updateActiveHeading()
 }
 
@@ -634,6 +702,8 @@ onUnmounted(() => {
   window.removeEventListener('keydown', cancelPendingAnchorScroll)
   clearScrollRetryTimers()
   clearImageLoadListeners()
+  contentResizeObserver?.disconnect()
+  contentResizeObserver = null
   document.body.style.overflow = ''
 
   if (zoomInstance) {
@@ -1082,11 +1152,21 @@ function normalizePath(path: string) {
   border-radius: 8px;
 }
 
-:deep(.wiki-content-body table) {
-  width: 100%;
+:deep(.wiki-content-body .table-scroll) {
+  overflow-x: auto;
+  margin: 1.6rem 0;
+  border: 1px solid var(--nav-border, #e5e7eb);
+  border-radius: 8px;
+  background: var(--bg-color, #fff);
+  -webkit-overflow-scrolling: touch;
+}
+
+:deep(.wiki-content-body .table-scroll table) {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
   border-collapse: collapse;
-  margin: 1.5rem 0;
-  overflow: hidden;
+  white-space: nowrap;
 }
 
 :deep(.wiki-content-body th),
@@ -1098,6 +1178,26 @@ function normalizePath(path: string) {
 
 :deep(.wiki-content-body th) {
   background: var(--bg-secondary, #f7f7f8);
+}
+
+:deep(.wiki-content-body .table-scroll th:first-child),
+:deep(.wiki-content-body .table-scroll td:first-child) {
+  border-left: 0;
+}
+
+:deep(.wiki-content-body .table-scroll th:last-child),
+:deep(.wiki-content-body .table-scroll td:last-child) {
+  border-right: 0;
+}
+
+:deep(.wiki-content-body .table-scroll tr:first-child th),
+:deep(.wiki-content-body .table-scroll tr:first-child td) {
+  border-top: 0;
+}
+
+:deep(.wiki-content-body .table-scroll tr:last-child th),
+:deep(.wiki-content-body .table-scroll tr:last-child td) {
+  border-bottom: 0;
 }
 
 :deep(.wiki-content-body pre) {
