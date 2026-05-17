@@ -2,6 +2,7 @@
 import { useHead } from '#app'
 import { computed, ref } from 'vue'
 import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
+import { getPageCopy } from '~~/utils/i18n-page-copy'
 import {
   featuredTools,
   knowledgeTags,
@@ -16,27 +17,29 @@ import {
   taskStatusConfig
 } from '~/data/tech-footprint.js'
 
-useHead({
-  title: '技术足迹 - 个人机器人技术路线',
-  meta: [
-    {
-      name: 'description',
-      content: '个人机器人技术路线清单，覆盖 ROS2、SLAM、Nav2、ros2_control、多传感器融合、MoveIt2 与部署。'
-    }
-  ]
-})
-
 type ViewKey = 'tasks' | 'stages' | 'archive'
 
 const route = useRoute()
 const activeView = ref<ViewKey>('tasks')
-const homePath = computed(() => replaceLocaleInPath('/', getCurrentLocaleSlug(route.path)))
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const copy = computed(() => getPageCopy('techFootprint', currentLocaleSlug.value))
+const homePath = computed(() => replaceLocaleInPath('/', currentLocaleSlug.value))
 
-const viewTabs: Array<{ key: ViewKey; label: string; eyebrow: string }> = [
-  { key: 'tasks', label: '路线待办', eyebrow: `${routeTasks.length} 个任务` },
-  { key: 'stages', label: '阶段清单', eyebrow: `${routeSections.length} 个能力层` },
-  { key: 'archive', label: '沉淀归档', eyebrow: '长期维护区' }
-]
+useHead(() => ({
+  title: copy.value.metaTitle,
+  meta: [
+    {
+      name: 'description',
+      content: copy.value.metaDescription
+    }
+  ]
+}))
+
+const viewTabs = computed<Array<{ key: ViewKey; label: string; eyebrow: string }>>(() => [
+  { key: 'tasks', label: copy.value.tabs.tasks, eyebrow: formatCopy(copy.value.tabs.tasksEyebrow, { count: routeTasks.length }) },
+  { key: 'stages', label: copy.value.tabs.stages, eyebrow: formatCopy(copy.value.tabs.stagesEyebrow, { count: routeSections.length }) },
+  { key: 'archive', label: copy.value.tabs.archive, eyebrow: copy.value.tabs.archiveEyebrow }
+])
 
 const sortedTasks = computed(() => [...routeTasks].sort((a, b) => a.order - b.order))
 
@@ -63,14 +66,21 @@ const doneCount = computed(() => routeTasks.filter(task => task.status === 'done
 
 const getPriority = (priority: keyof typeof priorityConfig) => priorityConfig[priority]
 const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[status]
+
+function formatCopy(template: string, values: Record<string, string | number>) {
+  return Object.entries(values).reduce(
+    (text, [key, value]) => text.replaceAll(`{${key}}`, String(value)),
+    template
+  )
+}
 </script>
 
 <template>
   <div class="tech-footprint-page">
-    <nav class="route-nav" aria-label="页面导航">
-      <NuxtLink :to="homePath" class="back-link">返回首页</NuxtLink>
+    <nav class="route-nav" :aria-label="copy.navLabel">
+      <NuxtLink :to="homePath" class="back-link">{{ copy.backHome }}</NuxtLink>
       <span class="nav-divider"></span>
-      <span class="nav-current">技术足迹</span>
+      <span class="nav-current">{{ copy.navCurrent }}</span>
     </nav>
 
     <header class="route-hero">
@@ -81,18 +91,18 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
 
         <div class="track-panel">
           <div>
-            <span class="track-label">主线</span>
+            <span class="track-label">{{ copy.mainTrack }}</span>
             <p>{{ routeIntro.mainTrack }}</p>
           </div>
           <div>
-            <span class="track-label">副线</span>
+            <span class="track-label">{{ copy.sideTrack }}</span>
             <p>{{ routeIntro.sideTrack }}</p>
           </div>
         </div>
       </div>
 
-      <aside class="hero-card" aria-label="路线目标">
-        <span class="hero-card-kicker">路线目标</span>
+      <aside class="hero-card" :aria-label="copy.goalLabel">
+        <span class="hero-card-kicker">{{ copy.goalLabel }}</span>
         <p>{{ routeIntro.finalGoal }}</p>
         <div class="hero-metrics">
           <div v-for="stat in routeProgressStats" :key="stat.label" class="metric-item">
@@ -104,7 +114,7 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
       </aside>
     </header>
 
-    <section class="tool-strip" aria-label="核心工具链">
+    <section class="tool-strip" :aria-label="copy.toolchainLabel">
       <div v-for="tool in featuredTools" :key="tool.name" class="tool-item">
         <img :src="tool.logo" :alt="tool.name" loading="lazy" />
         <div>
@@ -116,9 +126,9 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
 
     <section class="architecture-section" aria-labelledby="architecture-title">
       <div class="section-heading">
-        <p class="section-kicker">System Map</p>
-        <h2 id="architecture-title">从底盘到部署的能力链路</h2>
-        <p>这张图来自同一份阶段数据：以后调整阶段时，路线图和任务清单会一起跟着变。</p>
+        <p class="section-kicker">{{ copy.systemMap }}</p>
+        <h2 id="architecture-title">{{ copy.architectureTitle }}</h2>
+        <p>{{ copy.architectureDescription }}</p>
       </div>
 
       <div class="architecture-grid">
@@ -136,33 +146,33 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
     <section class="roadmap-section" aria-labelledby="roadmap-title">
       <div class="roadmap-header">
         <div>
-          <p class="section-kicker">Checklist</p>
-          <h2 id="roadmap-title">个人路线任务清单</h2>
+          <p class="section-kicker">{{ copy.checklist }}</p>
+          <h2 id="roadmap-title">{{ copy.roadmapTitle }}</h2>
           <p>
-            {{ routeTasks.length }} 个长期任务里，先抓住 {{ coreCount }} 个主线任务；页面上的统计、分组和优先级都从任务清单自动生成。
+            {{ formatCopy(copy.roadmapDescription, { total: routeTasks.length, core: coreCount }) }}
           </p>
         </div>
 
-        <div class="todo-summary" aria-label="任务统计">
+        <div class="todo-summary" :aria-label="copy.taskStatsLabel">
           <div>
             <strong>{{ routeTasks.length }}</strong>
-            <span>总任务</span>
+            <span>{{ copy.totalTasks }}</span>
           </div>
           <div>
             <strong>{{ coreCount }}</strong>
-            <span>主线</span>
+            <span>{{ copy.coreTasks }}</span>
           </div>
           <div>
             <strong>{{ doingCount }}</strong>
-            <span>进行中</span>
+            <span>{{ copy.doingTasks }}</span>
           </div>
           <div>
             <strong>{{ doneCount }}</strong>
-            <span>已完成</span>
+            <span>{{ copy.doneTasks }}</span>
           </div>
         </div>
 
-        <div class="view-switch" role="tablist" aria-label="路线图视图">
+        <div class="view-switch" role="tablist" :aria-label="copy.roadmapViewLabel">
           <button
             v-for="tab in viewTabs"
             :key="tab.key"
@@ -199,7 +209,7 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
                   <span class="project-check" :class="'status-' + task.status" aria-hidden="true">
                     <span v-if="task.status === 'done'">✓</span>
                   </span>
-                  <span class="project-index">Task {{ String(task.order).padStart(2, '0') }}</span>
+                  <span class="project-index">{{ copy.taskPrefix }} {{ String(task.order).padStart(2, '0') }}</span>
                 </div>
                 <div class="project-pills">
                   <span class="status-pill" :style="{ color: getStatus(task.status).color }">
@@ -242,7 +252,7 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
             </div>
 
             <div class="deliverable-list">
-              <strong>阶段成果</strong>
+              <strong>{{ copy.deliverables }}</strong>
               <ul>
                 <li v-for="item in stage.deliverables" :key="item">
                   <span class="todo-checkbox" aria-hidden="true"></span>
@@ -267,7 +277,7 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
 
         <div class="route-archive-columns">
           <section class="keyword-panel">
-            <h3>能力关键词</h3>
+            <h3>{{ copy.keywordsTitle }}</h3>
             <div class="keyword-groups">
               <div v-for="group in knowledgeTags" :key="group.title" class="keyword-group">
                 <strong>{{ group.title }}</strong>
@@ -279,7 +289,7 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
           </section>
 
           <section class="role-panel">
-            <h3>维护规则</h3>
+            <h3>{{ copy.maintenanceTitle }}</h3>
             <div class="maintenance-groups">
               <div v-for="group in maintenanceNotes" :key="group.title" class="maintenance-group">
                 <strong>{{ group.title }}</strong>
@@ -295,9 +305,9 @@ const getStatus = (status: keyof typeof taskStatusConfig) => taskStatusConfig[st
 
     <section class="priority-section" aria-labelledby="priority-title">
       <div class="section-heading compact">
-        <p class="section-kicker">Priority</p>
-        <h2 id="priority-title">路线优先级</h2>
-        <p>这里不用单独维护，分组会从任务的 priority 字段自动生成。</p>
+        <p class="section-kicker">{{ copy.priority }}</p>
+        <h2 id="priority-title">{{ copy.priorityTitle }}</h2>
+        <p>{{ copy.priorityDescription }}</p>
       </div>
 
       <div class="priority-grid">

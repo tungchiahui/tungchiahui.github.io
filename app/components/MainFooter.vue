@@ -53,7 +53,7 @@ const socialLinks = computed(() => {
     { key: 'twitter', label: 'Twitter', href: social.twitter, icon: 'fab fa-twitter' },
     { key: 'instagram', label: 'Instagram', href: social.instagram, icon: 'fab fa-instagram' },
     { key: 'facebook', label: 'Facebook', href: social.facebook, icon: 'fab fa-facebook' },
-    { key: 'douyin', label: '抖音', href: social.douyin, icon: 'fab fa-tiktok' },
+    { key: 'douyin', label: ui.value.douyin, href: social.douyin, icon: 'fab fa-tiktok' },
     { key: 'tiktok', label: 'TikTok', href: social.tiktok, icon: 'fab fa-tiktok' },
     { key: 'coolapk', label: 'CoolAPK', href: social.coolapk, icon: 'fab fa-android' }
   ].filter(link => Boolean(link.href))
@@ -68,14 +68,14 @@ const recordLinks = computed(() => {
       label: record.icp,
       href: 'https://beian.miit.gov.cn/',
       icon: 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-miit.webp',
-      alt: '工信部图标'
+      alt: ui.value.miitIconAlt
     },
     {
       key: 'beian',
       label: record.beian,
       href: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37030302001121',
       icon: 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/footer/favicon-mps.webp',
-      alt: '公安备案图标'
+      alt: ui.value.mpsIconAlt
     }
   ].filter(link => Boolean(link.label))
 })
@@ -175,7 +175,7 @@ function getLocalizedFooterPath(path: string) {
       </section>
 
       <div class="footer-bottom">
-        <p class="footer-copyright">Copyright {{ currentYear }} 东澈的折腾天地</p>
+        <p class="footer-copyright">Copyright {{ currentYear }} {{ ui.copyrightSiteName }}</p>
 
         <div class="footer-records">
           <a

@@ -4,7 +4,7 @@
     <div class="photo-layer" aria-hidden="true"></div>
 
     <header class="start-topbar">
-      <NuxtLink class="brand-mark" :to="homePath" aria-label="返回首页">
+      <NuxtLink class="brand-mark" :to="homePath" :aria-label="copy.backHome">
         <img
           class="brand-logo"
           src="/favicon.ico"
@@ -17,24 +17,24 @@
       </NuxtLink>
 
       <div class="top-actions">
-        <div class="mode-switch" aria-label="显示模式">
+        <div class="mode-switch" :aria-label="copy.displayMode">
           <button
             type="button"
             :class="{ active: viewMode === 'simple' }"
             @click="setViewMode('simple')"
           >
-            简洁
+            {{ copy.simple }}
           </button>
           <button
             type="button"
             :class="{ active: viewMode === 'detailed' }"
             @click="setViewMode('detailed')"
           >
-            完整
+            {{ copy.detailed }}
           </button>
         </div>
 
-        <button class="icon-button top-icon" type="button" aria-label="切换背景" title="切换背景" @click="nextBackground">
+        <button class="icon-button top-icon" type="button" :aria-label="copy.switchBackground" :title="copy.switchBackground" @click="nextBackground">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M3 7h18" />
             <path d="M7 3 3 7l4 4" />
@@ -64,14 +64,14 @@
             <button
               class="engine-inline-button"
               type="button"
-              :aria-label="`当前搜索引擎：${currentEngine.name}，点击切换`"
-              :title="`当前搜索引擎：${currentEngine.name}`"
+              :aria-label="formatCopy(copy.currentEngineLabel, { engine: currentEngineName })"
+              :title="formatCopy(copy.currentEngineTitle, { engine: currentEngineName })"
               @click="cycleEngine"
             >
               <img
                 class="engine-logo"
                 :src="currentEngine.logo"
-                :alt="currentEngine.name"
+                :alt="currentEngineName"
                 referrerpolicy="no-referrer"
                 draggable="false"
               />
@@ -84,8 +84,8 @@
               type="text"
               autocomplete="off"
               spellcheck="false"
-              placeholder="搜索，或者输入一个网址"
-              aria-label="搜索或输入网址"
+              :placeholder="copy.searchPlaceholder"
+              :aria-label="copy.searchAria"
               @focus="onSearchFocus"
               @blur="onSearchBlur"
             />
@@ -94,8 +94,8 @@
               v-if="query"
               class="icon-button clear-button"
               type="button"
-              aria-label="清空搜索"
-              title="清空"
+              :aria-label="copy.clearSearch"
+              :title="copy.clear"
               @mousedown.prevent="query = ''"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -104,7 +104,7 @@
               </svg>
             </button>
 
-            <button class="search-submit" type="submit" aria-label="开始搜索" title="搜索">
+            <button class="search-submit" type="submit" :aria-label="copy.startSearch" :title="copy.search">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" />
                 <path d="m16.3 16.3 4.2 4.2" />
@@ -115,8 +115,8 @@
           <Transition name="dropdown">
             <div v-if="showSearchPanel" class="history-popover">
               <div class="history-head">
-                <span>{{ query.trim() ? '搜索建议' : '最近搜索' }}</span>
-                <button v-if="history.length" type="button" @mousedown.prevent="clearHistory">清除历史</button>
+                <span>{{ query.trim() ? copy.suggestions : copy.recentSearches }}</span>
+                <button v-if="history.length" type="button" @mousedown.prevent="clearHistory">{{ copy.clearHistory }}</button>
               </div>
 
               <div v-if="searchOptions.length" class="history-list">
@@ -129,12 +129,12 @@
                 >
                   <span class="history-dot" :class="item.source" aria-hidden="true"></span>
                   <span class="history-text">{{ item.text }}</span>
-                  <span class="history-engine">{{ item.source === 'suggestion' ? currentEngine.name : item.engine }}</span>
+                  <span class="history-engine">{{ item.source === 'suggestion' ? currentEngineName : item.engine }}</span>
                   <button
                     v-if="item.source === 'history'"
                     class="history-remove"
                     type="button"
-                    aria-label="移除此条历史"
+                    :aria-label="copy.removeHistory"
                     @mousedown.prevent.stop="removeHistory(item.text)"
                   >
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -145,7 +145,7 @@
                 </div>
               </div>
 
-              <div v-else class="suggest-loading">正在获取建议</div>
+              <div v-else class="suggest-loading">{{ copy.loadingSuggestions }}</div>
             </div>
           </Transition>
 
@@ -158,8 +158,8 @@
       <section class="bookmark-stage" aria-labelledby="bookmark-title">
         <div class="stage-head">
           <div>
-            <p class="stage-kicker">Launchpad</p>
-            <h2 id="bookmark-title">常用入口</h2>
+            <p class="stage-kicker">{{ copy.launchpad }}</p>
+            <h2 id="bookmark-title">{{ copy.bookmarksTitle }}</h2>
           </div>
 
           <div class="stage-actions">
@@ -167,8 +167,8 @@
               class="icon-button edit-toggle"
               :class="{ active: editing }"
               type="button"
-              :aria-label="editing ? '完成编辑' : '编辑书签'"
-              :title="editing ? '完成编辑' : '编辑书签'"
+              :aria-label="editing ? copy.finishEdit : copy.editBookmarks"
+              :title="editing ? copy.finishEdit : copy.editBookmarks"
               @click="editing = !editing"
             >
               <svg v-if="editing" viewBox="0 0 24 24" aria-hidden="true">
@@ -181,14 +181,14 @@
             </button>
 
             <template v-if="editing">
-              <button class="icon-button" type="button" aria-label="新增分类" title="新增分类" @click="addSection">
+              <button class="icon-button" type="button" :aria-label="copy.addSection" :title="copy.addSection" @click="addSection">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 5v14" />
                   <path d="M5 12h14" />
                 </svg>
               </button>
 
-              <button class="icon-button" type="button" aria-label="恢复默认" title="恢复默认" @click="resetDefaults">
+              <button class="icon-button" type="button" :aria-label="copy.resetDefaults" :title="copy.resetDefaults" @click="resetDefaults">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M4.8 9a7.5 7.5 0 1 1 1.7 8.2" />
                   <path d="M4.8 4.8V9h4.3" />
@@ -214,19 +214,19 @@
                   v-model="section.title"
                   class="section-title-input"
                   type="text"
-                  aria-label="分类名称"
+                  :aria-label="copy.sectionName"
                   @change="persist"
                 />
                 <h3 v-else>{{ section.title }}</h3>
-                <span>{{ section.items.length }} 个入口</span>
+                <span>{{ formatCopy(copy.entryCount, { count: section.items.length }) }}</span>
               </div>
 
               <button
                 v-if="editing"
                 class="icon-button add-link"
                 type="button"
-                aria-label="添加书签"
-                title="添加书签"
+                :aria-label="copy.addBookmark"
+                :title="copy.addBookmark"
                 @click="addItem(si)"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -266,16 +266,16 @@
 
                 <template v-else>
                   <span class="edit-fields">
-                    <input v-model="item.name" type="text" placeholder="名称" aria-label="书签名称" @change="persist" />
-                    <input v-model="item.desc" type="text" placeholder="描述" aria-label="书签描述" @change="persist" />
-                    <input v-model="item.url" type="url" placeholder="URL" aria-label="书签链接" @change="persist" />
+                    <input v-model="item.name" type="text" :placeholder="copy.namePlaceholder" :aria-label="copy.bookmarkName" @change="persist" />
+                    <input v-model="item.desc" type="text" :placeholder="copy.descPlaceholder" :aria-label="copy.bookmarkDesc" @change="persist" />
+                    <input v-model="item.url" type="url" placeholder="URL" :aria-label="copy.bookmarkUrl" @change="persist" />
                   </span>
 
                   <button
                     class="icon-button remove-link"
                     type="button"
-                    aria-label="删除书签"
-                    title="删除书签"
+                    :aria-label="copy.deleteBookmark"
+                    :title="copy.deleteBookmark"
                     @click.prevent="removeItem(si, ii)"
                   >
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -290,32 +290,32 @@
         </div>
       </section>
 
-      <aside class="start-aside" aria-label="启动页状态">
+      <aside class="start-aside" :aria-label="copy.startStatus">
         <section class="aside-panel now-panel">
-          <p>当前引擎</p>
-          <strong>{{ currentEngine.name }}</strong>
-          <span>{{ query.trim() ? '准备搜索' : '等待输入' }}</span>
+          <p>{{ copy.currentEngine }}</p>
+          <strong>{{ currentEngineName }}</strong>
+          <span>{{ query.trim() ? copy.readySearch : copy.waitingInput }}</span>
         </section>
 
         <section class="aside-panel metrics-panel">
           <div>
             <strong>{{ sections.length }}</strong>
-            <span>分类</span>
+            <span>{{ copy.categories }}</span>
           </div>
           <div>
             <strong>{{ bookmarkCount }}</strong>
-            <span>入口</span>
+            <span>{{ copy.entries }}</span>
           </div>
           <div>
             <strong>{{ history.length }}</strong>
-            <span>历史</span>
+            <span>{{ copy.history }}</span>
           </div>
         </section>
 
         <section v-if="history.length" class="aside-panel recent-panel">
           <div class="aside-head">
-            <p>最近</p>
-            <button type="button" @click="clearHistory">清除</button>
+            <p>{{ copy.recent }}</p>
+            <button type="button" @click="clearHistory">{{ copy.clear }}</button>
           </div>
 
           <button
@@ -337,6 +337,7 @@
 
 <script setup lang="ts">
 import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
+import { getPageCopy } from '~~/utils/i18n-page-copy'
 
 interface BookmarkItem {
   id: string
@@ -367,51 +368,13 @@ interface SearchOption {
 }
 
 type ViewMode = 'simple' | 'detailed'
-
-const defaultSections: BookmarkSection[] = [
-  {
-    title: '日常工具',
-    items: [
-      { id: 'tool-gmail', name: 'Gmail', desc: '邮件收件箱', url: 'https://mail.google.com', key: '1', color: '#ef5b4d' },
-      { id: 'tool-github', name: 'GitHub', desc: '代码与项目', url: 'https://github.com', key: '2', color: '#6f66d8' },
-      { id: 'tool-notion', name: 'Notion', desc: '笔记与资料', url: 'https://notion.so', key: '3', color: '#2f3437' },
-      { id: 'tool-chatgpt', name: 'ChatGPT', desc: 'AI 助手', url: 'https://chat.openai.com', key: '4', color: '#10a37f' },
-    ],
-  },
-  {
-    title: '开发资源',
-    items: [
-      { id: 'dev-mdn', name: 'MDN', desc: 'Web 文档', url: 'https://developer.mozilla.org', color: '#2f80ed' },
-      { id: 'dev-stack', name: 'Stack Overflow', desc: '技术问答', url: 'https://stackoverflow.com', color: '#f48225' },
-      { id: 'dev-caniuse', name: 'Can I Use', desc: '兼容性查询', url: 'https://caniuse.com', color: '#7bbf47' },
-      { id: 'dev-codepen', name: 'CodePen', desc: '前端实验', url: 'https://codepen.io', color: '#47b8a6' },
-    ],
-  },
-  {
-    title: '阅读灵感',
-    items: [
-      { id: 'read-hn', name: 'Hacker News', desc: '技术热榜', url: 'https://news.ycombinator.com', color: '#ff6600' },
-      { id: 'read-producthunt', name: 'Product Hunt', desc: '产品发现', url: 'https://www.producthunt.com', color: '#da3b28' },
-      { id: 'read-v2ex', name: 'V2EX', desc: '创意社区', url: 'https://www.v2ex.com', color: '#308eda' },
-      { id: 'read-zhihu', name: '知乎', desc: '知识问答', url: 'https://www.zhihu.com', color: '#0084ff' },
-    ],
-  },
-  {
-    title: '媒体娱乐',
-    items: [
-      { id: 'media-youtube', name: 'YouTube', desc: '视频频道', url: 'https://www.youtube.com', color: '#ff0033' },
-      { id: 'media-bilibili', name: 'Bilibili', desc: '弹幕视频', url: 'https://www.bilibili.com', color: '#00aeec' },
-      { id: 'media-spotify', name: 'Spotify', desc: '音乐电台', url: 'https://open.spotify.com', color: '#1ed760' },
-      { id: 'media-douban', name: '豆瓣', desc: '书影音', url: 'https://www.douban.com', color: '#1b813e' },
-    ],
-  },
-]
+type SearchEngineId = 'baidu' | 'google' | 'bing'
 
 const engines = [
-  { name: '百度', logo: 'https://www.baidu.com/favicon.ico', url: 'https://www.baidu.com/s?wd=' },
-  { name: '谷歌', logo: 'https://www.google.com/favicon.ico', url: 'https://www.google.com/search?q=' },
-  { name: '必应', logo: 'https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico', url: 'https://www.bing.com/search?q=' },
-]
+  { id: 'baidu', logo: 'https://www.baidu.com/favicon.ico', url: 'https://www.baidu.com/s?wd=' },
+  { id: 'google', logo: 'https://www.google.com/favicon.ico', url: 'https://www.google.com/search?q=' },
+  { id: 'bing', logo: 'https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico', url: 'https://www.bing.com/search?q=' },
+] satisfies Array<{ id: SearchEngineId, logo: string, url: string }>
 
 const backgroundPhotos = [
   {
@@ -459,8 +422,11 @@ let suggestionTimer: ReturnType<typeof setTimeout> | undefined
 let suggestionRequestId = 0
 
 const route = useRoute()
-const homePath = computed(() => replaceLocaleInPath('/', getCurrentLocaleSlug(route.path)))
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const copy = computed(() => getPageCopy('start', currentLocaleSlug.value))
+const homePath = computed(() => replaceLocaleInPath('/', currentLocaleSlug.value))
 const currentEngine = computed(() => engines[engineIdx.value] || engines[0])
+const currentEngineName = computed(() => copy.value.engineNames[currentEngine.value.id])
 
 const currentBackground = computed(() => backgroundPhotos[backgroundIdx.value % backgroundPhotos.length])
 
@@ -482,18 +448,17 @@ const timeSS = computed(() => String(now.value.getSeconds()).padStart(2, '0'))
 
 const dateLine = computed(() => {
   const d = now.value
-  const days = ['日', '一', '二', '三', '四', '五', '六']
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} 星期${days[d.getDay()]}`
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} ${copy.value.weekdayPrefix}${copy.value.weekdays[d.getDay()]}`
 })
 
 const greeting = computed(() => {
   const h = now.value.getHours()
-  if (h >= 6 && h < 9) return '早上好，先找到今天的节奏。'
-  if (h >= 9 && h < 12) return '上午好，适合做一点需要专注的事。'
-  if (h >= 12 && h < 14) return '中午好，慢一点也没关系。'
-  if (h >= 14 && h < 18) return '下午好，把下一步打开就行。'
-  if (h >= 18 && h < 22) return '晚上好，收束今天，也留点余地。'
-  return '夜深了，做完这一件就早点休息。'
+  if (h >= 6 && h < 9) return copy.value.greetings.early
+  if (h >= 9 && h < 12) return copy.value.greetings.morning
+  if (h >= 12 && h < 14) return copy.value.greetings.noon
+  if (h >= 14 && h < 18) return copy.value.greetings.afternoon
+  if (h >= 18 && h < 22) return copy.value.greetings.evening
+  return copy.value.greetings.night
 })
 
 const filteredHistory = computed(() => {
@@ -519,7 +484,7 @@ const searchOptions = computed<SearchOption[]>(() => {
     for (const text of suggestions.value) {
       push({
         text,
-        engine: currentEngine.value.name,
+        engine: currentEngineName.value,
         source: 'suggestion',
       })
     }
@@ -544,7 +509,7 @@ const showSearchPanel = computed(() => {
 })
 
 function cloneDefaults(): BookmarkSection[] {
-  return JSON.parse(JSON.stringify(defaultSections))
+  return JSON.parse(JSON.stringify(copy.value.defaultSections))
 }
 
 function loadSections(): BookmarkSection[] {
@@ -585,7 +550,7 @@ function addToHistory(text: string) {
   history.value = history.value.filter(item => item.text !== text)
   history.value.unshift({
     text,
-    engine: currentEngine.value.name,
+    engine: currentEngineName.value,
     timestamp: Date.now(),
   })
 
@@ -635,7 +600,7 @@ function setEngine(index: number) {
   engineIdx.value = index
 
   if (import.meta.client) {
-    localStorage.setItem(ENGINE_KEY, currentEngine.value.name)
+    localStorage.setItem(ENGINE_KEY, currentEngine.value.id)
   }
 }
 
@@ -793,16 +758,16 @@ function jsonp(url: string, callbackName: string, charset = 'utf-8') {
 
 function suggestionRequest(queryText: string, callbackName: string) {
   const encoded = encodeURIComponent(queryText)
-  const engine = currentEngine.value.name
+  const engine = currentEngine.value.id
 
-  if (engine === '谷歌') {
+  if (engine === 'google') {
     return {
       url: `https://suggestqueries.google.com/complete/search?client=chrome&q=${encoded}&jsonp=${callbackName}`,
       charset: 'utf-8',
     }
   }
 
-  if (engine === '必应') {
+  if (engine === 'bing') {
     return {
       url: `https://api.bing.com/osjson.aspx?query=${encoded}&JsonType=callback&JsonCallback=${callbackName}`,
       charset: 'utf-8',
@@ -865,8 +830,8 @@ function makeId() {
 function addItem(sectionIndex: number) {
   sections.value[sectionIndex].items.push({
     id: makeId(),
-    name: '新入口',
-    desc: '添加描述',
+    name: copy.value.defaultEntryName,
+    desc: copy.value.defaultEntryDesc,
     url: 'https://',
     color: accentByIndex(sections.value[sectionIndex].items.length + sectionIndex),
   })
@@ -885,7 +850,7 @@ function removeItem(sectionIndex: number, itemIndex: number) {
 
 function addSection() {
   sections.value.push({
-    title: '新分类',
+    title: copy.value.defaultSectionTitle,
     items: [],
   })
   persist()
@@ -960,6 +925,10 @@ function urlHost(url: string) {
   }
 }
 
+function formatCopy(template: string, values: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ''))
+}
+
 watch([query, engineIdx], () => {
   queueSuggestions()
 })
@@ -986,15 +955,18 @@ onMounted(() => {
 
     const savedEngine = localStorage.getItem(ENGINE_KEY)
     if (savedEngine) {
-      const aliases: Record<string, string> = {
-        Google: '谷歌',
-        Bing: '必应',
+      const aliases: Record<string, SearchEngineId> = {
+        Google: 'google',
+        Bing: 'bing',
+        '谷歌': 'google',
+        '必应': 'bing',
+        '百度': 'baidu'
       }
       const normalizedEngine = aliases[savedEngine] || savedEngine
-      const byName = engines.findIndex(engine => engine.name === normalizedEngine)
+      const byName = engines.findIndex(engine => engine.id === normalizedEngine)
       const legacyNames = ['Google', 'Bing', 'DuckDuckGo', '百度']
       const legacyName = legacyNames[Number(savedEngine)]
-      const byLegacyIndex = legacyName ? engines.findIndex(engine => engine.name === (aliases[legacyName] || legacyName)) : -1
+      const byLegacyIndex = legacyName ? engines.findIndex(engine => engine.id === (aliases[legacyName] || legacyName)) : -1
       const nextIndex = byName >= 0 ? byName : byLegacyIndex
 
       if (nextIndex >= 0) engineIdx.value = nextIndex
@@ -1010,12 +982,12 @@ onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown)
 })
 
-useHead({
-  title: 'Start Page',
+useHead(() => ({
+  title: copy.value.metaTitle,
   bodyAttrs: {
     class: 'start-page-active',
   },
-})
+}))
 
 definePageMeta({ layout: false })
 </script>

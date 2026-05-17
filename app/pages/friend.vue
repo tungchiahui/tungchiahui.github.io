@@ -3,15 +3,15 @@
     <div class="friends-header">
       <h1>
         <i class="fas fa-handshake" aria-hidden="true"></i>
-        <span>友情链接</span>
+        <span>{{ copy.title }}</span>
       </h1>
-      <p>汇聚技术资源、开源社区、竞赛团队及优质网站，方便学习、交流与探索更多创新内容。</p>
+      <p>{{ copy.description }}</p>
     </div>
 
     <div class="friends-divider"></div>
 
     <div v-for="category in categoriesOrder" :key="category">
-      <div class="friend-category-title">{{ category }}</div>
+      <div class="friend-category-title">{{ copy.categories[category] || category }}</div>
       <div class="friends-grid">
         <a 
           v-for="friend in friendsByCategory(category)" 
@@ -25,24 +25,24 @@
             <img
               class="friend-icon-img"
               :src="friend.icon || defaultIcon"
-              :alt="friend.name"
+              :alt="friendCopy(friend).name"
               loading="lazy"
               @error="onImgError"
             />
             <div>
-              <div class="friend-title">{{ friend.name }}</div>
-              <div class="friend-sub">{{ friend.desc }}</div>
+              <div class="friend-title">{{ friendCopy(friend).name }}</div>
+              <div class="friend-sub">{{ friendCopy(friend).desc }}</div>
             </div>
           </div>
 
           <div class="friend-meta">
             <div class="friend-tags">
-              <span class="tag" v-for="tag in friend.tags" :key="tag">{{ tag }}</span>
+              <span class="tag" v-for="tag in friend.tags" :key="tag">{{ copy.tags[tag] || tag }}</span>
             </div>
           </div>
 
           <div class="friend-bottom">
-            <span class="friend-visit">访问网站</span>
+            <span class="friend-visit">{{ copy.visit }}</span>
           </div>
         </a>
       </div>
@@ -53,16 +53,22 @@
 <script setup>
 import { useHead } from '#app'
 import { friends } from '~/data/friends.js'
+import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
+import { getPageCopy } from '~~/utils/i18n-page-copy'
 
-useHead({
-  title: '友情链接',
+const route = useRoute()
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const copy = computed(() => getPageCopy('friend', currentLocaleSlug.value))
+
+useHead(() => ({
+  title: copy.value.title,
   meta: [
     {
       name: 'description',
-      content: '汇聚技术资源、开源社区、竞赛团队及优质网站。'
+      content: copy.value.metaDescription
     }
   ]
-})
+}))
 
 // 动态生成分类，只显示实际有的
 const categoriesOrder = [...new Set(friends.map(f => f.category))]
@@ -70,6 +76,11 @@ const categoriesOrder = [...new Set(friends.map(f => f.category))]
 const defaultIcon = "https://cdn.tungchiahui.cn/tungwebsite/assets/images/default-avatar.webp"
 
 const friendsByCategory = (category) => friends.filter(f => f.category === category)
+
+const friendCopy = (friend) => copy.value.friends[friend.key] || {
+  name: friend.name,
+  desc: friend.desc
+}
 
 const onImgError = (e) => {
   e.target.src = defaultIcon

@@ -2,26 +2,29 @@
 import { computed } from 'vue'
 import { useHead } from '#app'
 import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
+import { getPageCopy } from '~~/utils/i18n-page-copy'
 
 const logoUrl = 'https://cdn.tungchiahui.cn/tungwebsite/assets/images/logo.png'
 const route = useRoute()
-const morePath = computed(() => replaceLocaleInPath('/more', getCurrentLocaleSlug(route.path)))
+const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
+const morePath = computed(() => replaceLocaleInPath('/more', currentLocaleSlug.value))
+const copy = computed(() => getPageCopy('mylogo', currentLocaleSlug.value))
 
-useHead({
-  title: '个人 LOGO - Tung Chia-hui',
+useHead(() => ({
+  title: copy.value.metaTitle,
   meta: [
     {
       name: 'description',
-      content: 'Tung Chia-hui 个人 LOGO 介绍：以 T / C / H 为核心的绿色几何个人标识。'
+      content: copy.value.metaDescription
     }
   ]
-})
+}))
 </script>
 
 <template>
   <div class="mylogo-page">
-    <nav class="logo-top-nav" aria-label="页面导航">
-      <NuxtLink :to="morePath" class="logo-back-link">← 返回更多页面</NuxtLink>
+    <nav class="logo-top-nav" :aria-label="copy.navLabel">
+      <NuxtLink :to="morePath" class="logo-back-link">← {{ copy.back }}</NuxtLink>
     </nav>
 
     <header class="logo-hero">
@@ -30,7 +33,7 @@ useHead({
           <img
             class="logo-image"
             :src="logoUrl"
-            alt="Tung Chia-hui 个人 LOGO"
+            :alt="copy.imageAlt"
             width="220"
             height="220"
             decoding="async"
@@ -43,53 +46,41 @@ useHead({
       </div>
 
       <div class="logo-hero-copy">
-        <p class="logo-kicker">Tung Chia-hui 的个人标识</p>
-        <h1>个人 LOGO</h1>
+        <p class="logo-kicker">{{ copy.kicker }}</p>
+        <h1>{{ copy.title }}</h1>
         <p class="logo-summary">
-          一个把名字、机器人方向和工程气质压缩在一起的绿色几何符号。
+          {{ copy.summary }}
         </p>
       </div>
     </header>
 
     <main class="logo-content">
       <section class="logo-section">
-        <h2>字母结构</h2>
+        <h2>{{ copy.letterSectionTitle }}</h2>
         <p>
-          这个 Logo 以我的名字 Tung Chia-hui 的首字母 T / C / H 为核心，将三个字母融合进一个类似立方体的几何结构中。它不只是一个简单的姓名缩写，而是一个带有工程感和系统感的个人标识：中间向上的 T 像一条主轴，代表技术方向、持续成长和向上探索；左侧的 C 像一个开放的结构框架，象征连接、协作与对外部世界的感知；右侧的 H 则像稳定的支撑模块，代表硬件、系统架构与工程实现能力。
+          {{ copy.letterSectionBody }}
         </p>
       </section>
 
-      <section class="logo-key-grid" aria-label="LOGO 字母含义">
-        <article class="logo-key-card">
-          <span class="key-letter">T</span>
-          <h3>技术主轴</h3>
-          <p>向上的结构感，代表技术方向、持续成长和向上探索。</p>
-        </article>
-
-        <article class="logo-key-card">
-          <span class="key-letter">C</span>
-          <h3>开放框架</h3>
-          <p>开放而有连接性的轮廓，象征协作与对外部世界的感知。</p>
-        </article>
-
-        <article class="logo-key-card">
-          <span class="key-letter">H</span>
-          <h3>工程支撑</h3>
-          <p>稳定的支撑模块，代表硬件、系统架构与工程实现能力。</p>
+      <section class="logo-key-grid" :aria-label="copy.keyGridLabel">
+        <article v-for="card in copy.cards" :key="card.letter" class="logo-key-card">
+          <span class="key-letter">{{ card.letter }}</span>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.body }}</p>
         </article>
       </section>
 
       <section class="logo-section">
-        <h2>绿色含义</h2>
+        <h2>{{ copy.greenTitle }}</h2>
         <p>
-          绿色是这个 Logo 的主色。相比冷硬的工业色彩，绿色更强调成长、生命力与持续迭代。机器人并不只是机械、代码和电路的组合，它也承载着对现实世界的感知、行动与反馈。对我来说，绿色代表一种不断调试、不断优化、不断向前推进的状态：从一块开发板、一段驱动程序、一个节点，到一台能够自主运动的机器人，技术在一次次实践中逐渐生长。
+          {{ copy.greenBody }}
         </p>
       </section>
 
       <section class="logo-section logo-attitude-section">
-        <h2>技术态度</h2>
+        <h2>{{ copy.attitudeTitle }}</h2>
         <p>
-          因此，这个 Logo 是我的个人符号，也是我的技术态度。它代表我对机器人系统的理解：既关注底层硬件，也重视上层软件；既追求工程实现，也保留创造力和探索欲。它将我的名字、技术方向和个人气质压缩进一个简洁的几何标识里，象征着我希望持续构建更完整、更可靠、更智能的机器人系统。
+          {{ copy.attitudeBody }}
         </p>
       </section>
     </main>

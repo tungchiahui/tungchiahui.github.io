@@ -1,6 +1,7 @@
 // data/friends.js
 export const friends = [
   {
+    key: "vinci",
     name: "Vinci机器人队",
     url: "https://sdutvincirobot.top/",
     desc: "山东理工大学CURC-Robocon团队",
@@ -9,6 +10,7 @@ export const friends = [
     tags: ["竞赛"]
   },
   {
+    key: "qiqi",
     name: "齐奇战队",
     url: "https://sdutqiqi.cn/",
     desc: "山东理工大学CURC-RoboMaster团队",
@@ -17,6 +19,7 @@ export const friends = [
     tags: ["竞赛"]
   },
   {
+    key: "robocon",
     name: "CURC-Robocon赛事官网",
     url: "http://robocon.org.cn/",
     desc: "全国大学生机器人大赛RC 官方站点",
@@ -25,6 +28,7 @@ export const friends = [
     tags: ["资源"]
   },
   {
+    key: "robomaster",
     name: "CURC-RoboMaster赛事官网",
     url: "https://www.robomaster.com/zh-CN",
     desc: "全国大学生机器人大赛RM 官方站点",
@@ -33,6 +37,7 @@ export const friends = [
     tags: ["资源"]
   },
   {
+    key: "rcbbs",
     name: "RCBBS-Robocon开源论坛",
     url: "https://rcbbs.top/",
     desc: "开源机器人与 RC 社区",
@@ -41,6 +46,7 @@ export const friends = [
     tags: ["讨论"]
   },
   {
+    key: "rmBbs",
     name: "RoboMaster开源论坛",
     url: "https://bbs.robomaster.com/",
     desc: "开源机器人与 RC 社区",
@@ -49,6 +55,7 @@ export const friends = [
     tags: ["讨论"]
   },
   {
+    key: "cherish",
     name: "Cherish个人博客",
     url: "https://cherish.wang/",
     desc: "记录生活，分享知识，定格美好",
@@ -57,6 +64,7 @@ export const friends = [
     tags: ["个人"]
   },
   {
+    key: "timeStation",
     name: "时光驿站",
     url: "https://blog.ksah.cn/",
     desc: "记录生活，分享知识，定格美好",
