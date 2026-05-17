@@ -1,13 +1,24 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { createHash } from 'node:crypto'
 import OpenCC from 'opencc-js'
 import { pageCopySource } from '../utils/i18n-page-copy-source'
 
 type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
+type PageCopyEntry = {
+  zh: JsonValue
+  en?: JsonValue
+}
+type MemoryEntry = {
+  source: string
+  target: string
+}
+type MemoryStore = Record<string, MemoryEntry>
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const outputFile = path.join(rootDir, 'utils/generated/i18n-page-copy.ts')
+const memoryFile = path.join(rootDir, 'i18n/ui-memory/en-us.json')
 
 const converters = {
   'zh-hant': OpenCC.Converter({ from: 'cn', to: 't' }),
@@ -15,15 +26,17 @@ const converters = {
   'zh-tw': OpenCC.Converter({ from: 'cn', to: 'tw' })
 } as const
 
+const memory = await readJson<MemoryStore>(memoryFile, {})
+
 const generated = Object.fromEntries(
-  Object.entries(pageCopySource).map(([page, copy]) => [
+  Object.entries(pageCopySource as Record<string, PageCopyEntry>).map(([page, copy]) => [
     page,
     {
       'zh-cn': copy.zh,
       'zh-hant': convertValue(copy.zh, converters['zh-hant']),
       'zh-hk': convertValue(copy.zh, converters['zh-hk']),
       'zh-tw': convertValue(copy.zh, converters['zh-tw']),
-      'en-us': copy.en
+      'en-us': localizeEnglish(page, copy.zh, memory, copy.en)
     }
   ])
 )
@@ -53,4 +66,48 @@ function convertValue<T extends JsonValue>(value: T, converter: (input: string) 
     ) as T
   }
   return value
+}
+
+function localizeEnglish<T extends JsonValue>(page: string, value: T, memory: MemoryStore, fallback?: JsonValue, keyPath: string[] = []): T {
+  if (typeof value === 'string') {
+    const fallbackText = typeof fallback === 'string' ? fallback : value
+    if (!containsChinese(value)) return fallbackText as T
+
+    const pathKey = [page, ...keyPath].join('.')
+    return (memory[memoryKey(pathKey, value)]?.target || fallbackText) as T
+  }
+
+  if (Array.isArray(value)) {
+    const fallbackItems = Array.isArray(fallback) ? fallback : []
+    return value.map((item, index) => localizeEnglish(page, item, memory, fallbackItems[index], [...keyPath, String(index)])) as T
+  }
+
+  if (value && typeof value === 'object') {
+    const fallbackObject = fallback && typeof fallback === 'object' && !Array.isArray(fallback) ? fallback as Record<string, JsonValue> : {}
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, localizeEnglish(page, item, memory, fallbackObject[key], [...keyPath, key])])
+    ) as T
+  }
+
+  return value
+}
+
+async function readJson<T>(file: string, fallback: T): Promise<T> {
+  try {
+    return JSON.parse(await fs.readFile(file, 'utf8')) as T
+  } catch {
+    return fallback
+  }
+}
+
+function memoryKey(pathKey: string, source: string) {
+  return `${pathKey}:${hashText(source)}`
+}
+
+function hashText(value: string) {
+  return createHash('sha256').update(value.replace(/\s+/g, ' ').trim()).digest('hex')
+}
+
+function containsChinese(value: string) {
+  return /[\u3400-\u9fff]/.test(value)
 }

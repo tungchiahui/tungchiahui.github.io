@@ -1,0 +1,548 @@
+{
+  "home.actions.blog:ba2871980ca952a0412fb4113ddc736b76b204ad764cde22aa44829e78e10a7a": {
+    "source": "浏览博客文章",
+    "target": "Browse blog posts",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.actions.more:b215f9f0c526f1f455cd3f7dfe7b2d7480495abd2004edd4b54dda231f3cced7": {
+    "source": "查看更多页面",
+    "target": "View more pages",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.actions.wiki:b095cbc4ae43b73a9fe65f08b346d28ccc3da6669126dbc97ab73d945d9b48be": {
+    "source": "进入 Wiki 知识库",
+    "target": "Open Wiki knowledge base",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.description:0402a24265c26e8ed68d98d2a23d4bc2bf96a7431ff2ed2d62878fb3fbd48241": {
+    "source": "这里是我的个人主页，记录学习、开发和生活里的折腾过程: 从机器人与嵌入式，到 Web、工具和一些日常思考。",
+    "target": "A personal homepage for learning, development, and everyday tinkering: from robotics and embedded systems to web tools and practical notes.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.focusAreas.0.summary:de57b57341ea2849ccb3a41679c30a2797c923d1f71bd68b608e08973896041c": {
+    "source": "围绕 C/C++、Python 与 Linux 环境，沉淀 STM32、ESP32、FreeRTOS 与驱动开发实践。",
+    "target": "C/C++, Python, Linux, STM32, ESP32, FreeRTOS, and driver development practice.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.0.title:89a60b4c8f3f4b544f3b970756d4de62bb1d006a8ae863a6338ee760d61516d6": {
+    "source": "编程与嵌入式开发",
+    "target": "Programming and Embedded Development",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.1.summary:dfe1e1854c21961a99ffc6b2086a25fbe478fb425a6cfcc3cc69a454640c98ad": {
+    "source": "持续实践 ROS1 / ROS2 的运动控制、导航建图与传感器融合，并结合 OpenCV 做环境感知。",
+    "target": "ROS1 / ROS2 motion control, navigation, mapping, sensor fusion, and OpenCV-based perception.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.1.title:54f7b284983e6f5efaf850035fcd00a6e159cd723d14d2f7bcd01cd36e0b3f65": {
+    "source": "机器人与自动化",
+    "target": "Robotics and Automation",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.2.summary:acf422d374d719a9953c59aff6c4b83962fc002c6481e8fe0daeaa5a11422e0a": {
+    "source": "使用 Qt6 构建上位机与可视化调试工具，提升机器人项目的开发效率与可维护性。",
+    "target": "Qt6 host tools and visual debugging utilities that make robotics projects easier to maintain.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.2.title:d6c4d69c9eed0610ac4bf831c25bf1ea101d6b9ce22406b7d3a28be62da6cc69": {
+    "source": "图形界面与工具开发",
+    "target": "GUI and Tool Development",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.3.summary:3c362160176bdf7247020116f10fac0c486017a1bfb4a3c8456485f0f8ee7075": {
+    "source": "基于 Nuxt 打造内容系统，持续优化内容组织、检索体验与前端性能。",
+    "target": "A Nuxt-based content system with better organization, search, and frontend performance.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.3.title:858f9e9da222fdb0a9bcc8f5ea9b96eaf21d7a58b0f683f8fa44dcb6a3ab77aa": {
+    "source": "Web 与博客工程",
+    "target": "Web and Blog Engineering",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.4.summary:7b51ecd5bf309527e816be8d18fb6122a82a13a7690f8660b370f98cc533fa3b": {
+    "source": "在 Android 平台开发控制与监控工具，实现设备联动、状态可视化与流程提效。",
+    "target": "Android control and monitoring tools for device integration, status visualization, and workflow efficiency.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.4.title:a7694aba60647fa2fbd7d578c627eb8200bc2711ff5295e8ea7233c2a693b1a1": {
+    "source": "移动端工具实践",
+    "target": "Mobile Tool Practice",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.5.summary:47e4c1320a814c325887c5943232ab3b2371a24445faa482416a0b3d76d0a327": {
+    "source": "以可复用的方式记录踩坑、设计取舍与项目反思，方便后续快速回顾与迭代。",
+    "target": "Reusable notes on pitfalls, design tradeoffs, and project reviews for later iteration.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusAreas.5.title:fe6a940f165329c9ce3adeb38bdfd5fd607b1e80afadf28c97ee7dbff5de1acb": {
+    "source": "学习笔记与思考复盘",
+    "target": "Study Notes and Retrospectives",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusDescription:5579138a588441f1407848fb0bfd4ebd71fe4d4fa9144cbaa7ddc7a286102554": {
+    "source": "聚焦工程实践与可落地经验，而不是只停留在概念。",
+    "target": "Focused on engineering practice and reusable experience, not just concepts.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.focusTitle:562f5c6704c3669b36d2a6ad203dd22f11128d63950a8197fe1980c7714e7c65": {
+    "source": "本站内容方向",
+    "target": "What This Site Covers",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.latestBlog:dc2b66577e1f3930d43ea6f3dd0b4699373c5ffe8c911e81f0f2530b898d999a": {
+    "source": "最新博客",
+    "target": "Latest Blog",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.latestLabel:c5a5a01c0848e38e21eb108480c3ea44bb4e444195ba986d7ac55305f4d6ae3e": {
+    "source": "最新内容",
+    "target": "Latest content",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.latestWiki:9dbdafa7871a4044189b113dab406b5b150dccf5095fb8e8b5e72e9323cd9f24": {
+    "source": "最新 Wiki",
+    "target": "Latest Wiki",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "home.metaDescription:dcfaf4d3375417fb04f10511ba44250e4efab0e7c7706f6ad2a6704a37cd8def": {
+    "source": "探索、学习与创造的记录",
+    "target": "Notes on exploring, learning, and building.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.metaTitle:ab699b864d8c6964c2c924ac3a877fd6acd231eb4908b4ad00a0cc95f423dc18": {
+    "source": "东澈的折腾天地",
+    "target": "Dongche's Tinkering Notes",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.tags.0:fd486e0803e467f80a1852270b1b96854746d5a79e8d93d3838656319bdccb6e": {
+    "source": "技术折腾",
+    "target": "Technical tinkering",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.tags.1:9f3c96e2f7b3f07279c09f6541696ac5ec5ac5066a85f52a22bbbb2ee1b054ac": {
+    "source": "项目记录",
+    "target": "Project logs",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.tags.2:267e10c2605da00e2bad0fae47e02af9431fa19a7e9eaaf7094bd99363c1dcce": {
+    "source": "学习笔记",
+    "target": "Study notes",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.tags.3:26baa878c01f9568febe2f6abade6d4cc8e74d403df8be85dc3a1d37cd76af4e": {
+    "source": "生活随想",
+    "target": "Life thoughts",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.title:8f9ea65e33217240998197a76c9c9722baf9c504059936ec759da09d5214366e": {
+    "source": "欢迎来到东澈的折腾天地",
+    "target": "Welcome to Dongche's Tinkering Notes",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.230Z"
+  },
+  "home.viewAll:fa2ff3c379a7c988a3f553b4350556f1b94f28829f786ad5b646c6835e803d63": {
+    "source": "查看全部",
+    "target": "View all",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.chat.1:04747c081922ed03b0a3505c558195ee4d068245f4e71f9117117b577456141d": {
+    "source": "自建的类ChatGPT网站",
+    "target": "Self-hosted ChatGPT-like website",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.cnCdn.0:f8122f54a03a176e7dcf205e893d11d59577539e0ebad23dc742115963ed2b51": {
+    "source": "中国大陆 CDN",
+    "target": "Mainland China CDN",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.cnCdn.1:e2222675d8340a1b1aefb12d34a1e16e94421a96effe848d76fcd3f6691084d4": {
+    "source": "内容分发网络(Content Delivery Network,CDN)",
+    "target": "Content Delivery Network (CDN)",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.cv.0:fe15bcacc4da5bbb2b98eb61a05ed134bdafb47e8a1ab8b8f76c28f49b3f04f6": {
+    "source": "简历",
+    "target": "Resume",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.cv.1:4e2c6c2e79f7ab7f92467ad80008bb3166dcb23e017d594907fc51734e018e08": {
+    "source": "个人简历",
+    "target": "Personal resume",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.footprint.0:8c873dedb3fe00501a5f07c6dd681510496aa429b3c71eb9c03c2082cbbda139": {
+    "source": "技术足迹",
+    "target": "Tech Footprint",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.footprint.1:14714005fe8355c23335a0c06af40e0cc4da1828a8277f7bfb6fe92007a76aec": {
+    "source": "个人机器人技术路线清单",
+    "target": "Personal robotics technology roadmap",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.friends.0:c2a2f8293dc670ef203395840344f01709076fde4095f03f7312c6b94bd000a5": {
+    "source": "友情链接",
+    "target": "Friends",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.friends.1:65008da8eaa46b87264d305faa6c0a29dc1a7c8d7196995c63c9855753c39c50": {
+    "source": "汇聚优质网站、社区和团队",
+    "target": "Useful websites, communities, and teams",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.globalCdn.0:af880c3aa7a6cb51413b5862fbd1bffbb05813859899a2f86bb030f25821df59": {
+    "source": "国际 CDN",
+    "target": "Global CDN",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.globalCdn.1:e2222675d8340a1b1aefb12d34a1e16e94421a96effe848d76fcd3f6691084d4": {
+    "source": "内容分发网络(Content Delivery Network,CDN)",
+    "target": "Content Delivery Network (CDN)",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.logo.0:a4dd7f564fca8b593262e70ead9e81582d1318dba5a2fd1e4c60a6a43b37bd05": {
+    "source": "个人 LOGO",
+    "target": "Personal Logo",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.logo.1:7866cbc58a2193b91486da5532335dbc6667cf29ff79c2515db6dc64f251c28e": {
+    "source": "LOGO介绍",
+    "target": "Logo introduction",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.start.0:2c0154ae7c19abcc4b44c220ca100b90f253b97cc69f311fc13b5e69c0927455": {
+    "source": "导航页",
+    "target": "Start Page",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.start.1:2c0154ae7c19abcc4b44c220ca100b90f253b97cc69f311fc13b5e69c0927455": {
+    "source": "导航页",
+    "target": "Navigation page",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.stats.0:e160197551bf161574f12044c364b5495ae762bbd762f2ff8c9bf37fa3e95ccd": {
+    "source": "数据统计",
+    "target": "Stats",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.stats.1:518927410e69817177e2124fa4dde2afb2258c7770a48f672461268871728d74": {
+    "source": "网站数据分析与统计页面",
+    "target": "Website analytics and statistics",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.cards.umami.1:cd796d76603682bd36018abf056da31ea53f7762529b96308085e96615db6176": {
+    "source": "网站访问统计平台",
+    "target": "Website traffic analytics platform",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.categories.acceleration:6c1d26ec5341fb844242aca09d7cb82171a68ba9fe23216a9c9b9e058767f437": {
+    "source": "加速服务",
+    "target": "Acceleration Services",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.categories.analytics:5d8ec6f62009eef7358db6118471df87163576497235e7413b57fb25ed12a232": {
+    "source": "数据分析",
+    "target": "Analytics",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.categories.other:d2909f1647e7c891a8282759b2eaa961e84620ff04cda7b8b5478cb540d74fa4": {
+    "source": "其他",
+    "target": "Other",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.description:5accee07cc64135ebbd521f02891db9e32b34f6d42b856510acab617abe11819": {
+    "source": "这里收集站内的重要页面，方便快速访问。",
+    "target": "Important site pages collected for quick access.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.metaDescription:1da6f5f19beb11193e148e451c374561211e0d9d80aa1a8530c3bd21f537372e": {
+    "source": "站内重要页面入口，包括数据统计、友链、技术足迹、简历与导航页。",
+    "target": "Important site entries, including analytics, friends, tech footprint, resume, and navigation.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "more.title:dd6002032cc816f31e6ee0e2232d4399dc640045349262d84103249e3f4790cc": {
+    "source": "更多页面",
+    "target": "More Pages",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.direct:762cd9c2de69577baca17e16dc91727905766dfdd596bb371d4bea20b089d4c0": {
+    "source": "直接访问",
+    "target": "Direct",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.empty:497c85690c4cc0fc1aeb7bf60859386fb0f1ec136faea5dcb77c8dc16d88795c": {
+    "source": "暂无数据",
+    "target": "No data",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.frameLabel:c0d57670a89a98b14666637cc98d372117facb653bef9c4dc6732a2292a2ccc7": {
+    "source": "Umami 共享面板",
+    "target": "Umami shared dashboard",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.frameTitle:f03db52b589676e7652536cf773152a94b4f6d5259f51eaa7953eac0b32c6d54": {
+    "source": "网站访问数据统计",
+    "target": "Website traffic analytics",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.loading:f75515ab3c99f623d2ac0eafc5a083252dd88b2dd5297412cdfbdfd269d9a5c0": {
+    "source": "正在加载统计数据...",
+    "target": "Loading analytics data...",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.metaDescription:f03db52b589676e7652536cf773152a94b4f6d5259f51eaa7953eac0b32c6d54": {
+    "source": "网站访问数据统计",
+    "target": "Website traffic analytics.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.note:f2f40a2a98ede286bdf98bfab8a4f8bc104338cda391c1f2f008d0b85bf35b0b": {
+    "source": "以下数据来自 Umami API，支持实时刷新。",
+    "target": "The data below comes from the Umami API and supports live refresh.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.overviewLabel:def581d67c30ae6ac4d8babc5d622cea64a5d88e8ad2d7aa67716c9aa0a8b451": {
+    "source": "全站指标",
+    "target": "Site metrics",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.refresh:0468ee76ee3da30e147efe8fa27b242c515114a9ec3a6aa35c36ae40187055a5": {
+    "source": "刷新数据",
+    "target": "Refresh data",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.refreshing:609140d9c6613fe0f566b4a9799adf1fb266e46cc05a695209440a25942b4436": {
+    "source": "刷新中...",
+    "target": "Refreshing...",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.browsers:e19c3b9e266c69c952f9f265334bb14bceeb2f6869305d1a44447c5e09e64105": {
+    "source": "浏览器",
+    "target": "Browsers",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.channels:c35ffb529d5d4bac4d074312abfdd793aa2d84770c4554d5fd3758dbc21841ed": {
+    "source": "渠道",
+    "target": "Channels",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.cities:ed84a1665f79b6ca43e821a4f81a050fb3a32f6a283a1df5ec69e09301ce2a4b": {
+    "source": "城市",
+    "target": "Cities",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.countries:0cc659a9f57c24934d08e517f1aeadfd4908ca355759523dc513d2b901ff3f40": {
+    "source": "国家",
+    "target": "Countries",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.devices:e1506406a5bd8f0225fbb27b4349faf7a8af6090960908c3b2b32b1275e38bc9": {
+    "source": "设备",
+    "target": "Devices",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.events:c560201b331c54435b445baebe03b8922d6ef6a80065411ed3f379eb8bef9848": {
+    "source": "事件",
+    "target": "Events",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.os:360480034cc3e9d32da9e262f001b129f80ddea134733a2e8b6268032aa139ab": {
+    "source": "操作系统",
+    "target": "Operating Systems",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.paths:89d9db257f9c2dbff57f19b1432fd1596e3a5e6ed55278c915cfa27de4e00e6a": {
+    "source": "热门页面",
+    "target": "Top Pages",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.referrers:792a2e7f5f1b67765ca018be445f1e7c10213a7a09a6aaaeaabd695016177acc": {
+    "source": "来源网站",
+    "target": "Referrers",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.sections.regions:0b5daa927681e86358f4cd3b74e55df326f598e68980e27f282662529e309c40": {
+    "source": "地区",
+    "target": "Regions",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.avgVisitDuration:aa34b47863ec8589e26eed4a5c7a2826c01c2ecd7ed01a3bac290e6a6008f82d": {
+    "source": "平均停留",
+    "target": "Avg. duration",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.bounceRate:2ec91d7f07c40a92b06b9095ce845a5e17b543812b2f17b054cd300213985651": {
+    "source": "跳出率",
+    "target": "Bounce rate",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.bounces:91568978afd9d0d185a9c4c4360d9d52b793bff9d73156e66bbb7635cabb7532": {
+    "source": "跳出次数",
+    "target": "Bounces",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.pagesPerVisit:8b84ceaec04b777c03230f2974a1e318906450e0c36ac5420dde2250e5fc1bb5": {
+    "source": "平均每次浏览",
+    "target": "Pages per visit",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.pageviews:ed6ad197ebbb2054b38b77aa5c49ce9c44f6a52a2f5bd8f14df973953c70f6fc": {
+    "source": "浏览次数",
+    "target": "Pageviews",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.totaltime:5b4c43a0df57dd0189f55e0625849a16820094af0f94f2e3288f564bbfc5aa91": {
+    "source": "累计停留",
+    "target": "Total time",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.visitors:7fbe848b7f2906339f4ec991fc7ba4cab4fe32f90d2f66c8ac0e2f20d46f63d4": {
+    "source": "访客人数",
+    "target": "Visitors",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.summary.visits:0339c61fb3dc802b7803b27a1b685c6eedcc6177e6a98ec00e6ea8b237819d40": {
+    "source": "访问次数",
+    "target": "Visits",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.title:e160197551bf161574f12044c364b5495ae762bbd762f2ff8c9bf37fa3e95ccd": {
+    "source": "数据统计",
+    "target": "Stats",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.unavailable:e67ac32670d0892fe12ad180c7d78c85ae53d853cb84996c1aed53178b8a9813": {
+    "source": "统计数据暂时不可用，请稍后再试。",
+    "target": "Analytics data is temporarily unavailable. Please try again later.",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.hours:3b6fefc50febace4472333c87df059024ef94bbe22c6a0afb32014f7fd330e16": {
+    "source": "小时",
+    "target": "h",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.minutes:b6a993c256ef577abb04b0c353affde222af27a0e4254d66bb697a154cfec553": {
+    "source": "分",
+    "target": "m",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.page:d24d3c99460c7e3aca18732df7e5f21626ba0378fd1add65872ca9ac59187d36": {
+    "source": "页",
+    "target": "pages",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.pageviews:a8c81f93f2e0e3b6aa64520bd90c504ef506987b7a411637782e562e755d3cba": {
+    "source": "浏览",
+    "target": "views",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.seconds:9dcdc2b289b9d23314e89a7830623090087aaeda0bffe3b606bdd466e61e98f1": {
+    "source": "秒",
+    "target": "s",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.times:172fb7e67b9b09dd2a61ca0d8319ec9324fe206dedea52030769b709c0e6f6b5": {
+    "source": "次",
+    "target": "times",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.visitors:8b358d0f97427aa2f2ce51c433f2dec84b70272810c85cc50c06278c36a0dadb": {
+    "source": "访客",
+    "target": "visitors",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  },
+  "stats.units.visits:9cff688763e22a22d75668ab1ec99622ffcac49372ee347bc507edecd6331128": {
+    "source": "访问",
+    "target": "visits",
+    "provider": "legacy",
+    "updatedAt": "2026-05-17T03:24:20.231Z"
+  }
+}

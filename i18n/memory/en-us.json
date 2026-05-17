@@ -524,6 +524,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:22:19.912Z"
   },
+  "029441df86164276fd7411f3f5552bcf0a046788a90b923b469be608cb3ed615": {
+    "source": "当 __I18N_PROTECTED_0__ 时发布 __I18N_PROTECTED_1__ 到 __I18N_PROTECTED_2__ 的 TF",
+    "target": "When __I18N_PROTECTED_0__, publish TF from __I18N_PROTECTED_1__ to __I18N_PROTECTED_2__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:37.222Z"
+  },
   "0295962676d899bf7e82ee5cf557f9fd23cebf1f73f797a87a6d7292ad3e9e13": {
     "source": "接着尝试使用来控制机器人运动",
     "target": "Then try using it to control the robot's movement.",
@@ -677,6 +684,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:12:39.154Z"
+  },
+  "032baead11599ab67bed2469579b6ad1734b1356cb265bf663e139b7841cfafd": {
+    "source": "机器人位姿和速度估计",
+    "target": "Robot pose and velocity estimation",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:29.288Z"
   },
   "032ddba59d542ae1af158fe89e28acb50ae561126c7698b2d95ed90d668673dc": {
     "source": "把上图除了刚才创建的**efi，swap,根目录/** 的其他分区全部点change更改为do not use the partition.",
@@ -1630,6 +1644,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:24:51.328Z"
   },
+  "071042bd06732d6e3eac6b20c8c11aef668175b3e6149b381466d6a11d64a77b": {
+    "source": "安装 ros2_control 相关软件包后，常见包路径如下：",
+    "target": "After installing the ros2_control related software packages, the common package paths are as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:17.797Z"
+  },
   "071745481f43ea282d732644af24b9f11b7824fcaf274bf0038024b07ad56e18": {
     "source": "然后按Ctrl+H",
     "target": "Then press Ctrl+H",
@@ -2526,6 +2547,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:37:10.055Z"
   },
+  "0b5b20bdeba110630f3ecdc0f94587d17df382d8185d891748321ed1dd471a1b": {
+    "source": "编写 URDF ros2_control 标签",
+    "target": "Writing URDF ros2_control Tags",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:50.187Z"
+  },
   "0b5b3b29783168ff0fec34c5625a92c2db1517a23eefab7b2d2722c1c289d939": {
     "source": "最后一个杆件，也差不多，因为Xn和Xn-1都要垂直于Axis n(Zn)，所以最简单的方法就是让Xn与Xn-1方向一致。",
     "target": "The last link is similar, because both Xn and Xn-1 need to be perpendicular to Axis n (Zn), so the simplest method is to make Xn align with the direction of Xn-1.",
@@ -2813,6 +2841,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:10:22.288Z"
   },
+  "0c920eaedddd80e6bb948bbca4cf3e8b1c1201034c6f8b68b55d81952407549f": {
+    "source": "**硬件抽象** ：真实机器人通常有电机、编码器、舵机、传感器、驱动板等不同硬件。__I18N_PROTECTED_0__ 负责定义统一接口，让上层控制器不直接依赖具体硬件通信方式。",
+    "target": "**Hardware Abstraction**: Real robots typically have various hardware components such as motors, encoders, servos, sensors, and driver boards. __I18N_PROTECTED_0__ is responsible for defining a unified interface so that the upper-level controller does not directly depend on specific hardware communication methods.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:46.963Z"
+  },
   "0c96fe34bc3a3d7f3a8f9dc5e2226aacab9ca8646f8f2aa7106c7f75d5957554": {
     "source": "也可以传值，比如传backg\\_r:=0",
     "target": "You can also pass values, such as `backg_r:=0`.",
@@ -2931,6 +2966,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:28:56.786Z"
+  },
+  "0d0cf789d83d0e0e16c3f34102f92b2c0c8b884756746a8cc2f80510b4d72fcf": {
+    "source": "官方文档说明，__I18N_PROTECTED_0__ 提供 __I18N_PROTECTED_1__ 脚本，用于在启动时加载、配置并启动控制器。",
+    "target": "The official documentation states that __I18N_PROTECTED_0__ provides a __I18N_PROTECTED_1__ script for loading, configuring, and starting the controller at boot.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:27.385Z"
   },
   "0d0f692dea89f9987d92f0a1cf13ee42a7850319c5bf8c5406ff18b7a328cd4a": {
     "source": "建完后点击File->Exit,在退出的弹框中选Exit。",
@@ -5151,6 +5193,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:43:44.818Z"
   },
+  "170c3aab4f38495f7cb825e674d66d1dac69d69f72283d35824d36b2274ee910": {
+    "source": "再确认硬件组件提供了关节 state interfaces。__I18N_PROTECTED_0__ 默认会发布可用的 __I18N_PROTECTED_1__、__I18N_PROTECTED_2__ 和 __I18N_PROTECTED_3__ 到 __I18N_PROTECTED_4__，并发布所有 state interfaces 到 __I18N_PROTECTED_5__。",
+    "target": "Reconfirm that the hardware components provide joint state interfaces. __I18N_PROTECTED_0__ will by default publish the available __I18N_PROTECTED_1__, __I18N_PROTECTED_2__, and __I18N_PROTECTED_3__ to __I18N_PROTECTED_4__, and publish all state interfaces to __I18N_PROTECTED_5__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:36.275Z"
+  },
   "171e6c3a9c2a0eb95ac3373756a305d7c38a55c394b0d43583c5a8f900885cdd": {
     "source": "然后ctrl shift P搜索clangd找到如下图的选项（重启clangd语言服务器前，要先colcon build）",
     "target": "Then press Ctrl+Shift+P, search for \"clangd\", and find the option shown in the image below (before restarting the clangd language server, you need to run `colcon build` first).",
@@ -5388,6 +5437,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:42:40.302Z"
+  },
+  "17fbb9f88aed1c094eb76fbd1f6e5a2537ccbd5d0bfd505e142e3af936baf3c8": {
+    "source": "Jazzy 的 __I18N_PROTECTED_0__ 订阅的是 __I18N_PROTECTED_1__，不是旧教程里常见的 __I18N_PROTECTED_2__。因此发布命令时需要带 __I18N_PROTECTED_3__ 和 __I18N_PROTECTED_4__ 字段。",
+    "target": "Jazzy's __I18N_PROTECTED_0__ subscribes to __I18N_PROTECTED_1__, not the __I18N_PROTECTED_2__ commonly seen in older tutorials. Therefore, the publish command needs to include the __I18N_PROTECTED_3__ and __I18N_PROTECTED_4__ fields.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:25.213Z"
   },
   "180197773179c567b20e2935541b02388fd4cffb748eca645f9cff3a352ce1c0": {
     "source": "如果你是自己从Windows上从0开始创立的工程(没有使用模板)，那么需要你去寻找CubeMX下载的固件源码",
@@ -5675,6 +5731,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:48:29.346Z"
+  },
+  "192c2c0d986b5a95d8e15ae39c922f049cb58f6b0bd105adcc77f815aa39b1f5": {
+    "source": "__I18N_PROTECTED_0__ 用于发布机器人关节状态。官方文档说明，它会读取所有 state interfaces，并发布到 __I18N_PROTECTED_1__ 和 __I18N_PROTECTED_2__。",
+    "target": "__I18N_PROTECTED_0__ is used to publish robot joint states. The official documentation states that it reads all state interfaces and publishes them to __I18N_PROTECTED_1__ and __I18N_PROTECTED_2__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:33.992Z"
   },
   "192cc99a476fbc90b35c4d9f6b2b871667f5a073ff46af91487ba6f5f549f231": {
     "source": "tf2\\_ros功能包内包含了广播对象。",
@@ -6004,6 +6067,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:09:11.794Z"
+  },
+  "1ab24f33302d6ddda3e3364a80b2bda97a6ad0feefae4598c3073bc97b526b9d": {
+    "source": "__I18N_PROTECTED_0__ 和 __I18N_PROTECTED_1__ 必须是 URDF 中真实存在的关节名。",
+    "target": "__I18N_PROTECTED_0__ and __I18N_PROTECTED_1__ must be joint names that actually exist in the URDF.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:01.465Z"
   },
   "1ab3130686e967e8f48e9049ca643a04a3c858814208dcac50eec5940e9f1500": {
     "source": "咱们这里是Ubuntu所以是Debian系的系统，所以选deb扩展名的程序包。（也就是红色框框）",
@@ -6551,6 +6621,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:41:33.036Z"
   },
+  "1d6e47e5ae12296f1410aab21f276dafab5b9438ea8474bbd06cf2c4ea9f0a86": {
+    "source": "查看控制器和硬件接口",
+    "target": "View Controller and Hardware Interface",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:35.450Z"
+  },
   "1d704aefa1e02e2528bf75914ff51523c5694980b2d999636db3adb868be4561": {
     "source": "只赋值一次",
     "target": "Assigned only once",
@@ -6754,6 +6831,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:41:49.510Z"
   },
+  "1e5bcd15aec3bc3b06c2796d18adbf2542d6b2c9d98ab253e46d289c177407ca": {
+    "source": "官方文档把硬件组件分为三类：",
+    "target": "Official documentation categorizes hardware components into three categories:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:54.262Z"
+  },
   "1e65fd0a028da8e83abd477368fd61460d0f2fa5f8169ec1effbca20c8a69994": {
     "source": "cartogarpher基本使用",
     "target": "Basic usage of Cartographer",
@@ -6830,6 +6914,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:00:30.609Z"
+  },
+  "1e8d12969a9a628e00299da2b37b15b1ea6309548dff164e386c34d56fd48984": {
+    "source": "轮子半径，必须大于 __I18N_PROTECTED_0__",
+    "target": "Wheel radius, must be greater than __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:05.236Z"
   },
   "1e8d618dc9aae6c0e8b7b9c2731c5c3b75a428de7f75e8ba07afb91c1dba7b76": {
     "source": "找到Argon主题所在的目录（一般为__I18N_PROTECTED_0__），并进入该目录",
@@ -7026,6 +7117,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:44:01.283Z"
+  },
+  "1fa95934dbf52dd3eea2d6c22e6c074bd7e7c62d29f023067fb37882bd42266b": {
+    "source": "安装完成后，至少应该能查到：",
+    "target": "After installation is complete, at least you should be able to find:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:11.970Z"
   },
   "1fac0b37cb776529fccb5818118c5220e3665531a1989bed4090a7829f6a6e73": {
     "source": "查到了三个模型，一个大地，一个fishbot，一个fishbot\\_0。",
@@ -7440,6 +7538,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:18:35.718Z"
   },
+  "215c10e7f91b7db1b92fe1c80b31ee75b91ab37769820ba009fabcaa87f8e252": {
+    "source": "控制器",
+    "target": "controller",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:24.570Z"
+  },
   "2166a969e00a39b4f3f36bd0e454098285fe7e5394643ed0a2d2cbf4f4c784be": {
     "source": "OpenWrt编译教学",
     "target": "OpenWrt Compilation Tutorial",
@@ -7558,6 +7663,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:54:00.867Z"
+  },
+  "21d5de3591311c717cbac2612a39a9f0aec6a3f7d29e7d77017d1194b00bfa53": {
+    "source": "若要完整运行本章示例，建议先执行官方安装命令安装 __I18N_PROTECTED_0__ 与 __I18N_PROTECTED_1__。",
+    "target": "To fully run the examples in this chapter, it is recommended to first execute the official installation command to install __I18N_PROTECTED_0__ and __I18N_PROTECTED_1__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:14.530Z"
   },
   "21df02e6cf9148252eaa7b6366bcf92e2684eca30592094f3901691b85f2e57e": {
     "source": "如果我们只是解析反馈的数据，那么goal\\_handle是用不上的。",
@@ -8616,6 +8728,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:14:07.225Z"
   },
+  "25cb24dca7ebdbd664fdaa58a3eb0cd5f1ca4e09b8fa53cb966f84c52cd61000": {
+    "source": "Gazebo 集成时，URDF 中仍然需要 __I18N_PROTECTED_0__ 标签，控制器 YAML 也仍然需要 __I18N_PROTECTED_1__、__I18N_PROTECTED_2__ 和具体控制器配置。变化的是 __I18N_PROTECTED_3__ 使用 Gazebo 对应的硬件插件，而不是上文的 __I18N_PROTECTED_4__。",
+    "target": "When integrating with Gazebo, the URDF still requires the __I18N_PROTECTED_0__ tag, and the controller YAML still requires __I18N_PROTECTED_1__, __I18N_PROTECTED_2__, and specific controller configurations. What changes is that __I18N_PROTECTED_3__ uses the corresponding hardware plugin for Gazebo, instead of the __I18N_PROTECTED_4__ mentioned above.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:59.717Z"
+  },
   "25cee566246fc58c36605a921cf67173e1fe3210d927a2a548352ab4b1068430": {
     "source": "图片名字格式为当前图片创建的日期:时间戳.扩展名,例如20251225153422.webp",
     "target": "The image name format is the creation date of the current image: timestamp.extension, for example 20251225153422.webp.",
@@ -8805,6 +8924,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:49:33.908Z"
   },
+  "2640619459110aa47357a7cb4f46cccc6b2b8678d939bf55e4ce8796b25f5e98": {
+    "source": "编写控制器配置",
+    "target": "Write controller configuration",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:43.018Z"
+  },
   "26425d76ec5d7515f95cd5809309b026da1a8a72dfaf2bcfc28975926e84dc28": {
     "source": "3个平移以米meter为单位",
     "target": "3 translations in meters",
@@ -8987,6 +9113,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:49:15.618Z"
   },
+  "2706666e34bf063357e8cb7cbd489bcd1041fee9bb741c753483a236173e80f1": {
+    "source": "限定要发布的关节列表；为空时发布所有可用关节状态接口",
+    "target": "Restrict the list of joints to publish; if empty, publish all available joint state interfaces.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:57.043Z"
+  },
   "2713269757d706605c6f14c66bf7c79baed458bb269e318bbc977a38bf2bc05c": {
     "source": "最终响应：",
     "target": "Final response.",
@@ -9000,6 +9133,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:38:07.959Z"
+  },
+  "27227ae39b441ed449e2332c71b9d8f232af4d4244a3273a044b6c7539e45f31": {
+    "source": "如果参数 __I18N_PROTECTED_0__ 设置为 __I18N_PROTECTED_1__，这两个话题会发布在控制器自己的命名空间下，例如 __I18N_PROTECTED_2__。默认值为 __I18N_PROTECTED_3__，因此默认发布到根命名空间。",
+    "target": "If the parameter __I18N_PROTECTED_0__ is set to __I18N_PROTECTED_1__, these two topics will be published under the controller's own namespace, for example, __I18N_PROTECTED_2__. The default value is __I18N_PROTECTED_3__, so they are published to the root namespace by default.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:47.818Z"
   },
   "27233505d986b0479f58cf4aa13d1755c4769e638ffe8e82e42686acd35d656f": {
     "source": "运行该命令后，__I18N_PROTECTED_0__ 将启动并加载 __I18N_PROTECTED_1__ 配置文件。",
@@ -9175,6 +9315,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:22:25.551Z"
+  },
+  "27e8d7e8897825381a6b26cc5021216476e39d355e5509fe46390ffa8289fbc3": {
+    "source": "是否根据机器人描述中的关节限制约束命令，默认值为 __I18N_PROTECTED_0__",
+    "target": "Whether to constrain commands based on joint limits in the robot description, default value is __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:29.888Z"
   },
   "27faac956959f9f9e72dab689358435f4041201d5eb31ea60f26483a07b495df": {
     "source": "Participant ID是参与组ID，是指该域内的第几个节点",
@@ -9561,6 +9708,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:29:21.207Z"
   },
+  "298acab1a9733340ceb90208bee4ab57e3cbb587f79749c474956401599f2102": {
+    "source": "传感器硬件，只提供读取能力",
+    "target": "Sensor hardware only provides read capability.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:00.302Z"
+  },
   "29a1dfc2d4fbbf6e965f860463bf998b3ad90912a57a209bff8cfebacaaf9a4e": {
     "source": "对于连续的杆件，我们可以从base\\_link一直算到linkx，x想是几就是几。",
     "target": "For continuous links, we can compute all the way from base\\_link to linkx, where x can be any number you want.",
@@ -9791,6 +9945,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:16:21.879Z"
+  },
+  "2a775ec6f8e9f6c8b98f95394082d41c0b5315b5d8408adc47eb008c5b7dc0c8": {
+    "source": "差速底盘控制器",
+    "target": "differential chassis controller",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:25.989Z"
   },
   "2a7d40e98ae87786fc77ff1fa06702b59dbd519455f3e87a9c687e6613dc3c7d": {
     "source": "特性：",
@@ -10352,6 +10513,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:45:45.552Z"
   },
+  "2cd71d8e22ae7846290bb8e1cac7e2173b9e5f254d8c2373aa5ef1a660d25574": {
+    "source": "添加额外关节，状态值为 __I18N_PROTECTED_0__",
+    "target": "Add an extra joint with state value __I18N_PROTECTED_0__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:00.618Z"
+  },
   "2cd794e5d1b3f1c73931a856e1edff5ec7fe18b809a57b1cded73b123babe31b": {
     "source": "**安装依赖**",
     "target": "**Install Dependencies**",
@@ -10415,6 +10583,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:41:48.899Z"
   },
+  "2d1e338d82a1530f91fbf018ac09e2f067d56a095e36bde433996e130f0b8750": {
+    "source": "本章后续命令均按 Ubuntu 24.04 的 deb 包环境书写。每次打开新终端后，都需要先 source 环境：",
+    "target": "All subsequent commands in this chapter are written for the deb package environment of Ubuntu 24.04. Every time you open a new terminal, you need to first source the environment:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:08.178Z"
+  },
   "2d23d6f6dd0414027fe9e805af2421fbb8e5c9cb507d92de3e79d86f4260fcec": {
     "source": "2.实现",
     "target": "2. Implementation",
@@ -10449,6 +10624,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:35:38.201Z"
+  },
+  "2d424efbb04b2d87870aa4018d3c9c1d28b65e329f72dd3b03c650a36e8f81fb": {
+    "source": "启动控制器管理器",
+    "target": "Start the controller manager",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:11.281Z"
   },
   "2d462778b3bf850ae739e6c2cef8be71670928537480e592d864e953ac9d5840": {
     "source": "普通的单线激光雷达一般有一个发射器，一个接收器，发射器发出激光射线到前方的目标上，物品会将激光反射回来，然后激光雷达的接受器可以检测到反射的激光。",
@@ -10512,6 +10694,20 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:17:33.298Z"
+  },
+  "2d98b3fc6a5a908b5f83e829442282a0fe4ec06d058549212a4324d4f7414f77": {
+    "source": "在实际工程中，__I18N_PROTECTED_0__ 通常由 xacro 生成，不建议手写一个超长字符串。可以参考前面章节中 __I18N_PROTECTED_1__ 和 xacro 的写法，把生成后的 URDF 传给 __I18N_PROTECTED_2__。",
+    "target": "In practical engineering, __I18N_PROTECTED_0__ is typically generated by xacro; it is not recommended to manually write an extremely long string. You can refer to the writing style of __I18N_PROTECTED_1__ and xacro in the previous chapters, and pass the generated URDF to __I18N_PROTECTED_2__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:18.968Z"
+  },
+  "2da1a4ec89f4b4c50f547b5742ad7d0a7878f5a7bd0bc630150248926c7a172d": {
+    "source": "在机器人 URDF 或 xacro 中加入：",
+    "target": "Add in the robot URDF or xacro:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:52.637Z"
   },
   "2da77427588640022026f796606bbe2eb440fde0ff924f9d2876aa6b1650f977": {
     "source": "CMake工程搭建",
@@ -10891,6 +11087,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:30:28.479Z"
   },
+  "2f402e1157473004a5bccd9fd4826cf24ebd3de945db973b47835286ce21d72d": {
+    "source": "ROS2 Control 安装",
+    "target": "ROS2 Control Installation",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:58.962Z"
+  },
   "2f4cf508019910e6aa1dede4692c8d64a9bd88ca75f5a2d5af7b8af6ef8e310a": {
     "source": "ROS2Humble/Jazzy安装方式:Docker 详看[Docker教程](__I18N_PROTECTED_0__)",
     "target": "ROS2 Humble/Jazzy Installation Method: Docker See [Docker Tutorial](__I18N_PROTECTED_0__) for details",
@@ -11192,6 +11395,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:27:26.220Z"
   },
+  "306da767a461a51e85c0ee884498ae78dd543b73c7390b1eae819b67600000f0": {
+    "source": "默认值",
+    "target": "default value",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:50.791Z"
+  },
   "3070a1cb5c5b81df0c997fd4527ea4a16dcfe1e17aa75e9360595922b2aef5f5": {
     "source": "不要钱的长什么样？",
     "target": "What does the free one look like?",
@@ -11492,6 +11702,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:43:24.276Z"
+  },
+  "318237272b37c8a9a0d5430fdb72227877330fed1117039cfd70604b060cb6cc": {
+    "source": "在 launch 文件中也可以把 spawner 写成节点：",
+    "target": "In the launch file, you can also write the spawner as a node:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:32.685Z"
   },
   "31950388649a8074eb54d21663ff6d97bcc8e4028a390a4241dd062b0948add7": {
     "source": "须知",
@@ -11934,6 +12151,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:54:38.447Z"
   },
+  "33513acd512c35109ae2c61d0f242fed3032a56c348bd8941830584050f395c6": {
+    "source": "ROS2 Control 架构",
+    "target": "ROS2 Control Architecture",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:15.960Z"
+  },
   "3354f48f5d9c57864d8d6fd179c8093b3ecb3c07896848525d43817cbd2e820b": {
     "source": "配置调试器",
     "target": "Configure the debugger",
@@ -11954,6 +12178,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:47:05.932Z"
+  },
+  "336e0bb4c15e31a3b94c6e2eebbb34e3aa01a960d6be06ccf9ff13b7458a83f7": {
+    "source": "因此，只要安装了 __I18N_PROTECTED_0__，这个 mock 硬件插件名就可以在 __I18N_PROTECTED_1__ 下查到。",
+    "target": "Therefore, once __I18N_PROTECTED_0__ is installed, this mock hardware plugin name can be found under __I18N_PROTECTED_1__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:16.073Z"
   },
   "337799a7124571cbb0a1cdea51396028be159b9bb303126a754d447d6dd65c91": {
     "source": "然后编辑下__I18N_PROTECTED_0__，在末尾添加上",
@@ -12017,6 +12248,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:12:56.980Z"
+  },
+  "33ba47702afb29ccb35a2b8032192c42622bad0d87f12c3da2bd59cd08a92676": {
+    "source": "是否根据 __I18N_PROTECTED_0__ 中的关节过滤 __I18N_PROTECTED_1__",
+    "target": "Should __I18N_PROTECTED_1__ be filtered based on the joints in __I18N_PROTECTED_0__?",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:05.226Z"
   },
   "33bb5822db2fd9ed32b733f54b1ebf812a3bae8b438ef9af2df8d527a90fb58c": {
     "source": "记录上电角度",
@@ -12424,6 +12662,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:13:19.782Z"
   },
+  "35416bdb04657e1c0a75e12e78363b555d20e39747afb0e4be0ae844ccdd40fa": {
+    "source": "同时还要确认话题名。控制器订阅的是 __I18N_PROTECTED_0__，如果控制器名称是 __I18N_PROTECTED_1__，一般应发布到：",
+    "target": "Also confirm the topic name. The controller subscribes to __I18N_PROTECTED_0__. If the controller name is __I18N_PROTECTED_1__, it should generally publish to:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:28.124Z"
+  },
   "354b1af58ce1bba70cfece44a2c5413a47fceb16fdec0566909c3be3cf42384c": {
     "source": "基本支持bash的配置命令。以博主为例，bashrc脚本迁移到zsh未作任何改动。",
     "target": "Basic support for bash configuration commands. For example, the blogger migrated the bashrc script to zsh without making any changes.",
@@ -12514,6 +12759,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:14:33.130Z"
+  },
+  "357dc9e6ae27f517819b7dd1948253b9c9d197e73ca0776277e5725d07ef0eb3": {
+    "source": "Gazebo 与 ROS2 Control",
+    "target": "Gazebo and ROS2 Control",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:45.790Z"
   },
   "35a33630d9473bc9b81f7711342dda8d9340d9e842e864642f2409e76ba7f1cf": {
     "source": "**或者** 说直接克隆仓库",
@@ -12886,6 +13138,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:21:44.488Z"
   },
+  "377b2894d683f8264589b7680d0d4564afb9baa963a11d5b513b4187f600043c": {
+    "source": "一个最小的差速底盘 mock 硬件写法如下：",
+    "target": "The following is a minimal mock hardware implementation for a differential drive chassis:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:08.603Z"
+  },
   "37898884c10d891f0128bc5e0352bcaaaad9c2eff77aacaf14efec63adccc768": {
     "source": "机器人在仿真环境与实际环境下的表现差异较大，换言之，仿真并不能完全做到模拟真实的物理世界，存在一些\"失真\"的情况，原因:",
     "target": "Robots perform quite differently in simulation environments compared to real-world settings. In other words, simulation cannot fully replicate the real physical world, and there are some cases of \"distortion.\" Reasons:",
@@ -13152,6 +13411,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:24:58.625Z"
   },
+  "38b473a421b3356b85040c1624235e898ef857235dfecbb54c778899281ec1ec": {
+    "source": "在 Jazzy 版本中，官方文档将 __I18N_PROTECTED_0__ 定义为一个用于 ROS 2 机器人实时控制的框架，它的核心仓库是 __I18N_PROTECTED_1__，常用控制器仓库是 __I18N_PROTECTED_2__。官方文档还明确列出 __I18N_PROTECTED_3__、__I18N_PROTECTED_4__ 等常用控制器属于 __I18N_PROTECTED_5__ 仓库。",
+    "target": "In the Jazzy version, the official documentation defines __I18N_PROTECTED_0__ as a framework for real-time control of ROS 2 robots, with its core repository being __I18N_PROTECTED_1__ and the common controllers repository being __I18N_PROTECTED_2__. The official documentation also explicitly lists __I18N_PROTECTED_3__, __I18N_PROTECTED_4__, and other common controllers as belonging to the __I18N_PROTECTED_5__ repository.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:12.271Z"
+  },
   "38b5bd25633f7a602070574b0abc89084bf2b5ed70cd8cbd046f8616ec083e08": {
     "source": "**粒子滤波器参数**",
     "target": "**Particle Filter Parameters**",
@@ -13236,6 +13502,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:43:20.488Z"
   },
+  "38f69c1b8ca3c543cb89327edde96583c131b51e2023935b89cc92d750dfc645": {
+    "source": "控制器无法激活",
+    "target": "Cannot activate controller",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:03.614Z"
+  },
   "39053c2d977e326adbe8ff3b8164b65ceb8151997a1716fae0041662c27d8688": {
     "source": "安装微PE并下载WinPE的镜像",
     "target": "Install WePE and download the WinPE image.",
@@ -13270,6 +13543,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:05:45.801Z"
+  },
+  "3921b774589cb619bf8cbfc95704e233bc7b3d16349e1152a2bf694d595100b5": {
+    "source": "这个例子中的 __I18N_PROTECTED_0__ 来自插件描述文件：",
+    "target": "In this example, __I18N_PROTECTED_0__ comes from the plugin description file:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:10.337Z"
   },
   "39244266d404703bf14929b628291288b72e9dbf0f0006df0c2fbe5c84598ed0": {
     "source": "在安装Packs的时候，需要保证一个良好的网络环境(需要一个有魔法的网络环境)，",
@@ -13431,6 +13711,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:43:37.135Z"
+  },
+  "39e108c60754701f4eb7f7b30d774a431f51e792708ff12a021427ae059fde0d": {
+    "source": "官方 Jazzy 文档在 ros2_control 仓库列表中列出 __I18N_PROTECTED_0__，它是用于 Gazebo 的插件。若要在 Gazebo 中运行 __I18N_PROTECTED_1__，通常需要安装：",
+    "target": "The official Jazzy documentation lists __I18N_PROTECTED_0__ in the ros2_control repository list, which is a plugin for Gazebo. To run __I18N_PROTECTED_1__ in Gazebo, you typically need to install:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:51.935Z"
   },
   "39e10b1612880c9292d0675712772bcba7e066f3efd7d0b2bcfef31ec2c767d7": {
     "source": "这个就是来获取某个功能包的share目录路径",
@@ -13642,6 +13929,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:25:54.554Z"
   },
+  "3b12b0a5bdf430e352822eadbddeba683ed6045f5e733324e74b0e7ec43b3b4a": {
+    "source": "一个适合差速小车的最小配置如下：",
+    "target": "A minimum configuration suitable for a differential drive robot is as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:34.779Z"
+  },
   "3b27ed771524fa807e36fcc08e52ffa7000dfa5b9e6839934cc7a4b2d9c285ca": {
     "source": "urdf 中的 joint 标签用于描述机器人关节的运动学和动力学属性，还可以指定关节运动的安全极限，机器人的两个部件(分别称之为 parent link 与 child link)以”关节“的形式相连接，不同的关节有不同的运动形式: 旋转、滑动、固定、旋转速度、旋转角度限制....,比如:安装在底座上的轮子可以360度旋转，而摄像头则可能是完全固定在底座上。",
     "target": "The `joint` tag in URDF is used to describe the kinematic and dynamic properties of a robot joint, and can also specify safety limits for joint motion. Two parts of the robot (referred to as the parent link and child link) are connected in the form of a \"joint.\" Different joints have different types of motion: rotation, sliding, fixed, rotational speed, rotational angle limits, etc. For example, a wheel mounted on a base can rotate 360 degrees, while a camera might be completely fixed to the base.",
@@ -13718,6 +14012,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:28:24.368Z"
+  },
+  "3b64a303745015d43713fcfe4b729596fd7637319688ead4b84ec2d13dec08fa": {
+    "source": "是否发布 __I18N_PROTECTED_0__ 到 __I18N_PROTECTED_1__ 的 TF",
+    "target": "Publish __I18N_PROTECTED_0__ to __I18N_PROTECTED_1__'s TF?",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:21.207Z"
   },
   "3b6b2f53614f02f9ed275f28d9223e02ae08e3508369b9b367e33ffb15c5b578": {
     "source": "根据自己是否有需求再选择对应的功能进行配置",
@@ -13837,6 +14138,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:49:34.722Z"
+  },
+  "3c03e36d8af866a92ae587339a24ee6bbd7830e95fd393a7f0c8ef5f7e22caef": {
+    "source": "如果设置 __I18N_PROTECTED_0__，里程计不使用外部状态反馈，而是根据控制器收到的速度命令计算。",
+    "target": "If __I18N_PROTECTED_0__ is set, the odometry does not use external state feedback, but instead calculates based on the speed commands received by the controller.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:54.183Z"
   },
   "3c0a644848346d6f29da4f5bafe1cd3222eddf1d58f72a39184cfb4dbf7aca0d": {
     "source": "等... ...",
@@ -14265,6 +14573,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:25:28.807Z"
   },
+  "3e10cb97409f04f92873fb8b6837c05633953f2effceb5f71666721a845170eb": {
+    "source": "插件描述文件",
+    "target": "Plugin description file",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:27.540Z"
+  },
   "3e12c06d0bf765b8ec5576808978e7cb1e5500ff4506453c9eee3ea6341f102d": {
     "source": "4.准备工作",
     "target": "4. Preparation",
@@ -14285,6 +14600,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:49:16.187Z"
+  },
+  "3e19ab92fd22fcd35342b0788280335a46209b3ebf2fa4f7b94c547da06b286c": {
+    "source": "先确认 __I18N_PROTECTED_0__ 已经激活：",
+    "target": "First confirm that __I18N_PROTECTED_0__ is activated:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:31.973Z"
   },
   "3e25aa61f061aa3c5e009e427a5b5791323fae4c15e8b1cc04c23a80e9a04708": {
     "source": "当前工作空间下，启动两个终端，终端1输入如下命令发布雷达（laser）相对于底盘（base\\_link）的静态坐标变换：",
@@ -14642,6 +14964,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:13:00.499Z"
+  },
+  "3fe7cc3f5e3fdbdc8df25952ae80e3820ecd163ebb4962d236e580db89adaffc": {
+    "source": "是否捕获控制器和硬件组件操作中的异常，默认值为 __I18N_PROTECTED_0__",
+    "target": "Whether to catch exceptions in controller and hardware component operations, default value is __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:31.975Z"
   },
   "3feb780753a569c87c63a95c9732d740295ecfba18c67ca18343da41de4c8a9a": {
     "source": "modules模块modules始于C++20，在C++26有了较大的变化。",
@@ -15084,6 +15413,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:42:31.642Z"
   },
+  "4201457088cdd063ce61e74c9292a724e85f2d5354cde820265f0bc4696486be": {
+    "source": "是否发布限幅后的速度",
+    "target": "Whether to publish the speed after limiting",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:27.453Z"
+  },
   "420a48930a49628f1a02e5f255da350252188a9d181b6a59160e1fd5dd2a50d4": {
     "source": "注意参数名也要改：",
     "target": "Note: Parameter names should also be changed:",
@@ -15356,6 +15692,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:33:18.131Z"
+  },
+  "433414b22c036fe5e783ad0c50d966d00b07b564db56b4b6268f5fb6a3112ef9": {
+    "source": "右轮关节名列表，不能为空",
+    "target": "Right wheel joint name list cannot be empty.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:00.087Z"
   },
   "4338f207fd063e59fba3e5ac60783d1a8b07c15f84f20bb389e627238022d948": {
     "source": "Linux 分区方案",
@@ -16078,6 +16421,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:57:51.372Z"
   },
+  "46533d185208d64c9f6ae37b110b8684e706de03304c2c1cd2f6de8c2d7582fc": {
+    "source": "限定要发布的接口列表；为空时发布所有可用状态接口",
+    "target": "Limit the list of interfaces to be published; if empty, publish all available state interfaces.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:59.082Z"
+  },
   "4655e231f975a976210f846719a99466a1c5b836644decbd7a22b1b534b7097e": {
     "source": "lambda 自己是 __I18N_PROTECTED_0__ 的（可以编译期执行）；",
     "target": "lambda itself is __I18N_PROTECTED_0__ (can be executed at compile time);",
@@ -16421,12 +16771,26 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:31:47.082Z"
   },
+  "47baccf52f721d50761643ef3b47b62c7836b170e6a3dbdd282e0c3fae8e6222": {
+    "source": "ROS2 Control 简述",
+    "target": "A Brief Introduction to ROS2 Control",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:05.236Z"
+  },
   "47bdf1e260ad9369f4b95e8c2a07c2d3da0e5fceba2fe733a159ff29eae1e610": {
     "source": "主要修复的问题",
     "target": "Main issues fixed",
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-16T18:59:52.809Z"
+  },
+  "47c03a1dbc787407edf2a31fbb267c1ef80ede71022c8042c083a035c16057ed": {
+    "source": "软件包",
+    "target": "software package",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:20.562Z"
   },
   "47c2660c2b54ad2633820caa8703422065fcd15d3935cffd23862e3e1e38b339": {
     "source": "我们烧录会用到JLinkExe的命令，而JLinkExe会用到libreadline库，所以要安装libreadline库，执行如下命令安装：",
@@ -17730,6 +18094,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:36:48.595Z"
   },
+  "4dcbd942c3a8580c587d4b5beebe5e8512e8ef7426d8bba58d581b047ae9cf15": {
+    "source": "在 URDF 中，__I18N_PROTECTED_0__ 使用 __I18N_PROTECTED_1__ 标签描述硬件组件。官方文档明确说明，硬件配置应写在机器人 URDF 的 __I18N_PROTECTED_2__ 标签中。",
+    "target": "In URDF, __I18N_PROTECTED_0__ uses the __I18N_PROTECTED_1__ tag to describe hardware components. The official documentation clearly states that hardware configuration should be written in the robot URDF's __I18N_PROTECTED_2__ tag.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:06.769Z"
+  },
   "4dd063c30d970d14d44efb09e0f3018dc88c70e50bf72be72c8dfd4d84e5f31e": {
     "source": "被动被调用",
     "target": "Passively called",
@@ -17918,6 +18289,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:08:37.592Z"
+  },
+  "4f269351bd8caae301994ec4465a1b35051a0012bcfe7d4937b4225dfeec7d84": {
+    "source": "速度命令。控制器使用 __I18N_PROTECTED_0__ 和 __I18N_PROTECTED_1__，其他分量会被忽略",
+    "target": "Speed command. The controller uses __I18N_PROTECTED_0__ and __I18N_PROTECTED_1__, and other components will be ignored.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:24.125Z"
   },
   "4f29d31f1bcae42f1dfd78f7aaaad3a17e42d5cd883345940920e58f9bc573bd": {
     "source": "发布方",
@@ -18192,6 +18570,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:11:23.113Z"
   },
+  "502082f666ecc0c3530c70e70a2e3a9c35abeb1cdb4f211458779178bcb528fa": {
+    "source": "常用参数",
+    "target": "Common parameters",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:49.352Z"
+  },
   "50258d7a307b3f00d0aa442550830f7e1813dcc97f49e01e3831968ecf95a6e5": {
     "source": "3.view\\_frames（常用）",
     "target": "3. view_frames (commonly used)",
@@ -18289,6 +18674,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-16T18:57:58.651Z"
+  },
+  "505c0f75a06bfa20d8b905a0d58a3a8066868e67aa0ce9ef06bb47cad057e884": {
+    "source": "复杂机器人系统，例如移动底盘、机械臂或多自由度机器人。它有读取和写入能力",
+    "target": "Complex robot systems, such as mobile chassis, robotic arms, or multi-degree-of-freedom robots. They have read and write capabilities.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:58.048Z"
   },
   "5062c1b0a567bc686d0d9e25fdbd6e1f81fcb979d996795e65347440f5cedc66": {
     "source": "SDFormat Sensor 规范：__I18N_PROTECTED_0__",
@@ -19193,6 +19585,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:09:12.038Z"
   },
+  "54dc005b729c596f6c32da3a2f0f1347a7b0b8bbfb9824a658c2e54dbd21bd4d": {
+    "source": "创建控制器配置文件，例如 __I18N_PROTECTED_0__：",
+    "target": "Create controller configuration file, for example __I18N_PROTECTED_0__:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:44.916Z"
+  },
   "54dde86c86a52de76cf81e590bd0fdec603886b38351c8175aade54958b8e032": {
     "source": "__I18N_PROTECTED_0__ 是一个模板类，它为 __I18N_PROTECTED_1__ 提供了 **RAII（资源获取即初始化）** 风格的管理。RAII 是 C++ 中的一种常见技术，意思是资源（如锁、文件句柄等）在对象生命周期开始时获取，在对象生命周期结束时释放。",
     "target": "__I18N_PROTECTED_0__ is a template class that provides **RAII (Resource Acquisition Is Initialization)** style management for __I18N_PROTECTED_1__. RAII is a common technique in C++ where resources (such as locks, file handles, etc.) are acquired at the start of an object's lifetime and released at the end of its lifetime.",
@@ -20075,6 +20474,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:48:15.975Z"
   },
+  "57c5cdfbd5be4706b9d223304db08e8f395fe058e0f8c6d9d09955f0d285e2f8": {
+    "source": "插件描述文件：__I18N_PROTECTED_0__",
+    "target": "Plugin description file: __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:50.201Z"
+  },
   "57c67d3f0b6ee66c492141395c811865485528eb0ed2e5a60353476fca7bba19": {
     "source": "读取图像文件",
     "target": "Read the image file",
@@ -20291,6 +20697,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:59:15.752Z"
+  },
+  "5899d699ad2ad1c4cf6e02f4e17f2fd8066c42449172e4df68a091f5616ef579": {
+    "source": "当 __I18N_PROTECTED_0__ 时发布限幅后的速度命令",
+    "target": "Publish the clipped speed command when __I18N_PROTECTED_0__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:39.743Z"
   },
   "58a287d408de2f1ba1430c92f1d62357d31390967e8a15a69721efbca95f0e84": {
     "source": "PLL为了被倍频或者分频的时钟频率.",
@@ -21153,6 +21566,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:34:46.590Z"
   },
+  "5c7f46984693af32f827017f86f4fd1d25b89ecdd41a7c37a57161ac6f64badc": {
+    "source": "控制器是 __I18N_PROTECTED_0__ 中真正执行控制逻辑的插件。官方文档说明，控制器派生自 __I18N_PROTECTED_1__ 包中的 __I18N_PROTECTED_2__，并通过 __I18N_PROTECTED_3__ 导出。",
+    "target": "The controller is the plugin in __I18N_PROTECTED_0__ that actually executes the control logic. The official documentation states that the controller derives from __I18N_PROTECTED_2__ in the __I18N_PROTECTED_1__ package and is exported via __I18N_PROTECTED_3__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:20.792Z"
+  },
   "5c82d1098a711d987623f0b8cc744b8b6ff32f4edea1b3b69c1181407bf0dc36": {
     "source": "消息类型",
     "target": "Message type",
@@ -21481,6 +21901,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:24:35.033Z"
+  },
+  "5e06aa0c84e24620f550f5e9b9f1a04c07ec0d3a8cd1f12e3fad9b16c484997c": {
+    "source": "加载控制器",
+    "target": "Load controller",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:24.320Z"
   },
   "5e0f05a02a8425a6fa07985ac6c9a639578c60d1e0b13a0da1d7d1ee67afce16": {
     "source": "HAL\\_UART\\_IRQHnadler(句柄)",
@@ -22301,6 +22728,20 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:42:59.999Z"
   },
+  "61e8cd5be1355583917f8774d288cb185fa6ec364dab5c915a863da3bd1371ef": {
+    "source": "常用命令如下：",
+    "target": "Common commands are as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:28.896Z"
+  },
+  "61f0d8da46d80836c6016d72b28deef893cc4c82754aba9bcffed242a4ceab03": {
+    "source": "硬件接口",
+    "target": "hardware interface",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:41.021Z"
+  },
   "61f1a068f425b5a1a78654fc5d02613458b81522d8bb6c66d6a178b950eba9ff": {
     "source": "列表的长度(属性)-__I18N_PROTECTED_0__",
     "target": "Length of a List (Property) - __I18N_PROTECTED_0__",
@@ -22483,12 +22924,26 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:36:27.766Z"
   },
+  "62bc131eae14546447f8ec5d6520556c51c9ff0755688b56a1d088f1c410cfc3": {
+    "source": "如果没有安装 __I18N_PROTECTED_0__，则无法直接在 Gazebo 中加载 ros2_control 硬件插件。此时应先安装上面的 __I18N_PROTECTED_1__ 软件包。",
+    "target": "If __I18N_PROTECTED_0__ is not installed, then ros2_control hardware plugins cannot be loaded directly in Gazebo. In this case, you should first install the __I18N_PROTECTED_1__ package mentioned above.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:54.087Z"
+  },
   "62dfeb3ab4e3c722d21b745f1ff61f71dbeadcd68d242d388151d5585d10b79b": {
     "source": "MDK 5.3及以上：建议使用，但需要自己装ARMCC编译器。其只能在Windows平台进行开发，且图形界面过于丑陋，且没有黑暗模式，夜晚开发及其辣眼，但由于其使用ARMCC和ARMCLANG编译器，比ARM-GCC编译器生成的量要小很多，且因为其对ARM Cortex内核兼容性极好，所以仍选择用MDK 5.3版本。",
     "target": "MDK 5.3 and above: Recommended, but requires manual installation of the ARMCC compiler. It can only be developed on the Windows platform, and its graphical interface is quite ugly, with no dark mode, making it extremely harsh on the eyes for nighttime development. However, because it uses the ARMCC and ARMCLANG compilers, the generated output is much smaller than that of the ARM-GCC compiler, and due to its excellent compatibility with ARM Cortex cores, MDK 5.3 is still the chosen version.",
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:17:25.928Z"
+  },
+  "62ed113027936fd1df43f875a92705a9eeaf6d969d654eb0abeb8c88400b5201": {
+    "source": "在一个机器人系统中，__I18N_PROTECTED_0__ 主要解决“谁来读硬件、谁来算控制、谁来写硬件”的问题。",
+    "target": "In a robot system, __I18N_PROTECTED_0__ mainly solves the problem of \"who reads the hardware, who calculates the control, who writes the hardware.\"",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:44.728Z"
   },
   "62f058e7b76a59312b4ee62142bdac3b7b1204157cc69a5f4e3c20b9de1795f6": {
     "source": "纯免费方案五【Github Pages】：",
@@ -22545,6 +23000,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:08:44.287Z"
+  },
+  "633358dc34a6a68d33aeb896abdcfc217a2a454931d8eab6cefda28db196a4e2": {
+    "source": "是否根据命令值计算里程计",
+    "target": "Calculate odometry based on command values",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:14.553Z"
   },
   "63349b48174bef6680c6cec0f863ef93709e656d964686ab7698ba583a1b2433": {
     "source": "如果线程函数没有入口参数，那么重载函数只需要第一个参数即可。",
@@ -23344,12 +23806,26 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:22:05.378Z"
   },
+  "66d8c3dea072f62d42bcf872fee80fbd66f41aa1d17609f6348961979fdc9d47": {
+    "source": "控制器管理器的常用参数是：",
+    "target": "Common parameters for the controller manager are:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:20.569Z"
+  },
   "66ddfa8faecc6bad80389bfd7c8d6cf3da0c73f2dc424fd0307f01f38290d87a": {
     "source": "SYMLINK是符号连接，即绑定的别名；",
     "target": "A SYMLINK is a symbolic link, which is an alias for a binding.",
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:29:31.955Z"
+  },
+  "66e2d3d4688ca62314862092a9b1105f355b8213da6a95030ee6ed7303ad2114": {
+    "source": "单自由度执行器，例如单个电机或阀门。它通常有写入能力，也可以有读取能力",
+    "target": "A single-degree-of-freedom actuator, such as a single motor or valve. It typically has write capability, and can also have read capability.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:02.762Z"
   },
   "66f32efc6219004123c67185d101d4d406a0e7ff7b3676a18346ddbd9b2107ed": {
     "source": "直接图形化就可以了。",
@@ -23820,6 +24296,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:04:30.023Z"
   },
+  "691ff57b7d6cd4afb33fff582fbc96141e2124a8e4e7830c4a5d6911ed1bfe00": {
+    "source": "该文件声明的插件类名是：",
+    "target": "The plugin class name declared in this file is:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:12.386Z"
+  },
   "69219a29f0b3660b72421e547afcd0ef3af3cc676c38b2a999df2a902371a168": {
     "source": "Xi与Zi+1和Zi都垂直。",
     "target": "Xi is perpendicular to both Zi+1 and Zi.",
@@ -23882,6 +24365,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:12:44.740Z"
+  },
+  "6999e59e9ff659bd7f84161ff31855bc1b1d80e7ef19b46f5c09e34370295d1e": {
+    "source": "如果是 RHEL 系统，官方文档给出的命令是：",
+    "target": "If it is an RHEL system, the command given in the official documentation is:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:03.162Z"
   },
   "699de668e9651f313af7b0d750778fb2a738f832189ba979b15a0616f028a0af": {
     "source": "对关节进行限位设置",
@@ -24863,6 +25353,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:29:09.237Z"
   },
+  "6e1c86e96d7bf8631739d18b6d1342d79427e9cd2707604bbeaab7ec2a741c1d": {
+    "source": "硬件抽象接口基础包",
+    "target": "Hardware Abstraction Interface Base Package",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:23.941Z"
+  },
   "6e20ea2c37cae08185e4fef29ab3896497e91c9e86b31084b2ab35b0606a8b78": {
     "source": "####### get\\_total\\_angle 处理CAN通信接收到的大疆电机编码器数据，并处理得到 **电机角度值** 函数。（*暂时没被调用*）",
     "target": "####### The `get_total_angle` function processes the DJI motor encoder data received via CAN communication and calculates the **motor angle value**. (*Not currently called*)",
@@ -25646,6 +26143,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:23:51.876Z"
+  },
+  "71dcf8cab7aa573de4ee13d7bdae7380d695b7f7c25c2e337216c2942f493db6": {
+    "source": "对 __I18N_PROTECTED_0__ 来说，轮关节必须有 __I18N_PROTECTED_1__ 命令接口；如果 __I18N_PROTECTED_2__，还需要 __I18N_PROTECTED_3__ 状态接口；如果 __I18N_PROTECTED_4__，则需要 __I18N_PROTECTED_5__ 状态接口。",
+    "target": "For __I18N_PROTECTED_0__, the wheel joint must have a __I18N_PROTECTED_1__ command interface; if __I18N_PROTECTED_2__, it also requires a __I18N_PROTECTED_3__ status interface; if __I18N_PROTECTED_4__, it requires a __I18N_PROTECTED_5__ status interface.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:16.715Z"
   },
   "71ddd2bb383f3412ef38b42d75a6281f4ea7999d5cbb61d895a01ea1e77daccc": {
     "source": "点击工具下载",
@@ -26431,6 +26935,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:21:05.944Z"
   },
+  "7566cda98a2b92db40f23427317c71ecd4970b349a7b4a1fa74aa23f12884a97": {
+    "source": "**控制循环** ：官方文档说明，控制器管理器的 __I18N_PROTECTED_0__ 会执行控制循环：从硬件组件读取状态，更新所有激活的控制器，再把控制结果写回硬件组件。",
+    "target": "**Control loop**: The official documentation explains that the __I18N_PROTECTED_0__ of the controller manager executes a control loop: reads the status from hardware components, updates all active controllers, and writes the control results back to the hardware components.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:51.794Z"
+  },
   "7571445683febeb139989640def82f40517af639f189e785a8b8610d9ef4f08b": {
     "source": "安全，跟 lambda 活得一样久",
     "target": "Safety, living as long as lambda.",
@@ -26557,6 +27068,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:29:12.863Z"
   },
+  "7602b4a0f057e6945bf9970a5f04c4ebe5cacf2fab5115b01c91f75857e8277a": {
+    "source": "是否使用 position 反馈",
+    "target": "Whether to use position feedback",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:10.967Z"
+  },
   "76155187be9a3d2d5f9c15d8dcfeda57b7e727ec4672a81670db940df6dc3afe": {
     "source": "rclcpp::ok()这个是判断当前程序是否正常运行，如果正常运行，则返回true，如果不正常运行则返回false，比如按下Ctrl+C就是不正常运行。",
     "target": "`rclcpp::ok()` checks whether the current program is running normally. If it is running normally, it returns `true`; if not, it returns `false`. For example, pressing Ctrl+C causes abnormal termination.",
@@ -26668,6 +27186,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:18:13.028Z"
+  },
+  "767de10b1ecf366f434cf8d9757b870c0c314d01b91b860c8db4f3ac4777756d": {
+    "source": "里程计父坐标系",
+    "target": "odometry parent frame",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:07.102Z"
   },
   "7680fad7d47437389c8c2f8de2814a5bae0e4ade9b2d4a2e0fe632880cce259a": {
     "source": "硬件平台进阶",
@@ -26990,6 +27515,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:19:35.563Z"
+  },
+  "77e1ea5c5688eea4ebe3c16f8f0b7b7d7089c0fda949362eccdac2a59dcc71ac": {
+    "source": "路径",
+    "target": "path",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:21.995Z"
   },
   "77e5500e433cc84ec68b9a7ef5a3a844e3f1d997184848bbf865805591a08fdb": {
     "source": "是否发布里程计",
@@ -27992,6 +28524,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:12:17.131Z"
   },
+  "7cb3b20733d21736be3d4b41f7ca48b669d87b8a618b22809140f64d2410e92b": {
+    "source": "插件描述文件：",
+    "target": "Plugin description file:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:19.394Z"
+  },
   "7cb7ae76e955cd2c1a5796499654b05d87a849c82919e6459793fe2545fc4f20": {
     "source": "2.案例分析",
     "target": "2. Case Analysis",
@@ -28033,6 +28572,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:45:49.148Z"
+  },
+  "7cd1401deaafc047c36fe4d8a297c1b78eb52491999297aded84095a438c0113": {
+    "source": "轮关节必须提供 __I18N_PROTECTED_0__ 命令接口，因为 __I18N_PROTECTED_1__ 输出的是轮关节速度命令。",
+    "target": "The wheel joint must provide the __I18N_PROTECTED_0__ command interface, because __I18N_PROTECTED_1__ outputs wheel joint velocity commands.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:09.636Z"
   },
   "7cd3cd7669bb97b6131db8f3e0bdefea7e5c0819b5aa23b8dc091b5b18344d1e": {
     "source": "安装rEFInd",
@@ -28131,6 +28677,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:22:16.907Z"
+  },
+  "7d23e7415a3f4b04704dcbfb7ac5279569f188318a8dc39f02b2d6c5b31b0593": {
+    "source": "硬件提供的 command/state interfaces 是否满足控制器要求。",
+    "target": "Whether the command/state interfaces provided by the hardware meet the controller requirements.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:13.132Z"
   },
   "7d24301eb25f71e9d337e3c74e46b79b20406374efdd6584901a5a9b5b9265b1": {
     "source": "首先先创建__I18N_PROTECTED_0__的内容",
@@ -28425,6 +28978,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:07:32.606Z"
+  },
+  "7e8436327ea0874771855ff3c26cda98c910ebc034dbba09521bde6a5ff8252d": {
+    "source": "是否在控制器局部命名空间发布话题",
+    "target": "Whether to publish a topic in the controller's local namespace",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:54.237Z"
   },
   "7e88d820448aa837de309483da1efb81e2c81f60379e4bb126e48d644e9188e3": {
     "source": "所以总共有6个自由度。",
@@ -29427,6 +29987,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:07:10.695Z"
   },
+  "82f97fba92e75525350a0218dba6ed2fdbf620a8ce361f8d008500091efe8fea": {
+    "source": "在 Ubuntu 24.04 安装 ROS 2 Jazzy 后，默认安装路径是：",
+    "target": "After installing ROS 2 Jazzy on Ubuntu 24.04, the default installation path is:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:15.344Z"
+  },
   "82fc3434221d346ddd9b680dfbc0d8e66a5ab2b4ceda5a79aa7d09ee5d56af8f": {
     "source": "在该文件中，关键配置如下：",
     "target": "In this file, the key configuration is as follows:",
@@ -29714,6 +30281,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:14:14.841Z"
   },
+  "8403f3a859dfd3fd4f75ee91a99b4a67d0612abadbb586968a72c03a676f1217": {
+    "source": "这里的 __I18N_PROTECTED_0__ 表示控制器命名空间。假设控制器名为 __I18N_PROTECTED_1__，则默认话题通常是：",
+    "target": "Here, __I18N_PROTECTED_0__ represents the controller namespace. Assuming the controller is named __I18N_PROTECTED_1__, the default topic is usually:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:27.855Z"
+  },
   "84098aabfc6f14be3c6c648627be6f63dab05976a72ebf3f2eea836bc1d5e24e": {
     "source": "工作空间覆盖",
     "target": "Workspace coverage",
@@ -29889,6 +30463,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:02:22.737Z"
   },
+  "84c88e36d168444d9e5340128d76c5424631acd50dfa76191dc6992b100f8d7b": {
+    "source": "这里有三个对应关系必须保持一致：",
+    "target": "There are three correspondences that must remain consistent:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:58.876Z"
+  },
   "84e06df6ebc8c201fa6309cfbccc0311d4779e6767d0ea6da6a15bacff952f39": {
     "source": "然后参考基准轴选择刚才咱们在这个关节处建立的基准轴1，然后joint type关节类型选择revolute（有限位的关节，只有这样，机器人关节才可以正常运动）",
     "target": "Then, refer to the reference axis and select the reference axis 1 we just created at this joint. Then, for the joint type, choose Revolute (a joint with limited range of motion; only this way can the robot joint move normally).",
@@ -30049,6 +30630,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:39:15.603Z"
+  },
+  "859ab167a41049a7e906c1e73dabf0bcf6c0ad9568fc8f119986b6a47b6ad4bf": {
+    "source": "左轮关节名列表，不能为空",
+    "target": "Left wheel joint name list cannot be empty.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:57.449Z"
   },
   "859bba6c029d8c13f1a85d48597cf98706b989600e1d3d438cb8b4cbb624cae0": {
     "source": "在joint上建立frame",
@@ -30364,6 +30952,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:05:21.146Z"
+  },
+  "86a03bd28b9ca7c7c60a337a4743e5d1264829cc78a5440015891437a897248a": {
+    "source": "插件名",
+    "target": "Plugin Name",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:26.211Z"
   },
   "86acd9619a16ac2b8f0e9c3446f4c434d57726f84658f4291cffc5be7702b274": {
     "source": "**用途：** URDF 是 ROS 的标准；SDF 是 Gazebo 的标准。",
@@ -30889,6 +31484,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:01:53.046Z"
+  },
+  "88cd289c66dbacceda3e967e07d7a62bb36b13aceee70093fb7bb1053e1129bb": {
+    "source": "其中，__I18N_PROTECTED_0__ 的 __I18N_PROTECTED_1__ 描述为“Base classes for hardware abstraction and tooling for them”。__I18N_PROTECTED_2__ 的 __I18N_PROTECTED_3__ 描述为“Controller for a differential-drive mobile base”。__I18N_PROTECTED_4__ 的 __I18N_PROTECTED_5__ 描述为“Broadcaster to publish joint state”。",
+    "target": "Among them, __I18N_PROTECTED_0__'s __I18N_PROTECTED_1__ is described as \"Base classes for hardware abstraction and tooling for them\". __I18N_PROTECTED_2__'s __I18N_PROTECTED_3__ is described as \"Controller for a differential-drive mobile base\". __I18N_PROTECTED_4__'s __I18N_PROTECTED_5__ is described as \"Broadcaster to publish joint state\".",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:38.484Z"
   },
   "88d3a0ff1b50341bdd17b3c2f221f71037fe6110102f5aff36e163bafeeaddd9": {
     "source": "先不管其他的，先把函数随便定义上，什么返回值，入口参数都是void，先不让程序报错。",
@@ -31849,6 +32451,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:04:43.646Z"
   },
+  "8d831cf59ae97374b8a341da63bfc6f83962108dffc75ef624243319a5b137a6": {
+    "source": "Humble与Jazzy导航的差异",
+    "target": "Differences in Navigation between Humble and Jazzy",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:47:53.809Z"
+  },
   "8d917c758aadeb5be265d36bae2b600f931c748651f01a758724036ad7965ab8": {
     "source": "保存并退出（在nano中按Ctrl + O保存，然后按Ctrl + X退出）。",
     "target": "Save and exit (in nano, press Ctrl + O to save, then press Ctrl + X to exit).",
@@ -31995,6 +32604,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:18:19.172Z"
+  },
+  "8e3698ab1e62d0fc0e90a5e8be3e63642ac6ad8cfef9212f3c4c5a77e97abf25": {
+    "source": "把控制器需要的状态接口和命令接口分配给对应控制器。",
+    "target": "Assign the status interface and command interface required by the controller to the corresponding controller.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:44.685Z"
   },
   "8e3ee45df458a21bdbb0839c4f5d81387fd6a70a0fadb0b137f71bffa434625f": {
     "source": "该函数的第一个参数是声明窗口的名称，用于窗口的唯一识别。第二个参数是声明窗口的属性，主要用于设置窗口的大小是否可调、显示的图像是否填充满窗口等，具体可选择的参数及含义在表2-4中给出，默认情况下，函数加载的标志参数为WINDOW_AUTOSIZE",
@@ -32185,6 +32801,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:16:20.575Z"
   },
+  "8eecd0513da532495e17236ea80839184fa66a25ae39719cefae8d0319ec5125": {
+    "source": "__I18N_PROTECTED_0__ 没有数据",
+    "target": "__I18N_PROTECTED_0__ has no data",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:30.288Z"
+  },
   "8f01b857331b49fef33f49c3669ea1dbfba16e9b0977e21f67efa2e9e6354f3e": {
     "source": "暂时主要维护ROS Humble的版本，其他版本随缘更新，但也基本都是非常够用的状态（随着战队主要使用的版本而变化）",
     "target": "Currently, I primarily maintain the ROS Humble version. Updates for other versions are sporadic, but they are generally in a very usable state (changing along with the version primarily used by the team).",
@@ -32240,6 +32863,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:15:49.159Z"
+  },
+  "8f254bcd452176a5ca1045670dee7c8971fb5182175159951e1b7b60a3deece4": {
+    "source": "如果使用上文的 __I18N_PROTECTED_0__ 最小 URDF，并且 mock 硬件没有真实编码器数据，可以先把差速控制器配置成开环测试：",
+    "target": "If using the minimal URDF from __I18N_PROTECTED_0__ above, and the mock hardware has no real encoder data, you can first configure the differential drive controller as an open-loop test:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:38.787Z"
   },
   "8f25b8d03529fcd3c717813d9b3f83017ae60bba5b1f8ed912762816548d7f30": {
     "source": "复制Linux镜像iso",
@@ -32940,6 +33570,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:54:11.925Z"
+  },
+  "91f54c6685f1a3f18e441f1dbe024aa5a92e370db314b8098b4fd802821eb56e": {
+    "source": "是否发布 __I18N_PROTECTED_0__",
+    "target": "Whether to publish __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:10.960Z"
   },
   "92001b9424006a86022b0ae893ae2868110bfe9b23e23e1cba3cbcea404fe9f1": {
     "source": "当 __I18N_PROTECTED_0__（-180°），如果继续减少，应该跳转到 __I18N_PROTECTED_1__（180°）。",
@@ -34159,6 +34796,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:19:43.039Z"
   },
+  "9765c6224645c963fdfebb071dd5bebd61865cc9c69938886d0508a474f8cbf8": {
+    "source": "**控制器管理** ：__I18N_PROTECTED_0__ 连接控制器和硬件抽象层。官方文档说明，控制器管理器负责加载、配置、激活、停用和卸载控制器，也负责匹配控制器需要的接口与硬件提供的接口。",
+    "target": "**Controller Management**: __I18N_PROTECTED_0__ connects the controller and the hardware abstraction layer. According to the official documentation, the controller manager is responsible for loading, configuring, activating, deactivating, and unloading controllers, as well as matching the interfaces required by the controllers with those provided by the hardware.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:48.313Z"
+  },
   "9768d5a4e53aa586d128b458b2e2b7fa8a0bc8c22ec26783ed4bab6a99e93ab8": {
     "source": "报错原因是没加占位符",
     "target": "The error is caused by not adding a placeholder.",
@@ -34544,6 +35188,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:42:55.114Z"
   },
+  "98faced7cd0e824c498dab9035e27572759aa78b9db341e29298aa30c909dd23": {
+    "source": "YAML 中控制器 __I18N_PROTECTED_0__ 是否写成插件名，例如 __I18N_PROTECTED_1__。",
+    "target": "In YAML, should the controller __I18N_PROTECTED_0__ be written as a plugin name, for example __I18N_PROTECTED_1__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:07.292Z"
+  },
   "98fcc8f7c01db451f39c1b7ad1eb182309f4708c077f0102657f2a4ac2084028": {
     "source": "可以看正点原子的__I18N_PROTECTED_0__里的详细说明.",
     "target": "You can refer to the detailed explanation in the __I18N_PROTECTED_0__ from Zhengdian Atom.",
@@ -34557,6 +35208,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:27:53.501Z"
+  },
+  "990d5b9938905c91bcb298d5ec77d192f60051df6cf772e8aac09533bc149426": {
+    "source": "最常见配置如下：",
+    "target": "The most common configuration is as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:12.396Z"
   },
   "9910be8e1599c45aefe56efa5a3cac6a9e722701059e0eb4f57b45f341e84a26": {
     "source": "CDN（Content Delivery Network）通过在全球布置缓存节点，让用户从距离最近的服务器加载内容，从而大幅提升访问速度并降低源站压力。",
@@ -34901,6 +35559,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:21:47.334Z"
   },
+  "9a4341a806617ebabb5f2fdbbe56897b5f8fb9fecd8b0d1999ee8b22cb91c20d": {
+    "source": "典型 YAML 写法如下：",
+    "target": "A typical YAML syntax is as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:33.555Z"
+  },
   "9a55f93de7c29c073c9eb57d6a45dd66fa0cf6c32272bd11e91dd156d0ac82b3": {
     "source": "是通过了的，但是有几个警告：版本过低，不影响正常使用。",
     "target": "It passed, but there are a few warnings: the version is too old, but it does not affect normal use.",
@@ -34998,6 +35663,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:10:50.409Z"
+  },
+  "9ae4fd1d4eefcbc97bb6e0f6138b165b01d2412a43ae5c949e1d7152f8f84237": {
+    "source": "优先检查三件事：",
+    "target": "First, check three things:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:05.657Z"
   },
   "9ae57d721248bee4dba94ef5940b7884b495915a0afdb742096a7fa3f7116d5e": {
     "source": "然后那个/initial\\_pose话题，是2D地图上的初始位置，可以用rviz2发布，也可以用C++代码发布。",
@@ -35110,6 +35782,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:46:55.201Z"
+  },
+  "9b72249b2b6d11ed11d5b3d425d8ae16759c1dd9793e534e51685490b583b096": {
+    "source": "Jazzy 默认安装路径：__I18N_PROTECTED_0__",
+    "target": "Jazzy default installation path: __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:48.667Z"
   },
   "9b732f506ef9e01373430f69d11fb479ad05fe497228fc0e4674bb46cc32f9f9": {
     "source": "该镜像包含的内容：",
@@ -35229,6 +35908,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:44:20.451Z"
+  },
+  "9bcf9dfe1b8fc7acf480d3ae864ab3a7f5c8776519d2679b9ae24a5fb7d52f34": {
+    "source": "__I18N_PROTECTED_0__ 和 __I18N_PROTECTED_1__ 必须与 URDF 中的轮关节名一致。",
+    "target": "__I18N_PROTECTED_0__ and __I18N_PROTECTED_1__ must match the wheel joint names in the URDF.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:04.156Z"
   },
   "9bdc88d58e40f2f07b7f88061758fc601070216ceee8110b3d419224e9ce5604": {
     "source": "打开CubeMX并登录ST账号",
@@ -35495,6 +36181,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:23:46.001Z"
+  },
+  "9d107888086ec5594bf26b0f47d5b0c6e7b4f185630cd9c4252eceef5ef9a973": {
+    "source": "发布所有可用 state interfaces，包括自定义接口",
+    "target": "Publish all available state interfaces, including custom interfaces.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:44.231Z"
   },
   "9d19c7a110a24fbc7af47d5e7cf2ac9533fe20f0835bab5ce565cbbc0f9bed7a": {
     "source": "至此，你可以在startup\\_main()函数中随意调用C/C++库中的代码啦。",
@@ -35775,6 +36468,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:26:34.260Z"
+  },
+  "9e36d70f45113750e7a4beaefdd2aeb6cdc3a8563264ab76dce037ca73425970": {
+    "source": "需要注意，broadcaster 不是普通意义上的控制器。官方文档说明，broadcaster 不接收控制命令。",
+    "target": "Note that the broadcaster is not a controller in the ordinary sense. The official documentation states that the broadcaster does not receive control commands.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:37.116Z"
   },
   "9e3d6187f46d81d56609e7b607544f2851c55218ae7c67adfa0e3a2bf8151d4e": {
     "source": "**（2）里程计消息采集**",
@@ -36097,6 +36797,20 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:47:19.494Z"
+  },
+  "9faa934614f07a3072f96f274a49c3647159e0538a31ea1696fdf582968fd1ca": {
+    "source": "__I18N_PROTECTED_0__ 是 __I18N_PROTECTED_1__ 的入口。官方文档说明，它一边管理控制器，一边通过 Resource Manager 访问硬件组件及其接口。",
+    "target": "__I18N_PROTECTED_0__ is the entry point for __I18N_PROTECTED_1__. The official documentation states that it manages the controller on one hand, while accessing hardware components and their interfaces through the Resource Manager on the other.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:17.974Z"
+  },
+  "9fac62778dbc5721dc437baad17b1bccbc1f7b38d7edf6f363e1935d4b01096a": {
+    "source": "可以用如下命令查看是否已经安装相关包：",
+    "target": "You can use the following command to check if the relevant packages are already installed:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:09.818Z"
   },
   "9fb731f80ef4ff0172ecec85aa1905c34886194503f7b8d763a22e747b615937": {
     "source": "Docker部署",
@@ -37204,6 +37918,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:22:26.745Z"
   },
+  "a43741efdfdd84700eb52f3ed6e194e86a1be810299a733b5790704591bb16fa": {
+    "source": "ROS2 Control Jazzy 官方文档：__I18N_PROTECTED_0__",
+    "target": "ROS2 Control Jazzy official documentation: __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:46.824Z"
+  },
   "a4375a4386a1050f240a244de99ce82f3d66ce26232bc4146d55e1fe0f5b2f61": {
     "source": "进入__I18N_PROTECTED_0__，找到__I18N_PROTECTED_1__，然后往下滑，找到__I18N_PROTECTED_2__这个选项，给他关闭就行了。",
     "target": "Enter __I18N_PROTECTED_0__, find __I18N_PROTECTED_1__, then scroll down and locate the __I18N_PROTECTED_2__ option, and just turn it off.",
@@ -37224,6 +37945,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:19:48.153Z"
+  },
+  "a43e9744ae39096ea49bd489686aa6464221dada66e90c527ef1e334a51e5a39": {
+    "source": "如果 __I18N_PROTECTED_0__ 已激活，发送速度命令时要使用 __I18N_PROTECTED_1__：",
+    "target": "If __I18N_PROTECTED_0__ is activated, use __I18N_PROTECTED_1__ when sending speed commands:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:42.617Z"
   },
   "a445544c831b9696d6a6ab1cb403cfff77ecd5afad006e869ff09f776ca93a1d": {
     "source": "接着在Gazebo界面中就可以看到墙了，我们再手动添加几个物体，就可以用于下面的导航使用了。",
@@ -37917,6 +38645,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:13:23.333Z"
+  },
+  "a765cdbab3fc3134b0b7cfb624d015216215c84eabe781acd72b37471c60d6f9": {
+    "source": "__I18N_PROTECTED_0__ 发了但机器人不动",
+    "target": "__I18N_PROTECTED_0__ was sent, but the robot doesn't move.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:22.967Z"
   },
   "a766a8a809472c2fb0c1e7ab4837f05d0ba7697254faaf08e8ba94945a930708": {
     "source": "TTL（单片机上引脚常用电平，串口全双工，芯片IO口为TTL电平的RX,TX;信号线为TTL电平的RX,TX）",
@@ -40326,12 +41061,26 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:52:22.662Z"
   },
+  "b246b6aa90e2639e392b77cf3e6850a01968035bb37810388b943ba81ee50b66": {
+    "source": "发布标准运动接口，主要是 __I18N_PROTECTED_0__、__I18N_PROTECTED_1__、__I18N_PROTECTED_2__",
+    "target": "Published standard motion interfaces, primarily __I18N_PROTECTED_0__, __I18N_PROTECTED_1__, and __I18N_PROTECTED_2__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:39.316Z"
+  },
   "b246cb1800b8a93928752a9c45b1442be30acd75eaee09b8c041d9defcf8476e": {
     "source": "用Win+R输入__I18N_PROTECTED_0__：",
     "target": "Press Win+R and enter __I18N_PROTECTED_0__:",
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:21:52.578Z"
+  },
+  "b25146491d11072f3582edc6d10cef7a12a0c61060d016df7fa59d74cffc7528": {
+    "source": "计算平均速度的滚动窗口大小",
+    "target": "Rolling window size for calculating average speed",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:30.526Z"
   },
   "b2548b2191c24988357b4d37697865d90224206f5fecf0577492ef455309f39e": {
     "source": "1.  机器人是一辆移动式平台时，”面向平台“的开发模式下可能需要人随车走，这显然效率低下，并存在一定的安全隐患；",
@@ -40535,6 +41284,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:57:59.257Z"
+  },
+  "b30b155c15f7f1804f72d6dd259688fe54420aa62dcfd2019433ee712dff9465": {
+    "source": "这个 YAML 中的 __I18N_PROTECTED_0__ 字段必须写插件名。上面两个插件名都可以在 __I18N_PROTECTED_1__ 下对应 XML 文件中查到。",
+    "target": "The __I18N_PROTECTED_0__ field in this YAML must contain the plugin name. The two plugin names above can both be found in the corresponding XML file under __I18N_PROTECTED_1__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:47.629Z"
   },
   "b30b950cff430a908068063b50f7bbea2e4525ac2f50ef55ff1955ceb7a2a672": {
     "source": "__I18N_PROTECTED_0__: 为机器人的足迹添加额外的填充空间，以考虑机器人运动时的额外空间需求。",
@@ -41145,6 +41901,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:28:38.807Z"
   },
+  "b58016e1cd0ca100f80316fd0867cab02f12c1ee242c117d2f72aec611187baa": {
+    "source": "如果控制器管理器不在默认命名空间，可以用 __I18N_PROTECTED_0__ 指定：",
+    "target": "If the controller manager is not in the default namespace, it can be specified with __I18N_PROTECTED_0__:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:30.842Z"
+  },
   "b582f65e59fdbdbc604017b445737411b3f1f05bb62754410181af5c9fce63ef": {
     "source": "填写好文件名，文件内容，就可以点绿色按钮进行提交了。然后也可以填写提交的注释信息。",
     "target": "Fill in the file name and file content, then click the green button to submit. You can also fill in a commit comment.",
@@ -41397,6 +42160,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:27:57.752Z"
   },
+  "b664ffe87ed7312876e211c583401f6940106f3abc34c9ac45fed60cafbb457b": {
+    "source": "发布 joint states 时使用的 frame_id",
+    "target": "The frame_id used when publishing joint states",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:07.245Z"
+  },
   "b66f6dbeaaf34959f7d12bac32af4921436a87b5a7258be2c6dcde7c9e696db7": {
     "source": "第二个入口参数是发送目标选项对象，我们可以设置这个目标发送过去之后，我们需要处理的一些回调函数",
     "target": "The second input parameter is the target sending options object, through which we can set certain callback functions that need to be handled after the target is sent.",
@@ -41522,6 +42292,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:19:20.674Z"
+  },
+  "b6d5e64432fe4511e32c19b09a0cdb3f3fbc8f8d60826afe3a78e13cf5e0242a": {
+    "source": "官方文档说明，__I18N_PROTECTED_0__ 的输出接口是轮关节的 __I18N_PROTECTED_1__ 命令接口。",
+    "target": "The official documentation explains that the output interface of __I18N_PROTECTED_0__ is the __I18N_PROTECTED_1__ command interface of the wheel joints.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:42.814Z"
   },
   "b6d7556277e367b8b4106e70c497e7f5fe20e622decf1c725ac3b13da2dca672": {
     "source": "配置防火墙",
@@ -42790,6 +43567,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:57:15.123Z"
   },
+  "bd703aa849f8590a8d4cd29f9f53f172aa538d9eebf68bf2a7020a0e94f6869e": {
+    "source": "里程计 TF 重复",
+    "target": "Odometry TF Duplication",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:40.168Z"
+  },
   "bd8902f22fcf159e39161cdb002a320b360139ab29e5849f79a7e6d7f54e019f": {
     "source": "中断优先级",
     "target": "interrupt priority",
@@ -42845,6 +43629,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:22:51.099Z"
+  },
+  "bdb1ae4d77111a7b50d2493c90f054d62665f290fb2933fc29cae69519f281a4": {
+    "source": "调用硬件组件的 __I18N_PROTECTED_0__，把控制器输出的命令写到真实硬件或仿真硬件。",
+    "target": "Call the hardware component's __I18N_PROTECTED_0__, and write the commands output by the controller to real or simulated hardware.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:51.700Z"
   },
   "bdc91fd31b6fc6e3cf21de34b4e2214df04e75a9cc094b6c18439efd2b2347ca": {
     "source": "如果图像是8位无符号类型，那么按照原样显示。",
@@ -43083,6 +43874,20 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:23:10.571Z"
+  },
+  "bed09db0f9e8d6659d2f8ae9b5bd5403dc691362b837d3f66406398a84af107c": {
+    "source": "__I18N_PROTECTED_0__ 用于差速移动机器人。官方文档说明，它接收机器人本体速度命令，并把线速度、角速度转换成左右轮命令；同时，它会根据硬件反馈计算并发布里程计。",
+    "target": "__I18N_PROTECTED_0__ is used for differential-drive mobile robots. The official documentation explains that it receives velocity commands for the robot's body and converts linear and angular velocities into left/right wheel commands; at the same time, it calculates and publishes odometry based on hardware feedback.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:18.232Z"
+  },
+  "bedc500bdd27d6f8b0a56d3bf36a0677120abc001307eed2c7663eb013e1ffc7": {
+    "source": "**控制器复用** ：同一个控制器可以接不同硬件实现。例如差速底盘控制器只关心左右轮关节的速度命令和反馈，不需要知道底层是串口、电机驱动器、Gazebo 还是 mock 硬件。",
+    "target": "**Controller reuse**: The same controller can work with different hardware implementations. For example, a differential drive controller only cares about speed commands and feedback for the left and right wheel joints, without needing to know whether the underlying layer is a serial port, motor driver, Gazebo, or mock hardware.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:57.634Z"
   },
   "beddf463e6ce10d60da7709b1478e1f4666b06b64e6da6a19bca5ad31db282a9": {
     "source": "第二种构造函数在给出声明变量的同时也将视频数据赋值给变量。可以读取的文件种类包括视频文件（例如video.avi）、图像序列或者视频流的URL。其中读取图像序列需要将多个图像的名称统一为\"前缀+数字\"的形式，通过\"前缀+%02d\"的形式调用，例如，在某个文件夹中有图片img_00.jpg、img_01.jpg、img_02.jpg加载时，文件名用img_%02d.jpg表示。函数中的读取视频设置属性标签默认的是自动搜索合适的标志，因此，在平时使用中，可以将其默认，只输入视频名称。与imread()函数一样，构造函数同样有可能读取文件失败，因此需要通过isOpened()函数进行判断。如果读取成功，则返回值为true；如果读取失败，则返回值为false。",
@@ -43994,6 +44799,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:23:52.465Z"
   },
+  "c35052c9b55b69f9bec48336a1802881b46e43c6314bb0b71145bf3926f4bc0a": {
+    "source": "官方 Jazzy 文档给出的 Ubuntu 二进制安装命令如下：",
+    "target": "The official Jazzy documentation provides the following Ubuntu binary installation command:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:01.112Z"
+  },
   "c35d8dfb98c7bead568b896b5ce3fa479720875f33309923f2538755da55f5c7": {
     "source": "大疆电机库闭环代码解析：库由往届学长学姐对大疆官方库代码修改后的。（在开环基础上又加了CAN报文接收，以及一系列数据解析程序）",
     "target": "DJI Motor Library Closed-Loop Code Analysis: The library is a modified version of DJI's official library code by previous senior students. (On top of the open-loop foundation, CAN message reception and a series of data parsing programs have been added.)",
@@ -44287,6 +45099,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:43:23.720Z"
+  },
+  "c47a240aeb1b29bcf57821e031e3fa8446bab9931419ab745e2165d03a94e5a2": {
+    "source": "如果系统中已经有其他节点发布 __I18N_PROTECTED_0__ 到 __I18N_PROTECTED_1__，再让 __I18N_PROTECTED_2__ 发布同一段 TF，可能会产生 TF 冲突。此时可以在控制器配置中关闭：",
+    "target": "If there are already other nodes publishing __I18N_PROTECTED_0__ to __I18N_PROTECTED_1__, and then __I18N_PROTECTED_2__ publishes the same TF, it may cause a TF conflict. In this case, you can disable it in the controller configuration:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:44.897Z"
   },
   "c47fe613806a050b1429905e335a015d23d3248250777c11b8b9c092942466e9": {
     "source": "不推荐做浮点计算",
@@ -45492,6 +46311,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:40:34.757Z"
   },
+  "c9fcb254c8028b0f7ed8628152adcf12dad07b302057ee716ba9fa02040d27d2": {
+    "source": "其中声明的插件名为：",
+    "target": "The declared plugin name is:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:22.121Z"
+  },
   "ca084cae7e679077b509551139f20bfd972fa7fcd0aae4caf27af3c6644b9fef": {
     "source": "CUDA\\_ARCH\\_PTX为BIN的最高值，我只设置了一个BIN，所以最高值就是这个8.6。(只有你要给电脑更换显卡的情况下，才要给BIN设置多个值，就需要把你要用的显卡的值全包含在BIN中，而PTX只需要BIN的最高值即可)",
     "target": "CUDA_ARCH_PTX is the highest value of BIN. I only set one BIN, so the highest value is 8.6. (Only if you are replacing your computer's graphics card should you set multiple values for BIN, in which case you need to include all the values for the graphics cards you intend to use in BIN, while PTX only needs the highest value of BIN.)",
@@ -45799,6 +46625,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:30:03.288Z"
+  },
+  "cb4c91fae81d0c42d0ac74d2b6a096d804025818e852ee47261c996589e52e04": {
+    "source": "安装 __I18N_PROTECTED_0__ 后，常用的两个控制器插件如下：",
+    "target": "After installing __I18N_PROTECTED_0__, the two commonly used controller plugins are as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:22.830Z"
   },
   "cb5428cc1592df7af1d7ba5e66bb7b715d2ce82c37469b41927e7bf801f76bb1": {
     "source": "（1）.查看所连接的主机USB接口的KERNELS",
@@ -46192,6 +47025,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:14:12.486Z"
   },
+  "cd452441bff58435bdf2184870d8a4c30b2af1080383e1db6d626a268dc9e9b6": {
+    "source": "在控制循环中，Resource Manager 的职责可以概括为：",
+    "target": "In the control loop, the responsibilities of the Resource Manager can be summarized as:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:38.592Z"
+  },
   "cd4a4625d2d163dd7b35faefbe8027fc350888dd8c60f510010dda9808e34b20": {
     "source": "在学习如何读取Mat类矩阵元素之前，首先需要知道Mat类变量在计算机中是如何存储的。多通道的Mat类矩阵类似于三维数据，而计算机的存储空间是一个二维空间，因此Mat类矩阵在计算机中存储时是将三维数据变成二维数据，先存储第一个元素每个通道的数据，之后再存储第二个元素每个通道的数据。每一行的元素都按照这种方式进行存储，因此，如果我们找到了每个元素的起始位置，那么可以找到这个元素中每个通道的数据。图2-5展示了一个三通道矩阵的存储方式，其中连续的蓝色、绿色和红色方块分别代表每个元素的3个通道。",
     "target": "Before learning how to read the elements of a `Mat` class matrix, you first need to understand how `Mat` class variables are stored in a computer. A multi-channel `Mat` matrix is similar to three-dimensional data, but a computer's storage space is two-dimensional. Therefore, when a `Mat` matrix is stored in a computer, the three-dimensional data is flattened into two-dimensional data: the data for each channel of the first element is stored first, followed by the data for each channel of the second element. The elements in each row are stored in this manner. Thus, if we find the starting position of each element, we can locate the data for each channel within that element. Figure 2-5 illustrates the storage method of a three-channel matrix, where consecutive blue, green, and red squares represent the three channels of each element.",
@@ -46472,6 +47312,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:09:50.962Z"
   },
+  "ce9f8e7fb9abe86d5dd1a4192cac8ea5c89ac8f1b12b22f0e0a60ba80f73ba66": {
+    "source": "__I18N_PROTECTED_0__ 本身不等于仿真器。它只定义控制框架、硬件接口和控制器管理方式。要接 Gazebo，需要使用对应的仿真集成插件。",
+    "target": "__I18N_PROTECTED_0__ itself is not a simulator. It only defines the control framework, hardware interfaces, and controller management methods. To connect with Gazebo, you need to use the corresponding simulation integration plugin.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:47.087Z"
+  },
   "cea521a9fa9e24493a7df73173c61f05ab4c3c9d7270b9d509c8e109da9c68f9": {
     "source": "__I18N_PROTECTED_0__包中提供的常用节点如下：",
     "target": "The commonly used nodes provided in the __I18N_PROTECTED_0__ package are as follows:",
@@ -46597,6 +47444,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:27:16.087Z"
+  },
+  "cf3b3480365620ebe63fc3a339c2f053a2bcc083a21486ae5f362c1678950f77": {
+    "source": "关节状态发布器",
+    "target": "Joint State Publisher",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:27.627Z"
   },
   "cf682d50f9b656a5b47c728272967645486b196275d65d4732a41a4af32e8812": {
     "source": "如果你想安装在D盘，就把第一个C改成D。",
@@ -46975,6 +47829,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:25:22.811Z"
+  },
+  "d0ed6e8450550f30b2e7bc05de5681318c4b14e1335972c0d1ef1446b5c4f56f": {
+    "source": "可以复制一个humble的功能包并命名为 __I18N_PROTECTED_0__,然后拿这个功能包进行改动.",
+    "target": "Copy a humble package, name it __I18N_PROTECTED_0__, and then modify it.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:00.907Z"
   },
   "d0f3063e9c43cc344f86cb90870328c49247f7000636384f203fa9f87aafb3fc": {
     "source": "订阅的话题",
@@ -47493,6 +48354,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:55:13.470Z"
+  },
+  "d325ede9863789548b06d4f454c92c3451fd2e124f2396c2b1d880ce8ad80c40": {
+    "source": "然后可以查看里程计和关节状态：",
+    "target": "Then you can view the odometry and joint states:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:43.947Z"
   },
   "d32b9b09a8cb4fd93a2f17a2395f4f6ccc8b89202d3578dea23ab97ff592b851": {
     "source": "在slam\\_toolbox中常用的节点有两个：sync\\_slam\\_toolbox\\_node和async\\_slam\\_toolbox\\_node。",
@@ -48089,6 +48957,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:38:47.541Z"
   },
+  "d5d183d8a7c334e6f3631024cd26f299f7dc559806b00f31adb1adf2060ee8f4": {
+    "source": "安装完整 __I18N_PROTECTED_0__ 后，可以使用 __I18N_PROTECTED_1__ 命令查看状态：",
+    "target": "After installing the complete __I18N_PROTECTED_0__, you can use the __I18N_PROTECTED_1__ command to check the status:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:40.465Z"
+  },
   "d5ea926fda6481f438c0ad0874f8deafdd142281f66ba9b37ba1a7b0cf801992": {
     "source": "生态及其丰富，有很多东西即便自己不构建，也能在dockerhub上找到别人构建好的镜像，自己连编译都省去了。",
     "target": "The ecosystem is extremely rich. Even if you don't build things yourself, you can find pre-built images on Docker Hub, saving you the trouble of compiling.",
@@ -48222,6 +49097,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:21:09.116Z"
   },
+  "d64a71a040d189cdd1959cc230a782cfbb653422f068f429dbbcd2e383b54dbd": {
+    "source": "Joint State Broadcaster 简述",
+    "target": "Joint State Broadcaster Brief",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:50:29.589Z"
+  },
   "d64fbdbed2aedbbb05ce5d08922d49373632af08903669e920f40e741f6f3e90": {
     "source": "ROS1已经EOF了，官方鼓励使用ROS2.",
     "target": "ROS1 has reached End of Life (EOF), and the official recommendation is to use ROS2.",
@@ -48270,6 +49152,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:30:21.518Z"
+  },
+  "d6790cc65d5bdf786dc2fd4555ad3cb425f51b67c9cbf6e9222b47c3f1292e37": {
+    "source": "ROS2 Control 作用",
+    "target": "The Role of ROS2 Control",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:43.093Z"
   },
   "d6835c8040897d72c0bc6ae75a9c13ea53bee6b81ea7c6a37c27884d3bee4c3f": {
     "source": "调用.ui类并编译运行",
@@ -48431,6 +49320,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:45:50.601Z"
+  },
+  "d6e54576bc8bd599884993fec8bbed7d2d8856016d5bf27dacf897cb4893a678": {
+    "source": "当 __I18N_PROTECTED_0__ 时，使用关节 __I18N_PROTECTED_1__ 状态接口。",
+    "target": "When __I18N_PROTECTED_0__, use the joint __I18N_PROTECTED_1__ state interface.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:50.691Z"
   },
   "d6f604c7a74f9cf8ed1322067961ee4f25e1c1e7e2c0a6a45c2cbfa2bb428885": {
     "source": "找到路径__I18N_PROTECTED_0__。",
@@ -50280,6 +51176,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:43:47.579Z"
   },
+  "df24b899f2579892f840adedabb12692fe53ac5fa619ddfc362380c24f578e7b": {
+    "source": "机器人底盘坐标系",
+    "target": "robot chassis coordinate system",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:08.406Z"
+  },
   "df30fc28aaf5bd600c6eeed64ab72aa174ec4d0a1e48e687b37927ccc4e7c92b": {
     "source": "如果你只写 __I18N_PROTECTED_0__，但 lambda 不能编译期执行，那编译会报错。",
     "target": "If you only write __I18N_PROTECTED_0__, but the lambda cannot be executed at compile time, the compilation will fail with an error.",
@@ -50594,6 +51497,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:19:47.443Z"
+  },
+  "e0a500ee2d6e42f63c2ed3fbc7c5d85715ec5922be2e8a0773383b198f1eeeb4": {
+    "source": "默认使用关节 __I18N_PROTECTED_0__ 状态接口。",
+    "target": "By default, the joint __I18N_PROTECTED_0__ state interface is used.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:48.300Z"
   },
   "e0afd4d5bdb5c75bdc69f998a7b6d9059c0dc99a1e3ab1b8d23ad14552a0e234": {
     "source": "添加TF插件，",
@@ -51218,6 +52128,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:04:18.964Z"
   },
+  "e3552319ce82704696655d42707a9a7d7d5f885dfa038cfebe0fdbf1f500f6cb": {
+    "source": "Resource Manager 负责管理硬件组件。官方文档说明，硬件组件通过 __I18N_PROTECTED_0__ 动态加载，Resource Manager 管理这些组件的生命周期、状态接口和命令接口。",
+    "target": "The Resource Manager is responsible for managing hardware components. The official documentation states that hardware components are dynamically loaded through __I18N_PROTECTED_0__, and the Resource Manager manages the lifecycle, status interface, and command interface of these components.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:36.441Z"
+  },
   "e357155b1e11b4a3fd8898450c9991054d8550b93506d2a09be5fd46dd97d713": {
     "source": "STM32库",
     "target": "STM32 library",
@@ -51539,6 +52456,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:31:26.542Z"
+  },
+  "e4cab2ac20344b3ce4f1b9ad5cdd3f767c457b028e650aa6489e8f20fc5de0b6": {
+    "source": "左右轮最短距离，必须大于 __I18N_PROTECTED_0__",
+    "target": "The minimum distance between the left and right wheels must be greater than __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:02.982Z"
   },
   "e4e783098c0782b60226c80aa8426cd5c11a32342bae8621a09d6bb29cab2619": {
     "source": "**map\\_update\\_interval**  更新 2D 占用地图的时间间隔",
@@ -52240,6 +53164,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:46:37.771Z"
   },
+  "e7fdf4f53fe493a9f792cb0366eb4dede3a12ddbc3064ac4f47b737a46564c7f": {
+    "source": "里程计和 TF 发布频率",
+    "target": "Odometry and TF publishing frequency",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:32.373Z"
+  },
   "e8048796d320291be1d1cdd918034a0cad34772e4dae5ca1d9403e5870bacd1b": {
     "source": "由于看我自己板子的原理图,我的板子的IO43是LED灯的控制引脚,所以下面我初始化IO43.(我这里只有IO43,IO44接了个普通灯,没办法,只能先把__I18N_PROTECTED_0__里的__I18N_PROTECTED_1__换成__I18N_PROTECTED_2__,而你的灯不用改这个)",
     "target": "Since I looked at the schematic of my board, IO43 is the control pin for the LED, so I initialize IO43 below. (I only have IO43 here; IO44 is connected to a regular light, so I have no choice but to first replace __I18N_PROTECTED_1__ in __I18N_PROTECTED_0__ with __I18N_PROTECTED_2__, but you don't need to change this for your light.)",
@@ -52302,6 +53233,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:36:52.955Z"
+  },
+  "e85d3a61d07c2b08f95fe5b8da086dfbea64662072ee0274e282941047deaa24": {
+    "source": "官方文档建议使用 __I18N_PROTECTED_0__ 包中的默认节点 __I18N_PROTECTED_1__。launch 中典型写法如下：",
+    "target": "The official documentation recommends using the default node __I18N_PROTECTED_1__ in the __I18N_PROTECTED_0__ package. A typical launch file example is as follows:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:53:14.561Z"
   },
   "e862bfaee895785eba0714e1c468e920b61d7e27d4276a5e1ae8b09027405f8e": {
     "source": "**minimum_distance_penalty**  扫描可以确保大小不会爆炸的最小惩罚",
@@ -52708,6 +53646,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:52:38.639Z"
+  },
+  "e9e11aadcdc20290d100fc8330b6e59cbe0d51293f1f3b8004f64816742781c9": {
+    "source": "一个最小 Bringup 流程",
+    "target": "A Minimal Bringup Process",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:41.379Z"
   },
   "e9e4e50fda726108cd0518203599131f2251bc4bef99353b3db35a82802a309f": {
     "source": "📁 常见 Docker 应用场景",
@@ -53191,6 +54136,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:14:10.131Z"
+  },
+  "ebe4c2a72e4900dc4b1daf9682b4070f5c0156f9410efcf9ba56fb79613f8ddd": {
+    "source": "控制器管理器实时更新循环频率，默认值为 __I18N_PROTECTED_0__",
+    "target": "Real-time update loop frequency of the controller manager, default value is __I18N_PROTECTED_0__",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:26.508Z"
   },
   "ebe8d796c3d19cdc9e4cbe3630665b31de838403bc37175ea22f9e3f40a8deaa": {
     "source": "顶部的工具栏包含两个按钮，左侧的文件菜单按钮（水平条纹）和右侧的插件按钮（垂直省略号）。",
@@ -54003,6 +54955,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:25:04.684Z"
+  },
+  "ef0491164fc1f2735a460fe7ddc287f7ff3fc8de373748bd192a78991afd9e93": {
+    "source": "__I18N_PROTECTED_0__ 是 ROS 2 中用于机器人实时控制的框架。它把机器人控制拆成三层：上层控制器、中间的控制器管理器、底层硬件抽象。这样做的目的，是让同一套控制器既可以接真实电机驱动，也可以接仿真插件或模拟硬件。",
+    "target": "__I18N_PROTECTED__ is a framework for real-time robot control in ROS 2. It divides robot control into three layers: an upper-level controller, a middle controller manager, and a lower-level hardware abstraction. The purpose is to allow the same set of controllers to interface with either real motor drivers or simulation plugins and simulated hardware.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:08.580Z"
   },
   "ef080a4835e96f4260f238bd59a0831b4fe2d41a3f2b8f6951eb8da4e0f79bb0": {
     "source": "物联网(※)",
@@ -54858,6 +55817,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:43:36.872Z"
   },
+  "f29cfda3349161f82163a5a4f60139f1491c75b9df899a1f3020722bf1edf5ee": {
+    "source": "反馈接口有两种常见方式：",
+    "target": "There are two common ways for the feedback interface:",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:45.570Z"
+  },
   "f2a23bef6e924743c4bb33a151ce034c33b5df500ced7453a140b991879ea713": {
     "source": "但是中间这段是正常的,如下图",
     "target": "However, the middle section is normal, as shown in the figure below.",
@@ -54871,6 +55837,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:09:16.603Z"
+  },
+  "f2a9a46b6b1bb2cd40e72c9beba3992c77565dc04cc449522b3f96fd1d100d45": {
+    "source": "ROS2 Control 概述",
+    "target": "ROS2 Control Overview",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:48:03.563Z"
   },
   "f2afaf2d886c33bf2b99da82a5259922f554f761a42a46b50065542832272a28": {
     "source": "Humble是ROS2的第一个LTS，支持到2027年5月31日或海龟节，自带老版Gazebo Classic和新版Igntion Gazebo（独一份支持新旧两个Gazebo版本比较好的ROS版本），选择性比较广，自带算法比较新，教程正在逐渐增多中，第三方算法也在逐渐增多中，很多用ROS1的人都在往ROS2Humble上转。",
@@ -55207,6 +56180,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:56:28.120Z"
+  },
+  "f4187332191b53ecfe9d5a552dbf65d726274ee0df5b81aa0bcef9a7a0610da9": {
+    "source": "Diff Drive Controller 简述",
+    "target": "Diff Drive Controller Overview",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:51:14.637Z"
   },
   "f4299788c9d7b37579b2a269348ca528cf03a1514666d2b1397775dd255e3571": {
     "source": "如图是一个标准的SW装配体图(大家也可以尝试自己手撸一个，里面没有传动装置也可以)",
@@ -56363,6 +57343,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:23:16.310Z"
   },
+  "f9b73ffb1fd1e3a127d94429c725e25e5abc6a4b2d650579b01551652add92d9": {
+    "source": "调用硬件组件的 __I18N_PROTECTED_0__，把真实硬件或仿真硬件的状态读入 __I18N_PROTECTED_1__。",
+    "target": "Invoke the hardware component's __I18N_PROTECTED_0__ to read the state of real or simulated hardware into __I18N_PROTECTED_1__.",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:49:42.178Z"
+  },
   "f9b9bc216abf5d56eceef19845301fa1c0faa776aa2ba89c583b304b4e697c27": {
     "source": "点击RUN，然后在新弹出的窗口选择对应的型号，比如我选择STM32F103C8",
     "target": "Click RUN, then in the newly opened window select the corresponding model, for example I choose STM32F103C8.",
@@ -57511,6 +58498,13 @@
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T18:31:47.696Z"
   },
+  "febba9bcc12ead7c0b87a941c34e77c1e539f7567ea5f4d8a891b9fdc1d276cf": {
+    "source": "速度命令超时时间，单位为秒",
+    "target": "Speed command timeout value, in seconds",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:52:22.541Z"
+  },
   "febc247432a5ec9cc31d1ba7882737e4d3c7e43772e2862dbb4f5535ad965cf1": {
     "source": "旋转矩阵",
     "target": "Rotation matrix",
@@ -57524,6 +58518,13 @@
     "provider": "deepseek",
     "model": "deepseek-chat",
     "updatedAt": "2026-05-15T19:35:36.709Z"
+  },
+  "fec515251f3ea9f3f4238a60920eb34e150d80041e33d04adad8893fb984142c": {
+    "source": "URDF 中 __I18N_PROTECTED_0__ 的关节名是否与控制器参数中的关节名一致。",
+    "target": "Are the joint names in URDF for __I18N_PROTECTED_0__ consistent with the joint names in the controller parameters?",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "updatedAt": "2026-05-17T03:54:11.131Z"
   },
   "fec71da7d50d8ed106855577fdbaa9b4d965381642c26be0f5339f0614263b8f": {
     "source": "cd进想保存bag的目录，然输入record指令，后面跟话题名称，然后-o +bag文件名，这里也可以不重新命名bag文件，这样会用默认的名字，默认的名称是年月日命名的。",

@@ -49,56 +49,6 @@ export const pageCopySource = {
           summary: '以可复用的方式记录踩坑、设计取舍与项目反思，方便后续快速回顾与迭代。'
         }
       ]
-    },
-    en: {
-      title: "Welcome to Dongche's Tinkering Notes",
-      description: 'A personal homepage for learning, development, and everyday tinkering: from robotics and embedded systems to web tools and practical notes.',
-      metaTitle: "Dongche's Tinkering Notes",
-      metaDescription: 'Notes on exploring, learning, and building.',
-      tags: ['Technical tinkering', 'Project logs', 'Study notes', 'Life thoughts'],
-      actions: {
-        blog: 'Browse blog posts',
-        wiki: 'Open Wiki knowledge base',
-        more: 'View more pages'
-      },
-      focusTitle: 'What This Site Covers',
-      focusDescription: 'Focused on engineering practice and reusable experience, not just concepts.',
-      latestLabel: 'Latest content',
-      latestBlog: 'Latest Blog',
-      latestWiki: 'Latest Wiki',
-      viewAll: 'View all',
-      focusAreas: [
-        {
-          icon: 'fas fa-microchip',
-          title: 'Programming and Embedded Development',
-          summary: 'C/C++, Python, Linux, STM32, ESP32, FreeRTOS, and driver development practice.'
-        },
-        {
-          icon: 'fas fa-robot',
-          title: 'Robotics and Automation',
-          summary: 'ROS1 / ROS2 motion control, navigation, mapping, sensor fusion, and OpenCV-based perception.'
-        },
-        {
-          icon: 'fas fa-display',
-          title: 'GUI and Tool Development',
-          summary: 'Qt6 host tools and visual debugging utilities that make robotics projects easier to maintain.'
-        },
-        {
-          icon: 'fas fa-globe',
-          title: 'Web and Blog Engineering',
-          summary: 'A Nuxt-based content system with better organization, search, and frontend performance.'
-        },
-        {
-          icon: 'fas fa-mobile-screen-button',
-          title: 'Mobile Tool Practice',
-          summary: 'Android control and monitoring tools for device integration, status visualization, and workflow efficiency.'
-        },
-        {
-          icon: 'fas fa-pen-ruler',
-          title: 'Study Notes and Retrospectives',
-          summary: 'Reusable notes on pitfalls, design tradeoffs, and project reviews for later iteration.'
-        }
-      ]
     }
   },
   more: {
@@ -122,28 +72,6 @@ export const pageCopySource = {
         start: ['导航页', '导航页'],
         logo: ['个人 LOGO', 'LOGO介绍'],
         chat: ['CHAT', '自建的类ChatGPT网站']
-      }
-    },
-    en: {
-      title: 'More Pages',
-      description: 'Important site pages collected for quick access.',
-      metaDescription: 'Important site entries, including analytics, friends, tech footprint, resume, and navigation.',
-      categories: {
-        analytics: 'Analytics',
-        acceleration: 'Acceleration Services',
-        other: 'Other'
-      },
-      cards: {
-        stats: ['Stats', 'Website analytics and statistics'],
-        umami: ['Umami', 'Website traffic analytics platform'],
-        cnCdn: ['Mainland China CDN', 'Content Delivery Network (CDN)'],
-        globalCdn: ['Global CDN', 'Content Delivery Network (CDN)'],
-        friends: ['Friends', 'Useful websites, communities, and teams'],
-        footprint: ['Tech Footprint', 'Personal robotics technology roadmap'],
-        cv: ['Resume', 'Personal resume'],
-        start: ['Start Page', 'Navigation page'],
-        logo: ['Personal Logo', 'Logo introduction'],
-        chat: ['CHAT', 'Self-hosted ChatGPT-like website']
       }
     }
   },
@@ -192,52 +120,6 @@ export const pageCopySource = {
         os: '操作系统',
         devices: '设备',
         events: '事件'
-      }
-    },
-    en: {
-      title: 'Stats',
-      metaDescription: 'Website traffic analytics.',
-      note: 'The data below comes from the Umami API and supports live refresh.',
-      refresh: 'Refresh data',
-      refreshing: 'Refreshing...',
-      unavailable: 'Analytics data is temporarily unavailable. Please try again later.',
-      loading: 'Loading analytics data...',
-      overviewLabel: 'Site metrics',
-      frameLabel: 'Umami shared dashboard',
-      frameTitle: 'Website traffic analytics',
-      direct: 'Direct',
-      empty: 'No data',
-      units: {
-        hours: 'h',
-        minutes: 'm',
-        seconds: 's',
-        page: 'pages',
-        pageviews: 'views',
-        visits: 'visits',
-        visitors: 'visitors',
-        times: 'times'
-      },
-      summary: {
-        visitors: 'Visitors',
-        visits: 'Visits',
-        pageviews: 'Pageviews',
-        bounces: 'Bounces',
-        bounceRate: 'Bounce rate',
-        avgVisitDuration: 'Avg. duration',
-        pagesPerVisit: 'Pages per visit',
-        totaltime: 'Total time'
-      },
-      sections: {
-        paths: 'Top Pages',
-        referrers: 'Referrers',
-        channels: 'Channels',
-        countries: 'Countries',
-        regions: 'Regions',
-        cities: 'Cities',
-        browsers: 'Browsers',
-        os: 'Operating Systems',
-        devices: 'Devices',
-        events: 'Events'
       }
     }
   }
