@@ -17,14 +17,7 @@
       <span>收起</span>
     </button>
 
-    <meting-js
-      v-if="ready"
-      server="tencent"
-      type="playlist"
-      id="9619599108"
-      autoplay="false"
-      api="https://music.3e0.cn/?server=:server&type=:type&id=:id&r=:r"
-    />
+    <div ref="aplayerContainer" class="music-player-aplayer" />
   </div>
 
   <div
@@ -93,16 +86,45 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { CDN_AUDIO_BY_ID, MUSIC_SERVER, PLAYLIST_API } from '~/data/cdn-audio'
+
+type MetingSong = Record<string, unknown> & {
+  id?: string | number
+  mid?: string | number
+  songmid?: string | number
+  song_song_id?: string | number
+  songId?: string | number
+  cover?: string
+  pic?: string
+  lrc?: string
+  url?: string
+}
+
+type APlayerInstance = {
+  destroy?: () => void
+}
+
+declare global {
+  interface Window {
+    APlayer?: new (options: {
+      container: HTMLElement
+      autoplay?: boolean
+      lrcType?: number
+      audio: MetingSong[]
+    }) => APlayerInstance
+  }
+}
 
 // 默认设为 false，确保初始状态是展开的
 const hidden = ref(false)
-const ready = ref(false)
 const player = ref<HTMLElement | null>(null)
+const aplayerContainer = ref<HTMLElement | null>(null)
 const currentTitle = ref('音樂播放器')
 const currentAuthor = ref('點擊展開')
 const currentCover = ref('')
 const isPlaying = ref(false)
 
+let aplayer: APlayerInstance | null = null
 let playerObserver: MutationObserver | null = null
 let syncTimer: number | undefined
 
@@ -127,8 +149,10 @@ onMounted(() => {
   } catch (e) {}
 
   setTimeout(() => {
-    ready.value = true
-    startPlayerSync()
+    initPlayer().catch(() => {
+      currentTitle.value = '音樂載入失敗'
+      currentAuthor.value = '點擊稍後重試'
+    })
   }, 300)
 })
 
@@ -137,6 +161,8 @@ onBeforeUnmount(() => {
   if (syncTimer) {
     window.clearInterval(syncTimer)
   }
+  aplayer?.destroy?.()
+  aplayer = null
 })
 
 function toggle() {
@@ -164,6 +190,94 @@ function startPlayerSync() {
       attributeFilter: ['class', 'style']
     })
   }
+}
+
+async function initPlayer() {
+  if (!aplayerContainer.value) {
+    return
+  }
+
+  const APlayer = await waitForAPlayer()
+  const songs = await fetchPlaylist()
+
+  aplayer?.destroy?.()
+  aplayer = new APlayer({
+    container: aplayerContainer.value,
+    autoplay: false,
+    lrcType: 3,
+    audio: songs
+  })
+
+  startPlayerSync()
+}
+
+async function fetchPlaylist() {
+  const response = await fetch(PLAYLIST_API)
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch playlist: ${response.status}`)
+  }
+
+  const songs = await response.json() as MetingSong[]
+
+  if (!Array.isArray(songs)) {
+    throw new Error('Playlist API did not return an array')
+  }
+
+  return songs.map((song) => {
+    const songId = getSongId(song)
+    const cdnUrl = songId ? CDN_AUDIO_BY_ID[`${MUSIC_SERVER}:${songId}`] : undefined
+    const normalizedSong = {
+      ...song,
+      cover: song.cover ?? song.pic
+    }
+
+    return cdnUrl
+      ? { ...normalizedSong, url: cdnUrl }
+      : normalizedSong
+  })
+}
+
+function getSongId(song: MetingSong) {
+  const songId = song.id ?? song.mid ?? song.songmid ?? song.song_song_id ?? song.songId
+  if (songId !== undefined && songId !== null) {
+    return String(songId)
+  }
+
+  return getSongIdFromUrl(song.url) || getSongIdFromUrl(song.lrc)
+}
+
+function getSongIdFromUrl(value: unknown) {
+  if (typeof value !== 'string' || !value) {
+    return ''
+  }
+
+  try {
+    return new URL(value, window.location.origin).searchParams.get('id') || ''
+  } catch (e) {
+    return ''
+  }
+}
+
+function waitForAPlayer() {
+  if (window.APlayer) {
+    return Promise.resolve(window.APlayer)
+  }
+
+  return new Promise<NonNullable<typeof window.APlayer>>((resolve, reject) => {
+    let attempts = 0
+    const timer = window.setInterval(() => {
+      attempts += 1
+
+      if (window.APlayer) {
+        window.clearInterval(timer)
+        resolve(window.APlayer)
+      } else if (attempts >= 50) {
+        window.clearInterval(timer)
+        reject(new Error('APlayer script was not loaded'))
+      }
+    }, 100)
+  })
 }
 
 function syncCurrentTrack() {

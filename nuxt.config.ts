@@ -53,12 +53,6 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-01-01',
 
-  vue: {
-    compilerOptions: {
-      isCustomElement: (tag) => tag === 'meting-js'
-    }
-  },
-
   app: {
     head: {
       script: [
@@ -69,9 +63,6 @@ export default defineNuxtConfig({
         },
         {
           src: 'https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js'
-        },
-        {
-          src: 'https://cdn.tungchiahui.cn/libs/meting/2.0.2/Meting.min.js'
         },
         {
           src: 'https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/all.min.js',
