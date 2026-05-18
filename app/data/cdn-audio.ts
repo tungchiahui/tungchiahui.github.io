@@ -5,7 +5,7 @@ export const METING_API = 'https://music.3e0.cn/?server=:server&type=:type&id=:i
 
 export const CDN_AUDIO_BY_ID: Record<string, string> = {
   // Example:
-  'tencent:000DNTXj0gJF8O': 'https://global.cdn.tungchiahui.cn/tungwebsite/assets/music/马也_Crabbit%20Cole先生%20-%20海屿你.mp3',
+  'tencent:000DNTXj0gJF8O': 'https://cdn.tungchiahui.cn/tungwebsite/assets/music/马也_Crabbit%20Cole先生%20-%20海屿你.mp3',
 }
 
 export const PLAYLIST_API = METING_API
