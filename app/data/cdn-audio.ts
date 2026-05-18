@@ -29,6 +29,7 @@ export const CDN_AUDIO_BY_ID: Record<string, string> = {
   'tencent:003mVERF2THBiE': 'https://cdn.tungchiahui.cn/tungwebsite/assets/music/MOONLIGHT-HENRY刘宪华.mp3',
   'tencent:0038HM2J2C2T36': 'https://cdn.tungchiahui.cn/tungwebsite/assets/music/落在生命里的光-尹昔眠.mp3',
   'tencent:00333VYG3eXFtv': 'https://cdn.tungchiahui.cn/tungwebsite/assets/music/深院外-阿YueYue.戾格.小田音乐社.mp3',
+  'tencent:003lx2pR2PeOPi': 'https://cdn.tungchiahui.cn/tungwebsite/assets/music/晴天下雨-ATK.橙汁.P40林康鉴.mp3',
 }
 
 export const PLAYLIST_API = METING_API
