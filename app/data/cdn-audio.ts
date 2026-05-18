@@ -1,7 +1,8 @@
 export const MUSIC_SERVER = 'tencent'
 export const MUSIC_PLAYLIST_TYPE = 'playlist'
 export const MUSIC_PLAYLIST_ID = '9619599108'
-export const METING_API = 'https://music.3e0.cn/?server=:server&type=:type&id=:id'
+// export const METING_API = 'https://music.3e0.cn/?server=:server&type=:type&id=:id'
+export const METING_API = 'https://meting-api.u2sb.com/?server=:server&type=:type&id=:id'
 
 export const CDN_AUDIO_BY_ID: Record<string, string> = {
   // Example:
