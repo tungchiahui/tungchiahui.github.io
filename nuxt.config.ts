@@ -1,5 +1,14 @@
 import { getLocalizedContentMeta } from './utils/wiki-content-meta'
 
+const PRIMARY_CDN_ORIGIN = 'https://cdn.tungchiahui.cn'
+const GLOBAL_CDN_ORIGIN = 'https://global.cdn.tungchiahui.cn'
+const CDN_FALLBACK_RETRY_LIMIT = 2
+const CDN_FALLBACK_RETRY_DELAY = 240
+
+const cdnAsset = (path: string) => `${PRIMARY_CDN_ORIGIN}${path}`
+const globalCdnFallback = (attribute: 'src' | 'href', path: string) =>
+  `var e=this,r=Number(e.dataset.cdnRetry||0);if(r<${CDN_FALLBACK_RETRY_LIMIT}){e.dataset.cdnRetry=String(r+1);setTimeout(function(){e.${attribute}='${cdnAsset(path)}?music_cdn_retry='+(r+1)+'-'+Date.now()},${CDN_FALLBACK_RETRY_DELAY}*(r+1))}else{e.onerror=null;e.${attribute}='${GLOBAL_CDN_ORIGIN}${path}'}`
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // ✅ 关闭 SSR
@@ -41,7 +50,7 @@ export default defineNuxtConfig({
 
   image: {
     // CDN 域名（静态完全没问题）
-    domains: ['cdn.tungchiahui.cn']
+    domains: ['cdn.tungchiahui.cn', 'global.cdn.tungchiahui.cn']
   },
 
   // Nuxt 4 规范（可以保留）
@@ -62,21 +71,25 @@ export default defineNuxtConfig({
           defer: true
         },
         {
-          src: 'https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.js'
+          src: cdnAsset('/libs/aplayer/1.10.1/APlayer.min.js'),
+          onerror: globalCdnFallback('src', '/libs/aplayer/1.10.1/APlayer.min.js')
         },
         {
-          src: 'https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/all.min.js',
+          src: cdnAsset('/libs/font-awesome/7.1.0/all.min.js'),
+          onerror: globalCdnFallback('src', '/libs/font-awesome/7.1.0/all.min.js'),
           defer: true
         }
       ],
       link: [
         {
           rel: 'stylesheet',
-          href: 'https://cdn.tungchiahui.cn/libs/aplayer/1.10.1/APlayer.min.css'
+          href: cdnAsset('/libs/aplayer/1.10.1/APlayer.min.css'),
+          onerror: globalCdnFallback('href', '/libs/aplayer/1.10.1/APlayer.min.css')
         },
         {
           rel: 'stylesheet',
-          href: 'https://cdn.tungchiahui.cn/libs/font-awesome/7.1.0/fontawesome.min.css'
+          href: cdnAsset('/libs/font-awesome/7.1.0/fontawesome.min.css'),
+          onerror: globalCdnFallback('href', '/libs/font-awesome/7.1.0/fontawesome.min.css')
         }
       ]
     }

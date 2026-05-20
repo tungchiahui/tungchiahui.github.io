@@ -87,54 +87,50 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { CDN_AUDIO_BY_ID, MUSIC_SERVER, PLAYLIST_API } from '~/data/cdn-audio'
+import type { MusicSong, SiteAPlayerInstance, SiteAPlayerListSwitchEvent } from '~/composables/useSiteMusicPlayer'
 
-type MetingSong = Record<string, unknown> & {
-  id?: string | number
-  mid?: string | number
-  songmid?: string | number
-  song_song_id?: string | number
-  songId?: string | number
-  cover?: string
-  pic?: string
-  lrc?: string
-  url?: string
-}
-
-type APlayerInstance = {
-  destroy?: () => void
-}
-
-declare global {
-  interface Window {
-    APlayer?: new (options: {
-      container: HTMLElement
-      autoplay?: boolean
-      lrcType?: number
-      audio: MetingSong[]
-    }) => APlayerInstance
-  }
-}
+type MetingSong = MusicSong
+type APlayerInstance = SiteAPlayerInstance
+type APlayerListSwitchEvent = SiteAPlayerListSwitchEvent
 
 // 默认设为 false，确保初始状态是展开的
 const hidden = ref(false)
 const player = ref<HTMLElement | null>(null)
 const aplayerContainer = ref<HTMLElement | null>(null)
-const currentTitle = ref('音樂播放器')
-const currentAuthor = ref('點擊展開')
-const currentCover = ref('')
-const isPlaying = ref(false)
+const musicPlayer = useSiteMusicPlayer()
+const {
+  currentAuthor,
+  currentCoverStyle,
+  currentTitle,
+  isPlaying
+} = musicPlayer
 
 let aplayer: APlayerInstance | null = null
 let playerObserver: MutationObserver | null = null
 let syncTimer: number | undefined
+let autoResumeTimer: number | undefined
+let pendingAutoResumeIndex: number | null = null
+let autoResumeAttempts = 0
+let lastListSwitchAt = 0
+let cdnRecoveryTimer: number | undefined
+let cdnGlobalFallbackTimer: number | undefined
+let cdnRecoveryTrackKey = ''
+let primaryCdnReconnectAttempts = 0
+
+const AUTO_RESUME_DELAYS = [180, 450, 900, 1600, 2800, 4200]
+const PRIMARY_CDN_RECONNECT_DELAYS = [160, 420]
+const CDN_GLOBAL_FALLBACK_DELAY = 1800
+const PRIMARY_CDN_HOST = 'cdn.tungchiahui.cn'
+const GLOBAL_CDN_HOST = 'global.cdn.tungchiahui.cn'
+const CDN_RECONNECT_PARAM = 'music_cdn_retry'
 
 const miniCoverStyle = computed(() => (
-  currentCover.value
-    ? { backgroundImage: currentCover.value }
+  currentCoverStyle.value
+    ? { backgroundImage: currentCoverStyle.value }
     : {}
 ))
 
-const hasCover = computed(() => Boolean(currentCover.value))
+const hasCover = computed(() => Boolean(currentCoverStyle.value))
 
 onMounted(() => {
   try {
@@ -150,6 +146,7 @@ onMounted(() => {
 
   setTimeout(() => {
     initPlayer().catch(() => {
+      musicPlayer.setLoadError('音樂載入失敗')
       currentTitle.value = '音樂載入失敗'
       currentAuthor.value = '點擊稍後重試'
     })
@@ -161,6 +158,9 @@ onBeforeUnmount(() => {
   if (syncTimer) {
     window.clearInterval(syncTimer)
   }
+  clearAutoResume()
+  clearCdnRecovery()
+  musicPlayer.unregister(aplayer)
   aplayer?.destroy?.()
   aplayer = null
 })
@@ -200,14 +200,20 @@ async function initPlayer() {
   const APlayer = await waitForAPlayer()
   const songs = await fetchPlaylist()
 
+  musicPlayer.clearLoadError()
+  musicPlayer.setSongs(songs)
+  musicPlayer.unregister(aplayer)
   aplayer?.destroy?.()
   aplayer = new APlayer({
     container: aplayerContainer.value,
     autoplay: false,
     lrcType: 3,
+    preload: 'auto',
     audio: songs
   })
 
+  musicPlayer.register(aplayer)
+  bindAutoResume(aplayer)
   startPlayerSync()
 }
 
@@ -290,28 +296,357 @@ function syncCurrentTrack() {
   const author = root.querySelector<HTMLElement>('.aplayer-author')?.textContent
     ?.replace(/^\s*-\s*/, '')
     .trim()
-  const cover = root.querySelector<HTMLElement>('.aplayer-pic')?.style.backgroundImage
+  const coverStyle = root.querySelector<HTMLElement>('.aplayer-pic')?.style.backgroundImage
   const playButton = root.querySelector<HTMLElement>('.aplayer-pic .aplayer-button')
+  const currentIndex = aplayer ? getCurrentTrackIndex(aplayer) : null
+  const currentSong = typeof currentIndex === 'number' ? aplayer?.list?.audios?.[currentIndex] : null
+  const coverUrl = getTextValue(currentSong?.cover) || getTextValue(currentSong?.pic)
 
-  if (title) {
-    currentTitle.value = title
+  musicPlayer.updatePlaybackState({
+    author,
+    coverStyle: coverStyle && coverStyle !== 'none' ? coverStyle : '',
+    coverUrl,
+    currentIndex,
+    currentTime: aplayer?.audio?.currentTime,
+    duration: aplayer?.audio?.duration,
+    isPlaying: Boolean(playButton?.classList.contains('aplayer-pause')),
+    title
+  })
+}
+
+function bindAutoResume(instance: APlayerInstance) {
+  instance.on?.('listswitch', (payload) => {
+    lastListSwitchAt = Date.now()
+
+    if (wantsPlayback(instance)) {
+      queueAutoResume(getSwitchIndex(payload) ?? getCurrentTrackIndex(instance))
+    } else {
+      clearAutoResume()
+    }
+  })
+
+  instance.on?.('ended', () => {
+    if (wantsPlayback(instance)) {
+      queueAutoResume(getCurrentTrackIndex(instance))
+    }
+  })
+
+  instance.on?.('loadeddata', () => attemptAutoResume())
+  instance.on?.('canplay', () => attemptAutoResume())
+  instance.on?.('canplaythrough', () => attemptAutoResume())
+  instance.on?.('waiting', () => {
+    if (wantsPlayback(instance)) {
+      queueAutoResume(getCurrentTrackIndex(instance), true)
+    }
+  })
+  instance.on?.('error', () => {
+    if (!wantsPlayback(instance)) {
+      return
+    }
+
+    if (recoverCurrentTrackCdnFailure(instance)) {
+      return
+    }
+  })
+  instance.on?.('playing', () => {
+    clearAutoResume()
+    clearCdnRecovery()
+  })
+  instance.on?.('pause', () => {
+    if (Date.now() - lastListSwitchAt > 800) {
+      clearAutoResume()
+      clearCdnRecovery()
+    }
+  })
+}
+
+function queueAutoResume(index: number | null, keepAttempts = false) {
+  if (index === null) {
+    return
   }
 
-  currentAuthor.value = author || '點擊展開'
-  currentCover.value = cover && cover !== 'none' ? cover : ''
-  isPlaying.value = Boolean(playButton?.classList.contains('aplayer-pause'))
+  pendingAutoResumeIndex = index
+  if (!keepAttempts) {
+    autoResumeAttempts = 0
+  }
+
+  scheduleAutoResume()
+}
+
+function scheduleAutoResume(delay = AUTO_RESUME_DELAYS[Math.min(autoResumeAttempts, AUTO_RESUME_DELAYS.length - 1)]) {
+  if (autoResumeTimer) {
+    window.clearTimeout(autoResumeTimer)
+  }
+
+  autoResumeTimer = window.setTimeout(() => {
+    autoResumeTimer = undefined
+    attemptAutoResume()
+  }, delay)
+}
+
+function attemptAutoResume() {
+  if (!aplayer || pendingAutoResumeIndex === null) {
+    return
+  }
+
+  const currentIndex = getCurrentTrackIndex(aplayer)
+  if (currentIndex !== null && currentIndex !== pendingAutoResumeIndex) {
+    clearAutoResume()
+    return
+  }
+
+  if (!wantsPlayback(aplayer)) {
+    clearAutoResume()
+    return
+  }
+
+  const audio = aplayer.audio
+  if (audio && !audio.paused && !audio.ended) {
+    clearAutoResume()
+    return
+  }
+
+  try {
+    aplayer.play?.()
+  } catch (e) {}
+
+  window.setTimeout(() => {
+    if (!aplayer || pendingAutoResumeIndex === null) {
+      return
+    }
+
+    const audio = aplayer.audio
+    if (audio && !audio.paused && !audio.ended) {
+      clearAutoResume()
+      return
+    }
+
+    autoResumeAttempts += 1
+    if (autoResumeAttempts < AUTO_RESUME_DELAYS.length) {
+      scheduleAutoResume()
+    } else {
+      clearAutoResume()
+    }
+  }, 120)
+}
+
+function recoverCurrentTrackCdnFailure(instance: APlayerInstance) {
+  const index = getCurrentTrackIndex(instance)
+  if (index === null) {
+    return false
+  }
+
+  const song = instance.list?.audios?.[index]
+  if (!song || !isPrimaryCdnUrl(song.url)) {
+    return false
+  }
+
+  const trackKey = getCdnRecoveryTrackKey(index, song)
+  if (cdnRecoveryTrackKey !== trackKey) {
+    clearCdnRecovery()
+    cdnRecoveryTrackKey = trackKey
+    scheduleGlobalCdnFallback(instance, index, song)
+  }
+
+  if (primaryCdnReconnectAttempts < PRIMARY_CDN_RECONNECT_DELAYS.length) {
+    primaryCdnReconnectAttempts += 1
+    schedulePrimaryCdnReconnect(
+      instance,
+      index,
+      song,
+      getPrimaryCdnReconnectUrl(song.url, primaryCdnReconnectAttempts),
+      PRIMARY_CDN_RECONNECT_DELAYS[primaryCdnReconnectAttempts - 1] ?? 0
+    )
+    return true
+  }
+
+  const fallbackUrl = getGlobalCdnFallbackUrl(song.url)
+  if (!fallbackUrl) {
+    return false
+  }
+
+  reloadCurrentTrackWithUrl(instance, index, song, fallbackUrl)
+
+  return true
+}
+
+function scheduleGlobalCdnFallback(
+  instance: APlayerInstance,
+  index: number,
+  song: MetingSong
+) {
+  if (cdnGlobalFallbackTimer) {
+    return
+  }
+
+  cdnGlobalFallbackTimer = window.setTimeout(() => {
+    cdnGlobalFallbackTimer = undefined
+
+    if (!wantsPlayback(instance) || getCurrentTrackIndex(instance) !== index || !isPrimaryCdnUrl(song.url)) {
+      return
+    }
+
+    const fallbackUrl = getGlobalCdnFallbackUrl(song.url)
+    if (fallbackUrl) {
+      reloadCurrentTrackWithUrl(instance, index, song, fallbackUrl)
+    }
+  }, CDN_GLOBAL_FALLBACK_DELAY)
+}
+
+function schedulePrimaryCdnReconnect(
+  instance: APlayerInstance,
+  index: number,
+  song: MetingSong,
+  retryUrl: string,
+  delay: number
+) {
+  if (!retryUrl) {
+    return
+  }
+
+  if (cdnRecoveryTimer) {
+    window.clearTimeout(cdnRecoveryTimer)
+  }
+
+  cdnRecoveryTimer = window.setTimeout(() => {
+    cdnRecoveryTimer = undefined
+
+    if (!wantsPlayback(instance) || getCurrentTrackIndex(instance) !== index) {
+      return
+    }
+
+    reloadCurrentTrackWithUrl(instance, index, song, retryUrl)
+  }, delay)
+}
+
+function reloadCurrentTrackWithUrl(
+  instance: APlayerInstance,
+  index: number,
+  song: MetingSong,
+  url: string
+) {
+  song.url = url
+  queueAutoResume(index)
+  instance.list?.switch?.(index)
+
+  try {
+    instance.play?.()
+  } catch (e) {}
+}
+
+function getPrimaryCdnReconnectUrl(value: unknown, attempt: number) {
+  const url = getCdnUrl(value)
+  if (!url || url.hostname !== PRIMARY_CDN_HOST) {
+    return ''
+  }
+
+  url.searchParams.set(CDN_RECONNECT_PARAM, `${attempt}-${Date.now()}`)
+  return url.toString()
+}
+
+function getGlobalCdnFallbackUrl(value: unknown) {
+  const url = getCdnUrl(value)
+  if (!url || url.hostname !== PRIMARY_CDN_HOST) {
+    return ''
+  }
+
+  url.hostname = GLOBAL_CDN_HOST
+  url.searchParams.delete(CDN_RECONNECT_PARAM)
+  return url.toString()
+}
+
+function getCdnRecoveryTrackKey(index: number, song: MetingSong) {
+  return `${index}:${getSongId(song) || getCanonicalCdnUrl(song.url)}`
+}
+
+function isPrimaryCdnUrl(value: unknown) {
+  return getCdnUrl(value)?.hostname === PRIMARY_CDN_HOST
+}
+
+function getCanonicalCdnUrl(value: unknown) {
+  const url = getCdnUrl(value)
+  if (!url) {
+    return ''
+  }
+
+  url.hostname = PRIMARY_CDN_HOST
+  url.searchParams.delete(CDN_RECONNECT_PARAM)
+  return url.toString()
+}
+
+function getCdnUrl(value: unknown) {
+  if (typeof value !== 'string' || !value) {
+    return null
+  }
+
+  try {
+    const url = new URL(value, window.location.origin)
+    if (url.hostname !== PRIMARY_CDN_HOST && url.hostname !== GLOBAL_CDN_HOST) {
+      return null
+    }
+
+    return url
+  } catch (e) {
+    return null
+  }
+}
+
+function clearAutoResume() {
+  if (autoResumeTimer) {
+    window.clearTimeout(autoResumeTimer)
+    autoResumeTimer = undefined
+  }
+
+  pendingAutoResumeIndex = null
+  autoResumeAttempts = 0
+}
+
+function clearCdnRecovery() {
+  if (cdnRecoveryTimer) {
+    window.clearTimeout(cdnRecoveryTimer)
+    cdnRecoveryTimer = undefined
+  }
+  if (cdnGlobalFallbackTimer) {
+    window.clearTimeout(cdnGlobalFallbackTimer)
+    cdnGlobalFallbackTimer = undefined
+  }
+
+  cdnRecoveryTrackKey = ''
+  primaryCdnReconnectAttempts = 0
+}
+
+function wantsPlayback(instance: APlayerInstance) {
+  return instance.paused === false || isPlaying.value
+}
+
+function getCurrentTrackIndex(instance: APlayerInstance) {
+  return typeof instance.list?.index === 'number' ? instance.list.index : null
+}
+
+function getSwitchIndex(payload: APlayerListSwitchEvent | Event | undefined) {
+  if (!payload || !('index' in payload) || typeof payload.index !== 'number') {
+    return null
+  }
+
+  return payload.index
 }
 
 function toggleMiniPlay() {
-  const playButton = player.value?.querySelector<HTMLElement>('.aplayer-pic .aplayer-button')
-  playButton?.click()
+  if (isPlaying.value) {
+    clearAutoResume()
+    clearCdnRecovery()
+  }
+
+  musicPlayer.togglePlayback()
   window.setTimeout(syncCurrentTrack, 120)
 }
 
 function skipMiniTrack(direction: 'back' | 'forward') {
-  const selector = direction === 'back' ? '.aplayer-icon-back' : '.aplayer-icon-forward'
-  const button = player.value?.querySelector<HTMLElement>(selector)
-  button?.click()
+  musicPlayer.skip(direction)
   window.setTimeout(syncCurrentTrack, 180)
+}
+
+function getTextValue(value: unknown) {
+  return typeof value === 'string' || typeof value === 'number' ? String(value) : ''
 }
 </script>
