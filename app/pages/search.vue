@@ -90,6 +90,13 @@ const STATIC_PAGES = [
     keywords: '更多 页面 导航 数据统计 友链 简历'
   },
   {
+    path: '/music',
+    title: '音乐播放器',
+    section: '站点页面',
+    summary: '和悬浮播放器同步的完整音乐播放器。',
+    keywords: '音乐 播放器 QQ音乐 歌单 专辑封面 小播放器'
+  },
+  {
     path: '/stats',
     title: '数据统计',
     section: '站点页面',

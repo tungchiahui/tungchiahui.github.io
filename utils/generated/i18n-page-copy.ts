@@ -632,6 +632,10 @@ export const pageCopy = {
           "国际 CDN",
           "内容分发网络(Content Delivery Network,CDN)"
         ],
+        "music": [
+          "音乐播放器",
+          "和悬浮播放器同步的完整音乐控制台"
+        ],
         "friends": [
           "友情链接",
           "汇聚优质网站、社区和团队"
@@ -683,6 +687,10 @@ export const pageCopy = {
         "globalCdn": [
           "國際 CDN",
           "內容分發網絡(Content Delivery Network,CDN)"
+        ],
+        "music": [
+          "音樂播放器",
+          "和懸浮播放器同步的完整音樂控制台"
         ],
         "friends": [
           "友情鏈接",
@@ -736,6 +744,10 @@ export const pageCopy = {
           "國際 CDN",
           "內容分發網絡(Content Delivery Network,CDN)"
         ],
+        "music": [
+          "音樂播放器",
+          "和懸浮播放器同步的完整音樂控制台"
+        ],
         "friends": [
           "友情鏈接",
           "匯聚優質網站、社區和團隊"
@@ -788,6 +800,10 @@ export const pageCopy = {
           "國際 CDN",
           "內容分發網絡(Content Delivery Network,CDN)"
         ],
+        "music": [
+          "音樂播放器",
+          "和懸浮播放器同步的完整音樂控制台"
+        ],
         "friends": [
           "友情鏈接",
           "匯聚優質網站、社區和團隊"
@@ -839,6 +855,10 @@ export const pageCopy = {
         "globalCdn": [
           "Global CDN",
           "Content Delivery Network (CDN)"
+        ],
+        "music": [
+          "Music Player",
+          "Full music console synced with the floating player"
         ],
         "friends": [
           "Friends",

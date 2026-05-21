@@ -4,6 +4,21 @@
     id="music-player"
     :class="{ collapsed: hidden }"
   >
+    <NuxtLink
+      v-if="!hidden"
+      class="music-player-fullpage"
+      :to="musicPagePath"
+      aria-label="打开完整音乐播放器"
+      title="打开完整音乐播放器"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 17 17 7" />
+        <path d="M9 7h8v8" />
+        <path d="M19 13v6H5V5h6" />
+      </svg>
+      <span>音乐页</span>
+    </NuxtLink>
+
     <button
       v-if="!hidden"
       class="music-player-collapse"
@@ -85,9 +100,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { CDN_AUDIO_BY_ID, MUSIC_SERVER, PLAYLIST_API } from '~/data/cdn-audio'
 import type { MusicSong, SiteAPlayerInstance, SiteAPlayerListSwitchEvent } from '~/composables/useSiteMusicPlayer'
+import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
 
 type MetingSong = MusicSong
 type APlayerInstance = SiteAPlayerInstance
@@ -95,6 +111,7 @@ type APlayerListSwitchEvent = SiteAPlayerListSwitchEvent
 
 // 默认设为 false，确保初始状态是展开的
 const hidden = ref(false)
+const route = useRoute()
 const player = ref<HTMLElement | null>(null)
 const aplayerContainer = ref<HTMLElement | null>(null)
 const musicPlayer = useSiteMusicPlayer()
@@ -102,27 +119,37 @@ const {
   currentAuthor,
   currentCoverStyle,
   currentTitle,
-  isPlaying
+  isPlaying,
+  playbackIntent
 } = musicPlayer
 
 let aplayer: APlayerInstance | null = null
 let playerObserver: MutationObserver | null = null
 let syncTimer: number | undefined
 let autoResumeTimer: number | undefined
+let endedAdvanceTimer: number | undefined
+let deadTrackSkipTimer: number | undefined
 let pendingAutoResumeIndex: number | null = null
 let autoResumeAttempts = 0
 let lastListSwitchAt = 0
+let lastEndedAt = 0
 let cdnRecoveryTimer: number | undefined
 let cdnGlobalFallbackTimer: number | undefined
 let cdnRecoveryTrackKey = ''
 let primaryCdnReconnectAttempts = 0
+const failedTrackIndexes = new Set<number>()
 
 const AUTO_RESUME_DELAYS = [180, 450, 900, 1600, 2800, 4200]
 const PRIMARY_CDN_RECONNECT_DELAYS = [160, 420]
 const CDN_GLOBAL_FALLBACK_DELAY = 1800
+const DEAD_TRACK_SKIP_DELAY = 5200
+const ERROR_TRACK_SKIP_DELAY = 360
+const ENDED_ADVANCE_DELAY = 650
 const PRIMARY_CDN_HOST = 'cdn.tungchiahui.cn'
 const GLOBAL_CDN_HOST = 'global.cdn.tungchiahui.cn'
 const CDN_RECONNECT_PARAM = 'music_cdn_retry'
+
+const musicPagePath = computed(() => replaceLocaleInPath('/music', getCurrentLocaleSlug(route.path)))
 
 const miniCoverStyle = computed(() => (
   currentCoverStyle.value
@@ -131,6 +158,18 @@ const miniCoverStyle = computed(() => (
 ))
 
 const hasCover = computed(() => Boolean(currentCoverStyle.value))
+
+watch(playbackIntent, (nextPlaybackIntent) => {
+  if (nextPlaybackIntent) {
+    return
+  }
+
+  clearAutoResume()
+  clearCdnRecovery()
+  clearEndedAdvance()
+  clearDeadTrackSkip()
+  failedTrackIndexes.clear()
+})
 
 onMounted(() => {
   try {
@@ -160,6 +199,8 @@ onBeforeUnmount(() => {
   }
   clearAutoResume()
   clearCdnRecovery()
+  clearEndedAdvance()
+  clearDeadTrackSkip()
   musicPlayer.unregister(aplayer)
   aplayer?.destroy?.()
   aplayer = null
@@ -297,7 +338,6 @@ function syncCurrentTrack() {
     ?.replace(/^\s*-\s*/, '')
     .trim()
   const coverStyle = root.querySelector<HTMLElement>('.aplayer-pic')?.style.backgroundImage
-  const playButton = root.querySelector<HTMLElement>('.aplayer-pic .aplayer-button')
   const currentIndex = aplayer ? getCurrentTrackIndex(aplayer) : null
   const currentSong = typeof currentIndex === 'number' ? aplayer?.list?.audios?.[currentIndex] : null
   const coverUrl = getTextValue(currentSong?.cover) || getTextValue(currentSong?.pic)
@@ -309,7 +349,7 @@ function syncCurrentTrack() {
     currentIndex,
     currentTime: aplayer?.audio?.currentTime,
     duration: aplayer?.audio?.duration,
-    isPlaying: Boolean(playButton?.classList.contains('aplayer-pause')),
+    isPlaying: aplayer ? isAPlayerPlaying(aplayer) : false,
     title
   })
 }
@@ -317,17 +357,25 @@ function syncCurrentTrack() {
 function bindAutoResume(instance: APlayerInstance) {
   instance.on?.('listswitch', (payload) => {
     lastListSwitchAt = Date.now()
+    const index = getSwitchIndex(payload) ?? getCurrentTrackIndex(instance)
 
     if (wantsPlayback(instance)) {
-      queueAutoResume(getSwitchIndex(payload) ?? getCurrentTrackIndex(instance))
+      musicPlayer.setPlaybackIntent(true)
+      clearEndedAdvance()
+      queueAutoResume(index)
+      primeCurrentTrackCdnRecovery(instance, index)
+      scheduleDeadTrackSkip(instance, index)
     } else {
       clearAutoResume()
+      clearDeadTrackSkip()
     }
   })
 
   instance.on?.('ended', () => {
+    lastEndedAt = Date.now()
     if (wantsPlayback(instance)) {
-      queueAutoResume(getCurrentTrackIndex(instance))
+      musicPlayer.setPlaybackIntent(true)
+      scheduleEndedAdvance(instance, getCurrentTrackIndex(instance))
     }
   })
 
@@ -336,7 +384,11 @@ function bindAutoResume(instance: APlayerInstance) {
   instance.on?.('canplaythrough', () => attemptAutoResume())
   instance.on?.('waiting', () => {
     if (wantsPlayback(instance)) {
-      queueAutoResume(getCurrentTrackIndex(instance), true)
+      const index = getCurrentTrackIndex(instance)
+      musicPlayer.setPlaybackIntent(true)
+      queueAutoResume(index, true)
+      primeCurrentTrackCdnRecovery(instance, index)
+      scheduleDeadTrackSkip(instance, index)
     }
   })
   instance.on?.('error', () => {
@@ -344,19 +396,34 @@ function bindAutoResume(instance: APlayerInstance) {
       return
     }
 
+    musicPlayer.setPlaybackIntent(true)
+
     if (recoverCurrentTrackCdnFailure(instance)) {
+      scheduleDeadTrackSkip(instance, getCurrentTrackIndex(instance))
       return
     }
+
+    scheduleDeadTrackSkip(instance, getCurrentTrackIndex(instance), ERROR_TRACK_SKIP_DELAY)
   })
   instance.on?.('playing', () => {
+    musicPlayer.setPlaybackIntent(true)
     clearAutoResume()
     clearCdnRecovery()
+    clearEndedAdvance()
+    clearDeadTrackSkip()
+    failedTrackIndexes.clear()
+    syncCurrentTrack()
   })
   instance.on?.('pause', () => {
-    if (Date.now() - lastListSwitchAt > 800) {
+    if (!isTransitionPause()) {
+      musicPlayer.setPlaybackIntent(false)
       clearAutoResume()
       clearCdnRecovery()
+      clearEndedAdvance()
+      clearDeadTrackSkip()
+      failedTrackIndexes.clear()
     }
+    syncCurrentTrack()
   })
 }
 
@@ -425,9 +492,112 @@ function attemptAutoResume() {
     if (autoResumeAttempts < AUTO_RESUME_DELAYS.length) {
       scheduleAutoResume()
     } else {
+      const failedIndex = pendingAutoResumeIndex
       clearAutoResume()
+      scheduleDeadTrackSkip(aplayer, failedIndex, ERROR_TRACK_SKIP_DELAY)
     }
   }, 120)
+}
+
+function scheduleEndedAdvance(instance: APlayerInstance, index: number | null) {
+  if (index === null) {
+    return
+  }
+
+  clearEndedAdvance()
+  endedAdvanceTimer = window.setTimeout(() => {
+    endedAdvanceTimer = undefined
+
+    if (!wantsPlayback(instance) || isAPlayerPlaying(instance) || getCurrentTrackIndex(instance) !== index) {
+      return
+    }
+
+    const nextIndex = getNextTrackIndex(instance, index)
+    if (nextIndex !== null && nextIndex !== index) {
+      switchToTrackForPlayback(instance, nextIndex)
+    }
+  }, ENDED_ADVANCE_DELAY)
+}
+
+function scheduleDeadTrackSkip(
+  instance: APlayerInstance | null,
+  index: number | null,
+  delay = DEAD_TRACK_SKIP_DELAY
+) {
+  if (!instance || index === null) {
+    return
+  }
+
+  if (deadTrackSkipTimer) {
+    window.clearTimeout(deadTrackSkipTimer)
+  }
+
+  deadTrackSkipTimer = window.setTimeout(() => {
+    deadTrackSkipTimer = undefined
+
+    if (!wantsPlayback(instance) || isAPlayerPlaying(instance) || getCurrentTrackIndex(instance) !== index) {
+      return
+    }
+
+    skipDeadTrack(instance, index)
+  }, delay)
+}
+
+function skipDeadTrack(instance: APlayerInstance, index: number) {
+  const total = getTrackCount(instance)
+  if (!total) {
+    return
+  }
+
+  failedTrackIndexes.add(index)
+
+  if (failedTrackIndexes.size >= total) {
+    clearAutoResume()
+    clearCdnRecovery()
+    clearDeadTrackSkip()
+    return
+  }
+
+  const nextIndex = getNextTrackIndex(instance, index)
+  if (nextIndex === null || nextIndex === index) {
+    return
+  }
+
+  switchToTrackForPlayback(instance, nextIndex)
+}
+
+function switchToTrackForPlayback(instance: APlayerInstance, index: number) {
+  musicPlayer.setPlaybackIntent(true)
+  clearAutoResume()
+  clearCdnRecovery()
+  queueAutoResume(index)
+  instance.list?.switch?.(index)
+
+  try {
+    instance.play?.()
+  } catch (e) {}
+
+  scheduleDeadTrackSkip(instance, index)
+}
+
+function getNextTrackIndex(instance: APlayerInstance, index: number) {
+  const total = getTrackCount(instance)
+  if (!total) {
+    return null
+  }
+
+  for (let offset = 1; offset <= total; offset += 1) {
+    const nextIndex = (index + offset) % total
+    if (!failedTrackIndexes.has(nextIndex)) {
+      return nextIndex
+    }
+  }
+
+  return null
+}
+
+function getTrackCount(instance: APlayerInstance) {
+  return instance.list?.audios?.length || 0
 }
 
 function recoverCurrentTrackCdnFailure(instance: APlayerInstance) {
@@ -441,12 +611,7 @@ function recoverCurrentTrackCdnFailure(instance: APlayerInstance) {
     return false
   }
 
-  const trackKey = getCdnRecoveryTrackKey(index, song)
-  if (cdnRecoveryTrackKey !== trackKey) {
-    clearCdnRecovery()
-    cdnRecoveryTrackKey = trackKey
-    scheduleGlobalCdnFallback(instance, index, song)
-  }
+  primeCurrentTrackCdnRecovery(instance, index, song)
 
   if (primaryCdnReconnectAttempts < PRIMARY_CDN_RECONNECT_DELAYS.length) {
     primaryCdnReconnectAttempts += 1
@@ -468,6 +633,30 @@ function recoverCurrentTrackCdnFailure(instance: APlayerInstance) {
   reloadCurrentTrackWithUrl(instance, index, song, fallbackUrl)
 
   return true
+}
+
+function primeCurrentTrackCdnRecovery(
+  instance: APlayerInstance,
+  index: number | null,
+  existingSong?: MetingSong
+) {
+  if (index === null) {
+    return
+  }
+
+  const song = existingSong || instance.list?.audios?.[index]
+  if (!song || !isPrimaryCdnUrl(song.url)) {
+    return
+  }
+
+  const trackKey = getCdnRecoveryTrackKey(index, song)
+  if (cdnRecoveryTrackKey === trackKey) {
+    return
+  }
+
+  clearCdnRecovery()
+  cdnRecoveryTrackKey = trackKey
+  scheduleGlobalCdnFallback(instance, index, song)
 }
 
 function scheduleGlobalCdnFallback(
@@ -526,12 +715,15 @@ function reloadCurrentTrackWithUrl(
   url: string
 ) {
   song.url = url
+  musicPlayer.setPlaybackIntent(true)
   queueAutoResume(index)
   instance.list?.switch?.(index)
 
   try {
     instance.play?.()
   } catch (e) {}
+
+  scheduleDeadTrackSkip(instance, index)
 }
 
 function getPrimaryCdnReconnectUrl(value: unknown, attempt: number) {
@@ -601,6 +793,20 @@ function clearAutoResume() {
   autoResumeAttempts = 0
 }
 
+function clearEndedAdvance() {
+  if (endedAdvanceTimer) {
+    window.clearTimeout(endedAdvanceTimer)
+    endedAdvanceTimer = undefined
+  }
+}
+
+function clearDeadTrackSkip() {
+  if (deadTrackSkipTimer) {
+    window.clearTimeout(deadTrackSkipTimer)
+    deadTrackSkipTimer = undefined
+  }
+}
+
 function clearCdnRecovery() {
   if (cdnRecoveryTimer) {
     window.clearTimeout(cdnRecoveryTimer)
@@ -616,7 +822,25 @@ function clearCdnRecovery() {
 }
 
 function wantsPlayback(instance: APlayerInstance) {
-  return instance.paused === false || isPlaying.value
+  return isAPlayerPlaying(instance) || isPlaying.value || playbackIntent.value
+}
+
+function isTransitionPause() {
+  const now = Date.now()
+  return (
+    now - lastListSwitchAt <= 1200 ||
+    now - lastEndedAt <= 1200 ||
+    pendingAutoResumeIndex !== null ||
+    Boolean(cdnRecoveryTrackKey)
+  )
+}
+
+function isAPlayerPlaying(instance: APlayerInstance) {
+  if (instance.audio) {
+    return !instance.audio.paused && !instance.audio.ended
+  }
+
+  return instance.paused === false
 }
 
 function getCurrentTrackIndex(instance: APlayerInstance) {
@@ -632,9 +856,11 @@ function getSwitchIndex(payload: APlayerListSwitchEvent | Event | undefined) {
 }
 
 function toggleMiniPlay() {
-  if (isPlaying.value) {
+  if (isPlaying.value || playbackIntent.value) {
     clearAutoResume()
     clearCdnRecovery()
+    clearEndedAdvance()
+    clearDeadTrackSkip()
   }
 
   musicPlayer.togglePlayback()

@@ -85,6 +85,7 @@ const duration = ref(0)
 const isPlaying = ref(false)
 const isReady = ref(false)
 const loadError = ref('')
+const playbackIntent = ref(false)
 const volume = ref(0.8)
 
 const currentSong = computed(() => {
@@ -114,6 +115,7 @@ export function useSiteMusicPlayer() {
     isPlaying,
     isReady,
     loadError,
+    playbackIntent,
     progress,
     songs,
     volume,
@@ -122,6 +124,7 @@ export function useSiteMusicPlayer() {
     play,
     register,
     seekToRatio,
+    setPlaybackIntent,
     setLoadError,
     setSongs,
     setVolume,
@@ -151,6 +154,7 @@ function unregister(player?: SiteAPlayerInstance | null) {
     instance.value = null
     isReady.value = false
     isPlaying.value = false
+    playbackIntent.value = false
   }
 }
 
@@ -187,6 +191,9 @@ function updatePlaybackState(state: PlaybackState) {
 
   if (typeof state.isPlaying === 'boolean') {
     isPlaying.value = state.isPlaying
+    if (state.isPlaying) {
+      playbackIntent.value = true
+    }
   }
 
   if (typeof state.currentTime === 'number' && Number.isFinite(state.currentTime)) {
@@ -209,12 +216,15 @@ function syncFromInstance(state: PlaybackState = {}) {
     currentIndex: getCurrentIndex(player),
     currentTime: player.audio?.currentTime,
     duration: player.audio?.duration,
-    isPlaying: player.paused === false,
+    isPlaying: getInstanceIsPlaying(player),
     ...state
   })
 }
 
 function play() {
+  playbackIntent.value = true
+  isPlaying.value = true
+
   try {
     instance.value?.play?.()
   } catch (e) {}
@@ -229,11 +239,15 @@ function pause() {
     instance.value?.audio?.pause()
   }
 
+  isPlaying.value = false
+  playbackIntent.value = false
   scheduleSync()
 }
 
 function togglePlayback() {
-  if (isPlaying.value || instance.value?.paused === false) {
+  const player = instance.value
+
+  if (player ? (getInstanceIsPlaying(player) || playbackIntent.value) : (isPlaying.value || playbackIntent.value)) {
     pause()
   } else {
     play()
@@ -244,6 +258,10 @@ function skip(direction: 'back' | 'forward') {
   const player = instance.value
   if (!player) {
     return
+  }
+
+  if (getInstanceIsPlaying(player) || playbackIntent.value) {
+    playbackIntent.value = true
   }
 
   if (direction === 'back') {
@@ -298,6 +316,10 @@ function setVolume(nextVolume: number) {
   }
 }
 
+function setPlaybackIntent(nextPlaybackIntent: boolean) {
+  playbackIntent.value = nextPlaybackIntent
+}
+
 function getCurrentIndex(player: SiteAPlayerInstance) {
   return typeof player.list?.index === 'number' ? player.list.index : currentIndex.value
 }
@@ -313,6 +335,14 @@ function getWrappedIndex(index: number) {
 
 function getInstanceSongs() {
   return instance.value?.list?.audios?.length ? instance.value.list.audios : songs.value
+}
+
+function getInstanceIsPlaying(player: SiteAPlayerInstance) {
+  if (player.audio) {
+    return !player.audio.paused && !player.audio.ended
+  }
+
+  return player.paused === false
 }
 
 function scheduleSync(delay = 120) {

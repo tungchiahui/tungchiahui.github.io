@@ -133,12 +133,18 @@ export const pageCopySource = {
         umami: ['Umami', '网站访问统计平台'],
         cnCdn: ['中国大陆 CDN', '内容分发网络(Content Delivery Network,CDN)'],
         globalCdn: ['国际 CDN', '内容分发网络(Content Delivery Network,CDN)'],
+        music: ['音乐播放器', '和悬浮播放器同步的完整音乐控制台'],
         friends: ['友情链接', '汇聚优质网站、社区和团队'],
         footprint: ['技术足迹', '个人机器人技术路线清单'],
         cv: ['简历', '个人简历'],
         start: ['导航页', '导航页'],
         logo: ['个人 LOGO', 'LOGO介绍'],
         chat: ['CHAT', '自建的类ChatGPT网站']
+      }
+    },
+    en: {
+      cards: {
+        music: ['Music Player', 'Full music console synced with the floating player']
       }
     }
   },

@@ -83,6 +83,15 @@ useHead(() => ({
       <h2 class="category-title">{{ copy.categories.other }}</h2>
       <div class="more-grid">
 
+        <!-- 音乐播放器 -->
+        <NuxtLink class="more-card" :to="localizePath('/music')">
+          <div class="card-title">
+            <i class="fas fa-music" aria-hidden="true"></i>
+            <span>{{ copy.cards.music[0] }}</span>
+          </div>
+          <div class="card-sub">{{ copy.cards.music[1] }}</div>
+        </NuxtLink>
+
         <!-- 友情链接 -->
         <NuxtLink class="more-card" :to="localizePath('/friend')">
           <div class="card-title">

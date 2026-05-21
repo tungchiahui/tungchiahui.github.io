@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useHead } from '#app'
 import { MUSIC_PLAYLIST_ID } from '~/data/cdn-audio'
 import type { MusicSong } from '~/composables/useSiteMusicPlayer'
@@ -13,7 +13,9 @@ const player = useSiteMusicPlayer()
 const {
   currentAuthor,
   currentCoverStyle,
+  currentCoverUrl,
   currentIndex,
+  currentSong,
   currentTime,
   currentTitle,
   duration,
@@ -39,7 +41,11 @@ const copy = computed(() => isEnglish.value
       loading: 'Loading',
       playing: 'Playing',
       paused: 'Paused',
-      volume: 'Volume'
+      volume: 'Volume',
+      lyrics: 'Lyrics',
+      lyricsLoading: 'Loading lyrics',
+      lyricsEmpty: 'Lyrics will appear here when available',
+      lyricsUnavailable: 'No synced lyrics for this track yet'
     }
   : {
       title: '音乐播放器',
@@ -52,12 +58,57 @@ const copy = computed(() => isEnglish.value
       loading: '加载中',
       playing: '播放中',
       paused: '已暂停',
-      volume: '音量'
+      volume: '音量',
+      lyrics: '歌词',
+      lyricsLoading: '歌词加载中',
+      lyricsEmpty: '有歌词的歌曲会在这里同步显示',
+      lyricsUnavailable: '这首歌暂时没有可同步的歌词'
     })
+
+type LyricLine = {
+  key: string
+  text: string
+  time: number
+}
+
+const lyricLines = ref<LyricLine[]>([])
+const lyricStatus = ref('')
+let lyricRequestId = 0
+let lyricAbortController: AbortController | null = null
 
 const progressPercent = computed(() => Math.round(progress.value * 1000) / 10)
 const volumePercent = computed(() => Math.round(volume.value * 100))
-const coverClass = computed(() => ({ 'has-cover': Boolean(currentCoverStyle.value) }))
+const currentCoverFallback = computed(() => currentCoverUrl.value || extractImageFromCss(currentCoverStyle.value))
+const currentCoverImage = computed(() => getClearCoverUrl(currentCoverFallback.value))
+const coverAlt = computed(() => `${currentTitle.value || copy.value.title} ${isEnglish.value ? 'album cover' : '专辑封面'}`)
+const coverClass = computed(() => ({ 'has-cover': Boolean(currentCoverImage.value) }))
+const currentLyricIndex = computed(() => {
+  if (!lyricLines.value.length) {
+    return -1
+  }
+
+  const now = currentTime.value + 0.18
+  for (let index = lyricLines.value.length - 1; index >= 0; index -= 1) {
+    if (now >= lyricLines.value[index].time) {
+      return index
+    }
+  }
+
+  return 0
+})
+const visibleLyricLines = computed(() => {
+  if (!lyricLines.value.length) {
+    return []
+  }
+
+  const activeIndex = Math.max(0, currentLyricIndex.value)
+  const start = Math.max(0, Math.min(activeIndex - 3, lyricLines.value.length - 7))
+
+  return lyricLines.value.slice(start, start + 7).map((line, offset) => ({
+    ...line,
+    index: start + offset
+  }))
+})
 const statusText = computed(() => {
   if (loadError.value) {
     return loadError.value
@@ -80,6 +131,16 @@ useHead(() => ({
   ]
 }))
 
+watch(
+  () => [currentIndex.value, currentSong.value?.lrc],
+  () => loadCurrentLyrics(),
+  { immediate: true }
+)
+
+onBeforeUnmount(() => {
+  lyricAbortController?.abort()
+})
+
 function handleSeek(event: Event) {
   const value = Number((event.target as HTMLInputElement).value)
   player.seekToRatio(value / 100)
@@ -90,6 +151,80 @@ function handleVolume(event: Event) {
   player.setVolume(value / 100)
 }
 
+async function loadCurrentLyrics() {
+  const requestId = ++lyricRequestId
+  const source = getTextValue(currentSong.value?.lrc)
+  lyricAbortController?.abort()
+  lyricAbortController = null
+  lyricLines.value = []
+  lyricStatus.value = source ? copy.value.lyricsLoading : copy.value.lyricsEmpty
+
+  if (!source || typeof window === 'undefined') {
+    return
+  }
+
+  try {
+    const rawLyrics = await getLyricText(source)
+    if (requestId !== lyricRequestId) {
+      return
+    }
+
+    const parsedLyrics = parseLyrics(rawLyrics)
+    lyricLines.value = parsedLyrics
+    lyricStatus.value = parsedLyrics.length ? '' : copy.value.lyricsUnavailable
+  } catch (e) {
+    if (requestId === lyricRequestId) {
+      lyricStatus.value = copy.value.lyricsUnavailable
+    }
+  }
+}
+
+async function getLyricText(source: string) {
+  if (!isRemoteUrl(source)) {
+    return source
+  }
+
+  const controller = new AbortController()
+  lyricAbortController = controller
+  const response = await fetch(source, { signal: controller.signal })
+
+  if (!response.ok) {
+    throw new Error(`Failed to load lyric: ${response.status}`)
+  }
+
+  return response.text()
+}
+
+function parseLyrics(value: string) {
+  const timePattern = /\[(\d{1,2}):(\d{1,2})(?:[.:](\d{1,3}))?\]/g
+  const parsedLines: LyricLine[] = []
+
+  value.split(/\r?\n/).forEach((line, lineIndex) => {
+    const matches = [...line.matchAll(timePattern)]
+    const text = line
+      .replace(timePattern, '')
+      .replace(/\[(?:ar|ti|al|by|offset):[^\]]*\]/gi, '')
+      .trim()
+
+    if (!matches.length || !text) {
+      return
+    }
+
+    matches.forEach((match, matchIndex) => {
+      const minutes = Number(match[1])
+      const seconds = Number(match[2])
+      const fraction = match[3] ? Number(match[3].padEnd(3, '0').slice(0, 3)) / 1000 : 0
+      parsedLines.push({
+        key: `${lineIndex}-${matchIndex}-${match[0]}`,
+        text,
+        time: minutes * 60 + seconds + fraction
+      })
+    })
+  })
+
+  return parsedLines.sort((a, b) => a.time - b.time)
+}
+
 function songTitle(song: MusicSong) {
   return getTextValue(song.name) || getTextValue(song.title) || getTextValue(song.songname) || copy.value.playlist
 }
@@ -98,9 +233,21 @@ function songAuthor(song: MusicSong) {
   return getTextValue(song.artist) || getTextValue(song.author) || getTextValue(song.singer) || copy.value.ready
 }
 
-function songCoverStyle(song: MusicSong) {
-  const cover = getTextValue(song.cover) || getTextValue(song.pic)
-  return cover ? { backgroundImage: `url("${cover}")` } : {}
+function songCover(song: MusicSong) {
+  return getClearCoverUrl(songCoverFallback(song))
+}
+
+function songCoverFallback(song: MusicSong) {
+  return getTextValue(song.cover) || getTextValue(song.pic)
+}
+
+function handleCoverError(event: Event) {
+  const image = event.currentTarget as HTMLImageElement
+  const fallback = image.dataset.fallbackSrc
+
+  if (fallback && image.src !== fallback) {
+    image.src = fallback
+  }
 }
 
 function formatTime(value: number) {
@@ -117,6 +264,25 @@ function getTextValue(value: unknown) {
 
   return typeof value === 'string' || typeof value === 'number' ? String(value) : ''
 }
+
+function extractImageFromCss(value: string) {
+  const match = value.match(/^url\((['"]?)(.*?)\1\)$/)
+  return match?.[2] || ''
+}
+
+function getClearCoverUrl(value: string) {
+  if (!value) {
+    return ''
+  }
+
+  return value
+    .replace(/R\d{2,4}x\d{2,4}(?=M)/i, 'R800x800')
+    .replace(/([?&]param=)\d+y\d+/i, (_match, prefix: string) => `${prefix}800y800`)
+}
+
+function isRemoteUrl(value: string) {
+  return /^(?:https?:)?\/\//i.test(value)
+}
 </script>
 
 <template>
@@ -125,10 +291,17 @@ function getTextValue(value: unknown) {
       <div
         class="music-cover"
         :class="coverClass"
-        :style="currentCoverStyle ? { backgroundImage: currentCoverStyle } : {}"
-        aria-hidden="true"
       >
-        <i class="fas fa-music"></i>
+        <img
+          v-if="currentCoverImage"
+          :src="currentCoverImage"
+          :alt="coverAlt"
+          :data-fallback-src="currentCoverFallback"
+          decoding="async"
+          fetchpriority="high"
+          @error="handleCoverError"
+        >
+        <i v-else class="fas fa-music" aria-hidden="true"></i>
       </div>
 
       <div class="music-now">
@@ -162,7 +335,13 @@ function getTextValue(value: unknown) {
             :aria-label="isPlaying ? '暂停' : '播放'"
             @click="player.togglePlayback()"
           >
-            <i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'" aria-hidden="true"></i>
+            <svg v-if="isPlaying" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5v14"></path>
+              <path d="M16 5v14"></path>
+            </svg>
+            <svg v-else viewBox="0 0 24 24" aria-hidden="true">
+              <path class="music-play-triangle" d="M8 5v14l11-7Z"></path>
+            </svg>
           </button>
           <button type="button" class="music-icon-button" title="下一首" aria-label="下一首" @click="player.skip('forward')">
             <i class="fas fa-forward-step" aria-hidden="true"></i>
@@ -195,35 +374,69 @@ function getTextValue(value: unknown) {
       </aside>
     </section>
 
-    <section class="music-playlist" aria-labelledby="music-playlist-title">
-      <header class="music-section-head">
-        <h2 id="music-playlist-title">{{ copy.playlist }}</h2>
-        <span>{{ songs.length }}</span>
-      </header>
+    <div class="music-content">
+      <section class="music-lyrics" aria-labelledby="music-lyrics-title">
+        <header class="music-section-head">
+          <h2 id="music-lyrics-title">{{ copy.lyrics }}</h2>
+          <span>{{ formatTime(currentTime) }}</span>
+        </header>
 
-      <div v-if="songs.length" class="music-track-list">
-        <button
-          v-for="(song, index) in songs"
-          :key="`${song.id || song.mid || song.url || index}`"
-          type="button"
-          class="music-track"
-          :class="{ active: index === currentIndex }"
-          @click="player.switchTrack(index)"
-        >
-          <span class="music-track-index">{{ String(index + 1).padStart(2, '0') }}</span>
-          <span class="music-track-cover" :style="songCoverStyle(song)" aria-hidden="true">
-            <i class="fas fa-music"></i>
-          </span>
-          <span class="music-track-copy">
-            <strong>{{ songTitle(song) }}</strong>
-            <small>{{ songAuthor(song) }}</small>
-          </span>
-          <i class="fas fa-wave-square music-track-playing" aria-hidden="true"></i>
-        </button>
-      </div>
+        <div v-if="visibleLyricLines.length" class="music-lyric-window">
+          <p
+            v-for="line in visibleLyricLines"
+            :key="line.key"
+            class="music-lyric-line"
+            :class="{
+              active: line.index === currentLyricIndex,
+              past: line.index < currentLyricIndex
+            }"
+          >
+            {{ line.text }}
+          </p>
+        </div>
 
-      <div v-else class="music-empty">{{ copy.empty }}</div>
-    </section>
+        <div v-else class="music-empty">{{ lyricStatus || copy.lyricsEmpty }}</div>
+      </section>
+
+      <section class="music-playlist" aria-labelledby="music-playlist-title">
+        <header class="music-section-head">
+          <h2 id="music-playlist-title">{{ copy.playlist }}</h2>
+          <span>{{ songs.length }}</span>
+        </header>
+
+        <div v-if="songs.length" class="music-track-list">
+          <button
+            v-for="(song, index) in songs"
+            :key="`${song.id || song.mid || song.url || index}`"
+            type="button"
+            class="music-track"
+            :class="{ active: index === currentIndex }"
+            @click="player.switchTrack(index)"
+          >
+            <span class="music-track-index">{{ String(index + 1).padStart(2, '0') }}</span>
+            <span class="music-track-cover" :class="{ 'has-cover': Boolean(songCover(song)) }">
+              <img
+                v-if="songCover(song)"
+                :src="songCover(song)"
+                :alt="`${songTitle(song)} ${isEnglish ? 'album cover' : '专辑封面'}`"
+                :data-fallback-src="songCoverFallback(song)"
+                loading="lazy"
+                decoding="async"
+                @error="handleCoverError"
+              >
+              <i v-else class="fas fa-music" aria-hidden="true"></i>
+            </span>
+            <span class="music-track-copy">
+              <strong>{{ songTitle(song) }}</strong>
+              <small>{{ songAuthor(song) }}</small>
+            </span>
+            <i class="fas fa-wave-square music-track-playing" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div v-else class="music-empty">{{ copy.empty }}</div>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -231,23 +444,28 @@ function getTextValue(value: unknown) {
 .music-page {
   --music-accent: #14b8a6;
   --music-accent-strong: #0f766e;
+  --music-sky: #2563eb;
+  --music-warm: #f59e0b;
   display: grid;
-  gap: 18px;
+  gap: 20px;
   margin: 0 auto;
-  max-width: 1120px;
+  max-width: 1180px;
   padding: 20px 0 36px;
 }
 
 .music-hero {
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--bg-color, #fff) 88%, #ecfeff), var(--bg-color, #fff));
+    linear-gradient(135deg, color-mix(in srgb, var(--bg-color, #fff) 84%, #ecfeff), color-mix(in srgb, var(--bg-color, #fff) 88%, #eff6ff)),
+    linear-gradient(90deg, color-mix(in srgb, var(--music-accent) 10%, transparent), color-mix(in srgb, var(--music-warm) 8%, transparent));
   border: 1px solid var(--nav-border, #e5e7eb);
   border-radius: 18px;
   box-shadow: 0 20px 48px rgba(15, 23, 42, 0.12);
   display: grid;
   gap: 24px;
-  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr) minmax(220px, 260px);
+  grid-template-columns: minmax(240px, 360px) minmax(0, 1fr) minmax(220px, 260px);
+  overflow: hidden;
   padding: clamp(18px, 3vw, 30px);
+  position: relative;
 }
 
 .music-cover {
@@ -256,15 +474,34 @@ function getTextValue(value: unknown) {
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--music-accent) 24%, transparent), rgba(59, 130, 246, 0.14)),
     var(--bg-secondary, #f7f7f8);
-  background-position: center;
-  background-size: cover;
   border: 1px solid color-mix(in srgb, var(--music-accent) 26%, var(--nav-border, #e5e7eb));
   border-radius: 16px;
   box-shadow: 0 18px 34px rgba(15, 118, 110, 0.18);
   color: var(--music-accent-strong);
   display: flex;
   justify-content: center;
+  isolation: isolate;
   overflow: hidden;
+  position: relative;
+}
+
+.music-cover::after {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: inherit;
+  content: '';
+  inset: 8px;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.music-cover img,
+.music-track-cover img {
+  display: block;
+  height: 100%;
+  image-rendering: auto;
+  object-fit: cover;
+  width: 100%;
 }
 
 .music-cover.has-cover i {
@@ -283,7 +520,7 @@ function getTextValue(value: unknown) {
 }
 
 .music-kicker {
-  color: var(--music-accent-strong);
+  color: color-mix(in srgb, var(--music-accent-strong) 82%, var(--music-sky));
   font-size: 0.9rem;
   font-weight: 800;
   margin: 0;
@@ -360,15 +597,31 @@ function getTextValue(value: unknown) {
 .music-play-button {
   background: var(--music-accent);
   border-color: transparent;
-  border-radius: 14px;
+  border-radius: 999px;
   color: #fff;
-  height: 54px;
-  width: 54px;
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--music-accent) 32%, transparent);
+  height: 58px;
+  width: 58px;
+}
+
+.music-play-button svg {
+  fill: none;
+  height: 25px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.4;
+  width: 25px;
+}
+
+.music-play-button .music-play-triangle {
+  fill: currentColor;
+  stroke: none;
 }
 
 .music-qq-link {
-  background: #0f766e;
-  border-color: rgba(15, 118, 110, 0.24);
+  background: linear-gradient(135deg, #0f766e, #2563eb);
+  border-color: rgba(15, 118, 110, 0.18);
   border-radius: 12px;
   color: #fff;
   gap: 8px;
@@ -417,11 +670,22 @@ function getTextValue(value: unknown) {
   grid-template-columns: 48px minmax(0, 1fr) 44px;
 }
 
+.music-content {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
+
+.music-lyrics,
 .music-playlist {
   background: var(--bg-color, #fff);
   border: 1px solid var(--nav-border, #e5e7eb);
   border-radius: 16px;
   padding: 16px;
+}
+
+.music-lyrics {
+  min-height: 500px;
 }
 
 .music-section-head {
@@ -441,6 +705,47 @@ function getTextValue(value: unknown) {
   font-weight: 800;
 }
 
+.music-lyric-window {
+  align-content: center;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--music-accent) 8%, transparent), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, var(--bg-secondary, #f7f7f8) 86%, #eff6ff), var(--bg-secondary, #f7f7f8));
+  border: 1px solid color-mix(in srgb, var(--music-accent) 18%, var(--nav-border, #e5e7eb));
+  border-radius: 12px;
+  display: grid;
+  gap: 12px;
+  min-height: 410px;
+  padding: 26px;
+}
+
+.music-lyric-line {
+  color: var(--text-secondary, #666);
+  font-size: 1.32rem;
+  font-weight: 700;
+  line-height: 1.68;
+  margin: 0;
+  opacity: 0.64;
+  padding: 6px 16px;
+  text-align: center;
+  transform: translateX(0);
+  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  width: 100%;
+}
+
+.music-lyric-line.past {
+  opacity: 0.42;
+}
+
+.music-lyric-line.active {
+  background: color-mix(in srgb, var(--music-accent) 12%, transparent);
+  border-radius: 8px;
+  color: var(--text-main, #1f1f1f);
+  font-size: 1.68rem;
+  opacity: 1;
+  padding: 8px 18px;
+  transform: translateY(-1px);
+}
+
 .music-track-list {
   display: grid;
   gap: 8px;
@@ -455,8 +760,8 @@ function getTextValue(value: unknown) {
   cursor: pointer;
   display: grid;
   gap: 12px;
-  grid-template-columns: 42px 46px minmax(0, 1fr) 24px;
-  min-height: 64px;
+  grid-template-columns: 42px 56px minmax(0, 1fr) 24px;
+  min-height: 74px;
   padding: 8px 12px;
   text-align: left;
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
@@ -480,16 +785,15 @@ function getTextValue(value: unknown) {
   align-items: center;
   aspect-ratio: 1;
   background: var(--bg-secondary, #f7f7f8);
-  background-position: center;
-  background-size: cover;
   border-radius: 10px;
   color: var(--music-accent-strong);
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   overflow: hidden;
 }
 
-.music-track-cover[style*='background-image'] i {
+.music-track-cover.has-cover i {
   display: none;
 }
 
@@ -533,15 +837,18 @@ function getTextValue(value: unknown) {
 html.dark .music-page {
   --music-accent: #5eead4;
   --music-accent-strong: #99f6e4;
+  --music-sky: #93c5fd;
+  --music-warm: #fbbf24;
 }
 
 html.dark .music-hero,
+html.dark .music-lyrics,
 html.dark .music-playlist {
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.36);
 }
 
 html.dark .music-qq-link {
-  background: #14b8a6;
+  background: linear-gradient(135deg, #5eead4, #93c5fd);
   color: #082f30;
 }
 
@@ -552,6 +859,10 @@ html.dark .music-qq-link {
 
   .music-meta-panel {
     grid-column: 1 / -1;
+  }
+
+  .music-lyrics {
+    min-height: 420px;
   }
 }
 
@@ -583,8 +894,24 @@ html.dark .music-qq-link {
     flex: 1 1 100%;
   }
 
+  .music-lyric-window {
+    min-height: 280px;
+    padding: 14px;
+  }
+
+  .music-lyric-line {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    padding: 5px 10px;
+  }
+
+  .music-lyric-line.active {
+    font-size: 1.2rem;
+    padding: 7px 12px;
+  }
+
   .music-track {
-    grid-template-columns: 32px 42px minmax(0, 1fr) 18px;
+    grid-template-columns: 32px 48px minmax(0, 1fr) 18px;
     padding: 8px;
   }
 }
