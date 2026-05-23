@@ -54,6 +54,8 @@ const isHashOnlyNavigation = (to: { path: string; hash: string; query: unknown }
   return to.path === from.path && to.hash !== from.hash && JSON.stringify(to.query) === JSON.stringify(from.query)
 }
 
+const isSamePageNavigation = (to: { path: string }, from: { path: string }) => to.path === from.path
+
 const loadingActive = ref(false)
 const loadingMode = ref<LoadingMode>('screen')
 const loadingLabel = ref(getLoadingLabel(route.path, 'screen'))
@@ -100,12 +102,12 @@ const finishLoading = (force = false) => {
 
 onMounted(() => {
   removeBeforeEach = router.beforeEach((to, from) => {
-    if (to.fullPath === from.fullPath || isHashOnlyNavigation(to, from)) return
+    if (to.fullPath === from.fullPath || isHashOnlyNavigation(to, from) || isSamePageNavigation(to, from)) return
     beginLoading(to.path)
   })
 
-  removeAfterEach = router.afterEach(() => {
-    finishLoading()
+  removeAfterEach = router.afterEach((_to, _from, failure) => {
+    if (failure) finishLoading(true)
   })
 
   removeRouterError = router.onError(() => finishLoading(true))

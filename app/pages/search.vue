@@ -38,6 +38,10 @@ interface SearchDoc {
   date: string
   summary: string
   searchText: string
+  titleIndex: string
+  sectionIndex: string
+  pathIndex: string
+  searchIndex: string
 }
 
 interface SearchResult extends SearchDoc {
@@ -140,6 +144,21 @@ const STATIC_PAGES = [
   }
 ]
 
+const SEARCH_CONTENT_FIELDS = [
+  'path',
+  'stem',
+  'title',
+  'description',
+  'date',
+  'localeSlug',
+  'sourceStem',
+  'chapter',
+  'docTitle',
+  'isWikiDoc',
+  'isWikiIndex',
+  'body'
+] as const
+
 const route = useRoute()
 const router = useRouter()
 const currentLocaleSlug = computed(() => getCurrentLocaleSlug(route.path))
@@ -151,15 +170,24 @@ useHead({
   ]
 })
 
-const { data: contentItems, pending, status } = await useAsyncData<ContentDoc[]>(
-  'site-search-content',
+const searchContentKey = computed(() => `site-search-content:${currentLocaleSlug.value}`)
+
+const { data: contentDocuments, pending, status } = await useAsyncData<SearchDoc[]>(
+  searchContentKey,
   async () => {
-    const items = await queryCollection('content').all()
-    return items as unknown as ContentDoc[]
+    const items = await queryCollection('content')
+      .where('localeSlug', '=', currentLocaleSlug.value)
+      .select(...SEARCH_CONTENT_FIELDS)
+      .all()
+
+    return (items as unknown as ContentDoc[])
+      .map(toSearchDoc)
+      .filter((doc): doc is SearchDoc => Boolean(doc))
   },
   {
-    server: false,
-    default: () => []
+    server: true,
+    default: () => [],
+    watch: [currentLocaleSlug]
   }
 )
 
@@ -177,14 +205,17 @@ const queryTerms = computed(() =>
 )
 
 const searchDocuments = computed<SearchDoc[]>(() => {
-  const contentDocs = (contentItems.value || [])
-    .map(toSearchDoc)
-    .filter((doc): doc is SearchDoc => Boolean(doc))
-
   const staticDocs = STATIC_PAGES.map((page): SearchDoc => {
     const path = getLocalizedStaticPath(page.path)
+    const searchText = normalizeWhitespace([
+      page.title,
+      page.section,
+      page.summary,
+      page.keywords,
+      path
+    ].join(' '))
 
-    return {
+    return buildSearchDoc({
       id: `static:${path}`,
       path,
       title: page.title,
@@ -193,17 +224,11 @@ const searchDocuments = computed<SearchDoc[]>(() => {
       section: page.section,
       date: '',
       summary: page.summary,
-      searchText: normalizeWhitespace([
-        page.title,
-        page.section,
-        page.summary,
-        page.keywords,
-        path
-      ].join(' '))
-    }
+      searchText
+    })
   })
 
-  return dedupeByPath([...contentDocs, ...staticDocs])
+  return dedupeByPath([...(contentDocuments.value || []), ...staticDocs])
 })
 
 const typeCounts = computed(() => {
@@ -242,7 +267,7 @@ const searchResults = computed<SearchResult[]>(() => {
       .map(doc => ({
         ...doc,
         score: 0,
-        excerpt: doc.summary || createExcerpt(doc.searchText, '', 160)
+        excerpt: doc.summary || createExcerpt(doc.searchText, '', 160, [], doc.searchIndex)
       }))
   }
 
@@ -252,7 +277,7 @@ const searchResults = computed<SearchResult[]>(() => {
       return {
         ...doc,
         score,
-        excerpt: createExcerpt(doc.searchText, query, 180)
+        excerpt: createExcerpt(doc.searchText, query, 180, terms, doc.searchIndex)
       }
     })
     .filter(result => result.score > 0)
@@ -278,6 +303,11 @@ const highlightTerms = computed(() => {
     .sort((a, b) => b.length - a.length)
 
   return values
+})
+
+const highlightPattern = computed(() => {
+  const terms = highlightTerms.value
+  return terms.length ? new RegExp(`(${terms.map(escapeRegExp).join('|')})`, 'ig') : null
 })
 
 watch(() => route.query.q, (nextValue) => {
@@ -334,6 +364,16 @@ function clearSearch() {
   searchQuery.value = ''
 }
 
+function buildSearchDoc(doc: Omit<SearchDoc, 'titleIndex' | 'sectionIndex' | 'pathIndex' | 'searchIndex'>): SearchDoc {
+  return {
+    ...doc,
+    titleIndex: normalizeSearchText(doc.title),
+    sectionIndex: normalizeSearchText(doc.section),
+    pathIndex: doc.path.toLowerCase(),
+    searchIndex: normalizeSearchText(doc.searchText)
+  }
+}
+
 function toSearchDoc(doc: ContentDoc): SearchDoc | null {
   if (doc.localeSlug !== currentLocaleSlug.value) {
     return null
@@ -356,7 +396,7 @@ function toSearchDoc(doc: ContentDoc): SearchDoc | null {
   )
   const date = String(doc.date || '')
 
-  return {
+  return buildSearchDoc({
     id: String(doc._id || path),
     path,
     title,
@@ -375,7 +415,7 @@ function toSearchDoc(doc: ContentDoc): SearchDoc | null {
       stem,
       bodyText
     ].filter(Boolean).join(' '))
-  }
+  })
 }
 
 function getContentType(doc: ContentDoc, stem: string): SearchDoc['type'] {
@@ -420,22 +460,18 @@ function getSectionLabel(doc: ContentDoc, stem: string, type: SearchDoc['type'])
 }
 
 function scoreDocument(doc: SearchDoc, query: string, terms: string[]) {
-  const title = normalizeSearchText(doc.title)
-  const section = normalizeSearchText(doc.section)
-  const path = doc.path.toLowerCase()
-  const text = normalizeSearchText(doc.searchText)
   let score = 0
 
-  if (title.includes(query)) score += 120
-  if (section.includes(query)) score += 60
-  if (path.includes(query)) score += 28
-  if (text.includes(query)) score += 24
+  if (doc.titleIndex.includes(query)) score += 120
+  if (doc.sectionIndex.includes(query)) score += 60
+  if (doc.pathIndex.includes(query)) score += 28
+  if (doc.searchIndex.includes(query)) score += 24
 
   terms.forEach((term) => {
-    if (title.includes(term)) score += 32
-    if (section.includes(term)) score += 14
-    if (path.includes(term)) score += 8
-    if (text.includes(term)) score += 5
+    if (doc.titleIndex.includes(term)) score += 32
+    if (doc.sectionIndex.includes(term)) score += 14
+    if (doc.pathIndex.includes(term)) score += 8
+    if (doc.searchIndex.includes(term)) score += 5
   })
 
   if (doc.type === 'wiki' && doc.section.includes('/ 目录')) {
@@ -484,7 +520,7 @@ function extractText(value: unknown, depth = 0): string {
   return ''
 }
 
-function createExcerpt(text: string, query: string, maxLength: number) {
+function createExcerpt(text: string, query: string, maxLength: number, terms: string[] = [], searchIndex = '') {
   const source = normalizeWhitespace(text)
 
   if (!source) {
@@ -495,12 +531,12 @@ function createExcerpt(text: string, query: string, maxLength: number) {
     return source.length > maxLength ? `${source.slice(0, maxLength).trim()}...` : source
   }
 
-  const lowerSource = source.toLowerCase()
+  const lowerSource = searchIndex || source.toLowerCase()
   const lowerQuery = query.toLowerCase()
   let index = lowerSource.indexOf(lowerQuery)
 
   if (index < 0) {
-    index = queryTerms.value
+    index = terms
       .map(term => lowerSource.indexOf(term))
       .filter(position => position >= 0)
       .sort((a, b) => a - b)[0] ?? 0
@@ -515,16 +551,17 @@ function createExcerpt(text: string, query: string, maxLength: number) {
 }
 
 function highlightedParts(text: string) {
-  const terms = highlightTerms.value
+  const pattern = highlightPattern.value
 
-  if (!terms.length || !text) {
+  if (!pattern || !text) {
     return [{ text, mark: false }]
   }
 
-  const pattern = new RegExp(`(${terms.map(escapeRegExp).join('|')})`, 'ig')
   const parts: Array<{ text: string, mark: boolean }> = []
   let lastIndex = 0
   let match: RegExpExecArray | null
+
+  pattern.lastIndex = 0
 
   while ((match = pattern.exec(text)) !== null) {
     if (match.index > lastIndex) {
