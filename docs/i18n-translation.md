@@ -333,7 +333,7 @@ npm run i18n:ui:translate
 ```bash
 export TRANSLATE_PROVIDER=mimo
 export TRANSLATE_BASE_URL=https://api.xiaomimimo.com/v1
-export TRANSLATE_MODEL=mimo-v2-flash
+export TRANSLATE_MODEL=mimo-v2.5
 export TRANSLATE_API_KEY=sk-xxxx
 npm run i18n:translate
 npm run i18n:ui:translate
