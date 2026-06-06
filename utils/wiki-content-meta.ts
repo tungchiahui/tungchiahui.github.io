@@ -60,6 +60,10 @@ export function getWikiContentMeta(stem?: string): WikiContentMeta | null {
   }
 
   const rawDocKey = parts[1]
+  if (!rawDocKey) {
+    return null
+  }
+
   const docSlug = toPinyinSlug(rawDocKey)
   const rawFileName = parts.at(-1) || ''
   const isWikiIndex = rawFileName === 'index'
@@ -173,8 +177,9 @@ function toPinyinSlug(value: string) {
 function parseChapter(fileName: string) {
   const normalized = stripSortPrefix(fileName)
   const match = normalized.match(/^ch(\d+(?:-\d+)*)/i)
+  const chapter = match?.[1]
 
-  return match ? match[1].replace(/-/g, '.') : undefined
+  return chapter ? chapter.replace(/-/g, '.') : undefined
 }
 
 function chapterToSort(chapter: string) {
@@ -183,7 +188,7 @@ function chapterToSort(chapter: string) {
   return chapter
     .split('.')
     .slice(0, weights.length)
-    .reduce((total, part, index) => total + Number(part || 0) * weights[index], 0)
+    .reduce((total, part, index) => total + Number(part || 0) * (weights[index] || 0), 0)
 }
 
 function titleFromDocKey(docKey: string) {

@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     preset: 'static'
   },
 
-  modules: ['@nuxt/content', '@nuxt/image'],
+  modules: ['@nuxt/content'],
 
   css: [
     '~/assets/css/app.css',
@@ -40,17 +40,13 @@ export default defineNuxtConfig({
 
   hooks: {
     'content:file:afterParse'({ content }) {
-      const contentMeta = getLocalizedContentMeta(content.stem, content)
+      const stem = typeof content.stem === 'string' ? content.stem : undefined
+      const contentMeta = getLocalizedContentMeta(stem, content)
 
       if (contentMeta) {
         Object.assign(content, contentMeta)
       }
     }
-  },
-
-  image: {
-    // CDN 域名（静态完全没问题）
-    domains: ['cdn.tungchiahui.cn', 'global.cdn.tungchiahui.cn']
   },
 
   // Nuxt 4 规范（可以保留）

@@ -95,8 +95,8 @@ export function normalizeSitePath(path: unknown): string {
   const raw = String(path || '').trim()
   if (!raw) return '/'
 
-  const withoutHash = raw.split('#')[0]
-  const withoutQuery = withoutHash.split('?')[0]
+  const withoutHash = raw.split('#')[0] || ''
+  const withoutQuery = withoutHash.split('?')[0] || ''
   const withSlash = withoutQuery.startsWith('/') ? withoutQuery : `/${withoutQuery}`
 
   return withSlash.replace(/\/+$/, '') || '/'

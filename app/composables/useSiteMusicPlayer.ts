@@ -365,7 +365,7 @@ function getSongCover(song: MusicSong | null) {
   return getTextValue(song?.cover) || getTextValue(song?.pic)
 }
 
-function getTextValue(value: unknown) {
+function getTextValue(value: unknown): string {
   if (Array.isArray(value)) {
     return value.map(getTextValue).filter(Boolean).join(' / ')
   }
