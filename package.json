@@ -13,9 +13,10 @@
     "i18n:translate:all": "npm run i18n:translate && npm run i18n:ui:translate",
     "i18n:check": "tsx scripts/i18n-check.ts",
     "i18n:generate": "npm run i18n:gen",
+    "wiki:check": "tsx scripts/wiki-check.ts",
     "music:cdn-map": "node scripts/music-cdn-map.mjs",
-    "prebuild": "npm run i18n:ui && npm run i18n:gen",
-    "pregenerate": "npm run i18n:ui && npm run i18n:gen",
+    "prebuild": "npm run wiki:check && npm run i18n:ui && npm run i18n:gen",
+    "pregenerate": "npm run wiki:check && npm run i18n:ui && npm run i18n:gen",
     "preview": "nuxt preview"
   },
   "dependencies": {

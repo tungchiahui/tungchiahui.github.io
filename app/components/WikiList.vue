@@ -67,6 +67,7 @@
 import { ref, computed } from 'vue'
 import { getCurrentLocaleSlug } from '~~/utils/i18n-locales'
 import { formatUiText, getUiText } from '~~/utils/i18n-ui'
+import { compareWikiChapters, numberWikiChapters } from '~~/utils/wiki-chapters'
 import { getWikiLegacyPathAliases } from '~~/utils/wiki-legacy-paths'
 
 const props = defineProps({
@@ -108,8 +109,8 @@ const { data: wikis, pending } = await useAsyncData('wiki-list', () => {
       'i18nKey',
       'sourcePath',
       'legacyPath',
-      'chapter',
-      'chapterSort',
+      'chapterOrder',
+      'chapterDepth',
       'docKey',
       'docI18nKey',
       'docRoot',
@@ -250,15 +251,19 @@ const docGroups = computed(() => {
       }
 
       group.chapters.push({
-        ...wiki,
-        depth: Math.max(0, (wiki.chapter || '').split('.').length - 1)
+        ...wiki
       })
     })
 
   return Array.from(groups.values())
     .map(group => ({
       ...group,
-      chapters: group.chapters.sort(sortByChapter)
+      chapters: numberWikiChapters(group.chapters)
+        .sort(compareWikiChapters)
+        .map(chapter => ({
+          ...chapter,
+          depth: chapter.chapterDepth
+        }))
     }))
     .sort((a, b) => (b.index?.date || '').localeCompare(a.index?.date || '') || a.title.localeCompare(b.title))
 })
@@ -304,10 +309,6 @@ const filteredDocGroups = computed(() => {
 
   return list
 })
-
-function sortByChapter(a, b) {
-  return (a.chapterSort || 0) - (b.chapterSort || 0) || a.title.localeCompare(b.title)
-}
 
 function normalizePath(path) {
   return String(path || '/').replace(/\/$/, '') || '/'

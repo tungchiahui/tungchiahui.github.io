@@ -6,6 +6,7 @@ import {
   getCurrentLocaleSlug,
   getLocaleSectionPath
 } from '~~/utils/i18n-locales'
+import { compareWikiChapters, numberWikiChapters } from '~~/utils/wiki-chapters'
 import { getWikiLegacyPathAliases } from '~~/utils/wiki-legacy-paths'
 
 interface TocDisplayLink {
@@ -26,7 +27,8 @@ interface WikiPage {
   sourcePath?: string
   legacyPath?: string
   chapter?: string
-  chapterSort?: number
+  chapterOrder?: string
+  chapterDepth?: number
   docKey?: string
   docI18nKey?: string
   docRoot?: string
@@ -83,7 +85,7 @@ const { data: page, pending } = await useAsyncData(
         .first()
 
       if (result) {
-        return result as WikiPage
+        return result as unknown as WikiPage
       }
     }
 
@@ -115,8 +117,8 @@ const { data: docItems } = await useAsyncData(
         'stem',
         'title',
         'date',
-        'chapter',
-        'chapterSort',
+        'chapterOrder',
+        'chapterDepth',
         'docKey',
         'docRoot',
         'docTitle',
@@ -129,9 +131,8 @@ const { data: docItems } = await useAsyncData(
 
 const docIndex = computed(() => docItems.value?.find(item => item.isWikiIndex) || null)
 const chapterItems = computed(() =>
-  (docItems.value || [])
-    .filter(item => !item.isWikiIndex)
-    .sort(sortByChapter)
+  numberWikiChapters((docItems.value || []).filter(item => !item.isWikiIndex))
+    .sort(compareWikiChapters)
 )
 const docNavigationItems = computed(() => [
   ...(docIndex.value ? [docIndex.value] : []),
@@ -139,6 +140,9 @@ const docNavigationItems = computed(() => [
 ])
 
 const pagePath = computed(() => normalizePath(page.value?.path || route.path))
+const currentChapter = computed(() =>
+  chapterItems.value.find(item => normalizePath(item.path) === pagePath.value)?.chapter
+)
 
 const currentNavIndex = computed(() =>
   docNavigationItems.value.findIndex(item => normalizePath(item.path) === pagePath.value)
@@ -162,7 +166,7 @@ const docTitle = computed(() =>
 
 const pageTitle = computed(() => {
   if (!page.value) return '載入中...'
-  return page.value.chapter ? `${page.value.chapter} ${page.value.title}` : page.value.title
+  return currentChapter.value ? `${currentChapter.value} ${page.value.title}` : page.value.title
 })
 
 const { data: i18nVariantPaths } = await useAsyncData(
@@ -510,6 +514,8 @@ const correctHeadingPosition = (id: string, behavior: ScrollBehavior = 'smooth')
 }
 
 const scheduleAnchorSettle = (id: string) => {
+  const finalSettleDelay = anchorSettleDelays.at(-1) ?? 0
+
   anchorSettleDelays.forEach((delay) => {
     const timer = setTimeout(() => {
       if (pendingAnchorId.value !== id) return
@@ -522,7 +528,7 @@ const scheduleAnchorSettle = (id: string) => {
     if (pendingAnchorId.value === id) {
       pendingAnchorId.value = ''
     }
-  }, anchorSettleDelays[anchorSettleDelays.length - 1] + 500)
+  }, finalSettleDelay + 500)
   scrollRetryTimers.push(doneTimer)
 }
 
@@ -713,10 +719,6 @@ onUnmounted(() => {
   }
 })
 
-function sortByChapter(a: WikiPage, b: WikiPage) {
-  return (a.chapterSort || 0) - (b.chapterSort || 0) || a.title.localeCompare(b.title)
-}
-
 function normalizePath(path: string) {
   return path.replace(/\/$/, '') || '/'
 }
@@ -762,7 +764,7 @@ function normalizePath(path: string) {
             :to="item.path"
             class="doc-nav-link"
             :class="{ 'is-active': isCurrentPath(item.path), 'is-index': item.isWikiIndex }"
-            :style="{ '--doc-depth': String(Math.max(0, (item.chapter || '').split('.').length - 1)) }"
+            :style="{ '--doc-depth': String(item.chapterDepth || 0) }"
             @click="closeDrawers"
           >
             <span v-if="item.chapter" class="doc-nav-number">{{ item.chapter }}</span>
@@ -797,8 +799,8 @@ function normalizePath(path: string) {
 
         <article class="wiki-article">
           <header class="wiki-article-header">
-            <div v-if="(page as WikiPage).chapter" class="chapter-kicker">
-              第 {{ (page as WikiPage).chapter }} 節
+            <div v-if="currentChapter" class="chapter-kicker">
+              第 {{ currentChapter }} 節
             </div>
             <h1>{{ (page as WikiPage).title }}</h1>
             <div class="wiki-traffic" :class="{ 'is-loading': umamiPending }">

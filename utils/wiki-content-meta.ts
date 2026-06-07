@@ -23,8 +23,8 @@ export interface LocalizedContentMeta {
 }
 
 export interface WikiContentMeta extends LocalizedContentMeta {
-  chapter?: string
-  chapterSort: number
+  chapterOrder?: string
+  chapterDepth: number
   date?: string
   docKey: string
   docI18nKey: string
@@ -67,7 +67,7 @@ export function getWikiContentMeta(stem?: string): WikiContentMeta | null {
   const docSlug = toPinyinSlug(rawDocKey)
   const rawFileName = parts.at(-1) || ''
   const isWikiIndex = rawFileName === 'index'
-  const chapter = parseChapter(rawFileName)
+  const chapterOrder = parseChapterOrder(rawFileName)
   const slugParts = parts.slice(2).map(toPinyinSlug)
 
   if (slugParts.at(-1) === 'index') {
@@ -80,7 +80,6 @@ export function getWikiContentMeta(stem?: string): WikiContentMeta | null {
   const localizedPath = `/${[localeSlug, 'wiki', docSlug, ...slugParts].filter(Boolean).join('/')}`
   const docRoot = `/${[localeSlug, 'wiki', docSlug].join('/')}`
   const docI18nKey = `wiki/${docSlug}`
-
   return {
     path: localizedPath,
     locale: locale.code,
@@ -90,8 +89,8 @@ export function getWikiContentMeta(stem?: string): WikiContentMeta | null {
     sourcePath,
     sourceStem: parsedStem.sourceStem,
     legacyPath: localeSlug === DEFAULT_LOCALE_SLUG ? sourcePath : undefined,
-    chapter,
-    chapterSort: chapter ? chapterToSort(chapter) : 0,
+    chapterOrder,
+    chapterDepth: chapterOrder ? chapterOrder.split('-').length - 1 : 0,
     date: parseDate(rawDocKey),
     docKey: `${localeSlug}:${docSlug}`,
     docI18nKey,
@@ -174,21 +173,9 @@ function toPinyinSlug(value: string) {
     .replace(/^-+|-+$/g, '')
 }
 
-function parseChapter(fileName: string) {
+function parseChapterOrder(fileName: string) {
   const normalized = stripSortPrefix(fileName)
-  const match = normalized.match(/^ch(\d+(?:-\d+)*)/i)
-  const chapter = match?.[1]
-
-  return chapter ? chapter.replace(/-/g, '.') : undefined
-}
-
-function chapterToSort(chapter: string) {
-  const weights = [1000000, 10000, 100, 1]
-
-  return chapter
-    .split('.')
-    .slice(0, weights.length)
-    .reduce((total, part, index) => total + Number(part || 0) * (weights[index] || 0), 0)
+  return normalized.match(/^(\d{4}(?:-\d{4})*)-/)?.[1]
 }
 
 function titleFromDocKey(docKey: string) {

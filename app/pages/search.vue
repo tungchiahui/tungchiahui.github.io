@@ -7,6 +7,7 @@ import {
   replaceLocaleInPath,
   splitLocalePath
 } from '~~/utils/i18n-locales'
+import { numberWikiChapters } from '~~/utils/wiki-chapters'
 
 type SearchType = 'all' | 'blog' | 'wiki' | 'page'
 
@@ -21,6 +22,8 @@ interface ContentDoc {
   localeSlug?: string
   sourceStem?: string
   chapter?: string
+  chapterOrder?: string
+  docKey?: string
   docTitle?: string
   isWikiDoc?: boolean
   isWikiIndex?: boolean
@@ -152,7 +155,8 @@ const SEARCH_CONTENT_FIELDS = [
   'date',
   'localeSlug',
   'sourceStem',
-  'chapter',
+  'chapterOrder',
+  'docKey',
   'docTitle',
   'isWikiDoc',
   'isWikiIndex',
@@ -180,7 +184,25 @@ const { data: contentDocuments, pending, status } = await useAsyncData<SearchDoc
       .select(...SEARCH_CONTENT_FIELDS)
       .all()
 
-    return (items as unknown as ContentDoc[])
+    const documents = items as unknown as ContentDoc[]
+    const wikiGroups = new Map<string, ContentDoc[]>()
+
+    documents
+      .filter(item => item.isWikiDoc && !item.isWikiIndex && item.docKey)
+      .forEach((item) => {
+        const group = wikiGroups.get(item.docKey || '') || []
+        group.push(item)
+        wikiGroups.set(item.docKey || '', group)
+      })
+
+    wikiGroups.forEach((group) => {
+      numberWikiChapters(group).forEach((item) => {
+        const source = group.find(entry => entry.path === item.path)
+        if (source) source.chapter = item.chapter
+      })
+    })
+
+    return documents
       .map(toSearchDoc)
       .filter((doc): doc is SearchDoc => Boolean(doc))
   },
