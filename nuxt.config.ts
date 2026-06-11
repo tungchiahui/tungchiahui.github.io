@@ -30,6 +30,7 @@ export default defineNuxtConfig({
     '~/assets/css/aplayer.css',
     '~/assets/css/friend.css',
     '~/assets/css/more.css',
+    '~/assets/css/weight-loss.css',
   ],
 
   content: {

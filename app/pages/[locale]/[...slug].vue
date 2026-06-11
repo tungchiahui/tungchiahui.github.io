@@ -9,6 +9,7 @@ import MyLogoPage from '~/pages/mylogo.vue'
 import StartPage from '~/pages/start.vue'
 import StatsPage from '~/pages/stats.vue'
 import TechFootprintPage from '~/pages/tech-footprint.vue'
+import WeightLossPage from '~/pages/weight-loss.vue'
 import { isSupportedLocaleSlug } from '~~/utils/i18n-locales'
 
 const localizedPages = {
@@ -20,7 +21,8 @@ const localizedPages = {
   mylogo: MyLogoPage,
   start: StartPage,
   stats: StatsPage,
-  'tech-footprint': TechFootprintPage
+  'tech-footprint': TechFootprintPage,
+  'weight-loss': WeightLossPage
 }
 
 type LocalizedPageKey = keyof typeof localizedPages

@@ -83,6 +83,15 @@ useHead(() => ({
       <h2 class="category-title">{{ copy.categories.other }}</h2>
       <div class="more-grid">
 
+        <!-- 减脂计划 -->
+        <NuxtLink class="more-card" :to="localizePath('/weight-loss')">
+          <div class="card-title">
+            <i class="fas fa-weight-scale" aria-hidden="true"></i>
+            <span>{{ copy.cards.weightLoss[0] }}</span>
+          </div>
+          <div class="card-sub">{{ copy.cards.weightLoss[1] }}</div>
+        </NuxtLink>
+
         <!-- 音乐播放器 -->
         <NuxtLink class="more-card" :to="localizePath('/music')">
           <div class="card-title">

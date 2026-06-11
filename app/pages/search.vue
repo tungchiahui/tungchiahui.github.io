@@ -125,6 +125,13 @@ const STATIC_PAGES = [
     keywords: '技术足迹 机器人 ROS2 SLAM Nav2 ros2_control MoveIt2 TensorRT TodoList'
   },
   {
+    path: '/weight-loss',
+    title: '减脂计划',
+    section: '站点页面',
+    summary: '个人减脂目标体重和每周身体数据记录。',
+    keywords: '减脂 减肥 体重 体脂率 肌肉量 腰围 计划 记录'
+  },
+  {
     path: '/cv',
     title: '简历',
     section: '站点页面',
