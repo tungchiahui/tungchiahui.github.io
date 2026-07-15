@@ -232,7 +232,8 @@
 }
 
 .music-player-mini-title,
-.music-player-mini-subtitle {
+.music-player-mini-subtitle,
+.music-player-mini-lyric {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -250,6 +251,39 @@
   font-size: 0.68rem;
   font-weight: 650;
   line-height: 1;
+}
+
+.music-player-mini-lyric {
+  color: #0f766e;
+  font-size: 0.66rem;
+  font-weight: 650;
+  line-height: 1.05;
+  text-overflow: clip;
+}
+
+.music-player-mini-lyric-text {
+  display: inline-block;
+  min-width: max-content;
+}
+
+.music-player-mini-lyric.is-scrolling .music-player-mini-lyric-text {
+  animation: mini-lyric-scroll var(--mini-lyric-duration) ease-in-out 1s 1 forwards;
+}
+
+@keyframes mini-lyric-scroll {
+  0%, 12% {
+    transform: translateX(0);
+  }
+
+  88%, 100% {
+    transform: translateX(calc(-1 * var(--mini-lyric-distance)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-player-mini-lyric.is-scrolling .music-player-mini-lyric-text {
+    animation: none;
+  }
 }
 
 .music-player-mini-play,
@@ -328,6 +362,10 @@ html.dark .music-player-mini-title {
 
 html.dark .music-player-mini-subtitle {
   color: var(--text-secondary, #cbd5e1);
+}
+
+html.dark .music-player-mini-lyric {
+  color: #5eead4;
 }
 
 html.dark .music-player-mini-play,
@@ -433,6 +471,10 @@ html.dark .music-player-mini-skip:hover {
 
   .music-player-mini-subtitle {
     font-size: 0.68rem;
+  }
+
+  .music-player-mini-lyric {
+    font-size: 0.64rem;
   }
 
   .music-player-mini-play,

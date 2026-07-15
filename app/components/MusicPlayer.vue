@@ -59,6 +59,19 @@
     >
       <span class="music-player-mini-title">{{ currentTitle }}</span>
       <span class="music-player-mini-subtitle">{{ currentAuthor || '點擊展開' }}</span>
+      <span
+        ref="miniLyricContainer"
+        class="music-player-mini-lyric"
+        :class="{ 'is-scrolling': isMiniLyricOverflowing }"
+        :style="miniLyricStyle"
+        aria-live="polite"
+      >
+        <span
+          :key="currentLyric"
+          ref="miniLyricText"
+          class="music-player-mini-lyric-text"
+        >{{ currentLyric }}</span>
+      </span>
     </button>
     <button
       class="music-player-mini-skip"
@@ -100,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { CDN_AUDIO_BY_ID, MUSIC_SERVER, PLAYLIST_API } from '~/data/cdn-audio'
 import type { MusicSong, SiteAPlayerInstance, SiteAPlayerListSwitchEvent } from '~/composables/useSiteMusicPlayer'
 import { getCurrentLocaleSlug, replaceLocaleInPath } from '~~/utils/i18n-locales'
@@ -118,6 +131,9 @@ const musicPlayer = useSiteMusicPlayer()
 const {
   currentAuthor,
   currentCoverStyle,
+  currentIndex,
+  currentSong,
+  currentTime,
   currentTitle,
   isPlaying,
   playbackIntent
@@ -159,6 +175,48 @@ const miniCoverStyle = computed(() => (
 
 const hasCover = computed(() => Boolean(currentCoverStyle.value))
 
+type LyricLine = {
+  text: string
+  time: number
+}
+
+const lyricLines = ref<LyricLine[]>([])
+const lyricStatus = ref('歌詞載入中')
+const miniLyricContainer = ref<HTMLElement | null>(null)
+const miniLyricText = ref<HTMLElement | null>(null)
+const isMiniLyricOverflowing = ref(false)
+const miniLyricDistance = ref(0)
+let lyricRequestId = 0
+let lyricAbortController: AbortController | null = null
+
+const miniLyricStyle = computed(() => ({
+  '--mini-lyric-distance': `${miniLyricDistance.value}px`,
+  '--mini-lyric-duration': `${Math.max(2.6, miniLyricDistance.value / 32).toFixed(1)}s`
+}))
+
+const currentLyric = computed(() => {
+  if (!lyricLines.value.length) {
+    return lyricStatus.value
+  }
+
+  const now = currentTime.value + 0.18
+  for (let index = lyricLines.value.length - 1; index >= 0; index -= 1) {
+    if (now >= lyricLines.value[index].time) {
+      return lyricLines.value[index].text
+    }
+  }
+
+  return lyricLines.value[0].text
+})
+
+watch(
+  () => [currentIndex.value, currentSong.value?.lrc],
+  () => loadCurrentLyrics(),
+  { immediate: true }
+)
+
+watch([currentLyric, hidden], () => scheduleMiniLyricMeasurement(), { flush: 'post' })
+
 watch(playbackIntent, (nextPlaybackIntent) => {
   if (nextPlaybackIntent) {
     return
@@ -172,6 +230,7 @@ watch(playbackIntent, (nextPlaybackIntent) => {
 })
 
 onMounted(() => {
+  window.addEventListener('resize', scheduleMiniLyricMeasurement)
   try {
     const saved = localStorage.getItem('music_player_hidden')
     // 只有当本地存储明确记录为 'true' 时才隐藏
@@ -193,6 +252,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('resize', scheduleMiniLyricMeasurement)
+  lyricAbortController?.abort()
   playerObserver?.disconnect()
   if (syncTimer) {
     window.clearInterval(syncTimer)
@@ -205,6 +266,92 @@ onBeforeUnmount(() => {
   aplayer?.destroy?.()
   aplayer = null
 })
+
+function scheduleMiniLyricMeasurement() {
+  nextTick(() => {
+    const container = miniLyricContainer.value
+    const text = miniLyricText.value
+    if (!container || !text) {
+      isMiniLyricOverflowing.value = false
+      miniLyricDistance.value = 0
+      return
+    }
+
+    const distance = Math.ceil(text.scrollWidth - container.clientWidth)
+    miniLyricDistance.value = Math.max(0, distance)
+    isMiniLyricOverflowing.value = distance > 1
+  })
+}
+
+async function loadCurrentLyrics() {
+  const requestId = ++lyricRequestId
+  const source = getTextValue(currentSong.value?.lrc)
+  lyricAbortController?.abort()
+  lyricAbortController = null
+  lyricLines.value = []
+  lyricStatus.value = source ? '歌詞載入中' : '暫無歌詞'
+
+  if (!source || typeof window === 'undefined') {
+    return
+  }
+
+  try {
+    const rawLyrics = await getLyricText(source)
+    if (requestId !== lyricRequestId) {
+      return
+    }
+
+    lyricLines.value = parseLyrics(rawLyrics)
+    lyricStatus.value = lyricLines.value.length ? '' : '暫無歌詞'
+  } catch (e) {
+    if (requestId === lyricRequestId) {
+      lyricStatus.value = '暫無歌詞'
+    }
+  }
+}
+
+async function getLyricText(source: string) {
+  if (!/^(?:https?:)?\/\//i.test(source)) {
+    return source
+  }
+
+  const controller = new AbortController()
+  lyricAbortController = controller
+  const response = await fetch(source, { signal: controller.signal })
+
+  if (!response.ok) {
+    throw new Error(`Failed to load lyric: ${response.status}`)
+  }
+
+  return response.text()
+}
+
+function parseLyrics(value: string) {
+  const timePattern = /\[(\d{1,2}):(\d{1,2})(?:[.:](\d{1,3}))?\]/g
+  const parsedLines: LyricLine[] = []
+
+  value.split(/\r?\n/).forEach((line) => {
+    const matches = [...line.matchAll(timePattern)]
+    const text = line
+      .replace(timePattern, '')
+      .replace(/\[(?:ar|ti|al|by|offset):[^\]]*\]/gi, '')
+      .trim()
+
+    if (!matches.length || !text) {
+      return
+    }
+
+    matches.forEach((match) => {
+      const fraction = match[3] ? Number(match[3].padEnd(3, '0').slice(0, 3)) / 1000 : 0
+      parsedLines.push({
+        text,
+        time: Number(match[1]) * 60 + Number(match[2]) + fraction
+      })
+    })
+  })
+
+  return parsedLines.sort((a, b) => a.time - b.time)
+}
 
 function toggle() {
   hidden.value = !hidden.value
