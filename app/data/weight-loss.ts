@@ -26,6 +26,15 @@ export const GOAL_WEIGHT = 75
 export const PLAN_START_DATE = '2026-06-11'
 export const PLAN_END_DATE = '2027-02-04'
 
+const importedWeightByDate: Record<string, string> = {
+  '2026-06-11': '98',
+  '2026-06-18': '97.0',
+  '2026-06-25': '96.0',
+  '2026-07-02': '94.9',
+  '2026-07-09': '94.4',
+  '2026-07-16': '93.5'
+}
+
 export const weightMilestones: WeightMilestone[] = [
   { stage: 0, date: '2026-06-11', min: 98, max: 98 },
   { stage: 1, date: '2026-06-25', min: 96, max: 96.5 },
@@ -60,7 +69,7 @@ export function createWeeklyRecords(): WeightRecord[] {
       date,
       targetMin: target.min,
       targetMax: target.max,
-      weight: date === PLAN_START_DATE ? String(START_WEIGHT) : '',
+      weight: importedWeightByDate[date] || '',
       bodyFat: '',
       muscleMass: '',
       waist: '',

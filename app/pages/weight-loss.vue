@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useHead } from '#app'
 import {
   GOAL_WEIGHT,
@@ -45,6 +45,14 @@ const showAllRecords = ref(false)
 const hydrated = ref(false)
 const csvInput = ref<HTMLInputElement | null>(null)
 const importFeedback = ref<ImportFeedback | null>(null)
+const showUnlock = ref(false)
+const editSecret = ref('')
+const rememberDevice = ref(false)
+const unlockError = ref('')
+const cloudRevision = ref(0)
+const applyingCloud = ref(false)
+let syncTimer: ReturnType<typeof setTimeout> | null = null
+const cloud = usePersonalCloudStore('weight-loss')
 
 useHead(() => ({
   title: copy.value.metaTitle,
@@ -142,7 +150,7 @@ const chart = computed(() => {
 
 const planWeeks = computed(() => records.value.length - 1)
 
-onMounted(() => {
+onMounted(async () => {
   loadStoredData()
 
   const today = parseIsoDate(getLocalIsoDate())
@@ -153,12 +161,27 @@ onMounted(() => {
   selectedRecordDate.value = closest.date
   hydrated.value = true
   persistData()
+  const remote = await cloud.load<{ version: number; revision: number; records: WeightRecord[] }>()
+  if (remote?.records) {
+    applyingCloud.value = true
+    const remoteByDate = new Map(remote.records.map(record => [record.date, record]))
+    records.value = createWeeklyRecords().map(record => ({ ...record, ...(remoteByDate.get(record.date) || {}) }))
+    cloudRevision.value = remote.revision
+    persistData()
+    applyingCloud.value = false
+  }
 })
 
 watch(records, () => {
   if (!hydrated.value) return
   persistData()
+  if (!applyingCloud.value && cloud.isEditor.value) {
+    if (syncTimer) clearTimeout(syncTimer)
+    syncTimer = setTimeout(syncRecords, 900)
+  }
 }, { deep: true })
+
+onUnmounted(() => { if (syncTimer) clearTimeout(syncTimer) })
 
 function loadStoredData() {
   try {
@@ -206,6 +229,27 @@ function clearPersonalData() {
   selectedRecordDate.value = PLAN_START_DATE
   importFeedback.value = null
   localStorage.removeItem(STORAGE_KEY)
+}
+
+async function enterEditMode() {
+  unlockError.value = ''
+  try {
+    await cloud.unlock(editSecret.value, rememberDevice.value)
+    showUnlock.value = false
+    editSecret.value = ''
+    await syncRecords()
+  } catch (error) {
+    unlockError.value = error instanceof Error ? error.message : '无法进入编辑模式。'
+  }
+}
+
+async function syncRecords() {
+  try {
+    const saved = await cloud.save({ version: 2, revision: cloudRevision.value, records: records.value })
+    cloudRevision.value = saved.revision
+  } catch (error) {
+    importFeedback.value = { tone: 'error', text: error instanceof Error ? error.message : '云端同步失败。' }
+  }
 }
 
 function chooseCsvFile() {
@@ -333,6 +377,7 @@ function clamp(value: number, min: number, max: number) {
         <p class="weight-eyebrow">{{ copy.eyebrow }}</p>
         <h1>{{ copy.title }}</h1>
         <p>{{ copy.intro }}</p>
+        <div class="weight-edit-row"><span>{{ cloud.syncState.value === 'syncing' ? '正在同步…' : cloud.syncState.value === 'synced' ? '已同步云端' : cloud.syncState.value === 'error' ? '云端暂不可用' : '公开只读数据' }}</span><button v-if="!cloud.isEditor.value" type="button" class="secondary-button" @click="showUnlock = true">进入编辑模式</button><button v-else type="button" class="secondary-button" @click="cloud.lock()">退出编辑模式</button></div>
       </div>
 
       <div class="weight-goal-grid">
@@ -463,6 +508,7 @@ function clamp(value: number, min: number, max: number) {
           <span>{{ copy.averageWeight }}</span>
           <div class="input-unit">
             <input
+              :disabled="!cloud.isEditor.value"
               :value="activeRecord.weight"
               type="number"
               min="35"
@@ -478,6 +524,7 @@ function clamp(value: number, min: number, max: number) {
           <span>{{ copy.bodyFat }} <small>{{ copy.optional }}</small></span>
           <div class="input-unit">
             <input
+              :disabled="!cloud.isEditor.value"
               :value="activeRecord.bodyFat"
               type="number"
               min="2"
@@ -493,6 +540,7 @@ function clamp(value: number, min: number, max: number) {
           <span>{{ copy.muscleMass }} <small>{{ copy.optional }}</small></span>
           <div class="input-unit">
             <input
+              :disabled="!cloud.isEditor.value"
               :value="activeRecord.muscleMass"
               type="number"
               min="10"
@@ -508,6 +556,7 @@ function clamp(value: number, min: number, max: number) {
           <span>{{ copy.waist }} <small>{{ copy.optional }}</small></span>
           <div class="input-unit">
             <input
+              :disabled="!cloud.isEditor.value"
               :value="activeRecord.waist"
               type="number"
               min="40"
@@ -522,6 +571,7 @@ function clamp(value: number, min: number, max: number) {
         <label class="note-field">
           <span>{{ copy.note }} <small>{{ copy.optional }}</small></span>
           <textarea
+            :disabled="!cloud.isEditor.value"
             :value="activeRecord.note"
             rows="2"
             :placeholder="copy.notePlaceholder"
@@ -531,8 +581,8 @@ function clamp(value: number, min: number, max: number) {
       </div>
 
       <div class="record-actions">
-        <p><i class="fa-solid fa-lock" aria-hidden="true"></i>{{ copy.dataNote }}</p>
-        <div>
+        <p><i class="fa-solid fa-lock" aria-hidden="true"></i>{{ cloud.isEditor.value ? '修改会自动保存到本机并同步 Blob。' : '当前为公开只读模式，进入编辑模式后才能修改。' }}</p>
+        <div v-if="cloud.isEditor.value">
           <input
             ref="csvInput"
             class="csv-file-input"
@@ -678,16 +728,28 @@ function clamp(value: number, min: number, max: number) {
               <td>{{ index + 1 }}</td>
               <td>{{ formatDate(record.date) }}</td>
               <td>{{ formatRange(record.targetMin, record.targetMax) }}</td>
-              <td><input v-model="record.weight" type="number" step="0.1" inputmode="decimal" :aria-label="copy.averageWeight"></td>
-              <td><input v-model="record.bodyFat" type="number" step="0.1" inputmode="decimal" :aria-label="copy.bodyFat"></td>
-              <td><input v-model="record.muscleMass" type="number" step="0.1" inputmode="decimal" :aria-label="copy.muscleMass"></td>
-              <td><input v-model="record.waist" type="number" step="0.1" inputmode="decimal" :aria-label="copy.waist"></td>
+              <td><input v-model="record.weight" :disabled="!cloud.isEditor.value" type="number" step="0.1" inputmode="decimal" :aria-label="copy.averageWeight"></td>
+              <td><input v-model="record.bodyFat" :disabled="!cloud.isEditor.value" type="number" step="0.1" inputmode="decimal" :aria-label="copy.bodyFat"></td>
+              <td><input v-model="record.muscleMass" :disabled="!cloud.isEditor.value" type="number" step="0.1" inputmode="decimal" :aria-label="copy.muscleMass"></td>
+              <td><input v-model="record.waist" :disabled="!cloud.isEditor.value" type="number" step="0.1" inputmode="decimal" :aria-label="copy.waist"></td>
               <td><span class="table-status" :class="`tone-${getStatus(record.weight, record.targetMin, record.targetMax).tone}`">{{ getStatus(record.weight, record.targetMin, record.targetMax).text }}</span></td>
-              <td><input v-model="record.note" type="text" :placeholder="copy.optional" :aria-label="copy.note"></td>
+              <td><input v-model="record.note" :disabled="!cloud.isEditor.value" type="text" :placeholder="copy.optional" :aria-label="copy.note"></td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
+
+    <div v-if="showUnlock" class="edit-modal" @click.self="showUnlock = false">
+      <form class="edit-dialog" @submit.prevent="enterEditMode">
+        <p class="weight-eyebrow">Owner access</p>
+        <h2>进入编辑模式</h2>
+        <p>编辑密钥只用于换取签名令牌，不会写入减肥数据。</p>
+        <label><span>编辑密钥</span><input v-model="editSecret" type="password" autocomplete="current-password" required autofocus></label>
+        <label class="remember-option"><input v-model="rememberDevice" type="checkbox"><span>记住此设备（否则关闭浏览器后失效）</span></label>
+        <p v-if="unlockError" class="unlock-error">{{ unlockError }}</p>
+        <div><button type="button" class="secondary-button" @click="showUnlock = false">取消</button><button type="submit" class="unlock-button">解锁编辑</button></div>
+      </form>
+    </div>
   </div>
 </template>
