@@ -5,7 +5,7 @@ export const routeIntro = {
   mainTrack: 'CyberNaviRobot：STM32 → 纯 C++ 核心 → ROS 2 / ros2_control → 2D/3D 定位导航 → MoveIt 2 移动操作 → 具身任务执行',
   sideTrack: 'IndustrialMotionLab：实时 Linux → EtherCAT → CiA 402 → 轨迹插补 → 伺服闭环与故障安全',
   researchTrack: '多传感器融合 SLAM 与自主导航：状态估计 → 激光惯性里程计 → 退化与动态环境 → 规划导航验证；3DGS 仅作为可选地图表达模块',
-  finalGoal: '面向汇川、海康机器人、智元、宇树、小米等企业的机器人系统软件、机器人平台、控制器软件和运动控制岗位，形成一套旗舰机器人系统、一套工业实时控制副项目和一条可支撑毕业论文的科研成果链。'
+  finalGoal: '围绕机器人自主感知、决策、运动控制与系统集成，构建贯通嵌入式底层、实时控制、定位导航、移动操作与智能任务执行的完整技术体系，形成具备工程深度、科研价值与持续演进能力的机器人系统实践成果。'
 }
 
 export const tracks = {
