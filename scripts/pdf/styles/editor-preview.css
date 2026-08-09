@@ -1,0 +1,21 @@
+@page { size: A4; margin: 20mm 18mm; }
+body {
+  max-width: 176mm;
+  margin: 0 auto;
+  color: #333;
+  font: 10.5pt/1.75 "Noto Sans CJK SC", sans-serif;
+}
+h1, h2, h3, h4, h5 { color: #222; font-weight: 600; page-break-after: avoid; }
+h1 { font-size: 24pt; text-align: center; margin: 22pt 0 30pt; }
+h2 { font-size: 19pt; border-bottom: 1px solid #ddd; padding-bottom: 5pt; }
+h3 { font-size: 15pt; }
+h4 { font-size: 12pt; }
+a { color: #4183c4; text-decoration: none; overflow-wrap: anywhere; }
+img { display: block; max-width: 100%; max-height: 225mm; margin: 12pt auto; break-inside: avoid; }
+pre { padding: 12pt; background: #f7f7f7; border-radius: 4pt; white-space: pre-wrap; break-inside: avoid; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: 9pt; background: #f3f3f3; padding: 1pt 3pt; }
+pre code { background: transparent; padding: 0; }
+blockquote { margin-left: 0; padding-left: 12pt; border-left: 4px solid #ddd; color: #777; }
+hr { border: 0; border-top: 1px solid #ddd; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ddd; padding: 6pt 8pt; }
