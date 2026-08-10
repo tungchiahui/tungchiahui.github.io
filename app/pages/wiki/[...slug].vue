@@ -169,6 +169,18 @@ const pageTitle = computed(() => {
   return currentChapter.value ? `${currentChapter.value} ${page.value.title}` : page.value.title
 })
 
+const printLabel = computed(() => {
+  if (currentLocaleSlug.value === 'en-us') return 'Print / Save PDF'
+  if (currentLocaleSlug.value === 'zh-hant' || currentLocaleSlug.value === 'zh-hk' || currentLocaleSlug.value === 'zh-tw') {
+    return '列印 / 匯出 PDF'
+  }
+  return '打印 / 导出 PDF'
+})
+
+const printArticle = () => {
+  window.print()
+}
+
 const { data: i18nVariantPaths } = await useAsyncData(
   `wiki-i18n-paths-${route.path}`,
   async () => {
@@ -821,6 +833,10 @@ function normalizePath(path: string) {
                 <span class="traffic-label">平均停留</span>
               </span>
             </div>
+            <button class="wiki-print-button" type="button" @click="printArticle">
+              <i class="fas fa-print" aria-hidden="true" />
+              <span>{{ printLabel }}</span>
+            </button>
           </header>
 
           <div class="wiki-content-body">
@@ -1063,6 +1079,34 @@ function normalizePath(path: string) {
 
 .wiki-traffic.is-loading {
   opacity: 0.75;
+}
+
+.wiki-print-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 8px 13px;
+  border: 1px solid color-mix(in srgb, var(--wiki-accent) 45%, var(--nav-border, #e5e7eb));
+  border-radius: 8px;
+  background: var(--bg-color, #fff);
+  color: var(--wiki-accent-strong);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 750;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.wiki-print-button:hover {
+  border-color: var(--wiki-accent);
+  background: var(--wiki-accent-soft);
+  transform: translateY(-1px);
+}
+
+.wiki-print-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--wiki-accent) 30%, transparent);
+  outline-offset: 3px;
 }
 
 .traffic-chip {
@@ -1460,6 +1504,123 @@ function normalizePath(path: string) {
 
   .page-nav-next {
     text-align: left;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 15mm 18mm;
+  }
+
+  :global(html),
+  :global(body) {
+    width: auto !important;
+    max-width: none !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #1f2937 !important;
+  }
+
+  :global(.app-layout) {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+  }
+
+  :global(.main-header),
+  :global(.main-footer),
+  :global(#music-player),
+  :global(#music-player-mini),
+  :global(.app-loading-overlay),
+  .reading-progress-bar,
+  .wiki-drawer-backdrop,
+  .wiki-doc-sidebar,
+  .wiki-toc-sidebar,
+  .mobile-actions,
+  .wiki-breadcrumb,
+  .wiki-traffic,
+  .wiki-print-button,
+  .wiki-page-navigation {
+    display: none !important;
+  }
+
+  .wiki-doc-page,
+  .wiki-main,
+  .wiki-article {
+    width: auto !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .wiki-shell {
+    display: block !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .wiki-article-header {
+    margin: 0 0 20pt;
+    padding: 0 0 10pt;
+    border-bottom: 2px solid #2563eb;
+  }
+
+  .wiki-article-header h1 {
+    color: #123b62 !important;
+    font-size: 24pt;
+  }
+
+  .chapter-kicker {
+    color: #2563eb !important;
+  }
+
+  .wiki-content-body {
+    color: #1f2937 !important;
+    font-size: 10.5pt;
+    line-height: 1.7;
+  }
+
+  :deep(.wiki-content-body h2),
+  :deep(.wiki-content-body h3),
+  :deep(.wiki-content-body h4),
+  :deep(.wiki-content-body h5),
+  :deep(.wiki-content-body h6) {
+    color: #123b62 !important;
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+
+  :deep(.wiki-content-body h2) {
+    margin-top: 20pt;
+    border-bottom-color: #cbd5e1;
+  }
+
+  :deep(.wiki-content-body a) {
+    color: #1756a9 !important;
+    overflow-wrap: anywhere;
+  }
+
+  :deep(.wiki-content-body img) {
+    max-width: 100% !important;
+    max-height: 230mm !important;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  :deep(.wiki-content-body pre),
+  :deep(.wiki-content-body blockquote),
+  :deep(.wiki-content-body table) {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  :deep(.wiki-content-body pre) {
+    border-left: 3px solid #2563eb !important;
+    background: #f3f6fa !important;
+    white-space: pre-wrap !important;
   }
 }
 </style>
