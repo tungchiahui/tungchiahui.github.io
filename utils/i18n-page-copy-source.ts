@@ -122,17 +122,26 @@ export const pageCopySource = {
     zh: {
       title: '更多页面',
       description: '这里收集站内的重要页面，方便快速访问。',
-      metaDescription: '站内重要页面入口，包括数据统计、友链、技术足迹、简历与导航页。',
+      metaDescription: '站内重要页面入口，包括数据统计、对象存储、CDN、友链、技术足迹、简历与导航页。',
       categories: {
         analytics: '数据分析',
-        acceleration: '加速服务',
+        storage: '对象存储与分发',
         other: '其他'
+      },
+      storageDescription: '通过 AList 管理文件，提供兼容 S3 的对象接口，并由主 CDN 与 R2 备份线路分发。',
+      actions: {
+        open: '打开入口',
+        copy: '复制地址',
+        copied: '已复制',
+        copyFailed: '复制失败'
       },
       cards: {
         stats: ['数据统计', '网站数据分析与统计页面'],
         umami: ['Umami', '网站访问统计平台'],
-        cnCdn: ['中国大陆 CDN', '内容分发网络(Content Delivery Network,CDN)'],
-        globalCdn: ['国际 CDN', '内容分发网络(Content Delivery Network,CDN)'],
+        alist: ['AList 文件管理', '浏览、管理与分享对象存储中的文件'],
+        s3: ['S3 API 接口', '兼容 S3 协议的对象上传与管理端点'],
+        cnCdn: ['主 CDN 直链', '主存储桶的文件直链与内容分发入口'],
+        globalCdn: ['全球 CDN 备份', '基于 Cloudflare R2 备份的全球访问线路'],
         music: ['音乐播放器', '和悬浮播放器同步的完整音乐控制台'],
         friends: ['友情链接', '汇聚优质网站、社区和团队'],
         footprint: ['技术足迹', '个人机器人技术路线清单'],
@@ -144,7 +153,22 @@ export const pageCopySource = {
       }
     },
     en: {
+      metaDescription: 'Key site pages for analytics, object storage, CDN delivery, friends, technical roadmaps, resume, and navigation.',
+      categories: {
+        storage: 'Object Storage & Delivery'
+      },
+      storageDescription: 'Files are managed through AList, exposed through an S3-compatible endpoint, and delivered by the primary CDN and an R2 backup route.',
+      actions: {
+        open: 'Open Portal',
+        copy: 'Copy Address',
+        copied: 'Copied',
+        copyFailed: 'Copy Failed'
+      },
       cards: {
+        alist: ['AList File Manager', 'Browse, manage, and share files in object storage'],
+        s3: ['S3 API Endpoint', 'S3-compatible endpoint for object uploads and management'],
+        cnCdn: ['Primary CDN Links', 'Direct file links and content delivery for the primary bucket'],
+        globalCdn: ['Global CDN Backup', 'Global delivery route backed up to Cloudflare R2'],
         music: ['Music Player', 'Full music console synced with the floating player'],
         weightLoss: ['Weight-loss Plan', 'Goal weights and weekly body metrics']
       }

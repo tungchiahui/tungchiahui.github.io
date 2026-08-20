@@ -609,11 +609,18 @@ export const pageCopy = {
     "zh-cn": {
       "title": "更多页面",
       "description": "这里收集站内的重要页面，方便快速访问。",
-      "metaDescription": "站内重要页面入口，包括数据统计、友链、技术足迹、简历与导航页。",
+      "metaDescription": "站内重要页面入口，包括数据统计、对象存储、CDN、友链、技术足迹、简历与导航页。",
       "categories": {
         "analytics": "数据分析",
-        "acceleration": "加速服务",
+        "storage": "对象存储与分发",
         "other": "其他"
+      },
+      "storageDescription": "通过 AList 管理文件，提供兼容 S3 的对象接口，并由主 CDN 与 R2 备份线路分发。",
+      "actions": {
+        "open": "打开入口",
+        "copy": "复制地址",
+        "copied": "已复制",
+        "copyFailed": "复制失败"
       },
       "cards": {
         "stats": [
@@ -624,13 +631,21 @@ export const pageCopy = {
           "Umami",
           "网站访问统计平台"
         ],
+        "alist": [
+          "AList 文件管理",
+          "浏览、管理与分享对象存储中的文件"
+        ],
+        "s3": [
+          "S3 API 接口",
+          "兼容 S3 协议的对象上传与管理端点"
+        ],
         "cnCdn": [
-          "中国大陆 CDN",
-          "内容分发网络(Content Delivery Network,CDN)"
+          "主 CDN 直链",
+          "主存储桶的文件直链与内容分发入口"
         ],
         "globalCdn": [
-          "国际 CDN",
-          "内容分发网络(Content Delivery Network,CDN)"
+          "全球 CDN 备份",
+          "基于 Cloudflare R2 备份的全球访问线路"
         ],
         "music": [
           "音乐播放器",
@@ -669,11 +684,18 @@ export const pageCopy = {
     "zh-hant": {
       "title": "更多頁面",
       "description": "這裏收集站內的重要頁面，方便快速訪問。",
-      "metaDescription": "站內重要頁面入口，包括數據統計、友鏈、技術足跡、簡歷與導航頁。",
+      "metaDescription": "站內重要頁面入口，包括數據統計、對象存儲、CDN、友鏈、技術足跡、簡歷與導航頁。",
       "categories": {
         "analytics": "數據分析",
-        "acceleration": "加速服務",
+        "storage": "對象存儲與分發",
         "other": "其他"
+      },
+      "storageDescription": "通過 AList 管理文件，提供兼容 S3 的對象接口，並由主 CDN 與 R2 備份線路分發。",
+      "actions": {
+        "open": "打開入口",
+        "copy": "複製地址",
+        "copied": "已複製",
+        "copyFailed": "複製失敗"
       },
       "cards": {
         "stats": [
@@ -684,13 +706,21 @@ export const pageCopy = {
           "Umami",
           "網站訪問統計平臺"
         ],
+        "alist": [
+          "AList 文件管理",
+          "瀏覽、管理與分享對象存儲中的文件"
+        ],
+        "s3": [
+          "S3 API 接口",
+          "兼容 S3 協議的對象上傳與管理端點"
+        ],
         "cnCdn": [
-          "中國大陸 CDN",
-          "內容分發網絡(Content Delivery Network,CDN)"
+          "主 CDN 直鏈",
+          "主存儲桶的文件直鏈與內容分發入口"
         ],
         "globalCdn": [
-          "國際 CDN",
-          "內容分發網絡(Content Delivery Network,CDN)"
+          "全球 CDN 備份",
+          "基於 Cloudflare R2 備份的全球訪問線路"
         ],
         "music": [
           "音樂播放器",
@@ -729,11 +759,18 @@ export const pageCopy = {
     "zh-hk": {
       "title": "更多頁面",
       "description": "這裏收集站內的重要頁面，方便快速訪問。",
-      "metaDescription": "站內重要頁面入口，包括數據統計、友鏈、技術足跡、簡歷與導航頁。",
+      "metaDescription": "站內重要頁面入口，包括數據統計、對象存儲、CDN、友鏈、技術足跡、簡歷與導航頁。",
       "categories": {
         "analytics": "數據分析",
-        "acceleration": "加速服務",
+        "storage": "對象存儲與分發",
         "other": "其他"
+      },
+      "storageDescription": "通過 AList 管理文件，提供兼容 S3 的對象接口，並由主 CDN 與 R2 備份線路分發。",
+      "actions": {
+        "open": "打開入口",
+        "copy": "複製地址",
+        "copied": "已複製",
+        "copyFailed": "複製失敗"
       },
       "cards": {
         "stats": [
@@ -744,13 +781,21 @@ export const pageCopy = {
           "Umami",
           "網站訪問統計平台"
         ],
+        "alist": [
+          "AList 文件管理",
+          "瀏覽、管理與分享對象存儲中的文件"
+        ],
+        "s3": [
+          "S3 API 接口",
+          "兼容 S3 協議的對象上傳與管理端點"
+        ],
         "cnCdn": [
-          "中國大陸 CDN",
-          "內容分發網絡(Content Delivery Network,CDN)"
+          "主 CDN 直鏈",
+          "主存儲桶的文件直鏈與內容分發入口"
         ],
         "globalCdn": [
-          "國際 CDN",
-          "內容分發網絡(Content Delivery Network,CDN)"
+          "全球 CDN 備份",
+          "基於 Cloudflare R2 備份的全球訪問線路"
         ],
         "music": [
           "音樂播放器",
@@ -789,11 +834,18 @@ export const pageCopy = {
     "zh-tw": {
       "title": "更多頁面",
       "description": "這裡收集站內的重要頁面，方便快速訪問。",
-      "metaDescription": "站內重要頁面入口，包括數據統計、友鏈、技術足跡、簡歷與導航頁。",
+      "metaDescription": "站內重要頁面入口，包括數據統計、對象存儲、CDN、友鏈、技術足跡、簡歷與導航頁。",
       "categories": {
         "analytics": "數據分析",
-        "acceleration": "加速服務",
+        "storage": "對象存儲與分發",
         "other": "其他"
+      },
+      "storageDescription": "通過 AList 管理文件，提供兼容 S3 的對象接口，並由主 CDN 與 R2 備份線路分發。",
+      "actions": {
+        "open": "打開入口",
+        "copy": "複製地址",
+        "copied": "已複製",
+        "copyFailed": "複製失敗"
       },
       "cards": {
         "stats": [
@@ -804,13 +856,21 @@ export const pageCopy = {
           "Umami",
           "網站訪問統計平臺"
         ],
+        "alist": [
+          "AList 文件管理",
+          "瀏覽、管理與分享對象存儲中的文件"
+        ],
+        "s3": [
+          "S3 API 接口",
+          "兼容 S3 協議的對象上傳與管理端點"
+        ],
         "cnCdn": [
-          "中國大陸 CDN",
-          "內容分發網絡(Content Delivery Network,CDN)"
+          "主 CDN 直鏈",
+          "主存儲桶的文件直鏈與內容分發入口"
         ],
         "globalCdn": [
-          "國際 CDN",
-          "內容分發網絡(Content Delivery Network,CDN)"
+          "全球 CDN 備份",
+          "基於 Cloudflare R2 備份的全球訪問線路"
         ],
         "music": [
           "音樂播放器",
@@ -849,11 +909,18 @@ export const pageCopy = {
     "en-us": {
       "title": "More Pages",
       "description": "Important site pages collected for quick access.",
-      "metaDescription": "Important site entries, including analytics, friends, tech footprint, resume, and navigation.",
+      "metaDescription": "Key site pages for analytics, object storage, CDN delivery, friends, technical roadmaps, resume, and navigation.",
       "categories": {
         "analytics": "Analytics",
-        "acceleration": "Acceleration Services",
+        "storage": "Object Storage & Delivery",
         "other": "Other"
+      },
+      "storageDescription": "Files are managed through AList, exposed through an S3-compatible endpoint, and delivered by the primary CDN and an R2 backup route.",
+      "actions": {
+        "open": "Open Portal",
+        "copy": "Copy Address",
+        "copied": "Copied",
+        "copyFailed": "Copy Failed"
       },
       "cards": {
         "stats": [
@@ -864,13 +931,21 @@ export const pageCopy = {
           "Umami",
           "Website traffic analytics platform"
         ],
+        "alist": [
+          "AList File Manager",
+          "Browse, manage, and share files in object storage"
+        ],
+        "s3": [
+          "S3 API Endpoint",
+          "S3-compatible endpoint for object uploads and management"
+        ],
         "cnCdn": [
-          "Mainland China CDN",
-          "Content Delivery Network (CDN)"
+          "Primary CDN Links",
+          "Direct file links and content delivery for the primary bucket"
         ],
         "globalCdn": [
-          "Global CDN",
-          "Content Delivery Network (CDN)"
+          "Global CDN Backup",
+          "Global delivery route backed up to Cloudflare R2"
         ],
         "music": [
           "Music Player",

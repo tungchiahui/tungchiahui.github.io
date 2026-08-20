@@ -38,10 +38,12 @@ const copy = computed(() => isEnglish.value ? {
   siteKicker: 'Site',
   siteTitle: 'Site Services and Access Routes',
   siteLead: 'This site is a fully static Nuxt site. The goal is to deploy cleanly to Pages platforms, with content and pages mostly prerendered to reduce server dependency.',
+  storageTitle: 'Object Storage and File Delivery',
+  storageLead: 'AList provides file management and an S3-compatible endpoint, while the primary CDN and the Cloudflare R2 backup route handle file delivery.',
   contactKicker: 'Contact',
   contactTitle: 'Contact',
-  tableStorage: 'Object Storage',
-  tableCdn: 'CDN',
+  tableService: 'Service',
+  tablePurpose: 'Purpose',
   tableHost: 'Domain'
 } : {
   metaTitle: '关于 - Tung Chia-hui',
@@ -68,10 +70,12 @@ const copy = computed(() => isEnglish.value ? {
   siteKicker: 'Site',
   siteTitle: '站点服务与访问线路',
   siteLead: '本站是纯静态 Nuxt 站点，目标是能部署到 Pages 类平台，内容和页面尽量靠预渲染完成，减少服务器依赖。',
+  storageTitle: '对象存储与文件分发',
+  storageLead: '通过 AList 管理文件并提供兼容 S3 的对象接口，再由主 CDN 与 Cloudflare R2 备份线路完成文件分发。',
   contactKicker: 'Contact',
   contactTitle: '联系与交流',
-  tableStorage: '对象存储',
-  tableCdn: 'CDN',
+  tableService: '服务',
+  tablePurpose: '用途',
   tableHost: '访问域名'
 })
 
@@ -236,20 +240,36 @@ const englishSiteServices = [
 
 const localizedSiteServices = computed(() => isEnglish.value ? englishSiteServices : siteServices)
 
-const cdnNodes = [
+const storageNodes = computed(() => [
   {
-    storage: 'CF R2',
-    cdn: 'Cloudflare',
-    host: 'global.cdn.tungchiahui.cn',
-    href: 'https://global.cdn.tungchiahui.cn/'
+    service: 'AList WebUI',
+    purpose: isEnglish.value ? 'File browsing, management, and sharing' : '文件浏览、管理与分享',
+    host: 'alist.tungchiahui.cn',
+    href: 'https://alist.tungchiahui.cn/',
+    canOpen: true
   },
   {
-    storage: 'COS',
-    cdn: 'EdgeOne',
+    service: 'S3 API',
+    purpose: isEnglish.value ? 'S3-compatible object uploads and management' : '兼容 S3 的对象上传与管理',
+    host: 's3.tungchiahui.cn',
+    href: 'https://s3.tungchiahui.cn/',
+    canOpen: false
+  },
+  {
+    service: isEnglish.value ? 'Primary CDN' : '主 CDN',
+    purpose: isEnglish.value ? 'Direct links and delivery for the primary bucket' : '主存储桶文件直链与内容分发',
     host: 'cdn.tungchiahui.cn',
-    href: 'https://cdn.tungchiahui.cn/'
+    href: 'https://cdn.tungchiahui.cn/',
+    canOpen: false
+  },
+  {
+    service: isEnglish.value ? 'Global CDN Backup' : '全球 CDN 备份',
+    purpose: isEnglish.value ? 'Global delivery backed up to Cloudflare R2' : 'Cloudflare R2 备份与全球分发',
+    host: 'global.cdn.tungchiahui.cn',
+    href: 'https://global.cdn.tungchiahui.cn/',
+    canOpen: false
   }
-] as const
+])
 
 const contacts = [
   { label: 'Email', value: 'tungchiahui@gmail.com', href: 'mailto:tungchiahui@gmail.com' },
@@ -349,23 +369,29 @@ const contacts = [
         </article>
       </div>
 
+      <div class="storage-head">
+        <h3>{{ copy.storageTitle }}</h3>
+        <p>{{ copy.storageLead }}</p>
+      </div>
+
       <div class="cdn-table-wrap">
         <table class="cdn-table">
           <thead>
             <tr>
-              <th>{{ copy.tableStorage }}</th>
-              <th>{{ copy.tableCdn }}</th>
+              <th>{{ copy.tableService }}</th>
+              <th>{{ copy.tablePurpose }}</th>
               <th>{{ copy.tableHost }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="node in cdnNodes" :key="node.host">
-              <td>{{ node.storage }}</td>
-              <td>{{ node.cdn }}</td>
+            <tr v-for="node in storageNodes" :key="node.host">
+              <td>{{ node.service }}</td>
+              <td>{{ node.purpose }}</td>
               <td>
-                <a :href="node.href" target="_blank" rel="noopener noreferrer">
+                <a v-if="node.canOpen" :href="node.href" target="_blank" rel="noopener noreferrer">
                   {{ node.host }}
                 </a>
+                <code v-else>{{ node.host }}</code>
               </td>
             </tr>
           </tbody>
@@ -685,6 +711,22 @@ a.contact-card:hover {
   line-height: 1.6;
 }
 
+.storage-head {
+  margin-top: 1.35rem;
+}
+
+.storage-head h3 {
+  margin: 0 0 0.4rem;
+  color: var(--text-main);
+  font-size: 1.08rem;
+}
+
+.storage-head p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
 .cdn-table-wrap {
   margin-top: 0.9rem;
   overflow-x: auto;
@@ -724,6 +766,12 @@ a.contact-card:hover {
 
 .cdn-table a:hover {
   text-decoration: underline;
+}
+
+.cdn-table code {
+  color: var(--text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.86rem;
 }
 
 .contact-card {
