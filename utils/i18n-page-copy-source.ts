@@ -120,13 +120,23 @@ export const pageCopySource = {
   },
   more: {
     zh: {
+      kicker: 'SITE DIRECTORY',
       title: '更多页面',
-      description: '这里收集站内的重要页面，方便快速访问。',
+      description: '从数据洞察、存储服务到个人工具与内容页面，这里是探索本站的快捷目录。',
       metaDescription: '站内重要页面入口，包括数据统计、对象存储、CDN、友链、技术足迹、简历与导航页。',
+      directoryLabel: '页面分类导航',
       categories: {
         analytics: '数据分析',
         storage: '对象存储与分发',
-        other: '其他'
+        other: '更多探索'
+      },
+      sectionDescriptions: {
+        analytics: '查看网站访问趋势与统计数据，了解内容如何被浏览和发现。',
+        other: '继续探索我的项目路线、个人工具、内容导航以及一些长期维护的小页面。'
+      },
+      labels: {
+        internal: '站内页面',
+        external: '外部服务'
       },
       storageDescription: '通过 AList 管理文件，提供兼容 S3 的对象接口，并由主 CDN 与 R2 备份线路分发。',
       actions: {
@@ -153,9 +163,20 @@ export const pageCopySource = {
       }
     },
     en: {
+      description: 'A quick directory for exploring site insights, storage services, personal tools, and content pages.',
       metaDescription: 'Key site pages for analytics, object storage, CDN delivery, friends, technical roadmaps, resume, and navigation.',
+      directoryLabel: 'Page category navigation',
       categories: {
-        storage: 'Object Storage & Delivery'
+        storage: 'Object Storage & Delivery',
+        other: 'Explore More'
+      },
+      sectionDescriptions: {
+        analytics: 'View traffic trends and site statistics to understand how content is browsed and discovered.',
+        other: 'Explore my project roadmap, personal tools, content navigation, and other pages maintained over time.'
+      },
+      labels: {
+        internal: 'On-site Page',
+        external: 'External Service'
       },
       storageDescription: 'Files are managed through AList, exposed through an S3-compatible endpoint, and delivered by the primary CDN and an R2 backup route.',
       actions: {
