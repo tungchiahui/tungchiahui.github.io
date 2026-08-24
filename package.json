@@ -2,6 +2,11 @@
   "name": "my-blog",
   "private": true,
   "type": "module",
+  "packageManager": "npm@11.16.0",
+  "engines": {
+    "node": "24.18.0",
+    "npm": "11.16.0"
+  },
   "scripts": {
     "build": "nuxt generate",
     "dev": "nuxt dev",
@@ -29,7 +34,7 @@
     "pinyin-pro": "^3.28.1"
   },
   "devDependencies": {
-    "@types/node": "^22.19.0",
+    "@types/node": "^24.13.2",
     "tsx": "^4.22.4"
   }
 }
