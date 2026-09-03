@@ -2,9 +2,7 @@ import { pinyin } from 'pinyin-pro'
 import {
   DEFAULT_LOCALE_SLUG,
   getLocaleBySlug,
-  normalizeSitePath,
   parseLocalizedContentStem,
-  splitLocalePath,
   type LocaleSlug
 } from './i18n-locales'
 
@@ -36,14 +34,15 @@ export interface WikiContentMeta extends LocalizedContentMeta {
 }
 
 export interface PostContentMeta extends LocalizedContentMeta {
+  date?: string
   isBlogPost: boolean
 }
 
 export function getLocalizedContentMeta(
   stem?: string,
-  content: Record<string, unknown> = {}
+  _content: Record<string, unknown> = {}
 ): LocalizedContentMeta | WikiContentMeta | PostContentMeta | null {
-  return getWikiContentMeta(stem) || getPostContentMeta(stem, content)
+  return getWikiContentMeta(stem) || getPostContentMeta(stem)
 }
 
 export function getWikiContentMeta(stem?: string): WikiContentMeta | null {
@@ -102,10 +101,7 @@ export function getWikiContentMeta(stem?: string): WikiContentMeta | null {
   }
 }
 
-export function getPostContentMeta(
-  stem?: string,
-  content: Record<string, unknown> = {}
-): PostContentMeta | null {
+export function getPostContentMeta(stem?: string): PostContentMeta | null {
   const parsedStem = parseLocalizedContentStem(stem)
 
   if (!parsedStem?.sourceStem.startsWith(POST_STEM_PREFIX)) {
@@ -114,7 +110,7 @@ export function getPostContentMeta(
 
   const localeSlug = parsedStem.localeSlug
   const locale = getLocaleBySlug(localeSlug)
-  const sourcePath = getPostSourcePath(parsedStem.sourceStem, content)
+  const { sourcePath, date } = getPostFileMeta(parsedStem.sourceStem)
   const localizedPath = `/${localeSlug}${sourcePath}`
 
   return {
@@ -126,29 +122,26 @@ export function getPostContentMeta(
     sourcePath,
     sourceStem: parsedStem.sourceStem,
     legacyPath: localeSlug === DEFAULT_LOCALE_SLUG ? sourcePath : undefined,
+    date,
     isBlogPost: true
   }
 }
 
-function getPostSourcePath(sourceStem: string, content: Record<string, unknown>) {
-  const explicitPath = readString(content.sourcePath) || readString(content.path)
+function getPostFileMeta(sourceStem: string) {
+  const parts = sourceStem.split('/').slice(1).filter(Boolean)
+  const rawFileName = parts.at(-1) || 'post'
+  const pathParts = rawFileName.toLowerCase() === 'index'
+    ? parts.slice(0, -1)
+    : parts
+  const slugParts = pathParts.map(toPinyinSlug).filter(Boolean)
+  const dateParts = rawFileName.toLowerCase() === 'index'
+    ? [...pathParts].reverse()
+    : [rawFileName, ...parts.slice(0, -1).reverse()]
 
-  if (explicitPath) {
-    const { pathWithoutLocale } = splitLocalePath(explicitPath)
-
-    if (pathWithoutLocale === '/blog' || pathWithoutLocale.startsWith('/blog/')) {
-      return pathWithoutLocale
-    }
+  return {
+    sourcePath: `/${['blog', ...slugParts].filter(Boolean).join('/')}`,
+    date: dateParts.map(parseDate).find(Boolean)
   }
-
-  const fileName = sourceStem.split('/').at(-1) || 'post'
-  const slug = toPinyinSlug(fileName.replace(/^\d{4}-\d{2}-\d{2}-/, '')) || toPinyinSlug(fileName) || 'post'
-
-  return normalizeSitePath(`/blog/${slug}`)
-}
-
-function readString(value: unknown) {
-  return typeof value === 'string' ? value.trim() : ''
 }
 
 function parseDate(value: string) {
