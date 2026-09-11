@@ -1,0 +1,64 @@
+name: Sync canonical content
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-canonical-content.yml'
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-canonical-content
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync content from canonical repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out website repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          path: website
+          fetch-depth: 1
+
+      - name: Check out canonical content repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: tungchiahui/tungchiahui_content
+          ref: main
+          path: canonical-content
+          fetch-depth: 1
+
+      - name: Mirror canonical content
+        run: |
+          mkdir -p website/content
+          rsync -a --delete canonical-content/content/ website/content/
+          diff -qr canonical-content/content website/content
+
+      - name: Commit and push if content changed
+        working-directory: website
+        shell: bash
+        run: |
+          git add -A content
+
+          if git diff --cached --quiet; then
+            echo 'Content is already in sync.'
+            exit 0
+          fi
+
+          SOURCE_COMMIT=$(git -C ../canonical-content rev-parse HEAD)
+          SHORT_SOURCE_COMMIT=${SOURCE_COMMIT:0:12}
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "chore(content): sync from tungchiahui_content@${SHORT_SOURCE_COMMIT}"
+          git push origin HEAD:main
