@@ -55,9 +55,9 @@ ros2 topic pub --rate 2 /forward_position_controller/commands \
 
 `time` 是本轮调用使用的 ROS 时间；`period` 是测得的时间间隔。模拟硬件用 period 推进模型，差速里程计用时间差积分。
 
-本次独立节点源码中 read、update、write 分别取得当前时间，不能据此假定三个 time 数值逐纳秒一致。计算积分应尊重传入的周期和算法需要。
+教程参考版本的独立节点源码中 read、update、write 分别取得当前时间，不能据此假定三个 time 数值逐纳秒一致。计算积分应尊重传入的周期和算法需要。
 
-Gazebo 使用仿真时间：暂停时仿真时间不前进，不能用宿主机已经等待几秒来推断仿真已经执行几秒。
+Gazebo 使用仿真时间：暂停时仿真时间不前进，不能用现实时间已经过去几秒来推断仿真已经执行几秒。
 
 ## 关键函数说明
 
@@ -74,4 +74,4 @@ Gazebo 使用仿真时间：暂停时仿真时间不前进，不能用宿主机�
 
 ---
 
-[返回 Humble 总览](1500-0100-Humble.md) · 上一篇：[硬件与控制器生命周期](1500-0100-0900-硬件与控制器生命周期.md) · 下一篇：[状态广播与机器人显示](1500-0100-1100-状态广播与机器人显示.md)
+[返回 Humble 总览](/wiki/2023-12-30-ros2-tutorial/1500-0100-humble) · 上一篇：[硬件与控制器生命周期](/wiki/2023-12-30-ros2-tutorial/1500-0100-0900-ying-jian-yu-kong-zhi-qi-sheng-ming-zhou-qi) · 下一篇：[状态广播与机器人显示](/wiki/2023-12-30-ros2-tutorial/1500-0100-1100-zhuang-tai-guang-bo-yu-ji-qi-ren-xian-shi)
